@@ -97,15 +97,14 @@ router.post('/',
             //토큰을 생성하여 쿠키에 저장
             jwt.sign(payload,
                 config.get('jswtSecret'),
-                // { expiresIn: 60000 },
+                { expiresIn: 7200 },
                 (err, token) => {
                     if (err) throw err;
                     
                     user.token = token;
                     user.save();
 
-                    res
-                        .cookie("x_auth", token,{
+                    res.cookie("x_auth", token,{
                             path: '/',
                             httpOnly: true
                         })
