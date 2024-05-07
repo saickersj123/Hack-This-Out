@@ -37,10 +37,8 @@
  	align-content: center;
 	text-align: center;
 	transition: left 0.5s; /* 변경 */
+	color: var(--black200);
 
-	.h1 {
-		color: #000;
-	}
 	&.visible {
 	  left: 80%; /* 변경 */
 	}
