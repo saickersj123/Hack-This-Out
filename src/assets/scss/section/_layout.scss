@@ -1,0 +1,25 @@
+#header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 260px;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 10000;
+    border-right: 1px solid var(--black100)
+    
+}
+#main_dash {
+    max-width: 2000px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding-left: 260px;
+}
+#footer {
+    text-align: center;
+    background-color: var(--black200);
+    padding: 20px;
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    color: var(--black400);
+}
