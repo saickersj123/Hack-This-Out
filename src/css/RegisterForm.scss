@@ -1,0 +1,79 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.wrap {
+    justify-content: center;
+    position: relative;
+    width: 500px;
+    height: 600px;
+    border-radius: 10px;
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    place-items: center;
+    margin: 0 auto;
+    
+    & h1 {
+      margin-bottom: 30px;  
+    }
+
+    .register-form {
+        text-align: center;
+        padding: 10px;
+        position: relative;
+    }
+
+    .input-box {
+        width: 100% - margin;
+        height: 50px;
+        margin-bottom: 30px;
+        position: relative;
+        margin-left: 20px;
+        margin-right: 20px;
+        
+        input {
+            width: calc(100% - 26px); /* 입력칸의 너비에서 padding 값을 제외 */
+            height: 100%;
+            background: #ddd;
+            outline: none;
+            border: 2px solid rgba(255, 255, 255);
+            border-radius: 40px;
+            font-size: 16px;
+            color: #333;
+            padding-left: 20px;
+
+            &::placeholder {
+                font-weight: 600;
+                color: #333;
+            }
+        }
+    }
+
+    .button {
+        display: inline-block;
+        padding: 100px 200px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        color: #21c2c2b2;
+        background-color: transparent;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+        &:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
