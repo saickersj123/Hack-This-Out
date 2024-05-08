@@ -6,12 +6,12 @@ import Footer from './Footer'
 import Search from './Search'
 
 // props 속성을 전달
-const Main = ( props ) => {
+const Main = (props) => {
     return (
         <HelmetProvider>
-            <Helmet 
-                titleTemplate="%s | test" 
-                defaultTitle="test" 
+            <Helmet
+                titleTemplate="%s | test"
+                defaultTitle="test"
                 defer={false}
             >
                 {props.title && <title>{props.title}</title>}
@@ -20,10 +20,14 @@ const Main = ( props ) => {
 
             <Header />
             <main id="main_dash" role="main">
-                <Search />
+                <div style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+                    <Search />
+                </div>
                 {props.children}
             </main>
-            <Footer />
+            <div style={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 100 }}>
+                <Footer />
+            </div>
         </HelmetProvider>
     )
 }

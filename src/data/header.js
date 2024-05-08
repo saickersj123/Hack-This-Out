@@ -1,4 +1,3 @@
-import { CiHome  } from "react-icons/ci";
 import { CiUser } from "react-icons/ci";
 import { CiBank } from "react-icons/ci";
 import { CiReceipt } from "react-icons/ci";
@@ -10,11 +9,6 @@ import { AiFillYoutube } from "react-icons/ai";
 import { AiOutlineInstagram } from "react-icons/ai";
 
 export const headerMenus = [
-    {
-        title: "Home",
-        icon: <CiHome  />,
-        src: "/"
-    },
     {
         title: "Tutorial",
         icon: <CiReceipt />,
