@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+
 import profileIcon from '../../assets/img/icon/profile_default.png';
 import arrowIcon from '../../assets/img/icon/down_arrow.png';
 import bell from '../../assets/img/icon/notification-bell.png';
+
 
 const Search = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
@@ -48,7 +52,9 @@ const Search = () => {
                                 <li>설정</li>
                                 <li>고객센터</li>
                                 <hr></hr>
-                                <li>로그아웃</li>
+                                <Link to='/'>
+                                    <li>로그아웃</li>
+                                </Link>
                             </ul>
                         </div>
                     )}

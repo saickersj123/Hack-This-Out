@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Main from '../../components/section/Main'
+import '../../css/ChallengeDetail.scss';
 
 const ChallengeDetail = () => {
   const { id } = useParams(); // 문제 ID 가져오기
@@ -24,19 +25,20 @@ const ChallengeDetail = () => {
 
   return (
     <Main title={`문제 ${id}`} description={`문제 ${id} 내용`}>
-      <h2>문제 {id}</h2>
-      {/* 문제 내용을 배열로 가정하고 각 문제마다 입력 칸을 추가 */}
-      {problemDetails[id].map((problem, index) => (
-        <div key={index}>
-          <p>{problem}</p> {/* 문제 내용 출력 */}
-          <input
-            type="text"
-            placeholder={`답변 입력`}
-            value={answers[index]} // 해당 입력 칸의 답변
-            onChange={(e) => handleAnswerChange(index, e)} // 입력 값이 변경될 때 호출
-          />
-        </div>
-      ))}
+      <div className='challenge-detail'>
+        <h2>문제 {id}</h2>
+        {problemDetails[id].map((problem, index) => (
+          <div className='prob-detail' key={index}>
+            <p>{problem}</p> {/* 문제 내용 출력 */}
+            <input
+              type="text"
+              placeholder={`답변 입력`}
+              value={answers[index]} // 해당 입력 칸의 답변
+              onChange={(e) => handleAnswerChange(index, e)} // 입력 값이 변경될 때 호출
+            />
+          </div>
+        ))}
+      </div>
     </Main>
   );
 };
