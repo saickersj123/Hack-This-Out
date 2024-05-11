@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 connectDB();
 
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(cookieParser());
 
 // 루트 경로에 대한 응답
