@@ -1,0 +1,10 @@
+requirements:
+    install node.js packags "npm install"
+    install gcloud CLI SDK  "https://cloud.google.com/sdk/docs/install"
+    need gcloud auth "gcloud auth login"
+        login with an account that GCE activated and configured
+
+how to test:
+    1. run the server "npm run dev" or "npm run start"
+    2. send POST request to "https://localhost:8000/startvm" to start the instance
+    3. send POST request to "https://localhost:8000/stopvm" to stop the instance 

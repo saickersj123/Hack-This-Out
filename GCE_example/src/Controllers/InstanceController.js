@@ -1,6 +1,6 @@
 const compute = require('@google-cloud/compute');
 const projectId = 'hto2024';
-const zone = 'us-central1-b'
+const zone = 'us-west1-c'
 const instanceName = 'ftp-target'
 
 module.exports = {
