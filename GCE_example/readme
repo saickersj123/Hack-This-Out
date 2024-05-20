@@ -3,6 +3,7 @@ requirements:
     install gcloud CLI SDK  "https://cloud.google.com/sdk/docs/install"
     need gcloud auth "gcloud auth login"
         login with an account that GCE activated and configured
+        "https://cloud.google.com/compute/docs/authentication?hl=ko"
 
 how to test:
     1. run the server "npm run dev" or "npm run start"
