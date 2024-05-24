@@ -1,29 +1,54 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Main from '../../components/section/Main'
 import { Link } from 'react-router-dom';
 import '../../css/Challenge.scss';
 
 
 const Challenges = () => {
-    // 문제 목록. 일반적으로는 데이터베이스에서 가져오겠지만, 여기에 예시로 일부 데이터를 추가했습니다.
-    const challenges = [
-      { id: 1, title: '문제 1' },
-      { id: 2, title: '문제 2' },
-      { id: 3, title: '문제 3' },
-    ];
-  
-    return (
-      <Main title="Challenges" description="Challenges 화면입니다.">
-        <h2>문제 목록</h2>
-        <ul className='Challenge-list'>
-          {challenges.map((challenge) => (
-            <li key={challenge.id}>
-              <Link to={`/challenge/${challenge.id}`}>{challenge.title}</Link>
-            </li>
-          ))}
-        </ul>
-      </Main>
-    );
+  const [challenges, setChallenges] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/challenge', {
+      method: 'GET',
+      credentials: "include"
+    })
+      .then((res) => res.json())
+      .then(res => {
+        console.log('Challenges fetched:', res); 
+        setChallenges(res);
+      });
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this challenge?')) {
+      const response = await fetch(`http://localhost:5000/api/challenge/${id}`, {
+        method: 'DELETE',
+        credentials: "include"
+      });
+
+      if (response.ok) {
+        setChallenges(challenges.filter(challenge => challenge.id !== id));
+      } else {
+        console.error('Failed to delete challenge');
+      }
+    }
   };
-    
+
+  return (
+    <Main title="Challenges" description="Challenges 화면입니다.">
+      <h2>문제 목록</h2>
+      <ul className='Challenge-list'>
+        {challenges.map((challenge) => (
+          <li key={challenge.id}>
+            <Link to={`/challenge/${challenge.id}`} state={{ title: challenge.title, content: challenge.content }} >
+              {challenge.title}
+            </Link>
+            <button onClick={() => handleDelete(challenge.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </Main>
+  );
+};
+
 export default Challenges

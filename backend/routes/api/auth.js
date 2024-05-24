@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-const {auth} = require('../../middleware/auth');
+const { auth } = require('../../middleware/auth');
 const User = require('../../model/User');
 //const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
@@ -17,26 +17,14 @@ app.use(cookieParser());
 
 
 router.get('/', auth, async (req, res) => {
-    /*try {
-        const user = await User.findById(req.user.id).select('-password');
-        res.json(user);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }*/
+    const user = await User.findById(req.user.id).select('-password');
+
     res.json({
-        success: "true"
+        user_id: user.user_id,
+        email: user.email,
+        name: user.name,
+        date: user.date
     })
-    /*
-    res.status(200).json({
-        _id: req.user._id,
-        // 0> 일반 유저 ^ 나머지 관리자
-        isAdmin: req.user.role === 0 ? false : true,
-        isAuth: true,
-        email: req.user.email,
-        name: req.user.name,
-        role: req.user.role
-      });*/
 });
 
 router.post('/',
@@ -80,38 +68,13 @@ router.post('/',
                 }
             }
 
-            /*user.generateToken((err, user) => {
-
-                if (err) return res.status(400).send(err);
-                //토큰을 저장한다. where? 쿠키 OR 로컬 스토리지 OR 세션스토리지
-                //쿠키 name : value
-                res
-                  .cookie("x_auth", user.token)
-                  .status(200)
-                  .json({ loginSuccess: "true", userId: user.user_id });
-                
-               console.log("aaaaa");
-
-              });*/
-
             //토큰을 생성하여 쿠키에 저장
-            jwt.sign(payload,
-                config.get('jswtSecret'),
-                { expiresIn: 7200 },
-                (err, token) => {
-                    if (err) throw err;
-                    
-                    user.token = token;
-                    user.save();
+            token = jwt.sign(payload, config.get('jswtSecret'), { expiresIn: 7200 })
+            user.token = token;
+            user.save();
 
-                    res.cookie("x_auth", token,{
-                            path: '/',
-                            httpOnly: true
-                        })
-                        .json({ token });
-                        //.json({ loginSuccess: "true", userId: user.user_id });
-                });
-
+            res.cookie("token", token);
+            res.json({ token });
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server error1');

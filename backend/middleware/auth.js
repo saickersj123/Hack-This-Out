@@ -6,8 +6,7 @@ let auth = (req, res, next) => {
     //인증 처리를 하는 곳
 
     //1. 클라이언트 쿠키에서 토큰을 가져온다.
-    let token = req.cookies.x_auth;
-    console.log(token)
+    let token = req.cookies.token;
 
     if (!token){
         return res.status(401).json({

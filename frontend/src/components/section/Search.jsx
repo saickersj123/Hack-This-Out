@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 
@@ -9,10 +9,23 @@ import bell from '../../assets/img/icon/notification-bell.png';
 
 const Search = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
+    const [users, setUser] = useState([]);
 
     const toggleMenu = () => {
         setMenuOpen(!isMenuOpen);
     };
+
+    useEffect(()=>{
+        fetch('http://localhost:5000/api/auth', {
+            method:'GET',
+            credentials: "include"
+        })
+        .then((res) => res.json())
+        .then(res => {
+            console.log(1, res);
+            setUser([res]);
+        });
+    },[]);
 
     return (
         <div id="search">
@@ -40,7 +53,11 @@ const Search = () => {
                         <span className="profile_first">
                             <img className="profile_icon" alt="profile_icon" src={profileIcon} />
                         </span>
-                        <span className="userNametext">user</span>
+                        <span className="userNametext">
+                            {users.map((user) => (
+                                <p key={user.user_id}>{user.user_id}</p>
+                            ))}
+                        </span>
                         <img src={arrowIcon} alt="arrow_icon" className="arrow-icon" />
                     </button>
                     {isMenuOpen && (

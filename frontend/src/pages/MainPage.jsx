@@ -31,35 +31,45 @@ const MainPage = () => {
     // POST 요청 보내기
     fetch('http://localhost:5000/api/auth', {
       method: 'POST',
+      credentials: "include",
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          // 서버에서 반환한 오류 상태 코드 확인
+          return response.json().then((error) => {
+            throw new Error(error.message || '로그인 실패');
+          });
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log('Success login :', data);
         navigate('/main');
       })
       .catch((error) => {
         console.error('Error registering user:', error);
-        // 등록 실패 시 처리
+        alert('로그인 실패. 다시 시도해주세요.');
       });
   };
+
   return (
     <div>
       <div
         className={isClicked ? "background-image change-background" : "background-image"} // 상태에 따라 클래스 변경
         onClick={handleBackgroundClick} // 배경 이미지 클릭 시 이벤트 핸들러 호출
       ></div>
-      <form className={isClicked ? "content-wrapper visible" : "content-wrapper"}  onSubmit={handleSubmit}>
+      <form className={isClicked ? "content-wrapper visible" : "content-wrapper"} onSubmit={handleSubmit}>
         <h1>로그인</h1>
         <div className='login-form'>
           <div className="input-box">
-          <input type="text" name="user_id" placeholder="아이디"value={formData.user_id} onChange={handleChange} />
+            <input type="text" name="user_id" placeholder="아이디" value={formData.user_id} onChange={handleChange} />
           </div>
           <div className="input-box">
-          <input type="password" name="password" placeholder="비밀번호" value={formData.password} onChange={handleChange} />
+            <input type="password" name="password" placeholder="비밀번호" value={formData.password} onChange={handleChange} />
           </div>
           <button type="submit">로그인</button>
         </div>

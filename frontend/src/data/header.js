@@ -20,6 +20,11 @@ export const headerMenus = [
         src: "/Challenges"
     },
     {
+        title: "Upload",
+        icon: <CiDumbbell />,
+        src: "/Upload"
+    },
+    {
         title: "Rankings",
         icon: <CiRouter />,
         src: "/Rankings"

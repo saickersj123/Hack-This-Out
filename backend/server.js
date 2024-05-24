@@ -2,11 +2,17 @@ const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
-
+const jwt = require('jsonwebtoken');
 const app = express();
+
 connectDB();
 
-app.use(cors({ origin: '*' }));
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true
+}));
+
 app.use(cookieParser());
 
 // 루트 경로에 대한 응답
@@ -20,7 +26,8 @@ app.use('/api/user', require('./routes/api/user'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/post', require('./routes/api/post'));
 app.use('/api/profile', require('./routes/api/profile'));
-
+app.use('/api/create', require('./routes/api/createInst'));
+app.use('/api/challenge', require('./routes/api/challenge'));
 
 const PORT = process.env.PORT || 5000;
 

@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation  } from 'react-router-dom';
 import Main from '../../components/section/Main'
 import '../../css/ChallengeDetail.scss';
 
 const ChallengeDetail = () => {
-  const { id } = useParams(); // 문제 ID 가져오기
-
-  // 문제 데이터베이스에서 문제 정보를 가져오기
-  const problemDetails = {
-    1: ['문제 1 내용', '질문 2', '질문 3', '질문 4'],
-    2: ['문제 2 내용'],
-    3: ['문제 3 내용'],
-  };
+  const location = useLocation();
+  const { title, content = [] } = location.state || {};
 
   // 입력 칸의 답변을 추적하기 위해 상태 생성
-  const [answers, setAnswers] = useState(Array(problemDetails[id].length).fill(''));
+  const [answers, setAnswers] = useState(Array(content.length).fill(''));
 
   // 입력 값이 변경될 때 호출되는 함수
   const handleAnswerChange = (index, event) => {
@@ -23,11 +17,18 @@ const ChallengeDetail = () => {
     setAnswers(newAnswers); // 업데이트된 상태 설정
   };
 
+  // title과 content가 비어있는 경우 처리
+  if (!title || !content) {
+    return (
+      <div>Loading...</div> // 혹은 에러 메시지를 출력하거나 리다이렉트할 수 있음
+    );
+  }
+
   return (
-    <Main title={`문제 ${id}`} description={`문제 ${id} 내용`}>
+    <Main title={`문제 ${title}`} description={`문제 ${title} 내용`}>
       <div className='challenge-detail'>
-        <h2>문제 {id}</h2>
-        {problemDetails[id].map((problem, index) => (
+        <h2>{title}</h2>
+        {content.map((problem, index) => (
           <div className='prob-detail' key={index}>
             <p>{problem}</p> {/* 문제 내용 출력 */}
             <input

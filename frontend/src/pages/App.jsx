@@ -10,6 +10,7 @@ import Main from '../components/section/Main';
 const Tutorial = lazy(() => import('./dash_pages/Tutorial'));
 const Challenges = lazy(() => import('./dash_pages/Challenges'));
 const ChallengeDetail = lazy(() => import('./dash_pages/ChallengesDetail'));
+const UpChallenge = lazy(() => import('./dash_pages/UpChallenge'));
 const Rankings = lazy(() => import('./dash_pages/Rankings'));
 const Makers = lazy(() => import('./dash_pages/Makers'));
 const Academy = lazy(() => import('./dash_pages/Academy'));
@@ -28,7 +29,8 @@ const App = () => {
           <Route path="/main" element={<Main />} />
           <Route path="/Tutorial" element={<Tutorial />} />
           <Route path="/Challenges" element={<Challenges />} />
-          <Route path="/challenge/:id" element={<ChallengeDetail />} />
+          <Route path="/Challenge/:id" element={<ChallengeDetail />} />
+          <Route path="/Upload" element={<UpChallenge />} />
           <Route path="/Rankings" element={<Rankings />} />
           <Route path="/Makers" element={<Makers />} />
           <Route path="/Academy" element={<Academy />} />
