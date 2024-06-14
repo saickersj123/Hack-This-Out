@@ -1,28 +1,124 @@
+// .header__logo { -> 자물쇠
+//     border-bottom: 1px solid var(--black100);
+
+//     a {
+//         display: flex;
+//         padding: 10px;
+//         margin: 10px;
+//         margin-bottom: 9px;
+
+//         .lock {
+//             width: 40px;
+//             height: 40px;
+//             display: block;
+//             margin-left: 3px;
+//             margin-right: 3px;
+//         }
+
+//         span {
+//             font-size: 20px;
+//             line-height: 1;
+//             font-weight: 900;
+//             text-transform: uppercase;
+//         }
+//     }
+// }
+
+
+// // .header__logo { --> 직사각형
+// //     border-bottom: 1px solid var(--black100);
+
+// //     a {
+// //         display: flex;
+// //         padding: 10px;
+// //         margin: 10px;
+
+// //         em {
+// //             width: 40px;
+// //             height: 40px;
+// //             display: block;
+// //             background-color: var(--red);
+// //             margin-right: 10px;
+// //             animation: ani 15s 15s ease-in-out infinite;
+// //         }
+
+// //         span {
+// //             font-size: 20px;
+// //             line-height: 1;
+// //             font-weight: 900;
+// //             text-transform: uppercase;
+// //         }
+// //     }
+// // }
+
+
+// @keyframes ani {
+//     0% {
+//         transform: rotate(0) scale(1);
+//         border-radius: 5;
+//     }
+//     50% {
+//         transform: rotate(720deg) scale(0.5);
+//         border-radius: 20px;
+//     }
+//     100% {
+//         transform: rotate(0) scale(1);
+//         border-radius: 0;
+//     }
+// }
+
 .header__logo {
     border-bottom: 1px solid var(--black100);
-
+  
     a {
-        display: flex;
-        padding: 10px;
-        margin: 10px;
-        margin-bottom: 9px;
-
-        .lock {
-            width: 40px;
-            height: 40px;
-            display: block;
-            margin-left: 3px;
-            margin-right: 3px;
-        }
-
-        span {
-            font-size: 20px;
-            line-height: 1;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
+      display: flex;
+      align-items: center; /* 아이템 수직 중앙 정렬 */
+      padding: 10px;
+      margin: 10px;
+  
+      .star {
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 35px solid var(--red);
+        position: relative;
+        margin-right: 10px;
+        animation: ani 10s ease-in-out infinite;
+      }
+  
+      .star:before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 35px solid var(--red);
+        position: absolute;
+        left: -20px;
+        top: 10px;
+      }
+  
+      span {
+        font-size: 20px;
+        line-height: 1;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
     }
-}
+  }
+  
+  @keyframes ani {
+    0% {
+      transform: rotate(0) scale(1);
+    }
+    50% {
+      transform: rotate(360deg) scale(0.5);
+    }
+    100% {
+      transform: rotate(720deg) scale(1);
+    }
+  }
 
 .header__menu {
     padding: 10px 0;

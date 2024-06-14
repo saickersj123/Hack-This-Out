@@ -3,16 +3,96 @@
     padding: 0;
     margin-top: 20px;
     margin-left: 10px;
-    p {
-        margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;;
+
+    .start-btn {
+        p {
+            margin: 20px;
+            margin-bottom: 0px;
+        }
+        button {
+            height: 40px;
+            width: 300px;
+            min-width: 100px;
+            margin-top: 20px;
+            margin-left: 30px;
+            margin-bottom: 2px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
     }
-    input {
-        height: 40px;
-        width: 80%;
-        min-width: 500px;
-        margin-left: 30px;
-        background-color: var(--white200);
-        border-radius: 2px;
-        text-decoration: none;
+
+    .prob-detail{
+        width: 100%;
+        p {
+            margin: 20px;
+        }
+        input {
+            height: 40px;
+            width: 50%;
+            min-width: 500px;
+            padding-left: 20px;
+            margin-left: 30px;
+            margin-right: 50%;
+            background-color: var(--white200);
+            border-radius: 2px;
+            text-decoration: none;
+        }
+        button {
+            height: 40px;
+            width: 10%;
+            min-width: 100px;
+            margin-top: 20px;
+            margin-left: 30px;
+            margin-bottom: 2px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: gray;
+            color: white;
+        }
+
+        .question-text {
+            p {
+                height: 40px;
+                width: 50%;
+                line-height: 40px;
+                padding-left: 20px;
+                margin-left: 30px;
+                margin-right: 50%;
+                background-color: gray;
+                border-radius: 2px;
+            }
+        }
+    }
+
+    .back-btn-container {
+        display: flex;
+        align-items: center;
+
+        .back-btn{
+            position: relative;
+            background: url('../assets/img/icon/left_icon.png') no-repeat center center;
+            background-size: cover;
+            border: none;
+            margin: 0px;
+            background-color: transparent;
+            width: 30px;
+            min-width: 10px;
+            height: 36px;
+            display: flex;
+    
+            filter: brightness(0) invert(1);
+            cursor: pointer;
+        } 
+    
+        h2 {
+            position: relative;
+            width: calc(100% - 30px);
+            margin-left: 10px;
+        }
     }
 }

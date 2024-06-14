@@ -1,19 +1,19 @@
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwipeCore, { Navigation, Pagination, Autoplay } from 'swiper';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import slides from "../../data/banner.js"; 
 
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/scss/navigation';
-import 'swiper/scss/pagination';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/autoplay";
 
-SwipeCore.use([Navigation, Pagination, Autoplay]);
-
-export default function Home() {
+const Banner = () => {
   return (
-    <div className='banner' style={{ fontSize: '32pxs' }}>
+    <div className='banner' style={{ fontSize: '32px' }}>
       <div>
         <Swiper
+          modules={[Navigation, Pagination, Autoplay]}
           className="home-banner"
           spaceBetween={50}
           slidesPerView={1}
@@ -21,17 +21,15 @@ export default function Home() {
           pagination={{ clickable: true }}
           autoplay={{ delay: 2000 }}
         >
-          <SwiperSlide>
-            <img className="home-img" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F8WQ5N%2Fbtshy5kxPYn%2FVJqr5MTjba7vLROZucajuk%2Fimg.png" alt="이미지다!!! " />
-          </SwiperSlide>
-          <SwiperSlide>
-            <img className="home-img" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F1J1Il%2FbtshzBDtGf9%2F6h8SzcjwurvggUYcRO7UaK%2Fimg.png" alt="1" />
-          </SwiperSlide>
-          <SwiperSlide>
-            <img className="home-img" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3Rru3%2FbtshBmSUExv%2FRLgXbEOZhK4KVvs5TqsBKK%2Fimg.png" alt="2" />
-          </SwiperSlide>
+          {slides.map((slide) => (
+            <SwiperSlide key={slide.id}>
+              <img className="home-img" src={slide.imageUrl} alt={slide.altText} />
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
     </div>
   );
 }
+
+export default Banner;

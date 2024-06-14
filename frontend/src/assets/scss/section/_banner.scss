@@ -1,5 +1,46 @@
+.banner {
+  width: 100%;
+  max-width: 700px; 
+  position: relative;
+  margin-right:50px;
+  border-radius: 10px;;
+}
+
+.banner.small {
+  max-width: 600px;
+}
+
+.banner.medium {
+  max-width: 800px; 
+}
+
+.banner.large {
+  max-width: 1000px; 
+}
+
+.banner.left {
+  margin-left: 0;
+}
+
+.banner.right {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.swiper-container {
+  width: 100%;
+}
+
 .home-img {
-    max-width: 100%; 
-    height: auto; 
-    max-height: 500px; 
-  }
+  width: 100%;
+  height: auto;
+  max-height: 330px; 
+  border-radius: 10px;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #fff; 
+  top: 50%;
+  transform: translateY(-50%);
+}

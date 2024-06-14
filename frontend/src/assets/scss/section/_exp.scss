@@ -1,0 +1,55 @@
+.xp-container {
+  width: 100%;
+  max-width: 400px;
+  font-family: Arial, sans-serif;
+}
+
+.xp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.xp-title {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+
+.xp-link {
+  font-size: 0.9em;
+  text-decoration: underline;
+}
+
+.xp-level {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.xp-bar {
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.xp-bar-inner {
+  height: 20px;
+  background-color: #ffc94e;
+  text-align: center;
+  line-height: 20px;
+  font-size: 0.8em;
+  color: #000;
+}
+
+.xp-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.xp-item {
+  display: flex;
+  justify-content: space-between;
+}

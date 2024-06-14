@@ -1,11 +1,10 @@
 import React from "react";
-import lock from '../../assets/img/icon/lock.png';
 
 const Logo = () => {
   return (
     <h1 className="header__logo">
       <a href="/main">
-        <img className="lock" alt="profile_icon" src={lock} />
+        <div className="star"></div>
         <span>Hack<br />ThisOut</span>
       </a>
     </h1>

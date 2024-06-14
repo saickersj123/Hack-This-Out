@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Logo from '../header/Logo';
+import Logo from '../header/Logo1';
 import Menu from '../header/Menu';
 import Sns from '../header/Sns';
 

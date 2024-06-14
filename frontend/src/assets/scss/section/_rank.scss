@@ -1,0 +1,54 @@
+.ranking-section {
+  margin-bottom: 20px;
+}
+
+.rank-table-container {
+  width: 100%;
+  max-width: 400px;
+  font-family: Arial, sans-serif;
+}
+
+.ranking-title {
+  text-align: center;
+  font-size: 1.6em;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.rank-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rank-table th, .rank-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center; 
+  vertical-align: middle; 
+}
+
+.rank-table th {
+  background-color: #bb4a4a;
+  font-weight: bold;
+}
+
+.rank-col {
+  width: 10%; /* Rank 열의 너비 설정 */
+}
+
+.user-col {
+  width: 60%; /* User 열의 너비 설정 */
+}
+
+.points-col {
+  width: 30%; /* Points 열의 너비 설정 */
+}
+
+.rank-table .large {
+  font-size: 1em;
+  background-color: #471414;
+}
+
+.rank-table .small {
+  font-size: 0.7em;
+}
