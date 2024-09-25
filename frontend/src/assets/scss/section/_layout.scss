@@ -1,0 +1,35 @@
+body {
+    overflow: hidden; /* 전체 페이지의 스크롤을 제거 */
+}
+
+#header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 260px;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 10000;
+    border-right: 1px solid var(--black100);
+}
+
+#main_dash {
+    max-width: 2000px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding-left: 260px;
+    padding-bottom: 80px; /* Adjust based on footer height if necessary */
+    overflow-y: auto;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    left: 260px;
+    width: calc(100% - 260px);
+    text-align: center;
+    background-color: var(--black200);
+    padding: 20px;
+    color: var(--black400);
+    z-index: 10000;
+}
