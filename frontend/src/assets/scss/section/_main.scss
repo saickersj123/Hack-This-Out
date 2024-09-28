@@ -1,0 +1,38 @@
+.banner-container {
+  display: flex;
+  flex-direction: column; // 세로로 배치
+  align-items: center; // 가로 중앙 정렬
+  width: 100%; // 부모 너비에 맞춤
+  padding: 1rem 0; // 상하 여백 추가
+}
+
+.rank-exp-container {
+  display: flex;
+  justify-content: space-between;  // Rank와 Exp를 좌우로 배치
+  align-items: flex-start;
+  width: 100%;                     // Rank와 Exp가 전체 폭을 차지
+  max-width: 1200px;               // 원하는 최대 너비 설정 (선택 사항)
+  margin-top: 2rem;                // 배너와 Rank/Exp 사이 여백 추가
+  padding: 0 1rem;                 // 좌우 패딩 추가 (선택 사항)
+  box-sizing: border-box;
+}
+
+.rank-exp-container > * {
+  width: 40%;     // Rank와 Exp가 동일한 너비 차지
+}
+
+
+.app-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.rank-table-container {
+  margin-right: 20px;
+}
+
+.xp-container {
+  margin-left: 20px;
+}
