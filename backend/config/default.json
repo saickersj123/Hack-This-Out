@@ -1,4 +1,0 @@
-{
-    "mongoURI": "mongodb+srv://Blackmuji:1234@blackmuji.zrweex1.mongodb.net/",
-    "jswtSecret": "myjsonsecrettoken"
-}

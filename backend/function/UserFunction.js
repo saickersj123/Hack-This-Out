@@ -3,7 +3,9 @@ import gravatar from 'gravatar';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../model/User.js';
-import config from 'config';
+import config from '../config/config.js';
+
+const jwtSecret = config.jwtSecret;
 
 // 전체 회원 정보 GET
 export const getAllUser = async (req, res) => {
@@ -26,7 +28,7 @@ export const postSignUp = async (req, res) => {
     }
 
     const { name, user_id, email, password } = req.body;
-    
+
     try {
         // 유저가 존재하는지 체크
         let user = await User.findOne({ email });
@@ -62,7 +64,7 @@ export const postSignUp = async (req, res) => {
             }
         }
         jwt.sign(payload,
-            config.get('jswtSecret'),
+            jwtSecret,
             { expiresIn: 360000 },
             (err, token) => {
                 if(err) throw err;
@@ -122,7 +124,11 @@ export const postLoginUser = async (req, res) => {
             }
         }
         //토큰을 생성하여 쿠키에 저장
-        const token = jwt.sign(payload, config.get('jswtSecret'), { expiresIn: 7200 });
+        const token = jwt.sign(payload, jwtSecret, { expiresIn: 7200 });
+
+        if (!jwtSecret) {
+            return res.status(500).json({ msg: 'JWT secret is missing' });
+        }
         
         user.token = token;
         user.save();

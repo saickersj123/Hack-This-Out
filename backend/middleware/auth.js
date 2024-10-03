@@ -1,4 +1,4 @@
-import config from 'config';
+import config from '../config/config.js';
 import jwt from 'jsonwebtoken';
 
 let auth = (req, res, next) => {
@@ -13,7 +13,8 @@ let auth = (req, res, next) => {
         });
     }
     try {
-        const decoded = jwt.verify(token, config.get('jswtSecret'));
+        const jwtSecret = config.jwtSecret;
+        const decoded = jwt.verify(token, jwtSecret);
         req.user = decoded.user;
         next();
     } catch (err) {
