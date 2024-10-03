@@ -1,8 +1,10 @@
-const express = require('express');
-const connectDB = require('./config/db');
-const cors = require('cors');
-const cookieParser = require("cookie-parser");
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import connectDB from './config/db.js';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import userRoutes from "./routes/api/UserRoutes.js";
+import probRoutes from "./routes/api/ProbRoutes.js";
+
 const app = express();
 
 connectDB();
@@ -22,13 +24,9 @@ app.get('/', (req, res) => res.send('API is running'));
 app.use(express.json({ extended: false }));
 
 // '/api/user' 등의 경로에 대한 요청을 각각의 라우터로 라우팅
-app.use('/api/user', require('./routes/api/user'));
-app.use('/api/auth', require('./routes/api/auth'));
-app.use('/api/post', require('./routes/api/post'));
-app.use('/api/profile', require('./routes/api/profile'));
-app.use('/api/create', require('./routes/api/createInst'));
-app.use('/api/challenge', require('./routes/api/challenge'));
-app.use('/api/exp', require('./routes/api/exp'));
+app.use('/api/user', userRoutes);
+app.use('/api/prob', probRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 

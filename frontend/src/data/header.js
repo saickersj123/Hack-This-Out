@@ -1,5 +1,4 @@
-import { CiUser } from "react-icons/ci";
-import { CiBank } from "react-icons/ci";
+import { TiStopwatch } from "react-icons/ti";
 import { CiReceipt } from "react-icons/ci";
 import { CiDumbbell } from "react-icons/ci";
 import { CiRouter } from "react-icons/ci";
@@ -30,20 +29,10 @@ export const headerMenus = [
         src: "/Rankings"
     },
     {
-        title: "Makers",
-        icon: <CiUser />,
-        src: "/Makers"
-    },
-    {
-        title: "Academy",
-        icon: <CiBank />,
-        src: "/Academy"
-    },
-    {
-        title: "Universities",
-        icon: <CiBank />,
-        src: "/Universities"
-    },
+        title: "Contest",
+        icon: <TiStopwatch/>,
+        src: "/Contest"
+    }
 ];
 
 export const searchKeyword = [

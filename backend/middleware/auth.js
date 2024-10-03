@@ -1,6 +1,5 @@
-const User = require('../model/User.js');
-const config = require('config');
-const jwt = require('jsonwebtoken');
+import config from 'config';
+import jwt from 'jsonwebtoken';
 
 let auth = (req, res, next) => {
     //인증 처리를 하는 곳
@@ -37,4 +36,4 @@ let auth = (req, res, next) => {
 //     //4. 2조건 불만족시 NO
 };
 
-module.exports = { auth };
+export default auth;

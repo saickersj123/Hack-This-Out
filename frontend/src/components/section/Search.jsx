@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import { getLoginUser } from '../../api/axiosInstance';
 
 import profileIcon from '../../assets/img/icon/profile_default.png';
 import arrowIcon from '../../assets/img/icon/down_arrow.png';
@@ -15,17 +15,20 @@ const Search = () => {
         setMenuOpen(!isMenuOpen);
     };
 
-    useEffect(()=>{
-        fetch('http://localhost:5000/api/auth', {
-            method:'GET',
-            credentials: "include"
-        })
-        .then((res) => res.json())
-        .then(res => {
-            console.log(1, res);
-            setUser([res]);
-        });
-    },[]);
+    // 로그인 상태 확인 useEffect
+    useEffect(() => {
+        const checkLoginStatus = async () => {
+            try {
+                const loginUser = await getLoginUser();
+                console.log('Login status:', loginUser);
+                setUser([loginUser]); // 유저 상태 업데이트
+            } catch (error) {
+                console.error('Error checking login status:', error.message || error);
+            }
+        };
+
+        checkLoginStatus(); // 로그인 상태 확인 호출
+    }, []);
 
     return (
         <div id="search">
@@ -48,7 +51,7 @@ const Search = () => {
                         <img className="bell_icon" alt="bell_icon" src={bell} />
                     </button>
                 </div>
-                <div className="profile-wrapper">    
+                <div className="profile-wrapper">
                     <button id="profileButton" type="button" className="menuButton" onClick={toggleMenu}>
                         <span className="profile_first">
                             <img className="profile_icon" alt="profile_icon" src={profileIcon} />

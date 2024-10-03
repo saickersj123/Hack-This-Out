@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const ExampleSchema = new mongoose.Schema({
     numericId: {
@@ -19,4 +19,6 @@ const ExampleSchema = new mongoose.Schema({
     }
 });
 
-module.exports = Example = mongoose.model('Example', ExampleSchema)
+const Example = mongoose.model('Example', ExampleSchema);
+
+export default Example;

@@ -1,5 +1,7 @@
 import Main from '../../components/section/Main'
 import React, { useState } from 'react';
+import { postProb } from '../../api/axiosInstance';
+
 
 const UpChallenge = () => {
   const [title, setTitle] = useState('');
@@ -24,40 +26,27 @@ const UpChallenge = () => {
     setAnswers([...answers, '']);
   };
 
+  // 폼 제출 이벤트 처리
   const handleSubmit = async (event) => {
-    event.preventDefault();
-  
+    event.preventDefault(); // 기본 폼 제출 동작 막기
+
     try {
-      const response = await fetch('http://localhost:5000/api/challenge', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          content: contents,
-          answer: answers,
-          theme,
-        }),
-      });
-  
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to create challenge: ${errorText}`);
-      }
-  
-      const result = await response.json();
+      // postProb 함수를 호출하여 문제 등록 처리
+      const result = await postProb(title, contents, answers, theme);
+
       console.log('Challenge created:', result);
-      // Reset form fields
+      // 폼 필드 초기화
       setTitle('');
       setTheme('');
       setContents(['']);
       setAnswers(['']);
     } catch (error) {
-      console.error(error);
+      console.error('Error creating challenge:', error.message || error);
+      // 에러 처리 (예: 에러 메시지 표시)
+      alert('문제 등록에 실패했습니다. 다시 시도해주세요.');
     }
   };
-  
+
   return (
     <Main title="Up_Challenge" description="Up_Challenge 화면입니다.">
       <form onSubmit={handleSubmit}>

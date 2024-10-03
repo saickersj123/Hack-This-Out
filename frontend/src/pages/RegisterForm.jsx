@@ -1,6 +1,7 @@
 import '../css/RegisterForm.scss';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { signUpUser } from '../api/axiosInstance';
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -21,26 +22,20 @@ function RegisterForm() {
   };
 
   // 폼 제출 이벤트 처리
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // 기본 폼 제출 동작 막기
 
-    // POST 요청 보내기
-    fetch('http://localhost:5000/api/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('User registered:', data);
-        navigate('/');
-      })
-      .catch((error) => {
-        console.error('Error registering user:', error);
-        // 등록 실패 시 처리
-      });
+    try {
+      // signUpUser 함수를 호출하여 회원가입 처리
+      const data = await signUpUser(formData);
+
+      console.log('User registered:', data);
+      navigate('/'); // 회원가입 성공 시 홈 페이지로 이동
+    } catch (error) {
+      console.error('Error registering user:', error.message || error);
+      // 등록 실패 시 처리 (예: 에러 메시지 표시)
+      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   return (
