@@ -19,6 +19,24 @@ router.get('/', async (req, res) => {
     }
 });
 
+// 모든 유저의 exp 필드를 소급 적용하는 라우트
+router.put('/update-exp', async (req, res) => {
+    try {
+        // exp 필드가 없는 유저를 찾아 exp 필드를 0으로 설정
+        const result = await User.updateMany(
+            { exp: { $exists: false } }, // exp 필드가 없는 유저만 업데이트
+            { $set: { exp: 0 } }         // exp 필드를 0으로 설정
+        );
+
+        res.json({
+            message: `${result.nModified} users updated with default exp value.`,
+            success: true
+        });
+    } catch (err) {
+        console.error('Error updating exp for users:', err);
+        res.status(500).json({ message: 'Server error', success: false });
+    }
+});
 
 router.post('/', 
 [
