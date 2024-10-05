@@ -6,7 +6,7 @@ import {
     getProb,
     deleteProb,
     postMachine
-} from '../../controller/ProbFunction.js';
+} from '../../controller/ProbController.js';
 
 const ProbRoutes = express.Router();
 
