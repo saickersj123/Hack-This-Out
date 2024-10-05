@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/MainPage.scss';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../api/axiosInstance.jsx';
+
 
 const MainPage = () => {
   const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
-
-  const handleBackgroundClick = () => {
-    setIsClicked(!isClicked); // 배경 이미지 클릭 시 상태 변경
-  };
   const [formData, setFormData] = useState({
     user_id: '',
     password: '',
   });
+
+  const handleBackgroundClick = () => {
+    setIsClicked(!isClicked); // 배경 이미지 클릭 시 상태 변경
+  };
 
   // 입력 값이 변경될 때 실행되는 함수
   const handleChange = (e) => {
@@ -24,36 +26,20 @@ const MainPage = () => {
     }));
   };
 
-  // 폼 제출 이벤트 처리
-  const handleSubmit = (e) => {
+  // 폼 제출 이벤트 처리 함수
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // POST 요청 보내기
-    fetch('http://localhost:5000/api/auth', {
-      method: 'POST',
-      credentials: "include",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          // 서버에서 반환한 오류 상태 코드 확인
-          return response.json().then((error) => {
-            throw new Error(error.message || '로그인 실패');
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Success login :', data);
-        navigate('/main');
-      })
-      .catch((error) => {
-        console.error('Error registering user:', error);
-        alert('로그인 실패. 다시 시도해주세요.');
-      });
+    try {
+      // loginUser 함수를 호출하여 로그인 처리
+      const data = await loginUser(formData);
+
+      console.log('Success login:', data);
+      navigate('/main'); // 로그인 성공 시 메인 페이지로 이동
+    } catch (error) {
+      console.error('Error logging in:', error.message || error);
+      alert('로그인 실패. 다시 시도해주세요.');
+    }
   };
 
   return (

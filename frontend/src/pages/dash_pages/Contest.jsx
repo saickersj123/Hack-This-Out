@@ -1,12 +1,12 @@
 import React from 'react'
 import Main from '../../components/section/Main'
 
-const Search = () => {
+const Contest = () => {
     return (
         <Main title="Search" description="Search 화면입니다.">
-            Search
+            Contest
         </Main>
     )
 }
     
-export default Search
+export default Contest;

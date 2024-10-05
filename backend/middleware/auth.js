@@ -1,6 +1,5 @@
-const User = require('../model/User.js');
-const config = require('config');
-const jwt = require('jsonwebtoken');
+import config from '../config/config.js';
+import jwt from 'jsonwebtoken';
 
 let auth = (req, res, next) => {
     //인증 처리를 하는 곳
@@ -14,7 +13,8 @@ let auth = (req, res, next) => {
         });
     }
     try {
-        const decoded = jwt.verify(token, config.get('jswtSecret'));
+        const jwtSecret = config.jwtSecret;
+        const decoded = jwt.verify(token, jwtSecret);
         req.user = decoded.user;
         next();
     } catch (err) {
@@ -37,4 +37,4 @@ let auth = (req, res, next) => {
 //     //4. 2조건 불만족시 NO
 };
 
-module.exports = { auth };
+export default auth;
