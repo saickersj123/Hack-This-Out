@@ -10,8 +10,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    origin: ["https://app.hackthisout.o-r.kr/"],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    origin: "https://app.hackthisout.o-r.kr/",
     credentials: true
 }));
 
