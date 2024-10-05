@@ -7,7 +7,7 @@ import {
     postSignUp,
     getLoginUser,
     postLoginUser,
-} from '../../function/UserFunction.js';
+} from '../../controller/UserController.js';
 
 const UserRoutes = express.Router();
 
