@@ -10,7 +10,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    origin: "https://app.hackthisout.o-r.kr/",
+    origin: "https://app.hackthisout.o-r.kr",
     credentials: true
 }));
 
