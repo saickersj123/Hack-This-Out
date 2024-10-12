@@ -1,6 +1,6 @@
-import { EC2Client, RunInstancesCommand, TerminateInstancesCommand } from '@aws-sdk/client-ec2';
+import { EC2Client, RunInstancesCommand, TerminateInstancesCommand, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
 import Instance from '../model/Instance.js';
-import User from '../model/User.js';
+import Machine from '../model/Machine.js';
 import config from '../config/config.js';
 
 // Configure AWS SDK v3
@@ -17,22 +17,35 @@ const ec2Client = new EC2Client({
  */
 export const startInstance = async (req, res) => {
   try {
-    const { machineType } = req.body;
+    const { machineId } = req.params;
     const userId = req.user.id;
 
-    // Define AMI IDs for each machine type
-    const amiMap = {
-      machine1: 'ami-xxxxxxxxxxxxxxx1',
-      machine2: 'ami-xxxxxxxxxxxxxxx2',
-      // Add more machine types and their corresponding AMI IDs
-    };
-
-    const ImageId = amiMap[machineType];
-    if (!ImageId) {
-      return res.status(400).json({ msg: 'Invalid machine type selected' });
+    // Fetch the machine from the database to get the AMI ID
+    const machine = await Machine.findById(machineId);
+    if (!machine) {
+      return res.status(400).json({ msg: 'Invalid machine ID selected' });
     }
 
+    const ImageId = machine.amiId;
+
     // Create EC2 instance parameters
+    const userDataScript = `#!/bin/bash
+sudo apt-get update
+sudo apt-get install -y curl jq tunctl
+USER_ID="${userId}"
+INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+VPN_IP=$(ip addr show tun0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
+SERVER_URL="https://api.hackthisout.o-r.kr/api/inst/${INSTANCE_ID}/receive-vpn-ip"
+curl -X POST $SERVER_URL \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "${USER_ID}",
+    "vpnIp": "${VPN_IP}"
+  }'
+
+# Additional configuration for VPN or other services can be added here
+`;
+
     const params = {
       ImageId,
       InstanceType: 't2.micro', // Choose appropriate instance type
@@ -44,20 +57,7 @@ export const startInstance = async (req, res) => {
           Tags: [{ Key: 'User', Value: userId }],
         },
       ],
-      UserData: Buffer.from(`#!/bin/bash
-sudo apt-get update
-sudo apt-get install -y curl jq tunctl
-USER_ID="${userId}"
-INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
-VPN_IP=$(ip addr show tun0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
-SERVER_URL="https://api.hackthisout.o-r.kr/api/inst/receive-vpn-ip"
-curl -X POST $SERVER_URL \
-  -H "Content-Type: application/json" \
-  -d '{
-    "userId": "'$USER_ID'",
-    "instanceId": "'$INSTANCE_ID'",
-    "vpnIp": "'$VPN_IP'"
-  }'`).toString('base64'),
+      UserData: Buffer.from(userDataScript).toString('base64'),
     };
 
     // Create and send RunInstancesCommand
@@ -74,7 +74,7 @@ curl -X POST $SERVER_URL \
     const newInstance = new Instance({
       user: userId,
       instanceId,
-      machineType,
+      machineType: machine.name,
     });
     await newInstance.save();
 
@@ -90,7 +90,8 @@ curl -X POST $SERVER_URL \
  */
 export const receiveVpnIp = async (req, res) => {
   try {
-    const { userId, instanceId, vpnIp } = req.body;
+    const { instanceId } = req.params;
+    const { userId, vpnIp } = req.body;
 
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
@@ -147,6 +148,62 @@ export const submitFlag = async (req, res) => {
     res.json({ msg: 'Flag accepted. Instance terminated.' });
   } catch (error) {
     console.error('Error submitting flag:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Get details of a specific instance.
+ */
+export const getInstanceDetails = async (req, res) => {
+  try {
+    const { instanceId } = req.params;
+    const userId = req.user.id;
+
+    // Find the instance
+    const instance = await Instance.findOne({ instanceId, user: userId });
+    if (!instance) {
+      return res.status(404).json({ msg: 'Instance not found' });
+    }
+
+    res.json(instance);
+  } catch (error) {
+    console.error('Error fetching instance details:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete a specific instance.
+ */
+export const deleteInstance = async (req, res) => {
+  try {
+    const { instanceId } = req.params;
+    const userId = req.user.id;
+
+    // Find the instance
+    const instance = await Instance.findOne({ instanceId, user: userId });
+    if (!instance) {
+      return res.status(404).json({ msg: 'Instance not found' });
+    }
+
+    // Terminate the instance
+    const terminateParams = {
+      InstanceIds: [instanceId],
+    };
+    const terminateCommand = new TerminateInstancesCommand(terminateParams);
+    await ec2Client.send(terminateCommand);
+
+    // Update instance status in DB
+    instance.status = 'terminated';
+    await instance.save();
+
+    // Optionally, delete the instance record from DB
+    await Instance.deleteOne({ instanceId });
+
+    res.json({ msg: 'Instance terminated and deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting instance:', error);
     res.status(500).send('Server error');
   }
 };

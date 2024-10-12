@@ -1,5 +1,6 @@
 import Example from '../model/Example.js';
 import Counter from '../model/Counter.js';
+import Machine from '../model/Machine.js'; // Ensure Machine model is imported
 
 // 문제 번호 할당
 const getNextSequence = async (name) => {
@@ -73,8 +74,11 @@ export const postMachine = async (req, res) => {
     console.log('Request body:', req.body);
 
     try {
-        const { name, category, info, exp } = req.body;
-        const newMachine = new Machine({ name, category, info, exp });
+        const { name, category, info, exp, amiId } = req.body; // Include amiId
+        if (!amiId) {
+            return res.status(400).json({ msg: 'AMI ID is required' });
+        }
+        const newMachine = new Machine({ name, category, info, exp, amiId });
         await newMachine.save();
         res.json(newMachine);
     } catch (error) {

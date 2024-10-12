@@ -45,6 +45,11 @@ const MachineSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    amiId: { // New field for AMI ID
+        type: String,
+        required: true,
+        unique: true
+    },
     repute: {
         type: Number,
         default: 0.0 // 평균 별점
