@@ -116,10 +116,11 @@ export const receiveVpnIp = async (req, res) => {
  */
 export const submitFlag = async (req, res) => {
   try {
-    const { instanceId, flag } = req.body;
+    const { instanceId } = req.params;
+    const { flag } = req.body;
     const userId = req.user.id;
 
-    // Validate flag (implementation depends on your flag validation logic)
+    // Validate flag
     const isValidFlag = validateFlag(flag, userId, instanceId);
     if (!isValidFlag) {
       return res.status(400).json({ msg: 'Invalid flag' });
