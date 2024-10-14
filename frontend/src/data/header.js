@@ -7,6 +7,10 @@ import { AiFillGithub } from "react-icons/ai";
 import { AiFillYoutube } from "react-icons/ai";
 import { AiOutlineInstagram } from "react-icons/ai";
 
+import { PiComputerTower } from "react-icons/pi";
+import { GrCloudComputer } from "react-icons/gr";
+
+
 export const headerMenus = [
     {
         title: "Tutorial",
@@ -28,12 +32,22 @@ export const headerMenus = [
         icon: <CiRouter />,
         src: "/Rankings"
     },
-    {
-        title: "Contest",
-        icon: <TiStopwatch/>,
-        src: "/Contest"
-    }
-];
+        {
+            title: "Contest",
+            icon: <TiStopwatch/>,
+            src: "/Contest"
+        },
+        {
+            title: "Machines",
+            icon: < PiComputerTower />,
+            src: "/Machines"
+        },
+        {
+            title: "Instances",
+            icon: <GrCloudComputer />,
+            src: "/Instances"
+        }
+    ];
 
 export const searchKeyword = [
     {

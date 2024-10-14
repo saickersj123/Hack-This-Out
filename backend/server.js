@@ -5,13 +5,14 @@ import cookieParser from 'cookie-parser';
 import userRoutes from "./routes/UserRoutes.js";
 import probRoutes from "./routes/ProbRoutes.js";
 import InstRoutes from "./routes/InstRoutes.js";
+import MachineRoutes from './routes/MachineRoutes.js';
 
 const app = express();
 
 connectDB();
 
 app.use(cors({
-    origin: process.env.ORIGIN || "http://localhost:3000",
+    origin: "http://localhost:3000",
     credentials: true
 }));
 
@@ -27,6 +28,8 @@ app.use(express.json({ extended: false }));
 app.use('/api/user', userRoutes);
 app.use('/api/prob', probRoutes);
 app.use('/api/inst', InstRoutes);
+app.use('/api/machines', MachineRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 

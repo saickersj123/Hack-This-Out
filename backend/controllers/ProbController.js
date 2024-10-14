@@ -1,6 +1,6 @@
-import Example from '../model/Example.js';
-import Counter from '../model/Counter.js';
-import Machine from '../model/Machine.js'; // Ensure Machine model is imported
+import Example from '../models/Example.js';
+import Counter from '../models/Counter.js';
+import Machine from '../models/Machine.js'; // Ensure Machine model is imported
 
 // 문제 번호 할당
 const getNextSequence = async (name) => {

@@ -1,4 +1,4 @@
-import Instance from '../model/Instance.js';
+import Instance from '../models/Instance.js';
 
 const validateInstance = async (req, res, next) => {
   const { instanceId } = req.params;

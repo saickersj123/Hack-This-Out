@@ -1,4 +1,4 @@
-import Machine from './model/Machine.js';
+import Machine from '../models/Machine.js';
 
 // Example machines
 const machines = [

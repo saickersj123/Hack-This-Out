@@ -1,13 +1,13 @@
 import express from 'express';
 import { check } from 'express-validator';
-import auth from '../middleware/auth.js';
+import auth from '../middlewares/auth.js';
 
 import {
     getAllUser,
     postSignUp,
     getLoginUser,
     postLoginUser,
-} from '../controller/UserController.js';
+} from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
 

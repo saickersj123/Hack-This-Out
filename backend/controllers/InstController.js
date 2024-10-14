@@ -1,6 +1,6 @@
 import { EC2Client, RunInstancesCommand, TerminateInstancesCommand, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
-import Instance from '../model/Instance.js';
-import Machine from '../model/Machine.js';
+import Instance from '../models/Instance.js';
+import Machine from '../models/Machine.js';
 import config from '../config/config.js';
 
 // Configure AWS SDK v3
@@ -19,7 +19,9 @@ export const startInstance = async (req, res) => {
   try {
     const { machineId } = req.params;
     const userId = req.user.id;
-
+    const INSTANCE_ID = ""
+    const USER_ID = ""
+    const VPN_IP = ""
     // Fetch the machine from the database to get the AMI ID
     const machine = await Machine.findById(machineId);
     if (!machine) {
@@ -34,10 +36,11 @@ sudo apt-get install -y amazon-ec2-utils
 USER_ID="${userId}"
 INSTANCE_ID=$(ec2-metadata -i | cut -d' ' -f2)
 VPN_IP=$(ip addr show tun0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
-SERVER_URL="https://api.hackthisout.o-r.kr/api/inst/${INSTANCE_ID}/receive-vpn-ip"
+SERVER_URL="https://api.hackthisout.o-r.kr/api/inst/receive-vpn-ip"
 curl -X POST $SERVER_URL \
   -H "Content-Type: application/json" \
   -d '{
+    "instanceId": "${INSTANCE_ID}",
     "userId": "${USER_ID}",
     "vpnIp": "${VPN_IP}"
   }'
@@ -90,8 +93,7 @@ curl -X POST $SERVER_URL \
  */
 export const receiveVpnIp = async (req, res) => {
   try {
-    const { instanceId } = req.params;
-    const { userId, vpnIp } = req.body;
+    const { instanceId, userId, vpnIp } = req.body;
 
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
@@ -152,7 +154,19 @@ export const submitFlag = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
-
+/**
+ * Get details of all instances.
+ */
+export const getAllInstances = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const instances = await Instance.find({ user: userId });
+    res.json(instances);
+  } catch (error) {
+    console.error('Error fetching all instances:', error);  
+    res.status(500).send('Server error');
+  }
+};
 /**
  * Get details of a specific instance.
  */
