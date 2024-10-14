@@ -94,7 +94,7 @@ curl -X POST $SERVER_URL \
 export const receiveVpnIp = async (req, res) => {
   try {
     const { instanceId, userId, vpnIp } = req.body;
-
+    console.log(instanceId, userId, vpnIp);
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
