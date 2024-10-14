@@ -30,10 +30,9 @@ export const startInstance = async (req, res) => {
 
     // Create EC2 instance parameters
     const userDataScript = `#!/bin/bash
-sudo apt-get update
-sudo apt-get install -y curl jq tunctl
+sudo apt-get install -y amazon-ec2-utils
 USER_ID="${userId}"
-INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+INSTANCE_ID=$(ec2-metadata -i | cut -d' ' -f2)
 VPN_IP=$(ip addr show tun0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
 SERVER_URL="https://api.hackthisout.o-r.kr/api/inst/${INSTANCE_ID}/receive-vpn-ip"
 curl -X POST $SERVER_URL \
@@ -51,6 +50,7 @@ curl -X POST $SERVER_URL \
       InstanceType: 't2.micro', // Choose appropriate instance type
       MinCount: 1,
       MaxCount: 1,
+      SecurityGroupIds: [config.aws.securityGroupId], // Add your Security Group ID here
       TagSpecifications: [
         {
           ResourceType: 'instance',

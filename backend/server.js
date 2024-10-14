@@ -11,7 +11,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    origin: "https://app.hackthisout.o-r.kr",
+    origin: process.env.ORIGIN || "http://localhost:3000",
     credentials: true
 }));
 

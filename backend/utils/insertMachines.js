@@ -7,14 +7,14 @@ const machines = [
     category: 'Web',
     info: 'Description for machine1',
     exp: 100,
-    amiId: 'ami-xxxxxxxxxxxxxxx1', // Replace with actual AMI ID
+    amiId: 'ami-08757619c47af8049', // Replace with actual AMI ID
   },
   {
     name: 'machine2',
     category: 'Network',
     info: 'Description for machine2',
     exp: 150,
-    amiId: 'ami-xxxxxxxxxxxxxxx2', // Replace with actual AMI ID
+    amiId: 'ami-08757619c47af8049', // Replace with actual AMI ID
   },
   // Add more machines as needed
 ];

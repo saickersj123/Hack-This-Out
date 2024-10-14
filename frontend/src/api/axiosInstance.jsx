@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // axios 인스턴스 생성. 모든 요청에 사용됩니다.
 const axiosInstance = axios.create({
-  baseURL: 'https://api.hackthisout.o-r.kr/api', // API 요청의 기본 URL 설정
+  baseURL: 'https://api.hackthisout.o-r.kr/api' || 'http://localhost:5000/api', // API 요청의 기본 URL 설정
   headers: {
     'Content-Type': 'application/json', // 요청 헤더에 Content-Type을 application/json으로 설정
   },
@@ -99,6 +99,83 @@ export const deleteProb = async (id) => {
     return response.data;
   } catch (error) {
     throw new Error('문제를 삭제하는데 실패했습니다.');
+  }
+};
+
+/**
+ * Start a new EC2 instance with the specified machineId.
+ * @param {string} machineId - The ID of the machine to start.
+ * @returns {Promise<Object>} - The response data containing instance details.
+ */
+export const startInstance = async (machineId) => {
+  try {
+    const response = await axiosInstance.post(`/inst/start-instance/${machineId}`);
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to start instance');
+  }
+};
+
+/**
+ * Get details of a specific instance.
+ * @param {string} instanceId - The ID of the instance to retrieve details for.
+ * @returns {Promise<Object>} - The response data containing instance details.
+ */
+export const getInstanceDetails = async (instanceId) => {
+  try {
+    const response = await axiosInstance.get(`/inst/${instanceId}`);
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch instance details');
+  }
+};
+
+/**
+ * Submit a flag for a specific instance.
+ * @param {string} instanceId - The ID of the instance.
+ * @param {string} flag - The flag to submit.
+ * @returns {Promise<Object>} - The response data confirming submission.
+ */
+export const submitFlag = async (instanceId, flag) => {
+  try {
+    const response = await axiosInstance.post(`/inst/${instanceId}/submit-flag`, { flag });
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to submit flag');
+  }
+};
+
+/**
+ * Delete a specific instance.
+ * @param {string} instanceId - The ID of the instance to delete.
+ * @returns {Promise<Object>} - The response data confirming deletion.
+ */
+export const deleteInstance = async (instanceId) => {
+  try {
+    const response = await axiosInstance.delete(`/inst/${instanceId}`);
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to delete instance');
+  }
+};
+
+/**
+ * Submit VPN IP received by the EC2 instance.
+ * Note: This function is typically called from the backend, but including it here for completeness.
+ * @param {string} instanceId - The ID of the instance.
+ * @param {string} userId - The ID of the user.
+ * @param {string} vpnIp - The VPN IP to submit.
+ * @returns {Promise<Object>} - The response data confirming VPN IP update.
+ */
+export const receiveVpnIp = async (instanceId, userId, vpnIp) => {
+  try {
+    const response = await axiosInstance.post(`/inst/${instanceId}/receive-vpn-ip`, {
+      userId,
+      vpnIp,
+    });
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to receive VPN IP');
   }
 };
 
