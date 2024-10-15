@@ -29,25 +29,6 @@ export const startInstance = async (req, res) => {
     }
 
     const ImageId = machine.amiId;
-
-    // Create EC2 instance parameters
-    const userDataScript = `#!/bin/bash
-sudo apt-get install -y amazon-ec2-utils
-USER_ID="${userId}"
-INSTANCE_ID=$(ec2-metadata -i | cut -d' ' -f2)
-VPN_IP=$(ip addr show tun0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
-SERVER_URL="https://api.hackthisout.o-r.kr/api/inst/receive-vpn-ip"
-curl -X POST $SERVER_URL \
-  -H "Content-Type: application/json" \
-  -d '{
-    "instanceId": "${INSTANCE_ID}",
-    "userId": "${USER_ID}",
-    "vpnIp": "${VPN_IP}"
-  }'
-
-# Additional configuration for VPN or other services can be added here
-`;
-
     const params = {
       ImageId,
       InstanceType: 't2.micro', // Choose appropriate instance type
@@ -60,7 +41,6 @@ curl -X POST $SERVER_URL \
           Tags: [{ Key: 'User', Value: userId }],
         },
       ],
-      UserData: Buffer.from(userDataScript).toString('base64'),
     };
 
     // Create and send RunInstancesCommand
@@ -93,10 +73,10 @@ curl -X POST $SERVER_URL \
  */
 export const receiveVpnIp = async (req, res) => {
   try {
-    const { instanceId, userId, vpnIp } = req.body;
-    console.log(instanceId, userId, vpnIp);
+    const { instanceId, vpnIp } = req.body;
+    console.log(instanceId, vpnIp);
     // Find the instance
-    const instance = await Instance.findOne({ instanceId, user: userId });
+    const instance = await Instance.findOne({ instanceId });
     if (!instance) {
       return res.status(404).json({ msg: 'Instance not found' });
     }
@@ -223,6 +203,29 @@ export const deleteInstance = async (req, res) => {
   }
 };
 
+
+/**
+ * Get user ID by instance ID.
+ */
+export const getUserIdByInstanceId = async (req, res) => {
+  try {
+    const { instanceId } = req.params;
+
+    // Find the instance by instanceId and populate the user field
+    const instance = await Instance.findOne({ instanceId }).populate('user', '_id');
+    if (!instance) {
+      return res.status(404).json({ msg: 'Instance not found' });
+    }
+
+    res.json({ userId: instance.user._id });
+  } catch (error) {
+    console.error('Error fetching user ID by instance ID:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+
+
 /**
  * Validate the submitted flag.
  * Implement your own logic to validate the flag.
@@ -231,3 +234,5 @@ const validateFlag = (flag, userId, instanceId) => {
   // TODO: Implement flag validation logic
   return true; // Placeholder
 };
+
+
