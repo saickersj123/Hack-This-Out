@@ -19,9 +19,6 @@ export const startInstance = async (req, res) => {
   try {
     const { machineId } = req.params;
     const userId = req.user.id;
-    const INSTANCE_ID = ""
-    const USER_ID = ""
-    const VPN_IP = ""
     // Fetch the machine from the database to get the AMI ID
     const machine = await Machine.findById(machineId);
     if (!machine) {
