@@ -103,6 +103,37 @@ export const deleteProb = async (id) => {
   }
 };
 
+// 머신 등록 요청
+export const postMac = async ( name, category, info, exp) => {
+  try {
+    const response = await axiosInstance.post('/prob/post-mac', {
+      name,
+      category,
+      info,
+      exp,
+    });
+    return response.data; // 성공 시 데이터 반환
+  } catch (error) {
+    // 에러 처리
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error('머신 등록 실패');
+    }
+  }
+};
+
+export const getMachine = async () => {
+  try {
+    const response = await axiosInstance.get('/prob/get-mac');
+    return response.data; // 머신 데이터 반환
+  } catch (error) {
+    console.error('Error fetching machine:', error);
+    throw new Error('Failed to fetch machine data');
+  }
+};
+
+
 /**
  * Start a new EC2 instance with the specified machineId.
  * @param {string} machineId - The ID of the machine to start.
@@ -203,7 +234,7 @@ export const createMachine = async (machineData) => {
     return response.data; // Return the data received from the server
   } catch (error) {
     throw error.response ? error.response.data : new Error('Failed to create machine');
-  }
+    }
 };
 
 /**

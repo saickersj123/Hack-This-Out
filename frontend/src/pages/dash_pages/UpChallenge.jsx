@@ -1,13 +1,18 @@
 import Main from '../../components/section/Main'
 import React, { useState } from 'react';
 import { postProb } from '../../api/axiosInstance';
-
+import { useNavigate } from 'react-router-dom';
 
 const UpChallenge = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [theme, setTheme] = useState('');
   const [contents, setContents] = useState(['']);
   const [answers, setAnswers] = useState(['']);
+
+  const navUpMachine = () => {
+    navigate('/Upmachine');
+  }
 
   const handleContentChange = (index, event) => {
     const newContents = [...contents];
@@ -52,32 +57,17 @@ const UpChallenge = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Title:</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
         </div>
         <div>
           <label>Theme:</label>
-          <input
-            type="text"
-            value={theme}
-            onChange={(e) => setTheme(e.target.value)}
-            required
-          />
+          <input type="text" value={theme} onChange={(e) => setTheme(e.target.value)} required/>
         </div>
         <div>
           <label>Content:</label>
           {contents.map((content, index) => (
             <div key={index}>
-              <input
-                type="text"
-                value={content}
-                onChange={(e) => handleContentChange(index, e)}
-                required
-              />
+              <input type="text" value={content} onChange={(e) => handleContentChange(index, e)} required/>
               <input
                 type="text"
                 value={answers[index]} // 해당 content의 answer
@@ -93,6 +83,7 @@ const UpChallenge = () => {
         </div>
         <button type="submit">Submit</button>
       </form>
+      <button onClick={navUpMachine}>머신 업로드</button>
     </Main>
   );
 };

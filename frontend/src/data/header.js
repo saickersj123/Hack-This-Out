@@ -32,10 +32,10 @@ export const headerMenus = [
         icon: <CiRouter />,
         src: "/Rankings"
     },
-        {
-            title: "Contest",
-            icon: <TiStopwatch/>,
-            src: "/Contest"
+    {
+        title: "Machine",
+        icon: <TiStopwatch/>,
+            src: "/Machine"
         },
         {
             title: "Machines",
@@ -46,8 +46,8 @@ export const headerMenus = [
             title: "Instances",
             icon: <GrCloudComputer />,
             src: "/Instances"
-        }
-    ];
+    }
+];
 
 export const searchKeyword = [
     {
