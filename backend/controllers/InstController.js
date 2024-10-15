@@ -30,7 +30,6 @@ export const startInstance = async (req, res) => {
 
     // Create EC2 instance parameters
     const userDataScript = `#!/bin/bash
-sudo apt-get update -y
 sudo apt-get install -y amazon-ec2-utils
 USER_ID="${userId}"
 INSTANCE_ID=$(ec2-metadata -i | cut -d' ' -f2)
