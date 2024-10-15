@@ -19,7 +19,9 @@ export const startInstance = async (req, res) => {
   try {
     const { machineId } = req.params;
     const userId = req.user.id;
-
+    const INSTANCE_ID = ""
+    const USER_ID = ""
+    const VPN_IP = ""
     // Fetch the machine from the database to get the AMI ID
     const machine = await Machine.findById(machineId);
     if (!machine) {
@@ -37,11 +39,11 @@ VPN_IP=$(ip addr show tun0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
 SERVER_URL="https://api.hackthisout.o-r.kr/api/inst/receive-vpn-ip"
 curl -X POST $SERVER_URL \
   -H "Content-Type: application/json" \
-  -d "{
-    \\"instanceId\\": \\"${INSTANCE_ID}\\",
-    \\"userId\\": \\"${USER_ID}\\",
-    \\"vpnIp\\": \\"${VPN_IP}\\"
-  }"
+  -d '{
+    "instanceId": "${INSTANCE_ID}",
+    "userId": "${USER_ID}",
+    "vpnIp": "${VPN_IP}"
+  }'
 
 # Additional configuration for VPN or other services can be added here
 `;
