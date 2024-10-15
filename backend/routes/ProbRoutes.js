@@ -5,8 +5,9 @@ import {
     getAllProb,
     getProb,
     deleteProb,
-    postMachine
-} from '../controllers/ProbController.js';
+    postMachine,
+    getMachine
+} from '../../function/ProbFunction.js';
 
 const ProbRoutes = express.Router();
 
@@ -17,5 +18,6 @@ ProbRoutes.get("/get-prob/:numericId", getProb);
 ProbRoutes.delete("/delete-prob/:numericId", deleteProb);
 
 ProbRoutes.post("/post-mac", postMachine);
+ProbRoutes.get("/get-mac", getMachine);
 
 export default ProbRoutes;
