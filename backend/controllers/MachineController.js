@@ -52,8 +52,9 @@ export const getAllMachines = async (req, res) => {
  */
 export const getMachine = async (req, res) => {
   try {
-    const { machineId } = req.params;
-    const machine = await Machine.findById(machineId);
+    const { machineName } = req.params;
+    console.log(machineName);
+    const machine = await Machine.findOne({ name: machineName });
     if (!machine) {
       return res.status(404).json({ msg: 'Machine not found.' });
     }

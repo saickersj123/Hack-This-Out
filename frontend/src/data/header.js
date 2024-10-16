@@ -33,19 +33,19 @@ export const headerMenus = [
         src: "/Rankings"
     },
     {
-        title: "Machine",
-        icon: <TiStopwatch/>,
-            src: "/Machine"
-        },
-        {
-            title: "Machines",
-            icon: < PiComputerTower />,
-            src: "/Machines"
-        },
-        {
-            title: "Instances",
-            icon: <GrCloudComputer />,
-            src: "/Instances"
+        title: "Contest",
+        icon: <TiStopwatch />,
+        src: "/Contest"
+    },
+    {
+        title: "Machines",
+        icon: < PiComputerTower />,
+        src: "/Machines"
+    },
+    {
+        title: "Instances",
+        icon: <GrCloudComputer />,
+        src: "/Instances"
     }
 ];
 

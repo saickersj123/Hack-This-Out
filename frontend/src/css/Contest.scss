@@ -1,0 +1,19 @@
+.event {
+    height: 280px;
+    padding: 0;
+    margin: 0;
+}
+
+.tab {
+    height: 60px;
+
+    button {
+        width: 100px;
+        padding: 0 10%;
+        display: flex;              /* 플렉스 박스를 사용하여 수직 중앙 정렬 가능 */
+        align-items: center;        /* 수직 방향 중앙 정렬 */
+        justify-content: center;    /* 수평 방향 중앙 정렬 */
+        text-align: center;         /* 텍스트 중앙 정렬 */
+        height: 100%;               /* 버튼 높이를 부모의 100%로 설정해 높이를 맞춤 */
+    }
+}

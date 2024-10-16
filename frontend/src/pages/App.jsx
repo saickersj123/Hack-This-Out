@@ -14,8 +14,8 @@ const ChallengeDetail = lazy(() => import('./dash_pages/ChallengesDetail'));
 const UpChallenge = lazy(() => import('./dash_pages/UpChallenge'));
 const UpMachine = lazy(() => import('./dash_pages/UpMachine'));
 const Rankings = lazy(() => import('./dash_pages/Rankings'));
-const Machine = lazy(() => import('./dash_pages/Machine'));
-const MachineDetail = lazy(() => import('./dash_pages/MachineDetail'));
+const Contest = lazy(() => import('./dash_pages/Contest'));
+const ContestDetail = lazy(() => import('./dash_pages/ContestDetail'));
 
 // 새로운 App 구성
 const App = () => {
@@ -31,9 +31,9 @@ const App = () => {
           <Route path="/Upload" element={<UpChallenge />} />
           <Route path="/Upmachine" element={<UpMachine />} />
           <Route path="/Rankings" element={<Rankings />} />
-          <Route path="/Machine" element={<Machine />} />
-          <Route path="/Machine/:machineName" element={<MachineDetail />} />
-          <Route path="/Machine/:machineName/:tabName" element={<MachineDetail />} />
+          <Route path="/Contest" element={<Contest />} />
+          <Route path="/Contest/:machineName" element={<ContestDetail />} />
+          <Route path="/Contest/:machineName/:tabName" element={<ContestDetail />} />
           <Route path="/Instances" element={<InstancesPage />} />
           <Route path="/Machines" element={<MachinesPage />} />
         </Routes>

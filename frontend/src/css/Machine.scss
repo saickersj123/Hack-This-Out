@@ -1,0 +1,41 @@
+.Machine-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2a2a2a;
+    color: white;
+  }
+  
+  .Machine-table th,
+  .Machine-table td {
+    padding: 12px 15px;
+    text-align: left;
+  }
+  
+  .Machine-table th {
+    background-color: #333;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  
+  .machine-item {
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .machine-item:last-child {
+    border-bottom: none;
+  }
+  
+  .machine-name {
+    display: inline-block;
+    width: 80px;
+    margin-right: 10px;
+  }
+  
+  .machine-info {
+    flex: 2;
+    margin-right: 10px;
+  }
+  
+  .machine-repute {
+    flex: 1;
+  }

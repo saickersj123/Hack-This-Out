@@ -18,7 +18,7 @@ MachineRoutes.post('/', auth, validateMachine, createMachine);
 MachineRoutes.get('/', auth, getAllMachines);
 
 // Route to get a single machine by ID
-MachineRoutes.get('/:machineId', auth, getMachine);
+MachineRoutes.get('/:machineName', auth, getMachine);
 
 // Route to update a machine by ID
 MachineRoutes.put('/:machineId', auth, validateMachine, updateMachine);
