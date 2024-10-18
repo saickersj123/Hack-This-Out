@@ -1,37 +1,50 @@
-import { EC2Client, RunInstancesCommand, TerminateInstancesCommand, DescribeInstancesCommand } from '@aws-sdk/client-ec2';
-import Instance from '../models/Instance.js';
-import Machine from '../models/Machine.js';
-import config from '../config/config.js';
+import { 
+  EC2Client, 
+  RunInstancesCommand, 
+  TerminateInstancesCommand, 
+  _InstanceType as EC2InstanceType 
+} from '@aws-sdk/client-ec2';
+import { Request, Response } from 'express';
+import Instance from '../models/Instance';
+import Machine from '../models/Machine';
+import config from '../config/config';
 
 // Configure AWS SDK v3
 const ec2Client = new EC2Client({
   region: config.aws.region,
   credentials: {
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey,
+    accessKeyId: config.aws.accessKeyId!,
+    secretAccessKey: config.aws.secretAccessKey!,
   },
 });
 
 /**
  * Start an EC2 instance based on user's machine selection.
  */
-export const startInstance = async (req, res) => {
+export const startInstance = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
-    const userId = req.user.id;
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      res.status(401).json({ msg: 'Unauthorized' });
+      return;
+    }
+
     // Fetch the machine from the database to get the AMI ID
     const machine = await Machine.findById(machineId);
     if (!machine) {
-      return res.status(400).json({ msg: 'Invalid machine ID selected' });
+      res.status(400).json({ msg: 'Invalid machine ID selected' });
+      return;
     }
 
     const ImageId = machine.amiId;
     const params = {
       ImageId,
-      InstanceType: 't2.micro', // Choose appropriate instance type
+      InstanceType: EC2InstanceType.t2_micro, // Use the enum for InstanceType
       MinCount: 1,
       MaxCount: 1,
-      SecurityGroupIds: [config.aws.securityGroupId], // Add your Security Group ID here
+      SecurityGroupIds: [config.aws.securityGroupId!], // Add your Security Group ID here
       TagSpecifications: [
         {
           ResourceType: 'instance',
@@ -39,13 +52,21 @@ export const startInstance = async (req, res) => {
         },
       ],
     };
-
     // Create and send RunInstancesCommand
-    const runCommand = new RunInstancesCommand(params);
+    const runCommand = new RunInstancesCommand({
+      ...params,
+      TagSpecifications: [
+        {
+          ResourceType: 'instance' as const,
+          Tags: [{ Key: 'User', Value: userId }],
+        },
+      ],
+    });
     const data = await ec2Client.send(runCommand);
     
-    if (!data.Instances || data.Instances.length === 0) {
-      return res.status(500).json({ msg: 'Failed to create instance' });
+    if (!data.Instances || data.Instances.length === 0 || !data.Instances[0].InstanceId) {
+      res.status(500).json({ msg: 'Failed to create instance' });
+      return;
     }
 
     const instanceId = data.Instances[0].InstanceId;
@@ -68,14 +89,16 @@ export const startInstance = async (req, res) => {
 /**
  * Receive VPN IP posted by the EC2 instance.
  */
-export const receiveVpnIp = async (req, res) => {
+export const receiveVpnIp = async (req: Request, res: Response): Promise<void> => {
   try {
     const { instanceId, vpnIp } = req.body;
     console.log(instanceId, vpnIp);
+
     // Find the instance
     const instance = await Instance.findOne({ instanceId });
     if (!instance) {
-      return res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ msg: 'Instance not found' });
+      return;
     }
 
     // Update instance with VPN IP and status
@@ -93,22 +116,29 @@ export const receiveVpnIp = async (req, res) => {
 /**
  * Handle flag submission, terminate instance, and clean up.
  */
-export const submitFlag = async (req, res) => {
+export const submitFlag = async (req: Request, res: Response): Promise<void> => {
   try {
     const { instanceId } = req.params;
     const { flag } = req.body;
-    const userId = req.user.id;
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      res.status(401).json({ msg: 'Unauthorized' });
+      return;
+    }
 
     // Validate flag
     const isValidFlag = validateFlag(flag, userId, instanceId);
     if (!isValidFlag) {
-      return res.status(400).json({ msg: 'Invalid flag' });
+      res.status(400).json({ msg: 'Invalid flag' });
+      return;
     }
 
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
-      return res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ msg: 'Instance not found' });
+      return;
     }
 
     // Terminate the instance
@@ -131,12 +161,18 @@ export const submitFlag = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
 /**
  * Get details of all instances.
  */
-export const getAllInstances = async (req, res) => {
+export const getAllInstances = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user.id;
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      res.status(401).json({ msg: 'Unauthorized' });
+      return;
+    }
+
     const instances = await Instance.find({ user: userId });
     res.json(instances);
   } catch (error) {
@@ -144,18 +180,25 @@ export const getAllInstances = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
 /**
  * Get details of a specific instance.
  */
-export const getInstanceDetails = async (req, res) => {
+export const getInstanceDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { instanceId } = req.params;
-    const userId = req.user.id;
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      res.status(401).json({ msg: 'Unauthorized' });
+      return;
+    }
 
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
-      return res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ msg: 'Instance not found' });
+      return;
     }
 
     res.json(instance);
@@ -168,15 +211,21 @@ export const getInstanceDetails = async (req, res) => {
 /**
  * Delete a specific instance.
  */
-export const deleteInstance = async (req, res) => {
+export const deleteInstance = async (req: Request, res: Response): Promise<void> => {
   try {
     const { instanceId } = req.params;
-    const userId = req.user.id;
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      res.status(401).json({ msg: 'Unauthorized' });
+      return;
+    }
 
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
-      return res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ msg: 'Instance not found' });
+      return;
     }
 
     // Terminate the instance
@@ -200,18 +249,18 @@ export const deleteInstance = async (req, res) => {
   }
 };
 
-
 /**
  * Get user ID by instance ID.
  */
-export const getUserIdByInstanceId = async (req, res) => {
+export const getUserIdByInstanceId = async (req: Request, res: Response): Promise<void> => {
   try {
     const { instanceId } = req.params;
 
     // Find the instance by instanceId and populate the user field
     const instance = await Instance.findOne({ instanceId }).populate('user', '_id');
     if (!instance) {
-      return res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ msg: 'Instance not found' });
+      return;
     }
 
     res.json({ userId: instance.user._id });
@@ -221,15 +270,11 @@ export const getUserIdByInstanceId = async (req, res) => {
   }
 };
 
-
-
 /**
  * Validate the submitted flag.
  * Implement your own logic to validate the flag.
  */
-const validateFlag = (flag, userId, instanceId) => {
+const validateFlag = (flag: string, userId: string, instanceId: string): boolean => {
   // TODO: Implement flag validation logic
   return true; // Placeholder
 };
-
-

@@ -1,14 +1,15 @@
+import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import gravatar from 'gravatar';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
-import config from '../config/config.js';
+import User from '../models/User';
+import config from '../config/config';
 
-const jwtSecret = config.jwtSecret;
+const jwtSecret: string = config.jwtSecret;
 
-// 전체 회원 정보 GET
-export const getAllUser = async (req, res) => {
+// GET all user information
+export const getAllUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const users = await User.find({});
         res.json(users);
@@ -18,51 +19,53 @@ export const getAllUser = async (req, res) => {
     }
 };
 
-// 회원가입 POST
-export const postSignUp = async (req, res) => {
+// POST user signup
+export const postSignUp = async (req: Request, res: Response): Promise<void> => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
-        return res.status(400).json({
+        res.status(400).json({
             errors: errors.array()
-        })
+        });
+        return;
     }
 
     const { name, user_id, email, password } = req.body;
 
     try {
-        // 유저가 존재하는지 체크
+        // Check if user exists
         let user = await User.findOne({ email });
         if (user) {
-            return res.status(400).json({
+            res.status(400).json({
                 errors: [{
-                    msg: 'User is already exits'
+                    msg: 'User already exists'
                 }]
             });
+            return;
         }
-        // 유저가 아바타(프로필 사진)
+        // Get user avatar (profile picture)
         const avatar = gravatar.url(email, {
             s: '200',
             r: 'pg',
             d: 'mm'
-        })
+        });
         user = new User({
             name,
             user_id,
             email,
             avatar,
             password
-        })
-        // 비밀번호를 encrypt
+        });
+        // Encrypt password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
         await user.save();
 
-        // jsonwebtoken return
+        // Return JSON Web Token
         const payload = {
             user: {
                 id: user.id
             }
-        }
+        };
         jwt.sign(payload,
             jwtSecret,
             { expiresIn: 360000 },
@@ -70,17 +73,28 @@ export const postSignUp = async (req, res) => {
                 if(err) throw err;
                 res.json({
                     token
-                })
+                });
             });
-    } catch(err) {
+    } catch(err: any) {
         console.error(err.message);
         res.status(500).send('Server error');
     }
 };
 
-// 로그인 유저 GET
-export const getLoginUser = async (req, res) => {
-    const user = await User.findById(req.user.id).select('-password');
+// GET logged-in user
+export const getLoginUser = async (req: Request, res: Response): Promise<void> => {
+    const reqUser = (req as any).user;
+    if (!reqUser || !reqUser.id) {
+        res.status(401).json({ msg: 'Unauthorized' });
+        return;
+    }
+
+    const user = await User.findById(reqUser.id).select('-password');
+
+    if (!user) {
+        res.status(404).json({ msg: 'User not found' });
+        return;
+    }
 
     res.json({
         user_id: user.user_id,
@@ -88,56 +102,59 @@ export const getLoginUser = async (req, res) => {
         name: user.name,
         date: user.date,
         exp: user.exp
-    })
+    });
 };
 
-// 로그인 POST
-export const postLoginUser = async (req, res) => {
+// POST user login
+export const postLoginUser = async (req: Request, res: Response): Promise<void> => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({
+        res.status(400).json({
             errors: errors.array()
-        })
+        });
+        return;
     }
     const { user_id, password } = req.body;
     try {
         let user = await User.findOne({ user_id });
         if (!user) {
-            return res.status(400).json({
+            res.status(400).json({
                 errors: [{
-                    msg: 'User is not exits'
+                    msg: 'User does not exist'
                 }]
             });
+            return;
         }
-        const isMatch = await bcrypt.compare(password, user.password)
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({
+            res.status(400).json({
                 errors: [{
                     msg: 'Passwords do not match'
                 }]
             });
+            return;
         }
-        // jsonwebtoken return
+        // Return JSON Web Token
         const payload = {
             user: {
                 id: user.id
             }
-        }
-        //토큰을 생성하여 쿠키에 저장
+        };
+        // Create token and save to cookie
         const token = jwt.sign(payload, jwtSecret, { expiresIn: 7200 });
 
         if (!jwtSecret) {
-            return res.status(500).json({ msg: 'JWT secret is missing' });
+            res.status(500).json({ msg: 'JWT secret is missing' });
+            return;
         }
         
         user.token = token;
-        user.save();
+        await user.save();
 
-        res.cookie("token", token);
+        res.cookie("token", token, { httpOnly: true });
         res.json({ token });
-    } catch (err) {
+    } catch (err: any) {
         console.error(err.message);
-        res.status(500).send('Server error1');
+        res.status(500).send('Server error');
     }
 };
-

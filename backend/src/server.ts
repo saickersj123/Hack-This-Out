@@ -1,9 +1,9 @@
 import express from 'express';
 import connectDB from './config/db.js';
 import cors from 'cors';
+import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import userRoutes from "./routes/UserRoutes.js";
-import probRoutes from "./routes/ProbRoutes.js";
 import InstRoutes from "./routes/InstRoutes.js";
 import MachineRoutes from './routes/MachineRoutes.js';
 
@@ -18,16 +18,15 @@ app.use(cors({
 }));
 
 app.use(cookieParser());
-
+app.use(morgan("dev"));
 // 루트 경로에 대한 응답
 app.get('/', (req, res) => res.send('API is running'));
 
 // JSON 파싱 미들웨어 추가
-app.use(express.json({ extended: false }));
+app.use(express.json());
 
 // '/api/user' 등의 경로에 대한 요청을 각각의 라우터로 라우팅
 app.use('/api/user', userRoutes);
-app.use('/api/prob', probRoutes);
 app.use('/api/inst', InstRoutes);
 app.use('/api/machines', MachineRoutes);
 
