@@ -12,12 +12,12 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    //origin: "http://localhost:3000", //for local test
-    origin: "https://app.hackthisout.o-r.kr",
+    origin: "http://localhost:3000", //for local test
+    //origin: "https://app.hackthisout.o-r.kr",
     credentials: true
 }));
 
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(morgan("dev"));
 // 루트 경로에 대한 응답
 app.get('/', (req, res) => res.send('API is running'));

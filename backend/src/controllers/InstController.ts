@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 import Instance from '../models/Instance';
 import Machine from '../models/Machine';
 import config from '../config/config';
+import User from '../models/User';
 
 // Configure AWS SDK v3
 const ec2Client = new EC2Client({
@@ -21,15 +22,14 @@ const ec2Client = new EC2Client({
 /**
  * Start an EC2 instance based on user's machine selection.
  */
-export const startInstance = async (req: Request, res: Response): Promise<void> => {
+export const startInstance = async (req: Request, res: Response) => {
   try {
     const { machineId } = req.params;
-    const userId = (req as any).user?.id;
+    const user = await User.findById(res.locals.jwtData.id);
 
-    if (!userId) {
-      res.status(401).json({ msg: 'Unauthorized' });
-      return;
-    }
+    if (!user) {
+			return res.status(401).json("User not registered / token malfunctioned");
+		}
 
     // Fetch the machine from the database to get the AMI ID
     const machine = await Machine.findById(machineId);
@@ -48,7 +48,7 @@ export const startInstance = async (req: Request, res: Response): Promise<void> 
       TagSpecifications: [
         {
           ResourceType: 'instance',
-          Tags: [{ Key: 'User', Value: userId }],
+          Tags: [{ Key: 'User', Value: user.id }],
         },
       ],
     };
@@ -58,7 +58,7 @@ export const startInstance = async (req: Request, res: Response): Promise<void> 
       TagSpecifications: [
         {
           ResourceType: 'instance' as const,
-          Tags: [{ Key: 'User', Value: userId }],
+          Tags: [{ Key: 'User', Value: user.id }],
         },
       ],
     });
@@ -73,7 +73,7 @@ export const startInstance = async (req: Request, res: Response): Promise<void> 
 
     // Save instance info to DB
     const newInstance = new Instance({
-      user: userId,
+      user: user.id,
       instanceId,
       machineType: machine.name,
     });
@@ -116,26 +116,24 @@ export const receiveVpnIp = async (req: Request, res: Response): Promise<void> =
 /**
  * Handle flag submission, terminate instance, and clean up.
  */
-export const submitFlag = async (req: Request, res: Response): Promise<void> => {
+export const submitFlag = async (req: Request, res: Response) => {
   try {
     const { instanceId } = req.params;
     const { flag } = req.body;
-    const userId = (req as any).user?.id;
+    const user = await User.findById(res.locals.jwtData.id);
 
-    if (!userId) {
-      res.status(401).json({ msg: 'Unauthorized' });
-      return;
-    }
-
+    if (!user) {
+			return res.status(401).json("User not registered / token malfunctioned");
+		}
     // Validate flag
-    const isValidFlag = validateFlag(flag, userId, instanceId);
+    const isValidFlag = validateFlag(flag, user.id.toString(), instanceId);
     if (!isValidFlag) {
       res.status(400).json({ msg: 'Invalid flag' });
       return;
     }
 
     // Find the instance
-    const instance = await Instance.findOne({ instanceId, user: userId });
+    const instance = await Instance.findOne({ instanceId, user: user.id });
     if (!instance) {
       res.status(404).json({ msg: 'Instance not found' });
       return;
@@ -165,15 +163,14 @@ export const submitFlag = async (req: Request, res: Response): Promise<void> => 
 /**
  * Get details of all instances.
  */
-export const getAllInstances = async (req: Request, res: Response): Promise<void> => {
+export const getAllInstances = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
-    if (!userId) {
-      res.status(401).json({ msg: 'Unauthorized' });
-      return;
-    }
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+			return res.status(401).json("User not registered / token malfunctioned");
+		}
 
-    const instances = await Instance.find({ user: userId });
+    const instances = await Instance.find({ user: user.id });
     res.json(instances);
   } catch (error) {
     console.error('Error fetching all instances:', error);  
@@ -184,18 +181,15 @@ export const getAllInstances = async (req: Request, res: Response): Promise<void
 /**
  * Get details of a specific instance.
  */
-export const getInstanceDetails = async (req: Request, res: Response): Promise<void> => {
+export const getInstanceDetails = async (req: Request, res: Response) => {
   try {
     const { instanceId } = req.params;
-    const userId = (req as any).user?.id;
-
-    if (!userId) {
-      res.status(401).json({ msg: 'Unauthorized' });
-      return;
-    }
-
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+			return res.status(401).json("User not registered / token malfunctioned");
+		}
     // Find the instance
-    const instance = await Instance.findOne({ instanceId, user: userId });
+    const instance = await Instance.findOne({ instanceId, user: user.id });
     if (!instance) {
       res.status(404).json({ msg: 'Instance not found' });
       return;
@@ -211,18 +205,17 @@ export const getInstanceDetails = async (req: Request, res: Response): Promise<v
 /**
  * Delete a specific instance.
  */
-export const deleteInstance = async (req: Request, res: Response): Promise<void> => {
+export const deleteInstance = async (req: Request, res: Response) => {
   try {
     const { instanceId } = req.params;
-    const userId = (req as any).user?.id;
+    const user = await User.findById(res.locals.jwtData.id);
 
-    if (!userId) {
-      res.status(401).json({ msg: 'Unauthorized' });
-      return;
-    }
+    if (!user) {
+			return res.status(401).json("User not registered / token malfunctioned");
+		}
 
     // Find the instance
-    const instance = await Instance.findOne({ instanceId, user: userId });
+    const instance = await Instance.findOne({ instanceId, user: user.id });
     if (!instance) {
       res.status(404).json({ msg: 'Instance not found' });
       return;
@@ -245,27 +238,6 @@ export const deleteInstance = async (req: Request, res: Response): Promise<void>
     res.json({ msg: 'Instance terminated and deleted successfully.' });
   } catch (error) {
     console.error('Error deleting instance:', error);
-    res.status(500).send('Server error');
-  }
-};
-
-/**
- * Get user ID by instance ID.
- */
-export const getUserIdByInstanceId = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { instanceId } = req.params;
-
-    // Find the instance by instanceId and populate the user field
-    const instance = await Instance.findOne({ instanceId }).populate('user', '_id');
-    if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
-      return;
-    }
-
-    res.json({ userId: instance.user._id });
-  } catch (error) {
-    console.error('Error fetching user ID by instance ID:', error);
     res.status(500).send('Server error');
   }
 };

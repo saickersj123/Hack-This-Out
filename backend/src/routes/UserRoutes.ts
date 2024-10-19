@@ -1,34 +1,31 @@
 import express from 'express';
-import { check } from 'express-validator';
-import auth from '../middlewares/auth.js';
-
+import {verifyToken} from '../middlewares/Token.js';
+import { validate, signUpValidator, loginValidator} from '../middlewares/Validators.js';
 import {
     getAllUser,
     postSignUp,
-    getLoginUser,
     postLoginUser,
+    verifyUserStatus,
+    checkPassword,
+    logoutUser,
+    changePassword,
+
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
 
 UserRoutes.get("/", getAllUser);
 
-UserRoutes.post("/sign-up", [
-    check('name', 'Name is required').not().isEmpty(),
-    check('user_id', 'ID is required').not().isEmpty(),
-    check('password', 'please enter a password with 8 or more').isLength({
-        min: 8,
-    }),
-    check('email', 'Please enter your email').isEmail()
-],
-    postSignUp);
+UserRoutes.post("/sign-up", validate(signUpValidator), postSignUp);
 
-UserRoutes.get("/check-login", auth, getLoginUser);
+UserRoutes.get("/auth-status", verifyToken, verifyUserStatus);
 
-UserRoutes.post("/login", [
-    check('user_id', 'please enter your ID').not().isEmpty(),
-    check('password', 'please enter a password with 8 or more').exists()
-],
-    postLoginUser);
+UserRoutes.post("/login", validate(loginValidator), postLoginUser);
+
+UserRoutes.post("/logout", verifyToken, logoutUser);
+
+UserRoutes.post("/my-page", verifyToken, checkPassword);
+
+UserRoutes.post("/change-password", verifyToken, changePassword);
 
 export default UserRoutes;

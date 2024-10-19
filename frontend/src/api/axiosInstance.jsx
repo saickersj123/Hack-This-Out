@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // axios 인스턴스 생성. 모든 요청에 사용됩니다.
 const axiosInstance = axios.create({
-  //baseURL: 'http://localhost:5000/api', //for local test
-  baseURL: 'https://api.hackthisout.o-r.kr/api', // API 요청의 기본 URL 설정
+  baseURL: 'http://localhost:5000/api', //for local test
+  //baseURL: 'https://api.hackthisout.o-r.kr/api', // API 요청의 기본 URL 설정
   headers: {
     'Content-Type': 'application/json', // 요청 헤더에 Content-Type을 application/json으로 설정
   },
@@ -53,7 +53,7 @@ export const signUpUser = async (formData) => {
 // 로그인 상태 확인
 export const getLoginUser = async () => {
   try {
-    const response = await axiosInstance.get('/user/check-login');
+    const response = await axiosInstance.get('/user/auth-status');
     return response.data; // 서버로부터 받은 데이터 반환
   } catch (error) {
     throw new Error('로그인 상태를 확인하는데 실패했습니다.');

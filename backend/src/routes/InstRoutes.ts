@@ -1,6 +1,6 @@
 import express from 'express';
-import auth from '../middlewares/auth.js';
-import validateInstance from '../middlewares/validateInstance.js';
+import {verifyToken} from '../middlewares/Token.js';
+import validateInstance from '../middlewares/validateInstance';
 import {
   startInstance,
   receiveVpnIp,
@@ -13,21 +13,21 @@ import {
 const InstRoutes = express.Router();
 
 // Route to start a new instance with machineId
-InstRoutes.post('/start-instance/:machineId', auth, startInstance);
+InstRoutes.post('/start-instance/:machineId', verifyToken, startInstance);
 
 // Route for EC2 instance to post VPN IP, differentiated by instanceId
 InstRoutes.post('/receive-vpn-ip', receiveVpnIp);
 
 // Route to submit flag for a specific instance
-InstRoutes.post('/:instanceId/submit-flag', auth, validateInstance, submitFlag);
+InstRoutes.post('/:instanceId/submit-flag', verifyToken, validateInstance, submitFlag);
 
 // Route to get details of all instances
-InstRoutes.get('/', auth, getAllInstances);
+InstRoutes.get('/', verifyToken, getAllInstances);
 
 // Route to get details of a specific instance
-InstRoutes.get('/:instanceId', auth, validateInstance, getInstanceDetails);
+InstRoutes.get('/:instanceId', verifyToken, validateInstance, getInstanceDetails);
 
 // Route to delete a specific instance
-InstRoutes.delete('/:instanceId', auth, validateInstance, deleteInstance);
+InstRoutes.delete('/:instanceId', verifyToken, validateInstance, deleteInstance);
 
 export default InstRoutes;

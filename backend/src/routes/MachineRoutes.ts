@@ -1,6 +1,6 @@
 import express from 'express';
-import auth from '../middlewares/auth.js';
-import validateMachine from '../middlewares/validateMachine.js';
+import {verifyToken} from '../middlewares/Token.js';
+import validateMachine from '../middlewares/validateMachine';
 import {
   createMachine,
   getAllMachines,
@@ -12,18 +12,18 @@ import {
 const MachineRoutes = express.Router();
 
 // Route to create a new machine
-MachineRoutes.post('/', auth, validateMachine, createMachine);
+MachineRoutes.post('/', validateMachine, verifyToken,  createMachine);
 
 // Route to get all machines
-MachineRoutes.get('/', auth, getAllMachines);
+MachineRoutes.get('/', getAllMachines);
 
 // Route to get a single machine by ID
-MachineRoutes.get('/:machineId', auth, getMachine);
+MachineRoutes.get('/:machineId', verifyToken, getMachine);
 
 // Route to update a machine by ID
-MachineRoutes.put('/:machineId', auth, validateMachine, updateMachine);
+MachineRoutes.put('/:machineId', validateMachine, verifyToken, updateMachine);
 
 // Route to delete a machine by ID
-MachineRoutes.delete('/:machineId', auth, deleteMachine);
+MachineRoutes.delete('/:machineId', verifyToken, deleteMachine);
 
 export default MachineRoutes;
