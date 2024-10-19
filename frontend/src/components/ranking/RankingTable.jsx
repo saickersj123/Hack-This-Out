@@ -21,7 +21,7 @@ const RankingTable = () => {
 
         const intervalId = setInterval(() => {
             fetchUserRankings(); // Fetch every 60 seconds
-        }, 60000);
+        }, 300000);
 
         // Cleanup function to clear the interval when the component unmounts
         return () => clearInterval(intervalId);
