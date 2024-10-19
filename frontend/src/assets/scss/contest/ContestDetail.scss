@@ -1,4 +1,4 @@
-@import './mixin';
+@import '../setting/mixin.scss';
 
 .machine-main {
     margin: 0;
@@ -24,7 +24,7 @@
 
             .back-button {
                 position: relative;
-                background: url('../assets/img/icon/left_icon.png') no-repeat center center;
+                background: url('../../img/icon/left_icon.png') no-repeat center center;
                 background-size: cover;
                 border: none;
                 margin: 0px;
@@ -50,7 +50,7 @@
             align-items: center;
 
             .machine-image {
-                background: url('../assets/img/icon/machine_image.png') no-repeat center center;
+                background: url('../../img/icon/machine_image.png') no-repeat center center;
                 background-size: cover;
                 background-color: transparent;
                 width: 120px;

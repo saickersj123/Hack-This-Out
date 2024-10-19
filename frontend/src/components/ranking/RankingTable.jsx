@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Main from '../../components/section/Main';
-import '../../css/Rankings.scss';
+import '../../assets/scss/ranking/RankingTable.scss';
 import { getAllUser } from '../../api/axiosInstance';
 
 
-const Rankings = () => {
+const RankingTable = () => {
     const [rankings, setRankings] = useState([]);
 
     // 유저 데이터를 가져오는 useEffect
@@ -58,4 +58,4 @@ const Rankings = () => {
     );
 }
 
-export default Rankings;
+export default RankingTable;

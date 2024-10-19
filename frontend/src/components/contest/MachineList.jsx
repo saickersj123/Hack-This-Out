@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllMachines } from '../../api/axiosInstance';
-import '../../css/Machine.scss';
+//import '../../css/Machine.scss';
 
 const Machine = () => {
   const [machines, setMachines] = useState([]);

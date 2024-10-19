@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Main from '../../components/section/Main'
 import { getMachineDetails } from '../../api/axiosInstance';
-import '../../css/ContestDetail.scss';
-import emptyStar from '../../images/empty_star.png';
-import halfStar from '../../images/half_star.png';
-import fullStar from '../../images/full_star.png';
+import '../../assets/scss/contest/ContestDetail.scss';
+import emptyStar from '../../assets/img/icon/empty_star.png';
+import halfStar from '../../assets/img/icon/half_star.png';
+import fullStar from '../../assets/img/icon/full_star.png';
 
 
 const MachineDetail = () => {
@@ -67,7 +67,7 @@ const MachineDetail = () => {
           <div className='machine-info'>
             <div className='machine-info-upper'>
               <div className='back-btn-container'>
-                <Link to='/machine'>
+                <Link to='/Contest'>
                   <button className='back-button'></button>
                 </Link>
               </div>

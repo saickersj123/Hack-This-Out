@@ -1,9 +1,10 @@
-import '../css/RegisterForm.scss';
+//import '../css/RegisterForm.scss';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signUpUser } from '../api/axiosInstance';
+import { signUpUser } from '../../api/axiosInstance';
+import '../../assets/scss/login/RegisterForm.scss';
 
-function RegisterForm() {
+function RegisterForm({ closeRegisterModal }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -42,6 +43,7 @@ function RegisterForm() {
     <div className='back'>
       <div className="wrap">
         <form className="register-form" onSubmit={handleSubmit}>
+          <button type="button" onClick={closeRegisterModal}>닫기</button>
           <h1>회원가입</h1>
           <div className="input-box">
             <input type="text" name="name" placeholder="이름" value={formData.name} onChange={handleChange} />
