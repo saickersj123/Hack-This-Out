@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { COOKIE_NAME } from "./Constants.js";
+import User from "../models/User.js";
 
 export const createToken = (id: string, email: string, expiresIn: string) => {
 	const payload = { id, email };
@@ -45,3 +46,16 @@ export const verifyToken = async (
 		);
 	});
 };
+
+export const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+	  const user = await User.findById(res.locals.jwtData.id);
+	  if (!user || user.role !== 'admin') {
+		return res.status(403).json({ msg: 'Access denied. Admins only.' });
+	  }
+	  next();
+	} catch (error) {
+	  console.error('Error verifying admin:', error);
+	  res.status(500).json({ msg: 'Server error.' });
+	}
+  };

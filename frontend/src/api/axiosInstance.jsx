@@ -60,79 +60,15 @@ export const getLoginUser = async () => {
   }
 };
 
-
-// -------- 문제 관련 함수 ---------
-
-// 모든 문제 데이터를 가져오기
-export const getAllProb = async () => {
+// 유저 권한 변경
+export const changeUserRole = async (userId, adminPassword) => {
   try {
-    const response = await axiosInstance.get('/prob/');
-    return response.data; // 서버로부터 받은 데이터 반환
-  } catch (error) {
-    throw new Error('문제 데이터를 가져오는데 실패했습니다.');
-  }
-};
-
-// 문제 등록 요청 함수
-export const postProb = async (title, content, answer, theme) => {
-  try {
-    const response = await axiosInstance.post('/prob/post-prob', {
-      title,
-      content,
-      answer,
-      theme,
-    });
-    return response.data; // 성공 시 데이터 반환
-  } catch (error) {
-    // 에러 처리
-    if (error.response && error.response.data && error.response.data.message) {
-      throw new Error(error.response.data.message);
-    } else {
-      throw new Error('문제 등록 실패');
-    }
-  }
-};
-
-// 특정 문제 삭제 요청
-export const deleteProb = async (id) => {
-  try {
-    const response = await axiosInstance.delete(`/prob/delete-prob/${id}`);
+    const response = await axiosInstance.post('/user/change-role', { userId, adminPassword });
     return response.data;
   } catch (error) {
-    throw new Error('문제를 삭제하는데 실패했습니다.');
+    throw error.response ? error.response.data : new Error('Failed to change user role');
   }
 };
-
-// 머신 등록 요청
-export const postMac = async ( name, category, info, exp) => {
-  try {
-    const response = await axiosInstance.post('/prob/post-mac', {
-      name,
-      category,
-      info,
-      exp,
-    });
-    return response.data; // 성공 시 데이터 반환
-  } catch (error) {
-    // 에러 처리
-    if (error.response && error.response.data && error.response.data.message) {
-      throw new Error(error.response.data.message);
-    } else {
-      throw new Error('머신 등록 실패');
-    }
-  }
-};
-
-export const getMachine = async () => {
-  try {
-    const response = await axiosInstance.get('/prob/get-mac');
-    return response.data; // 머신 데이터 반환
-  } catch (error) {
-    console.error('Error fetching machine:', error);
-    throw new Error('Failed to fetch machine data');
-  }
-};
-
 
 /**
  * Start a new EC2 instance with the specified machineId.
@@ -290,6 +226,33 @@ export const deleteMachine = async (machineId) => {
     return response.data; // Return the data received from the server
   } catch (error) {
     throw error.response ? error.response.data : new Error('Failed to delete machine');
+  }
+};
+
+/**
+ * Get all pending machines (admin only).
+ * @returns {Promise<Object>} - The response data containing pending machines.
+ */
+export const getPendingMachines = async () => {
+  try {
+    const response = await axiosInstance.get('/machines/admin/pending');
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch pending machines');
+  }
+};
+
+/**
+ * Approve a specific machine.
+ * @param {string} machineId - The ID of the machine to approve.
+ * @returns {Promise<Object>} - The response data after approval.
+ */
+export const approveMachine = async (machineId) => {
+  try {
+    const response = await axiosInstance.post(`/machines/admin/approve/${machineId}`);
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to approve machine');
   }
 };
 

@@ -36,7 +36,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
         amiId,
         flag, 
       });
-      alert('Machine created successfully.');
+      alert('Machine registered successfully and is pending approval.');
       setFormData({
         name: '',
         category: '',
@@ -56,7 +56,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Register a New Machine</h2>
+      <h2>Register a New Machine (Pending Approval)</h2> {/* Updated heading */}
       <div>
         <label htmlFor="name">Name<span style={{ color: 'red' }}> *</span>:</label>
         <input

@@ -58,6 +58,11 @@ const MachineSchema = new mongoose.Schema({
         type: Number,
         default: 0.0 // Average rating
     },
+    status: { // New field for status
+        type: String,
+        enum: ['pending', 'confirmed'],
+        default: 'pending'
+    },
     reviews: [ReviewSchema]
 }, {
     timestamps: true

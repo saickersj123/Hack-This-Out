@@ -9,6 +9,7 @@ import {
     checkPassword,
     logoutUser,
     changePassword,
+    changeUserRole,
 
 } from '../controllers/UserController.js';
 
@@ -27,5 +28,7 @@ UserRoutes.post("/logout", verifyToken, logoutUser);
 UserRoutes.post("/my-page", verifyToken, checkPassword);
 
 UserRoutes.post("/change-password", verifyToken, changePassword);
+
+UserRoutes.post('/change-role', verifyToken, changeUserRole);
 
 export default UserRoutes;

@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // 기존 컴포넌트
 import LoginPage from './pages/LoginPage';
 import Main from './components/section/Main';
-
+import ProtectedRoute from './ProtectedRoute';
 
 // 비동기 로딩을 위한 Lazy 컴포넌트
 const RankingPage = lazy(() => import('./pages/RankingPage'));
@@ -12,7 +12,7 @@ const ContestPage = lazy(() => import('./pages/ContestPage'));
 const ContestDetail = lazy(() => import('./components/contest/ContestDetail'));
 const InstancesPage = lazy(() => import('./pages/InstancesPage'));
 const MachinesPage = lazy(() => import('./pages/MachinesPage'));
-
+const MachineManagementPage = lazy(() => import('./pages/MachineManagementPage'));
 // 새로운 App 구성
 const App = () => {
   return (
@@ -27,6 +27,11 @@ const App = () => {
           <Route path="/Contest/:machineName/:tabName" element={<ContestDetail />} />
           <Route path="/Instances" element={<InstancesPage />} />
           <Route path="/Machines" element={<MachinesPage />} />
+          <Route path="/MachineManagement" element={
+            <ProtectedRoute adminOnly={true}>
+              <MachineManagementPage />
+            </ProtectedRoute>
+          } />
         </Routes>
       </Suspense>
     </BrowserRouter>
