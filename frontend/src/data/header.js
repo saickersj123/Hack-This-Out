@@ -35,11 +35,6 @@ export const headerMenus = [
         title: "Instances",
         icon: <GrCloudComputer />,
         src: "/Instances"
-    },
-    {
-        title: "Machine Management",
-        icon: <GrCloudComputer />,
-        src: "/MachineManagement"
     }
 ];
 
