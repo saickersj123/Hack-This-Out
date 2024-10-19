@@ -5,6 +5,7 @@ import {
   _InstanceType as EC2InstanceType 
 } from '@aws-sdk/client-ec2';
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 import Instance from '../models/Instance';
 import Machine from '../models/Machine';
 import config from '../config/config';
@@ -126,7 +127,7 @@ export const submitFlag = async (req: Request, res: Response) => {
 			return res.status(401).json("User not registered / token malfunctioned");
 		}
     // Validate flag
-    const isValidFlag = validateFlag(flag, user.id.toString(), instanceId);
+    const isValidFlag = validateFlag(flag, user.id, instanceId);
     if (!isValidFlag) {
       res.status(400).json({ msg: 'Invalid flag' });
       return;
@@ -244,9 +245,26 @@ export const deleteInstance = async (req: Request, res: Response) => {
 
 /**
  * Validate the submitted flag.
- * Implement your own logic to validate the flag.
  */
-const validateFlag = (flag: string, userId: string, instanceId: string): boolean => {
-  // TODO: Implement flag validation logic
-  return true; // Placeholder
+const validateFlag = async (flag: string, userId: string, instanceId: string): Promise<boolean> => {
+  try {
+    // Find the instance
+    const instance = await Instance.findOne({ instanceId, user: userId });
+    if (!instance) {
+      return false;
+    }
+
+    // Find the machine associated with the instance
+    const machine = await Machine.findOne({ name: instance.machineType });
+    if (!machine) {
+      return false;
+    }
+
+    // Compare the submitted flag with the stored hashed flag
+    const isMatch = await bcrypt.compare(flag, machine.flag);
+    return isMatch;
+  } catch (error) {
+    console.error('Error validating flag:', error);
+    return false;
+  }
 };

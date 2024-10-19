@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import Machine from '../models/Machine';
-
+import bcrypt from 'bcrypt';
 /**
  * Create a new machine.
  */
 export const createMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, category, info, exp, amiId } = req.body;
+    const { name, category, info, exp, amiId, flag } = req.body;
 
     // Validate required fields
-    if (!name || !category || !amiId) {
-      res.status(400).json({ msg: 'Please provide name, category, and amiId.' });
+    if (!name || !category || !amiId || !flag) {
+      res.status(400).json({ msg: 'Please provide name, category, amiId, and flag.' });
       return;
     }
 
@@ -21,12 +21,17 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
+    // Hash the flag before saving
+    const saltRounds = 10;
+    const hashedFlag = await bcrypt.hash(flag, saltRounds);
+
     const newMachine = new Machine({
       name,
       category,
       info,
       exp,
       amiId,
+      flag: hashedFlag, // Assign the hashed flag
     });
 
     await newMachine.save();
@@ -75,7 +80,7 @@ export const getMachine = async (req: Request, res: Response): Promise<void> => 
 export const updateMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
-    const { name, category, info, exp, amiId } = req.body;
+    const { name, category, info, exp, amiId, flag } = req.body;
 
     // Find the machine
     const machine = await Machine.findById(machineId);
@@ -90,6 +95,12 @@ export const updateMachine = async (req: Request, res: Response): Promise<void> 
     if (info) machine.info = info;
     if (exp !== undefined) machine.exp = exp;
     if (amiId) machine.amiId = amiId;
+    if (flag) {
+      // Hash the new flag before updating
+      const saltRounds = 10;
+      const hashedFlag = await bcrypt.hash(flag, saltRounds);
+      machine.flag = hashedFlag;
+    } // Update flag if provided
 
     await machine.save();
     res.json({ msg: 'Machine updated successfully.', machine });

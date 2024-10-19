@@ -8,10 +8,11 @@ const AddMachineForm = ({ onMachineAdded }) => {
     info: '',
     exp: '',
     amiId: '',
+    flag: '', // Added flag field
   });
   const [loading, setLoading] = useState(false);
 
-  const { name, category, info, exp, amiId } = formData;
+  const { name, category, info, exp, amiId, flag } = formData;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,7 +21,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !category || !amiId) {
+    if (!name || !category || !amiId || !flag) { // Include flag in validation
       alert('Please fill in all required fields.');
       return;
     }
@@ -33,6 +34,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
         info,
         exp: exp ? parseInt(exp) : 0,
         amiId,
+        flag, 
       });
       alert('Machine created successfully.');
       setFormData({
@@ -41,6 +43,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
         info: '',
         exp: '',
         amiId: '',
+        flag: '', 
       });
       if (onMachineAdded) onMachineAdded(data.machine);
     } catch (error) {
@@ -105,6 +108,18 @@ const AddMachineForm = ({ onMachineAdded }) => {
           value={amiId}
           onChange={handleChange}
           placeholder="e.g., ami-0abcdef1234567890"
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="flag">Flag<span style={{ color: 'red' }}> *</span>:</label> {/* Added label */}
+        <input
+          type="text"
+          id="flag"
+          name="flag"
+          value={flag}
+          onChange={handleChange}
+          placeholder="Enter the flag"
           required
         />
       </div>

@@ -19,14 +19,6 @@ export const getAllUser = async (req: Request, res: Response) => {
 
 // POST user signup
 export const postSignUp = async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        res.status(400).json({
-            errors: errors.array()
-        });
-        return;
-    }
-
     const { name, user_id, email, password } = req.body;
 
     try {
