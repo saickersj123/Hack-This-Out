@@ -5,7 +5,7 @@ import { getLoginUser } from '../../api/axiosInstance';
 
 import Header from './Header';
 import Footer from './Footer';
-import Search from './Search';
+import SearchAndProfile from './SearchAndProfile';
 import Banner from '../contents/Banner';
 import Rank from '../contents/Rank';
 import Exp from '../contents/Exp';
@@ -14,7 +14,7 @@ import Exp from '../contents/Exp';
 const Main = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isMainPath = location.pathname === '/main';
+  const isMainPath = location.pathname === '/';
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -47,7 +47,7 @@ const Main = (props) => {
 
       <main id="main_dash" role="main">
         <div style={{ position: 'sticky', top: 0, zIndex: 100 }}>
-          <Search />
+          <SearchAndProfile />
         </div>
         {isMainPath && (
           <div className="banner-container">
