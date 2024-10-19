@@ -22,10 +22,8 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String
     },
-    role: { // New field for user roles
-        type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
+    token: {
+        type: String
     },
     date: {
         type: Date,

@@ -3,16 +3,14 @@ import { getAllMachines, deleteMachine } from '../../api/axiosInstance';
 import MachineDetail from './MachineDetail';
 import EditMachineForm from './EditMachineForm';
 import DeleteMachineButton from './DeleteMachineButton';
-import { useAuth } from '../../contexts/AuthContext'; // Assumes you have an AuthContext
 
 const MachineList = () => {
-  const { user } = useAuth();
   const [machines, setMachines] = useState([]);
   const [selectedMachine, setSelectedMachine] = useState(null);
   const [editingMachine, setEditingMachine] = useState(null);
 
   useEffect(() => {
-    // Fetch all confirmed machines on component mount
+    // Fetch all machines on component mount
     const fetchMachines = async () => {
       try {
         const data = await getAllMachines();
@@ -61,12 +59,8 @@ const MachineList = () => {
               <p><strong>Category:</strong> {machine.category}</p>
               <p><strong>Experience:</strong> {machine.exp}</p>
               <button onClick={() => setSelectedMachine(machine)}>View Details</button>
-              {user && user.role === 'admin' && (
-                <>
-                  <button onClick={() => handleEdit(machine)}>Edit</button>
-                  <DeleteMachineButton machineId={machine._id} onDelete={handleDelete} />
-                </>
-              )}
+              <button onClick={() => handleEdit(machine)}>Edit</button>
+              <DeleteMachineButton machineId={machine._id} onDelete={handleDelete} />
             </li>
           ))}
         </ul>

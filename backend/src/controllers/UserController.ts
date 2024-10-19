@@ -19,7 +19,7 @@ export const getAllUser = async (req: Request, res: Response) => {
 
 // POST user signup
 export const postSignUp = async (req: Request, res: Response) => {
-    const { name, user_id, email, password, role } = req.body; // Allow role to be set
+    const { name, user_id, email, password } = req.body;
 
     try {
         // Check if user exists
@@ -43,33 +43,32 @@ export const postSignUp = async (req: Request, res: Response) => {
             user_id,
             email,
             avatar,
-            password,
-            role: role === 'admin' ? 'admin' : 'user' // Assign role based on input
+            password
         });
         // Encrypt password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
         await user.save();
 
-        // create token
-        const token = createToken(user._id.toString(), user.email, "7d");
+		// create token
+		const token = createToken(user._id.toString(), user.email, "7d");
 
-        const expires = new Date();
-        expires.setDate(expires.getDate() + 7);
+		const expires = new Date();
+		expires.setDate(expires.getDate() + 7);
 
-        res.cookie(COOKIE_NAME, token, {
-            path: "/", //cookie directory in browser
-            domain: process.env.DOMAIN, // our website domain
-            expires, // same as token expiration time
-            httpOnly: true,
-            signed: true,
-            sameSite: 'lax',
-            secure: true,
-        });
+		res.cookie(COOKIE_NAME, token, {
+			path: "/", //cookie directory in browser
+			domain: process.env.DOMAIN, // our website domain
+			expires, // same as token expiration time
+			httpOnly: true,
+			signed: true,
+			sameSite: 'lax',
+			secure: true,
+		});
 
-        return res
-            .status(201)
-            .json({ message: "OK", name: user.name, email: user.email, role: user.role });
+		return res
+			.status(201)
+			.json({ message: "OK", name: user.name, email: user.email });
     } catch(err: any) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -288,37 +287,3 @@ export const checkPassword = async (
 			.json({ message: "ERROR", cause: err.message});
 	}
 };
-
-export const changeUserRole = async (req: Request, res: Response): Promise<void> => {
-	try {
-	  const { userId, adminPassword } = req.body;
-	  const user = await User.findById(userId);
-	  
-	  if (!user) {
-		res.status(404).json({ msg: 'User not found.' });
-		return;
-	  }
-  
-	  // Check if the provided admin password is correct
-	  const adminUser = await User.findOne({ role: 'admin' });
-	  if (!adminUser) {
-		res.status(500).json({ msg: 'No admin user found in the system.' });
-		return;
-	  }
-  
-	  const isPasswordCorrect = await bcrypt.compare(adminPassword, adminUser.password);
-	  if (!isPasswordCorrect) {
-		res.status(403).json({ msg: 'Incorrect admin password.' });
-		return;
-	  }
-  
-	  // Change user role to admin
-	  user.role = 'admin';
-	  await user.save();
-  
-	  res.json({ msg: 'User role changed to admin successfully.', user });
-	} catch (error: any) {
-	  console.error('Error changing user role:', error);
-	  res.status(500).send('Server error');
-	}
-  };
