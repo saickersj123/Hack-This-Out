@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import { body, validationResult } from 'express-validator';
 
 const validateMachine = [
@@ -22,10 +23,11 @@ const validateMachine = [
     .withMessage('Experience points must be a positive integer.'),
   // Add more validations as needed
 
-  (req, res, next) => {
+  (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      res.status(400).json({ errors: errors.array() });
+      return;
     }
     next();
   },

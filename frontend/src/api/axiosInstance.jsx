@@ -53,7 +53,7 @@ export const signUpUser = async (formData) => {
 // 로그인 상태 확인
 export const getLoginUser = async () => {
   try {
-    const response = await axiosInstance.get('/user/check-login');
+    const response = await axiosInstance.get('/user/auth-status');
     return response.data; // 서버로부터 받은 데이터 반환
   } catch (error) {
     throw new Error('로그인 상태를 확인하는데 실패했습니다.');
