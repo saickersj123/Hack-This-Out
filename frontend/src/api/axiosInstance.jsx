@@ -61,9 +61,9 @@ export const getLoginUser = async () => {
 };
 
 // 유저 권한 변경
-export const changeUserRole = async (userId, adminPassword) => {
+export const changeUserRole = async (adminPassword) => {
   try {
-    const response = await axiosInstance.post('/user/change-role', { userId, adminPassword });
+    const response = await axiosInstance.post('/user/change-role', { adminPassword });
     return response.data;
   } catch (error) {
     throw error.response ? error.response.data : new Error('Failed to change user role');

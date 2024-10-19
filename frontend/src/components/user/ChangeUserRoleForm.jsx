@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { changeUserRole } from '../../api/axiosInstance';
 
 const ChangeUserRoleForm = () => {
-  const [userId, setUserId] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -10,9 +9,8 @@ const ChangeUserRoleForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const data = await changeUserRole(userId, adminPassword);
+      const data = await changeUserRole(adminPassword);
       alert(data.msg);
-      setUserId('');
       setAdminPassword('');
     } catch (error) {
       console.error('Error changing user role:', error);
@@ -23,18 +21,8 @@ const ChangeUserRoleForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="change-user-role-form">
       <h2>Change User Role to Admin</h2>
-      <div>
-        <label htmlFor="userId">User ID:</label>
-        <input
-          type="text"
-          id="userId"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          required
-        />
-      </div>
       <div>
         <label htmlFor="adminPassword">Admin Password:</label>
         <input

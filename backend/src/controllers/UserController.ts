@@ -78,13 +78,6 @@ export const postSignUp = async (req: Request, res: Response) => {
 
 // POST user login
 export const postLoginUser = async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        res.status(400).json({
-            errors: errors.array()
-        });
-        return;
-    }
     const { user_id, password } = req.body;
     try {
         let user = await User.findOne({ user_id });
@@ -291,22 +284,23 @@ export const checkPassword = async (
 
 export const changeUserRole = async (req: Request, res: Response): Promise<void> => {
 	try {
-	  const { userId, adminPassword } = req.body;
-	  const user = await User.findById(userId);
+	  const { adminPassword } = req.body;
+	  const user = await User.findById(res.locals.jwtData.id);
 	  
 	  if (!user) {
 		res.status(404).json({ msg: 'User not found.' });
 		return;
 	  }
   
-	  // Check if the provided admin password is correct
-	  const adminUser = await User.findOne({ role: 'admin' });
-	  if (!adminUser) {
-		res.status(500).json({ msg: 'No admin user found in the system.' });
-		return;
-	  }
+	   // Check if the provided admin password is correct
+	   	const envAdminPassword = process.env.ADMIN_PASSWORD;
+	   	if (!envAdminPassword) {
+			res.status(500).json({ msg: 'Admin password not set in environment variables.' });
+			return;
+	   	}
+	   	const hashedAdminPassword = await bcrypt.hash(envAdminPassword, 10);
   
-	  const isPasswordCorrect = await bcrypt.compare(adminPassword, adminUser.password);
+		const isPasswordCorrect = await bcrypt.compare(adminPassword, hashedAdminPassword);
 	  if (!isPasswordCorrect) {
 		res.status(403).json({ msg: 'Incorrect admin password.' });
 		return;
