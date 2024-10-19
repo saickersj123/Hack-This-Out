@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MachineList from '../components/machine/MachineList';
 import AddMachineForm from '../components/machine/AddMachineForm';
+import withAuth from '../components/withAuth';
 
 const MachinesPage = () => {
   const [machines, setMachines] = useState([]);
@@ -28,4 +29,4 @@ const MachinesPage = () => {
   );
 };
 
-export default MachinesPage;
+export default withAuth(MachinesPage);

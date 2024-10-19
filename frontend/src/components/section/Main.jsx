@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getLoginUser } from '../../api/axiosInstance';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -12,7 +13,24 @@ import Exp from '../contents/Exp';
 // props 속성을 전달
 const Main = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isMainPath = location.pathname === '/main';
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const user = await getLoginUser();
+        if (!user) {
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('Error checking login status:', error);
+        navigate('/login');
+      }
+    };
+
+    checkLoginStatus();
+  }, [navigate]);
 
   return (
     <HelmetProvider>

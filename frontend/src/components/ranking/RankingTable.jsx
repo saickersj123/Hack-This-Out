@@ -3,26 +3,28 @@ import Main from '../../components/section/Main';
 import '../../assets/scss/ranking/RankingTable.scss';
 import { getAllUser } from '../../api/axiosInstance';
 
-
 const RankingTable = () => {
     const [rankings, setRankings] = useState([]);
 
-    // 유저 데이터를 가져오는 useEffect
+    const fetchUserRankings = async () => {
+        try {
+            const users = await getAllUser();
+            const sortedRankings = users.sort((a, b) => b.exp - a.exp);
+            setRankings(sortedRankings);
+        } catch (error) {
+            console.error('Error fetching user rankings:', error.message || error);
+        }
+    };
+
     useEffect(() => {
-        const fetchUserRankings = async () => {
-            try {
-                // getAllUser 함수를 호출하여 유저 데이터 가져오기
-                const users = await getAllUser();
+        fetchUserRankings(); // Initial fetch
 
-                // 경험치(exp) 기준으로 내림차순 정렬
-                const sortedRankings = users.sort((a, b) => b.exp - a.exp);
-                setRankings(sortedRankings); // 정렬된 데이터로 상태 업데이트
-            } catch (error) {
-                console.error('Error fetching user rankings:', error.message || error);
-            }
-        };
+        const intervalId = setInterval(() => {
+            fetchUserRankings(); // Fetch every 60 seconds
+        }, 60000);
 
-        fetchUserRankings(); // 데이터 가져오기 호출
+        // Cleanup function to clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
@@ -56,6 +58,6 @@ const RankingTable = () => {
             </div>
         </Main>
     );
-}
+};
 
 export default RankingTable;

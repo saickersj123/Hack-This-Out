@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Main from '../components/section/Main.jsx';
 import MachineList from "../components/contest/MachineList";
 import '../assets/scss/contest/ContestPage.scss';
+import withAuth from '../components/withAuth';
 
 const ContestPage = () => {
     const [activeTab, setActiveTab] = useState("Machine");
@@ -29,4 +30,4 @@ const ContestPage = () => {
 
 };
 
-export default ContestPage;
+export default withAuth(ContestPage);
