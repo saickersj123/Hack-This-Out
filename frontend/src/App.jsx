@@ -12,6 +12,7 @@ const ContestPage = lazy(() => import('./pages/ContestPage'));
 const ContestDetail = lazy(() => import('./components/contest/ContestDetail'));
 const InstancesPage = lazy(() => import('./pages/InstancesPage'));
 const MachinesPage = lazy(() => import('./pages/MachinesPage'));
+const MyPage = lazy(() => import('./pages/MyPage'));
 
 // 새로운 App 구성
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/Contest/:machineName/:tabName" element={<ContestDetail />} />
           <Route path="/Instances" element={<InstancesPage />} />
           <Route path="/Machines" element={<MachinesPage />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

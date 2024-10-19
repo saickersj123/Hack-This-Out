@@ -19,7 +19,7 @@ export const getAllUser = async () => {
     const response = await axiosInstance.get('/user/');
     return response.data; // 서버로부터 받은 데이터 반환
   } catch (error) {
-    throw new Error('유저 데이터 가져오기에 실패했습니다.');
+    throw new Error('Failed to fetch user data');
   }
 };
 
@@ -30,7 +30,7 @@ export const loginUser = async (formData) => {
     const response = await axiosInstance.post('/user/login', formData);
     return response.data; // 성공 시 데이터 반환
   } catch (error) {
-    throw error.response ? error.response.data : new Error('로그인 요청 실패'); // 에러 메시지 반환
+    throw error.response ? error.response.data : new Error('Login failed');
   }
 };
 
@@ -45,7 +45,7 @@ export const signUpUser = async (formData) => {
     if (error.response && error.response.data && error.response.data.message) {
       throw new Error(error.response.data.message);
     } else {
-      throw new Error('회원가입 요청 실패');
+      throw new Error('Sign up failed');
     }
   }
 };
@@ -56,83 +56,36 @@ export const getLoginUser = async () => {
     const response = await axiosInstance.get('/user/auth-status');
     return response.data; // 서버로부터 받은 데이터 반환
   } catch (error) {
-    throw new Error('로그인 상태를 확인하는데 실패했습니다.');
+    throw new Error('Failed to check login status');
   }
 };
 
-
-// -------- 문제 관련 함수 ---------
-
-// 모든 문제 데이터를 가져오기
-export const getAllProb = async () => {
+export const logoutUser = async () => {
   try {
-    const response = await axiosInstance.get('/prob/');
-    return response.data; // 서버로부터 받은 데이터 반환
-  } catch (error) {
-    throw new Error('문제 데이터를 가져오는데 실패했습니다.');
-  }
-};
-
-// 문제 등록 요청 함수
-export const postProb = async (title, content, answer, theme) => {
-  try {
-    const response = await axiosInstance.post('/prob/post-prob', {
-      title,
-      content,
-      answer,
-      theme,
-    });
-    return response.data; // 성공 시 데이터 반환
-  } catch (error) {
-    // 에러 처리
-    if (error.response && error.response.data && error.response.data.message) {
-      throw new Error(error.response.data.message);
-    } else {
-      throw new Error('문제 등록 실패');
-    }
-  }
-};
-
-// 특정 문제 삭제 요청
-export const deleteProb = async (id) => {
-  try {
-    const response = await axiosInstance.delete(`/prob/delete-prob/${id}`);
+    const response = await axiosInstance.post('/user/logout');
     return response.data;
   } catch (error) {
-    throw new Error('문제를 삭제하는데 실패했습니다.');
+    throw new Error('Logout failed');
   }
 };
 
-// 머신 등록 요청
-export const postMac = async ( name, category, info, exp) => {
+export const checkPassword = async (password) => {
   try {
-    const response = await axiosInstance.post('/prob/post-mac', {
-      name,
-      category,
-      info,
-      exp,
-    });
-    return response.data; // 성공 시 데이터 반환
+    const response = await axiosInstance.post('/user/my-page', { password });
+    return response.data;
   } catch (error) {
-    // 에러 처리
-    if (error.response && error.response.data && error.response.data.message) {
-      throw new Error(error.response.data.message);
-    } else {
-      throw new Error('머신 등록 실패');
-    }
+    throw error.response ? error.response.data : new Error('Password check failed');
   }
 };
 
-export const getMachine = async () => {
+export const changePassword = async (newPassword) => {
   try {
-    const response = await axiosInstance.get('/prob/get-mac');
-    return response.data; // 머신 데이터 반환
+    const response = await axiosInstance.post('/user/change-password', { password: newPassword });
+    return response.data;
   } catch (error) {
-    console.error('Error fetching machine:', error);
-    throw new Error('Failed to fetch machine data');
+    throw error.response ? error.response.data : new Error('Password change failed');
   }
 };
-
 
 /**
  * Start a new EC2 instance with the specified machineId.
@@ -211,10 +164,9 @@ export const deleteInstance = async (instanceId) => {
  * @param {string} vpnIp - The VPN IP to submit.
  * @returns {Promise<Object>} - The response data confirming VPN IP update.
  */
-export const receiveVpnIp = async (instanceId, userId, vpnIp) => {
+export const receiveVpnIp = async (instanceId, vpnIp) => {
   try {
     const response = await axiosInstance.post(`/inst/${instanceId}/receive-vpn-ip`, {
-      userId,
       vpnIp,
     });
     return response.data; // Return the data received from the server
@@ -234,7 +186,7 @@ export const createMachine = async (machineData) => {
     return response.data; // Return the data received from the server
   } catch (error) {
     throw error.response ? error.response.data : new Error('Failed to create machine');
-    }
+  }
 };
 
 /**
@@ -255,9 +207,9 @@ export const getAllMachines = async () => {
  * @param {string} machineId - The ID of the machine to retrieve.
  * @returns {Promise<Object>} - The response data containing machine details.
  */
-export const getMachineDetails = async (machineName) => {
+export const getMachineDetails = async (machineId) => {
   try {
-    const response = await axiosInstance.get(`/machines/${machineName}`);
+    const response = await axiosInstance.get(`/machines/${machineId}`);
     return response.data; // Return the data received from the server
   } catch (error) {
     throw error.response ? error.response.data : new Error('Failed to fetch machine details');

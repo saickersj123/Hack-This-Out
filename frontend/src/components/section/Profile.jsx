@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getLoginUser } from '../../api/axiosInstance';
-
+import { getLoginUser, logoutUser } from '../../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 import profileIcon from '../../assets/img/icon/profile_default.png';
 import arrowIcon from '../../assets/img/icon/down_arrow.png';
 import bell from '../../assets/img/icon/notification-bell.png';
@@ -9,7 +8,7 @@ import bell from '../../assets/img/icon/notification-bell.png';
 const Profile = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [users, setUser] = useState([]);
-
+    const navigate = useNavigate();
     const toggleMenu = () => {
         setMenuOpen(!isMenuOpen);
     };
@@ -27,6 +26,17 @@ const Profile = () => {
 
         checkLoginStatus();
     }, []);
+
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            // Redirect to the home page or login page after successful logout
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Logout failed:', error);
+            // Optionally, show an error message to the user
+        }
+    };
 
     return (
         <div className="profile">
@@ -50,15 +60,13 @@ const Profile = () => {
                 {isMenuOpen && (
                     <div className="profile-menu">
                         <ul>
-                            <li>개인정보 수정</li>
+                            <li onClick={() => navigate('/mypage')}>개인정보 수정</li>
                             <hr />
                             <li>언어: 한국어</li>
                             <li>설정</li>
                             <li>고객센터</li>
                             <hr />
-                            <Link to='/'>
-                                <li>로그아웃</li>
-                            </Link>
+                            <li onClick={handleLogout}>로그아웃</li>
                         </ul>
                     </div>
                 )}
