@@ -51,7 +51,7 @@ export const postSignUp = async (req: Request, res: Response) => {
         await user.save();
 
 		// create token
-		const token = createToken(user.user_id, user.email, "7d");
+		const token = createToken(user._id.toString(), user.email, "7d");
 
 		const expires = new Date();
 		expires.setDate(expires.getDate() + 7);

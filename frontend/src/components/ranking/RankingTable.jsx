@@ -52,7 +52,7 @@ const RankingTable = () => {
                     <tbody>
                         {rankings.length > 0 ? (
                             rankings.map((user, index) => (
-                                <tr key={user._id}>
+                                <tr key={user.user_id}>
                                     <td className="rank-col">{index + 1}</td> {/* 순위는 index + 1 */}
                                     <td className="user-col">{user.name}</td> {/* 유저 이름 */}
                                     <td className="exp-col">{user.exp}</td> {/* 경험치 */}
