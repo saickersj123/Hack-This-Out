@@ -35,8 +35,8 @@ const Main = (props) => {
   return (
     <HelmetProvider>
       <Helmet
-        titleTemplate="%s | test"
-        defaultTitle="test"
+        titleTemplate="%s | HackThisOut"
+        defaultTitle="HackThisOut"
         defer={false}
       >
         {props.title && <title>{props.title}</title>}
