@@ -22,7 +22,6 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Main />} />
-          <Route path="/main" element={<Main />} />
           <Route path="/Rankings" element={<RankingPage />} />
           <Route path="/Contest" element={<ContestPage />} />
           <Route path="/Contest/:machineName" element={<ContestDetail />} />

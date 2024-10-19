@@ -16,7 +16,7 @@ const LoginPage = () => {
       try {
         const user = await getLoginUser();
         if (user) {
-          navigate('/main');
+          navigate('/');
         }
       } catch (error) {
         console.error('Error checking login status:', error);
