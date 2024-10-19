@@ -9,10 +9,12 @@ const RankingTable = () => {
     const fetchUserRankings = async () => {
         try {
             const response = await getAllUser();
-            // Extract the data property which contains the users array
-            const users = response.data;
+            console.log('API Response:', response); // Debugging line
 
-            // Ensure that users is an array
+            // Adjust data extraction based on response structure
+            const users = response.data || response;
+            console.log('Extracted Users:', users); // Debugging line
+
             if (Array.isArray(users)) {
                 const sortedRankings = users.sort((a, b) => b.exp - a.exp);
                 setRankings(sortedRankings);
@@ -52,10 +54,10 @@ const RankingTable = () => {
                     <tbody>
                         {rankings.length > 0 ? (
                             rankings.map((user, index) => (
-                                <tr key={user.user_id}>
-                                    <td className="rank-col">{index + 1}</td> {/* 순위는 index + 1 */}
-                                    <td className="user-col">{user.name}</td> {/* 유저 이름 */}
-                                    <td className="exp-col">{user.exp}</td> {/* 경험치 */}
+                                <tr key={user._id || user.user_id}> {/* Use the correct key */}
+                                    <td className="rank-col">{index + 1}</td>
+                                    <td className="user-col">{user.name}</td>
+                                    <td className="exp-col">{user.exp}</td>
                                 </tr>
                             ))
                         ) : (
