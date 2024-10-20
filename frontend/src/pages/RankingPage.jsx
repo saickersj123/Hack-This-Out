@@ -11,7 +11,8 @@ const RankingPage = () => {
     const fetchUserRankings = async () => {
       try {
         // getAllUser 함수를 호출하여 유저 데이터 가져오기
-        const users = await getAllUser();
+        const response = await getAllUser();
+        const users = response.users;
 
         // 경험치(exp) 기준으로 내림차순 정렬
         const sortedRankings = users.sort((a, b) => b.exp - a.exp);
