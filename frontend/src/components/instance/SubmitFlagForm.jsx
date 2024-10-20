@@ -20,7 +20,16 @@ const SubmitFlagForm = ({ instanceId }) => {
       // Optionally, update instance status or redirect
     } catch (error) {
       console.error('Error submitting flag:', error);
-      alert(error.msg || 'Failed to submit flag.');
+      // Display the error message returned from the backend
+      if (error.msg) {
+        alert(error.msg);
+      } else if (error.errors) {
+        // Handle validation errors
+        const errorMessages = error.errors.map(err => err.msg).join('\n');
+        alert(errorMessages);
+      } else {
+        alert('Failed to submit flag.');
+      }
     } finally {
       setLoading(false);
       setFlag('');

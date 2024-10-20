@@ -205,7 +205,7 @@ export const verifyUserStatus = async (
 
 		return res
 			.status(200)
-			.json({ message: "OK", name: user.name, email: user.email });
+			.json({ message: "OK", user_id: user.user_id, name: user.name, email: user.email });
 	} catch (err) {
 		console.log(err);
 		return res

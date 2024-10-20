@@ -24,7 +24,7 @@ const LoginForm = ({ openRegisterModal }) => { // openRegisterModal 함수 받�
     try {
       const data = await loginUser(formData);
       console.log('Success login:', data);
-      navigate('/main');
+      navigate('/');
     } catch (error) {
       console.error('Error logging in:', error.message || error);
       alert('로그인 실패. 다시 시도해주세요.');

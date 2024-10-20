@@ -127,7 +127,7 @@ export const submitFlag = async (req: Request, res: Response) => {
 			return res.status(401).json("User not registered / token malfunctioned");
 		}
     // Validate flag
-    const isValidFlag = validateFlag(flag, user.id, instanceId);
+    const isValidFlag = await validateFlag(flag, user.id, instanceId);
     if (!isValidFlag) {
       res.status(400).json({ msg: 'Invalid flag' });
       return;
