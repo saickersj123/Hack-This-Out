@@ -1,46 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import Main from '../../components/section/Main';
+import React from 'react';
 import '../../assets/scss/ranking/RankingTable.scss';
-import { getAllUser } from '../../api/axiosInstance';
 
-const RankingTable = () => {
-    const [rankings, setRankings] = useState([]);
 
-    const fetchUserRankings = async () => {
-        try {
-            const response = await getAllUser();
-            console.log('API Response:', response); // Debugging line
-
-            // Adjust data extraction based on response structure
-            const users = response.data || response;
-            console.log('Extracted Users:', users); // Debugging line
-
-            if (Array.isArray(users)) {
-                const sortedRankings = users.sort((a, b) => b.exp - a.exp);
-                setRankings(sortedRankings);
-            } else {
-                console.error('Unexpected data format:', users);
-                setRankings([]);
-            }
-        } catch (error) {
-            console.error('Error fetching user rankings:', error.message || error);
-            setRankings([]);
-        }
-    };
-
-    useEffect(() => {
-        fetchUserRankings(); // Initial fetch
-
-        const intervalId = setInterval(() => {
-            fetchUserRankings(); // Fetch every 5 minutes
-        }, 300000);
-
-        // Cleanup function to clear the interval when the component unmounts
-        return () => clearInterval(intervalId);
-    }, []);
+const RankingTable = ( {rankings} ) => {
 
     return (
-        <Main title="Rankings" description="Rankings 화면입니다.">
+        
             <div className='ranking-container'>
                 <div className='ranking-title'>Ranking</div>
                 <table className="ranking-table">
@@ -54,10 +19,10 @@ const RankingTable = () => {
                     <tbody>
                         {rankings.length > 0 ? (
                             rankings.map((user, index) => (
-                                <tr key={user._id || user.user_id}> {/* Use the correct key */}
-                                    <td className="rank-col">{index + 1}</td>
-                                    <td className="user-col">{user.name}</td>
-                                    <td className="exp-col">{user.exp}</td>
+                                <tr key={user._id}>
+                                    <td className="rank-col">{index + 1}</td> {/* 순위는 index + 1 */}
+                                    <td className="user-col">{user.name}</td> {/* 유저 이름 */}
+                                    <td className="exp-col">{user.exp}</td> {/* 경험치 */}
                                 </tr>
                             ))
                         ) : (
@@ -68,8 +33,7 @@ const RankingTable = () => {
                     </tbody>
                 </table>
             </div>
-        </Main>
     );
-};
+}
 
 export default RankingTable;
