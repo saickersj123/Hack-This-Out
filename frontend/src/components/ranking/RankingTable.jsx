@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../assets/scss/ranking/RankingTable.scss';
 
+
 const RankingTable = ( {rankings} ) => {
 
     return (

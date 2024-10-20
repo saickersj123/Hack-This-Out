@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { getAllUser } from '../api/axiosInstance';
 import RankingTable from '../components/ranking/RankingTable'; // RankingTable import
 import Main from '../components/section/Main';
+import withAuth from '../components/withAuth';
 
 const RankingPage = () => {
   const [rankings, setRankings] = useState([]);
@@ -33,4 +34,4 @@ const RankingPage = () => {
   );
 };
 
-export default RankingPage;
+export default withAuth(RankingPage);

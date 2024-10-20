@@ -12,8 +12,6 @@ const withAuth = (WrappedComponent) => {
           const user = await getLoginUser();
           if (!user) {
             navigate('/login');
-          } else {
-            navigate('/');
           }
         } catch (error) {
           console.error('Error checking authentication:', error);
