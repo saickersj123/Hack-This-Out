@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useLocation, useNavigate } from 'react-router-dom';
-import withAuth from '../withAuth';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -51,4 +50,4 @@ const Main = (props) => {
   );
 };
 
-export default withAuth(Main);
+export default Main;
