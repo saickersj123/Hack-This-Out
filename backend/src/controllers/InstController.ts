@@ -8,8 +8,10 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import Instance from '../models/Instance';
 import Machine from '../models/Machine';
-import config from '../config/config';
+import Contest from '../models/Contest';
+import ContestParticipation from '../models/ContestParticipation';
 import User from '../models/User';
+import config from '../config/config';
 
 // Configure AWS SDK v3
 const ec2Client = new EC2Client({
@@ -29,8 +31,8 @@ export const startInstance = async (req: Request, res: Response) => {
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
 
     // Fetch the machine from the database to get the AMI ID
     const machine = await Machine.findById(machineId);
@@ -88,30 +90,55 @@ export const startInstance = async (req: Request, res: Response) => {
 };
 
 /**
- * Receive VPN IP posted by the EC2 instance.
+ * Handle receiving VPN IP and updating instance status to 'running'.
  */
 export const receiveVpnIp = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { instanceId, vpnIp } = req.body;
-    console.log(instanceId, vpnIp);
+    try {
+        const { instanceId, vpnIp } = req.body;
 
-    // Find the instance
-    const instance = await Instance.findOne({ instanceId });
-    if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
-      return;
+        // Find the instance by instanceId
+        const instance = await Instance.findOne({ instanceId });
+        if (!instance) {
+            res.status(404).json({ msg: 'Instance not found.' });
+            return;
+        }
+
+        // Update the instance with VPN IP and set status to 'running'
+        instance.vpnIp = vpnIp;
+        instance.status = 'running';
+        instance.runningTime = new Date();
+
+        // Determine active contests for this instance based on current time and machine type
+        const currentTime = new Date();
+        const activeContests = await Contest.find({
+            machines: instance.machineType,
+            startTime: { $lte: currentTime },
+            endTime: { $gte: currentTime },
+        }).select('_id'); // Only retrieve the _id fields
+
+        instance.activeContests = activeContests.map(contest => contest._id);
+
+        await instance.save();
+
+        // Find related ContestParticipation records for this instance's machine and user
+        const participations = await ContestParticipation.find({
+            user: instance.user,
+            machine: instance.machineType,
+            contest: { $in: instance.activeContests },
+            participationStartTime: null // Only update participations that haven't started
+        });
+
+        // Update participationStartTime for each relevant participation
+        for (const participation of participations) {
+            participation.participationStartTime = currentTime;
+            await participation.save();
+        }
+
+        res.status(200).json({ msg: 'VPN IP received and instance is running.', instance });
+    } catch (error: any) {
+        console.error('Error receiving VPN IP:', error);
+        res.status(500).send('Server error');
     }
-
-    // Update instance with VPN IP and status
-    instance.vpnIp = vpnIp;
-    instance.status = 'running';
-    await instance.save();
-
-    res.json({ msg: 'VPN IP updated successfully' });
-  } catch (error) {
-    console.error('Error receiving VPN IP:', error);
-    res.status(500).send('Server error');
-  }
 };
 
 /**
@@ -124,8 +151,9 @@ export const submitFlag = async (req: Request, res: Response) => {
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
+
     // Validate flag
     const isValidFlag = await validateFlag(flag, user.id, instanceId);
     if (!isValidFlag) {
@@ -138,6 +166,51 @@ export const submitFlag = async (req: Request, res: Response) => {
     if (!instance) {
       res.status(404).json({ msg: 'Instance not found' });
       return;
+    }
+
+    // Check if the machine is part of an active contest
+    const activeContest = await Contest.findOne({
+      machines: instance.machineType,
+      startTime: { $lte: new Date() },
+      endTime: { $gte: new Date() },
+    });
+
+    if (activeContest) {
+      // User should have participated in the contest for this machine
+      const participation = await ContestParticipation.findOne({
+        user: user.id,
+        contest: activeContest._id,
+        machine: instance.machineType,
+      });
+
+      if (participation && !participation.participationEndTime) {
+        // Calculate EXP based on contest rules
+        const currentTime = new Date();
+        const timeTaken = (currentTime.getTime() - participation.participationStartTime.getTime()) / 1000; // in seconds
+        const hintsUsed = participation.hintsUsed;
+
+        //EXP calculation
+        let expEarned = activeContest.contestExp;
+        expEarned -= Math.floor(timeTaken / 60); // Reduce 1 EXP per minute taken
+        expEarned -= hintsUsed * 5; // Reduce 5 EXP per hint used
+
+        if (expEarned < 0) expEarned = 0;
+
+        participation.participationEndTime = currentTime;
+        participation.expEarned = expEarned;
+
+        await participation.save();
+
+        // Update user's EXP and level
+        user.exp += expEarned;
+        await (user as any).updateLevel();
+        await user.save();
+      }
+    } else {
+      // Normal submission: Add machine's EXP to user
+      user.exp += (await Machine.findById(instance.machineType))?.exp || 0;
+      await (user as any).updateLevel();
+      await user.save();
     }
 
     // Terminate the instance
@@ -168,8 +241,8 @@ export const getAllInstances = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
 
     const instances = await Instance.find({ user: user.id });
     res.json(instances);
@@ -187,8 +260,8 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
     const { instanceId } = req.params;
     const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: user.id });
     if (!instance) {
@@ -212,8 +285,8 @@ export const deleteInstance = async (req: Request, res: Response) => {
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
 
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: user.id });
@@ -268,3 +341,4 @@ const validateFlag = async (flag: string, userId: string, instanceId: string): P
     return false;
   }
 };
+

@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import userRoutes from "./routes/UserRoutes.js";
 import InstRoutes from "./routes/InstRoutes.js";
 import MachineRoutes from './routes/MachineRoutes.js';
+import ContestRoutes from './routes/ContestRoutes.js';
 
 const app = express();
 
@@ -29,7 +30,7 @@ app.use(express.json());
 app.use('/api/user', userRoutes);
 app.use('/api/inst', InstRoutes);
 app.use('/api/machines', MachineRoutes);
-
+app.use('/api/contest', ContestRoutes);
 
 const PORT = process.env.PORT || 5000;
 

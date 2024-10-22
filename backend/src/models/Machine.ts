@@ -1,4 +1,16 @@
 import mongoose from 'mongoose';
+// Hint Schema
+const HintSchema = new mongoose.Schema({
+    content: {
+      type: String,
+      required: true
+    },
+    cost: {
+      type: Number,
+      required: true,
+      default: 1 // Cost in terms of reward reduction
+    }
+  });
 
 // Review Schema
 const ReviewSchema = new mongoose.Schema({
@@ -45,20 +57,26 @@ const MachineSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    amiId: { // New field for AMI ID
+    contestExp: { // New field for Contest EXP
+        type: Number,
+        required: true,
+        default: 0
+    },
+    amiId: { 
         type: String,
         required: true,
         unique: true
     },
-    flag: { // New field for Flag
+    flag: { 
         type: String,
         required: true
     },
     repute: {
         type: Number,
-        default: 0.0 // Average rating
+        default: 1.0
     },
-    reviews: [ReviewSchema]
+    reviews: [ReviewSchema],
+    hints: [HintSchema],
 }, {
     timestamps: true
 });
