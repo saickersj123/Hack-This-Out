@@ -126,9 +126,8 @@ export const submitFlag = async (req: Request, res: Response) => {
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-      return res.status(401).json("User not registered / token malfunctioned");
-    }
-
+			return res.status(401).json("User not registered / token malfunctioned");
+		}
     // Validate flag
     const isValidFlag = await validateFlag(flag, user.id, instanceId);
     if (!isValidFlag) {
@@ -141,51 +140,6 @@ export const submitFlag = async (req: Request, res: Response) => {
     if (!instance) {
       res.status(404).json({ msg: 'Instance not found' });
       return;
-    }
-
-    // Check if the machine is part of an active contest
-    const activeContest = await Contest.findOne({
-      machines: instance.machineType,
-      startTime: { $lte: new Date() },
-      endTime: { $gte: new Date() },
-    });
-
-    if (activeContest) {
-      // User should have participated in the contest for this machine
-      const participation = await ContestParticipation.findOne({
-        user: user.id,
-        contest: activeContest._id,
-        machine: instance.machineType,
-      });
-
-      if (participation && !participation.participationEndTime) {
-        // Calculate EXP based on contest rules
-        const currentTime = new Date();
-        const timeTaken = (currentTime.getTime() - participation.participationStartTime.getTime()) / 1000; // in seconds
-        const hintsUsed = participation.hintsUsed;
-
-        //EXP calculation
-        let expEarned = activeContest.contestExp;
-        expEarned -= Math.floor(timeTaken / 60); // Reduce 1 EXP per minute taken
-        expEarned -= hintsUsed * 5; // Reduce 5 EXP per hint used
-
-        if (expEarned < 0) expEarned = 0;
-
-        participation.participationEndTime = currentTime;
-        participation.expEarned = expEarned;
-
-        await participation.save();
-
-        // Update user's EXP and level
-        user.exp += expEarned;
-        await (user as any).updateLevel();
-        await user.save();
-      }
-    } else {
-      // Normal submission: Add machine's EXP to user
-      user.exp += (await Machine.findById(instance.machineType))?.exp || 0;
-      await (user as any).updateLevel();
-      await user.save();
     }
 
     // Terminate the instance
