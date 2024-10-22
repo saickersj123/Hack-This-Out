@@ -4,12 +4,11 @@
 
 body {
     overflow: hidden;
-    /* 전체 페이지의 스크롤을 제거 */
 }
 
 .main-container {
     display: flex;
-    height: 100vh; /* 전체 화면 높이를 차지하게 설정 */
+    height: 100vh; 
 
     /* Sidebar */
     .logo-sidebar-container {
@@ -17,26 +16,26 @@ body {
         min-width: var(--sidebar-width);
         height: 100vh;
         border-right: 1px solid var(--black100);
-        position: fixed; /* Sidebar를 고정 */
+        position: fixed; 
         left: 0;
         top: 0;
     }
 
     /* Sidebar 오른쪽 영역 */
     .content-container {
-        margin-left: var(--sidebar-width); /* Sidebar 만큼의 공간을 띄움 */
+        margin-left: var(--sidebar-width);
         display: flex;
-        flex-direction: column; /* 수직 배치 */
+        flex-direction: column;
         width: calc(100% - var(--sidebar-width));
-        height: 100vh; /* 전체 높이 차지 */
-        overflow-y: auto; /* 세로 스크롤 */
+        height: 100vh; 
+        overflow-y: auto; 
     }
 
-    /* Search and Profile */
-    .search-profile-container {
+    /* Profile */
+    .profile-container {
         display: flex;
         align-items: center;
-        height: 80px; /* 원하는 높이 설정 */
+        height: 80px; 
         padding: 0 20px;
         border-bottom: 1px solid var(--black100);
     }
@@ -44,7 +43,7 @@ body {
     /* Props children container */
     .props-container {
         flex: 1; /* 남은 공간을 모두 차지 */
-        padding: 20px; /* 적절한 여백 추가 */
+        padding: 20px; 
     }
 
     /* Footer */

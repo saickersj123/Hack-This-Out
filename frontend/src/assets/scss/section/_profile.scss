@@ -1,4 +1,4 @@
-.search {
+/* .search {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -39,7 +39,7 @@
             color: var(--white);
         }
     }
-}
+}*/
 
 .profile {
     position: absolute;
@@ -62,7 +62,6 @@
     .profile-wrapper {
         display: flex;
         position: relative;
-        /* 추가: profile-menu를 이 요소에 상대적으로 배치 */
         align-items: center;
         margin-left: 11px;
         ;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { getLoginUser, logoutUser } from '../../../api/axiosInstance';
+import { getLoginUser, logoutUser } from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import profileIcon from '../../../assets/img/icon/profile_default.png';
-import arrowIcon from '../../../assets/img/icon/down_arrow.png';
-import bell from '../../../assets/img/icon/notification-bell.png';
+import profileIcon from '../../assets/img/icon/profile_default.png';
+import arrowIcon from '../../assets/img/icon/down_arrow.png';
+import bell from '../../assets/img/icon/notification-bell.png';
 
 const Profile = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);

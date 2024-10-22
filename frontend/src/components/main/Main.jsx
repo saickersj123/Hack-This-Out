@@ -5,7 +5,7 @@ import withAuth from '../withAuth';
 
 import Sidebar from './Sidebar'; // 사이드바 불러오기
 import Footer from './Footer';
-import SearchandProfile from './SearchandProfile';
+import Profile from './Profile';
 
 const Main = (props) => {
   return (
@@ -24,8 +24,8 @@ const Main = (props) => {
           <Sidebar />
         </div>
         <div className="content-container">
-          <div className="search-profile-container">
-            <SearchandProfile />
+          <div className="profile-container">
+            <Profile />
           </div>
           <div className="props-container">
             {props.children}
