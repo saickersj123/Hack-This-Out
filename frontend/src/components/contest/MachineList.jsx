@@ -37,7 +37,7 @@ const Machine = () => {
           {machines.map((machine, index) => (
             <tr key={machine.id} className="machine-item">
               <td>
-                <Link to={`/Contest/${machine.name}`}>
+                <Link to={`/Contest/${machine.name}`} state={{ machineId: machine.id}}>
                   <span className="machine-name">{machine.name}</span>
                 </Link>
               </td>

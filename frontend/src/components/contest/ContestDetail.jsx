@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import Main from '../../components/section/Main'
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
+import Main from '../../components/main/Main'
 import { getMachineDetails } from '../../api/axiosInstance';
 import '../../assets/scss/contest/ContestDetail.scss';
 import emptyStar from '../../assets/img/icon/empty_star.png';
@@ -9,15 +9,23 @@ import fullStar from '../../assets/img/icon/full_star.png';
 
 
 const MachineDetail = () => {
-  const { machineName, tabName } = useParams(); // URL에서 name과 tabName 추출
+  const location = useLocation();
+  const { machineId } = location.state || {};
+  const { machineName, tabName } = useParams(); 
   const [machineData, setMachineData] = useState();
   const navigate = useNavigate();
 
   // 문제 데이터를 가져오는 useEffect
   useEffect(() => {
     const getMachineData = async () => {
+      if (!machineId) {
+        console.error('No machineId found');
+        return;
+      }
+      
       try {
-        const { machine } = await getMachineDetails(machineName); // 백엔드에서 machine 객체 받기
+        console.log('MachineID: ', machineId);
+        const { machine } = await getMachineDetails(machineId); // 백엔드에서 machine 객체 받기
         setMachineData(machine);
       } catch (err) {
         console.error('Error fetching machine details:', err.message || err);
@@ -25,7 +33,7 @@ const MachineDetail = () => {
     };
 
     getMachineData();
-  }, [machineName]);
+  }, [machineId]);
 
   // 탭 내용이 변경될 때 강제 리렌더링 (탭 이동 시 내용 변경)
   useEffect(() => { }, [tabName]);
