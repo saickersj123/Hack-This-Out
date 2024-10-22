@@ -33,15 +33,15 @@ const InstanceSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     },
-    runningTime: {
-        type: Date,
-        default: null,
-    },
-    activeContests: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Contest',
-        default: [],
-    },
+  runningTime: {
+    type: Date,
+    default: null,
+  },
+  activeContests: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Contest',
+    default: [],
+  },
 });
 
 const Instance = mongoose.model('Instance', InstanceSchema);

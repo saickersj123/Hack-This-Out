@@ -120,18 +120,22 @@ export const receiveVpnIp = async (req: Request, res: Response): Promise<void> =
 
         await instance.save();
 
-        // Find related ContestParticipation records for this instance's machine and user
-        const participations = await ContestParticipation.find({
-            user: instance.user,
-            machine: instance.machineType,
-            contest: { $in: instance.activeContests },
-            participationStartTime: null // Only update participations that haven't started
-        });
+        if (activeContests.length > 0) {
+            // Find related ContestParticipation records for this instance's machine and user
+            const participations = await ContestParticipation.find({
+                user: instance.user,
+                machine: instance.machineType,
+                contest: { $in: instance.activeContests },
+                participationStartTime: null // Only update participations that haven't started
+            });
 
-        // Update participationStartTime for each relevant participation
-        for (const participation of participations) {
-            participation.participationStartTime = currentTime;
-            await participation.save();
+            // Update participationStartTime for each relevant participation
+            for (const participation of participations) {
+                participation.participationStartTime = currentTime;
+                await participation.save();
+            }
+        } else {
+            console.log(`Instance ${instanceId} is running but has no active contests.`);
         }
 
         res.status(200).json({ msg: 'VPN IP received and instance is running.', instance });
