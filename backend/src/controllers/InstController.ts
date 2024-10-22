@@ -93,56 +93,27 @@ export const startInstance = async (req: Request, res: Response) => {
  * Handle receiving VPN IP and updating instance status to 'running'.
  */
 export const receiveVpnIp = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { instanceId, vpnIp } = req.body;
+  try {
+    const { instanceId, vpnIp } = req.body;
+    console.log(instanceId, vpnIp);
 
-        // Find the instance by instanceId
-        const instance = await Instance.findOne({ instanceId });
-        if (!instance) {
-            res.status(404).json({ msg: 'Instance not found.' });
-            return;
-        }
-
-        // Update the instance with VPN IP and set status to 'running'
-        instance.vpnIp = vpnIp;
-        instance.status = 'running';
-        instance.runningTime = new Date();
-
-        // Determine active contests for this instance based on current time and machine type
-        const currentTime = new Date();
-        const activeContests = await Contest.find({
-            machines: instance.machineType,
-            startTime: { $lte: currentTime },
-            endTime: { $gte: currentTime },
-        }).select('_id'); // Only retrieve the _id fields
-
-        instance.activeContests = activeContests.map(contest => contest._id);
-
-        await instance.save();
-
-        if (activeContests.length > 0) {
-            // Find related ContestParticipation records for this instance's machine and user
-            const participations = await ContestParticipation.find({
-                user: instance.user,
-                machine: instance.machineType,
-                contest: { $in: instance.activeContests },
-                participationStartTime: null // Only update participations that haven't started
-            });
-
-            // Update participationStartTime for each relevant participation
-            for (const participation of participations) {
-                participation.participationStartTime = currentTime;
-                await participation.save();
-            }
-        } else {
-            console.log(`Instance ${instanceId} is running but has no active contests.`);
-        }
-
-        res.status(200).json({ msg: 'VPN IP received and instance is running.', instance });
-    } catch (error: any) {
-        console.error('Error receiving VPN IP:', error);
-        res.status(500).send('Server error');
+    // Find the instance
+    const instance = await Instance.findOne({ instanceId });
+    if (!instance) {
+      res.status(404).json({ msg: 'Instance not found' });
+      return;
     }
+
+    // Update instance with VPN IP and status
+    instance.vpnIp = vpnIp;
+    instance.status = 'running';
+    await instance.save();
+
+    res.json({ msg: 'VPN IP updated successfully' });
+  } catch (error) {
+    console.error('Error receiving VPN IP:', error);
+    res.status(500).send('Server error');
+  }
 };
 
 /**
