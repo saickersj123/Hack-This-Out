@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // 기존 컴포넌트
 import LoginPage from './pages/LoginPage';
-import Main from './components/section/Main';
+import MainPage from './pages/MainPage';
 
 
 // 비동기 로딩을 위한 Lazy 컴포넌트
@@ -18,10 +18,10 @@ const MyPage = lazy(() => import('./pages/MyPage'));
 const App = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Main />}>
+      <Suspense fallback={<MainPage />}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/Rankings" element={<RankingPage />} />
           <Route path="/Contest" element={<ContestPage />} />
           <Route path="/Contest/:machineName" element={<ContestDetail />} />

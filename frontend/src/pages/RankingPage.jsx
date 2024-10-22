@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 //import '../../css/Rankings.scss';
 import { getAllUser } from '../api/axiosInstance';
 import RankingTable from '../components/ranking/RankingTable'; // RankingTable import
-import Main from '../components/section/Main';
+import Main from '../components/main/Main';
 import withAuth from '../components/withAuth';
 
 const RankingPage = () => {
@@ -29,7 +29,7 @@ const RankingPage = () => {
 
   return (
     <Main title="Rankings" description="Rankings 화면입니다.">
-    <RankingTable rankings={rankings}/>
+      <RankingTable rankings={rankings} />
     </Main>
   );
 };

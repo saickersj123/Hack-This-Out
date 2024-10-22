@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
-import Main from '../../components/section/Main'
+import Main from '../../components/main/Main'
 import { getMachineDetails } from '../../api/axiosInstance';
 import '../../assets/scss/contest/ContestDetail.scss';
 import emptyStar from '../../assets/img/icon/empty_star.png';
