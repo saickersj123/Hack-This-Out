@@ -1,76 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { getAllMachines, deleteMachine } from '../../api/axiosInstance';
-import MachineDetail from './MachineDetail';
-import EditMachineForm from './EditMachineForm';
-import DeleteMachineButton from './DeleteMachineButton';
+import { getAllMachines } from '../../api/axiosInstance';
+import { Link } from 'react-router-dom';
 
 const MachineList = () => {
   const [machines, setMachines] = useState([]);
-  const [selectedMachine, setSelectedMachine] = useState(null);
-  const [editingMachine, setEditingMachine] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Fetch all machines on component mount
-    const fetchMachines = async () => {
-      try {
-        const data = await getAllMachines();
-        setMachines(data.machines);
-      } catch (error) {
-        console.error('Error fetching machines:', error);
-        alert(error.msg || 'Failed to fetch machines.');
-      }
-    };
-
-    fetchMachines();
-  }, []);
-
-  const handleDelete = async (machineId) => {
+  const fetchMachines = async () => {
     try {
-      await deleteMachine(machineId);
-      setMachines(machines.filter((machine) => machine._id !== machineId));
-      alert('Machine deleted successfully.');
+      const data = await getAllMachines();
+      setMachines(data.machines);
+      setLoading(false);
     } catch (error) {
-      console.error('Error deleting machine:', error);
-      alert(error.msg || 'Failed to delete machine.');
+      console.error('Error fetching machines:', error);
+      setLoading(false);
     }
   };
 
-  const handleEdit = (machine) => {
-    setEditingMachine(machine);
-  };
+  useEffect(() => {
+    fetchMachines();
+  }, []);
 
-  const handleUpdate = (updatedMachine) => {
-    setMachines(
-      machines.map((machine) => (machine._id === updatedMachine._id ? updatedMachine : machine))
-    );
-    setEditingMachine(null);
-  };
+  if (loading) {
+    return <p>Loading machines...</p>;
+  }
 
   return (
-    <div>
+    <div className="machine-list">
       <h2>Available Machines</h2>
-      {machines.length === 0 ? (
-        <p>No machines available.</p>
-      ) : (
-        <ul>
-          {machines.map((machine) => (
-            <li key={machine._id}>
-              <p><strong>Name:</strong> {machine.name}</p>
-              <p><strong>Category:</strong> {machine.category}</p>
-              <p><strong>Experience:</strong> {machine.exp}</p>
-              <button onClick={() => setSelectedMachine(machine)}>View Details</button>
-              <button onClick={() => handleEdit(machine)}>Edit</button>
-              <DeleteMachineButton machineId={machine._id} onDelete={handleDelete} />
-            </li>
-          ))}
-        </ul>
-      )}
-      {selectedMachine && (
-        <MachineDetail machine={selectedMachine} onClose={() => setSelectedMachine(null)} />
-      )}
-      {editingMachine && (
-        <EditMachineForm machine={editingMachine} onUpdate={handleUpdate} onCancel={() => setEditingMachine(null)} />
-      )}
+      <Link to="/machines/create" className="create-machine-button">Create New Machine</Link>
+      <ul>
+        {machines.map(machine => (
+          <li key={machine._id}>
+            <Link to={`/machines/${machine._id}`}>{machine.name}</Link>
+            <p>Category: {machine.category}</p>
+            <p>EXP: {machine.exp}</p>
+            <p>Repute: {machine.repute}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

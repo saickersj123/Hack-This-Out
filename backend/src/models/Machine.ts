@@ -1,18 +1,6 @@
 import mongoose from 'mongoose';
-// Hint Schema
-const HintSchema = new mongoose.Schema({
-    content: {
-      type: String,
-      required: true
-    },
-    cost: {
-      type: Number,
-      required: true,
-      default: 1 // Cost in terms of reward reduction
-    }
-  });
 
-// Review Schema
+// 리뷰 스키마
 const ReviewSchema = new mongoose.Schema({
     reviewerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +16,7 @@ const ReviewSchema = new mongoose.Schema({
         required: true
     },
     rating: {
-        type: Number, // Added rating field
+        type: Number, // 별점 필드 추가
         required: true,
         min: 1.0,
         max: 5.0
@@ -39,7 +27,7 @@ const ReviewSchema = new mongoose.Schema({
     }
 });
 
-// Machine Schema
+// 머신 스키마
 const MachineSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -57,37 +45,27 @@ const MachineSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    contestExp: { // New field for Contest EXP
-        type: Number,
-        required: true,
-        default: 0
-    },
-    amiId: { 
+    amiId: { // New field for AMI ID
         type: String,
         required: true,
         unique: true
     },
-    flag: { 
-        type: String,
-        required: true
-    },
     repute: {
         type: Number,
-        default: 1.0
+        default: 0.0 // 평균 별점
     },
-    reviews: [ReviewSchema],
-    hints: [HintSchema],
+    reviews: [ReviewSchema]
 }, {
     timestamps: true
 });
 
-// Function to update average repute after adding a review
+// 리뷰 추가 후 평균 별점 계산 함수
 MachineSchema.methods.updateRepute = function() {
     if (this.reviews.length === 0) {
         this.repute = 0.0;
     } else {
         const totalRating = this.reviews.reduce((sum, review) => sum + review.rating, 0);
-        this.repute = totalRating / this.reviews.length; // Calculate average rating
+        this.repute = totalRating / this.reviews.length; // 평균 별점 계산
     }
     return this.save();
 };

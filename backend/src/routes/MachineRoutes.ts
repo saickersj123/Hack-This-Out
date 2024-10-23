@@ -7,7 +7,11 @@ import {
   getMachine,
   updateMachine,
   deleteMachine,
+  useHint,
+  MachinesubmitFlag,
+  downloadOpenVPNProfile,
 } from '../controllers/MachineController.js';
+import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 
 const MachineRoutes = express.Router();
 
@@ -25,5 +29,14 @@ MachineRoutes.put('/:machineId', validateMachine, verifyToken, updateMachine);
 
 // Route to delete a machine by ID
 MachineRoutes.delete('/:machineId', verifyToken, deleteMachine);
+
+// Route to use a hint
+MachineRoutes.post('/:machineId/use-hint', verifyToken, useHint);
+
+// Route to submit a flag
+MachineRoutes.post('/:machineId/submit-flag', verifyToken, flagSubmissionLimiter, MachinesubmitFlag);
+
+// Route to download OpenVPN profile
+MachineRoutes.get('/:machineId/download-ovpn', verifyToken, downloadOpenVPNProfile);
 
 export default MachineRoutes;

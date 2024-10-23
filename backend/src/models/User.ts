@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import UserProgress from './UserProgress';
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -7,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     },
     user_id: {
         type: String,
-        required: true,
+        requried: true,
         unique: true
     },
     password: {
@@ -22,6 +23,9 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String
     },
+    token: {
+        type: String
+    },
     date: {
         type: Date,
         default: Date.now
@@ -34,30 +38,12 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 1
     },
-    isAdmin: { // Add this field
+    progress: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserProgress' }],
+    isAdmin: { 
         type: Boolean,
         default: false
     }
 });
 
-// Method to update level based on EXP
-UserSchema.methods.updateLevel = function() {
-    const levels = [0, 100, 300, 600, 1000]; // Example thresholds
-    let newLevel = 1;
-    for (let i = 0; i < levels.length; i++) {
-        if (this.exp >= levels[i]) {
-            newLevel = i + 1;
-        } else {
-            break;
-        }
-    }
-    if (newLevel !== this.level) {
-        this.level = newLevel;
-        return this.save();
-    }
-    return Promise.resolve(this);
-};
-
 const User = mongoose.model('user', UserSchema);
-
 export default User;

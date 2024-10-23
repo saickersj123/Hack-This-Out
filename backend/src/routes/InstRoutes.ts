@@ -9,7 +9,7 @@ import {
   deleteInstance,
   getAllInstances,
 } from '../controllers/InstController.js';
-
+import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 const InstRoutes = express.Router();
 
 // Route to start a new instance with machineId
@@ -19,7 +19,7 @@ InstRoutes.post('/start-instance/:machineId', verifyToken, startInstance);
 InstRoutes.post('/receive-vpn-ip', receiveVpnIp);
 
 // Route to submit flag for a specific instance
-InstRoutes.post('/:instanceId/submit-flag', verifyToken, validateInstance, submitFlag);
+InstRoutes.post('/:instanceId/submit-flag', verifyToken, validateInstance, flagSubmissionLimiter, submitFlag);
 
 // Route to get details of all instances
 InstRoutes.get('/', verifyToken, getAllInstances);

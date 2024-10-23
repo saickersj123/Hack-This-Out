@@ -1,5 +1,6 @@
 import { TiStopwatch } from "react-icons/ti";
 import { CiReceipt } from "react-icons/ci";
+import { CiDumbbell } from "react-icons/ci";
 import { CiRouter } from "react-icons/ci";
 
 import { AiFillGithub } from "react-icons/ai";
@@ -17,26 +18,36 @@ export const headerMenus = [
         src: "/Tutorial"
     },
     {
+        title: "Challenges",
+        icon: <CiDumbbell />,
+        src: "/Challenges"
+    },
+    {
+        title: "Upload",
+        icon: <CiDumbbell />,
+        src: "/Upload"
+    },
+    {
         title: "Rankings",
         icon: <CiRouter />,
         src: "/Rankings"
     },
-    {
-        title: "Contest",
-        icon: <TiStopwatch />,
-        src: "/Contest"
-    },
-    {
-        title: "Machines",
-        icon: < PiComputerTower />,
-        src: "/Machines"
-    },
-    {
-        title: "Instances",
-        icon: <GrCloudComputer />,
-        src: "/Instances"
-    }
-];
+        {
+            title: "Contest",
+            icon: <TiStopwatch/>,
+            src: "/Contest"
+        },
+        {
+            title: "Machines",
+            icon: < PiComputerTower />,
+            src: "/Machines"
+        },
+        {
+            title: "Instances",
+            icon: <GrCloudComputer />,
+            src: "/Instances"
+        }
+    ];
 
 export const searchKeyword = [
     {

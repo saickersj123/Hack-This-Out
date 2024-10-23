@@ -19,6 +19,14 @@ export const getAllUser = async (req: Request, res: Response) => {
 
 // POST user signup
 export const postSignUp = async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        res.status(400).json({
+            errors: errors.array()
+        });
+        return;
+    }
+
     const { name, user_id, email, password } = req.body;
 
     try {
@@ -205,7 +213,7 @@ export const verifyUserStatus = async (
 
 		return res
 			.status(200)
-			.json({ message: "OK", user_id: user.user_id, name: user.name, email: user.email });
+			.json({ message: "OK", name: user.name, email: user.email });
 	} catch (err) {
 		console.log(err);
 		return res
@@ -287,3 +295,23 @@ export const checkPassword = async (
 			.json({ message: "ERROR", cause: err.message});
 	}
 };
+
+export const getUserProgress = async (req: Request, res: Response) => {
+	const user = await User.findById(res.locals.jwtData.id);
+	if (!user) {
+		return res.status(401).json({ message: "ERROR", cause: "User doesn't exist or token malfunctioned" });
+	}
+    return res.status(200).json({ message: "OK", progress: user.progress });
+};
+
+export const changeName = async (req: Request, res: Response) => {
+    const name = req.body.name;
+    const user = await User.findById(res.locals.jwtData.id);
+	if (!user) {
+		return res.status(401).json({ message: "ERROR", cause: "User doesn't exist or token malfunctioned" });
+	}
+	user.name = name;
+	await user.save();
+    return res.status(200).json({ message: "OK", name: user.name });
+};
+

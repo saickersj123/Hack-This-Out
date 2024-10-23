@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getLoginUser, changePassword } from '../../api/axiosInstance';
+import { getLoginUser, changePassword, changeName } from '../../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
+import "../../assets/scss/user/PersonalInfoForm.scss";
 
 const PersonalInfoForm = () => {
   const [userData, setUserData] = useState({
@@ -7,13 +9,20 @@ const PersonalInfoForm = () => {
     email: '',
     user_id: '',
   });
-  const [newPassword, setNewPassword] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const user = await getLoginUser();
         setUserData(user);
+        setFormData({ name: user.name, newPassword: '', confirmPassword: '' });
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -21,42 +30,106 @@ const PersonalInfoForm = () => {
     fetchUserData();
   }, []);
 
+  const { name, newPassword, confirmPassword } = formData;
+
+  const onChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeName = async (e) => {
+    e.preventDefault();
+    setErrors([]);
+    try {
+      const data = await changeName(userData.user_id, { name });
+      alert(data.msg);
+      navigate('/mypage');
+    } catch (error) {
+      if (error.errors) {
+        setErrors(error.errors);
+      } else if (error.msg) {
+        setErrors([{ msg: error.msg }]);
+      } else {
+        setErrors([{ msg: 'Failed to change name.' }]);
+      }
+    }
+  };
+
   const handlePasswordChange = async (e) => {
     e.preventDefault();
+    setErrors([]);
+    if (newPassword !== confirmPassword) {
+      setErrors([{ msg: 'Passwords do not match.' }]);
+      return;
+    }
     try {
       await changePassword(newPassword);
-      alert('비밀번호가 성공적으로 변경되었습니다.');
-      setNewPassword('');
+      alert('Password changed successfully.');
+      setFormData({ ...formData, newPassword: '', confirmPassword: '' });
     } catch (error) {
-      console.error('Error changing password:', error);
-      alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+      if (error.errors) {
+        setErrors(error.errors);
+      } else if (error.msg) {
+        setErrors([{ msg: error.msg }]);
+      } else {
+        setErrors([{ msg: 'Failed to change password.' }]);
+      }
     }
   };
 
   return (
-    <div>
-      <h2>개인정보 수정</h2>
-      <form>
-        <div>
-          <label>이름: {userData.name}</label>
+    <div className="personal-info-form">
+      <h2>Personal Information</h2>
+      <form onSubmit={handleChangeName}>
+        {errors.length > 0 && (
+          <div className="error-messages">
+            {errors.map((error, idx) => (
+              <p key={idx} className="error">{error.msg}</p>
+            ))}
+          </div>
+        )}
+        <div className="form-group">
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={onChange}
+            required
+          />
         </div>
-        <div>
-          <label>이메일: {userData.email}</label>
-        </div>
-        <div>
-          <label>아이디: {userData.user_id}</label>
-        </div>
+        <button type="submit" className="button">Change Name</button>
       </form>
-      <form onSubmit={handlePasswordChange}>
-        <h3>비밀번호 변경</h3>
-        <input
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          placeholder="새 비밀번호"
-          required
-        />
-        <button type="submit">비밀번호 변경</button>
+
+      <form onSubmit={handlePasswordChange} className="password-form">
+        <h3>Change Password</h3>
+        {errors.length > 0 && (
+          <div className="error-messages">
+            {errors.map((error, idx) => (
+              <p key={idx} className="error">{error.msg}</p>
+            ))}
+          </div>
+        )}
+        <div className="form-group">
+          <label>New Password:</label>
+          <input
+            type="password"
+            name="newPassword"
+            value={newPassword}
+            onChange={onChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={onChange}
+            required
+          />
+        </div>
+        <button type="submit" className="button">Change Password</button>
       </form>
     </div>
   );

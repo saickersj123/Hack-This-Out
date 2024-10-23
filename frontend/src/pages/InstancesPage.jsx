@@ -2,7 +2,6 @@
 import React from 'react';
 import InstanceList from '../components/instance/InstanceList';
 import StartInstanceForm from '../components/instance/StartInstanceForm';
-import withAuth from '../components/withAuth';
 
 const InstancesPage = () => {
   return (
@@ -14,5 +13,5 @@ const InstancesPage = () => {
   );
 };
 
-export default withAuth(InstancesPage);
+export default InstancesPage;
 

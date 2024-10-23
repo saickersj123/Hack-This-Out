@@ -1,33 +1,44 @@
-import React, { useState } from "react";
-import Main from '../components/main/Main.jsx';
-import MachineList from "../components/contest/MachineList";
-import '../assets/scss/contest/ContestPage.scss';
-import withAuth from '../components/withAuth';
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import ContestDetail from '../components/contest/ContestDetail';
+import ParticipateInContest from '../components/contest/ParticipateInContest';
+import CreateContest from '../components/contest/CreateContest';
+import UpdateContest from '../components/contest/UpdateContest';
+import SubmitFlagForContest from '../components/contest/SubmitFlagForContest';
 
 const ContestPage = () => {
-    const [activeTab, setActiveTab] = useState("Machine");
+  const { contestId } = useParams();
 
-    const renderContent = () => {
-        switch (activeTab) {
-            case "Machine":
-                return <MachineList />;
-            default:
-                return <MachineList />;
-        }
-    };
+  return (
+    <div className="contest-page">
+      <h1>Contest Page</h1>
+      
+      {/* Admin Components: Create and Update Contest */}
+      {/* 
+        You should conditionally render these components based on user roles.
+        For example:
+        {isAdmin && (
+          <>
+            <CreateContest />
+            <UpdateContest contestId={contestId} />
+          </>
+        )}
+      */}
+      <CreateContest />
+      {contestId && <UpdateContest contestId={contestId} />}
 
-    return (
-        <Main title="Contest" description="Contest 화면입니다.">
-        <div className="event">대회같은 event를 추가</div>
-            <div>
-            <nav className="tab" style={{ display: "flex", gap: "0px", marginBottom: "20px" }}>
-                <button onClick={() => setActiveTab("Machine")}>Machine</button>
-            </nav>
-            <div>{renderContent()}</div>
-        </div>
-        </Main>
-    );
-
+      {/* Contest Details and Participation */}
+      {contestId ? (
+        <>
+          <ContestDetail contestId={contestId} />
+          <ParticipateInContest />
+          <SubmitFlagForContest />
+        </>
+      ) : (
+        <p>Please select a contest to view details.</p>
+      )}
+    </div>
+  );
 };
 
-export default withAuth(ContestPage);
+export default ContestPage;

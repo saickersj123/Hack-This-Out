@@ -69,11 +69,12 @@ export const participateInContest = async (req: Request, res: Response): Promise
             return;
         }
 
-        // Create a new participation record without setting participationStartTime
+        // Create a new participation record with participationStartTime
         const newParticipation = new ContestParticipation({
             user: userId,
             contest: contestId,
-            machine: machineId
+            machine: machineId,
+            participationStartTime: currentTime
         });
 
         await newParticipation.save();
@@ -139,12 +140,13 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
         const timeTaken = (currentTime.getTime() - participation.participationStartTime.getTime()) / 1000; // in seconds
         const hintsUsed = participation.hintsUsed;
 
-        // EXP calculation
+        // EXP calculation with better scaling
         let expEarned = contest.contestExp;
-        expEarned -= Math.floor(timeTaken / 60); // Reduce 1 EXP per minute taken
-        expEarned -= hintsUsed * 5; // Reduce 5 EXP per hint used
-
-        if (expEarned < 0) expEarned = 0;
+        const timePercentage = timeTaken / (contest.endTime.getTime() - contest.startTime.getTime());
+        const timeMultiplier = Math.max(0.3, 1 - timePercentage); // Minimum 30% of base EXP
+        expEarned = Math.floor(expEarned * timeMultiplier);
+        expEarned -= hintsUsed * 5; // Hint penalty
+        expEarned = Math.max(Math.floor(contest.contestExp * 0.1), expEarned); // Minimum 10% of base EXP
 
         participation.participationEndTime = currentTime;
         participation.expEarned = expEarned;
@@ -261,3 +263,38 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
         res.status(500).send('Server error');
     }
 };
+
+export const getUserContestParticipation = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const userId = res.locals.jwtData.id;
+
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId });
+        res.status(200).json({ participation });
+    } catch (error: any) {
+        console.error('Error fetching user contest participation:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+export const getContestDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const contest = await Contest.findById(contestId);
+        res.status(200).json({ contest });
+    } catch (error: any) {
+        console.error('Error fetching contest details:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+export const getContests = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const contests = await Contest.find();
+        res.status(200).json({ contests });
+    } catch (error: any) {
+        console.error('Error fetching contests:', error);
+        res.status(500).send('Server error');
+    }
+};
+

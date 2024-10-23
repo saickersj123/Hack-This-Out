@@ -9,7 +9,8 @@ import {
     checkPassword,
     logoutUser,
     changePassword,
-
+    getUserProgress,
+    changeName,
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
@@ -27,5 +28,9 @@ UserRoutes.post("/logout", verifyToken, logoutUser);
 UserRoutes.post("/my-page", verifyToken, checkPassword);
 
 UserRoutes.post("/change-password", verifyToken, changePassword);
+
+UserRoutes.post("/change-name/:userId", verifyToken, changeName);
+
+UserRoutes.get("/progress/:userId", verifyToken, getUserProgress);
 
 export default UserRoutes;
