@@ -199,9 +199,9 @@ export const updateUsertoAdmin = async (AdminPassword) => {
  * Reset user progress.
  * @returns {Promise<Object>} - The response data confirming reset.
  */
-export const resetUserProgress = async () => {
+export const resetUserProgress = async (password) => {
   try {
-    const response = await axiosInstance.post('/user/reset');
+    const response = await axiosInstance.post('/user/reset', { password });
     return response.data;
   } catch (error) {
     throw new Error('Failed to reset user progress');

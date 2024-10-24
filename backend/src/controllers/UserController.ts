@@ -412,10 +412,15 @@ export const updateUsertoAdmin = async (req: Request, res: Response) => {
 // Reset User Progress
 export const resetUserProgress = async (req: Request, res: Response) => {
 	try {
+		const { password } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
+		}
+		const isPasswordCorrect = await bcrypt.compare(password, user.password);
+		if (!isPasswordCorrect) {
+			return res.status(401).json({ message: "ERROR", cause: "Incorrect Password" });
 		}
 		user.exp = 0;
 		user.level = 1;
