@@ -139,6 +139,61 @@ export const getUserProgress = async () => {
   }
 };
 
+/**
+ * Add user exp.
+ * @param {number} exp - The exp to add.
+ * @returns {Promise<Object>} - The response data confirming exp addition.
+ */
+export const addUserExp = async (exp) => {
+  try {
+    const response = await axiosInstance.post('/user/update/user-exp', { exp });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to add user exp');
+  }
+};
+
+/**
+ * Update user level.
+ * @param {number} level - The level to update.
+ * @returns {Promise<Object>} - The response data confirming level update.
+ */
+export const updateUserLevel = async (level) => {
+  try {
+    const response = await axiosInstance.post('/user/update/user-level', { level });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to update user level');
+  }
+};
+
+/**
+ * Update user avatar.
+ * @param {string} avatar - The avatar to update.
+ * @returns {Promise<Object>} - The response data confirming update.
+ */
+export const updateUserAvatar = async (avatar) => {
+  try {
+    const response = await axiosInstance.post('/user/update/user-avatar', { avatar });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to update user avatar');
+  }
+};
+
+/**
+ * Update user to admin.
+ * @param {string} AdminPassword - The admin password to update.
+ * @returns {Promise<Object>} - The response data confirming update.
+ */
+export const updateUsertoAdmin = async (AdminPassword) => {
+  try {
+    const response = await axiosInstance.post('/user/update/user-to-admin', { AdminPassword });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to update user to admin');
+  }
+};
 
 // ------- Instance related ------
 

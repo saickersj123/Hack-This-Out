@@ -11,26 +11,51 @@ import {
     changePassword,
     changeName,
     getUserProgress,
+    updateUserAvatar,
+    updateUsertoAdmin,
+    updateUserLevel,
+    addUserExp,
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
 
+// Get All Users
 UserRoutes.get("/", getAllUser);
 
+// Sign Up
 UserRoutes.post("/sign-up", validate(signUpValidator), postSignUp);
 
+// Verify User Status
 UserRoutes.get("/auth-status", verifyToken, verifyUserStatus);
 
+// Login
 UserRoutes.post("/login", validate(loginValidator), postLoginUser);
 
+// Logout
 UserRoutes.post("/logout", verifyToken, logoutUser);
 
+// Check Password
 UserRoutes.post("/my-page", verifyToken, checkPassword);
 
+// Change Password
 UserRoutes.post("/change-password", verifyToken, changePassword);
 
+// Change Name
 UserRoutes.post("/change-name", verifyToken, changeName);
 
+// Get User Progress
 UserRoutes.get("/user-progress", verifyToken, getUserProgress);
+
+// Update User Avatar
+UserRoutes.post("/update/user-avatar", verifyToken, updateUserAvatar);
+
+// Update User to Admin
+UserRoutes.post("/update/user-to-admin", verifyToken, updateUsertoAdmin);
+
+// Update User Level
+UserRoutes.post("/update/user-level", verifyToken, updateUserLevel);
+
+// Add User EXP
+UserRoutes.post("/update/user-exp", verifyToken, addUserExp);
 
 export default UserRoutes;

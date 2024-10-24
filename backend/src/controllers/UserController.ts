@@ -333,3 +333,78 @@ export const getUserProgress = async (req: Request, res: Response): Promise<void
 		res.status(500).send('Server error');
 	}
 };
+
+// Update user level
+export const updateUserLevel = async (req: Request, res: Response) => {
+	try {
+		const { level } = req.body;
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		user.level = level;
+		await user.save();
+		return res.status(200).json({ message: "OK", level: user.level });
+	} catch (error: any) {
+		console.error('Error updating user level:', error);
+		res.status(500).send('Server error');
+	}
+}
+
+// Add user exp
+export const addUserExp = async (req: Request, res: Response) => {
+	try {
+		const { exp } = req.body;
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		user.exp += exp;
+		await user.save();
+		return res.status(200).json({ message: "OK", exp: user.exp });
+	} catch (error: any) {
+		console.error('Error updating user exp:', error);
+		res.status(500).send('Server error');
+	}
+};
+
+// Update User Avatar
+export const updateUserAvatar = async (req: Request, res: Response) => {
+	try {
+		const { avatar } = req.body;
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		user.avatar = avatar;
+		await user.save();
+		return res.status(200).json({ message: "OK", avatar: user.avatar });
+	} catch (error: any) {
+		console.error('Error updating user avatar:', error);
+		res.status(500).send('Server error');
+	}	
+};
+
+// Update User to Admin
+export const updateUsertoAdmin = async (req: Request, res: Response) => {
+	try {
+		const { AdminPassword } = req.body;
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		if (AdminPassword !== process.env.ADMIN_PASSWORD) {
+			return res.status(401).json({ message: "ERROR", cause: "Incorrect Admin Password" });
+		}
+		user.isAdmin = true;
+		await user.save();
+		return res.status(200).json({ message: "OK", isAdmin: user.isAdmin });
+	} catch (error: any) {
+		console.error('Error updating user permissions:', error);
+		res.status(500).send('Server error');
+	}
+};
