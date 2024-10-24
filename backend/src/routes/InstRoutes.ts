@@ -1,6 +1,7 @@
 import express from 'express';
 import {verifyToken} from '../middlewares/Token.js';
 import validateInstance from '../middlewares/validateInstance';
+import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 import {
   startInstance,
   receiveVpnIp,
