@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 import gravatar from 'gravatar';
 import bcrypt from 'bcrypt';
 import User from '../models/User';
+import UserProgress from '../models/UserProgress';
 import { createToken } from '../middlewares/Token';
 import { COOKIE_NAME } from '../middlewares/Constants';
 
@@ -141,6 +142,7 @@ export const postLoginUser = async (req: Request, res: Response) => {
     }
 };
 
+// POST user logout
 export const logoutUser = async (
 	req: Request,
 	res: Response,
@@ -183,6 +185,7 @@ export const logoutUser = async (
 	}
 };
 
+// Verify user status
 export const verifyUserStatus = async (
 	req: Request,
 	res: Response,
@@ -214,6 +217,7 @@ export const verifyUserStatus = async (
 	}
 };
 
+// Change user password
 export const changePassword = async (
 	req: Request,
 	res: Response,
@@ -250,6 +254,28 @@ export const changePassword = async (
 	}
 };
 
+// Change user name
+export const changeName = async (req: Request, res: Response) => {
+	try {
+		const { name } = req.body;
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		if (user._id.toString() !== res.locals.jwtData.id) {
+			return res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
+		}
+		user.name = name;
+		await user.save();
+		return res.status(200).json({ message: "OK", name: user.name, email: user.email });
+	} catch (error: any) {
+		console.error('Error changing name:', error);
+		res.status(500).send('Server error');
+	}
+}
+
+// Check user password
 export const checkPassword = async (
 	req: Request,
 	res: Response,
@@ -285,5 +311,25 @@ export const checkPassword = async (
 		return res
 			.status(200)
 			.json({ message: "ERROR", cause: err.message});
+	}
+};
+
+// Get user progress
+export const getUserProgress = async (req: Request, res: Response): Promise<void> => {
+	try {
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		const userProgress = await UserProgress.findOne({ user: user._id });
+		if (!userProgress) {
+			res.status(404).json({ msg: 'User progress not found.' });
+			return;
+		}
+		res.json(userProgress);
+	} catch (error: any) {
+		console.error('Error getting user progress:', error);
+		res.status(500).send('Server error');
 	}
 };

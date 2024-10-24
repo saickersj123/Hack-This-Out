@@ -8,8 +8,6 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import Instance from '../models/Instance';
 import Machine from '../models/Machine';
-import Contest from '../models/Contest';
-import ContestParticipation from '../models/ContestParticipation';
 import User from '../models/User';
 import config from '../config/config';
 
@@ -270,4 +268,3 @@ const validateFlag = async (flag: string, userId: string, instanceId: string): P
     return false;
   }
 };
-

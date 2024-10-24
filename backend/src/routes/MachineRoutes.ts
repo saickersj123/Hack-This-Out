@@ -7,6 +7,8 @@ import {
   getMachine,
   updateMachine,
   deleteMachine,
+  getMachineHints,
+  submitFlagMachine,
 } from '../controllers/MachineController.js';
 
 const MachineRoutes = express.Router();
@@ -25,5 +27,11 @@ MachineRoutes.put('/:machineId', validateMachine, verifyToken, updateMachine);
 
 // Route to delete a machine by ID
 MachineRoutes.delete('/:machineId', verifyToken, deleteMachine);
+
+// Route to get machine hints
+MachineRoutes.get('/:machineId/hints', verifyToken, getMachineHints);
+
+// Route to submit flag for a machine
+MachineRoutes.post('/:machineId/submit-flag', verifyToken, submitFlagMachine);
 
 export default MachineRoutes;

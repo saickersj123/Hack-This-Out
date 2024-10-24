@@ -11,9 +11,12 @@ const axiosInstance = axios.create({
 });
 
 
-// ------- 유저 관련 함수 ------
+// ------- User related ------
 
-// 모든 사용자 데이터 가져오기
+/**
+ * Get all user data.
+ * @returns {Promise<Object>} - The response data containing all user data.
+ */
 export const getAllUser = async () => {
   try {
     const response = await axiosInstance.get('/user/');
@@ -23,25 +26,30 @@ export const getAllUser = async () => {
   }
 };
 
-// 로그인 요청 함수
+/**
+ * Login request function.
+ * @param {Object} formData - The form data for login.
+ * @returns {Promise<Object>} - The response data containing login status.
+ */
 export const loginUser = async (formData) => {
   try {
-    // 로그인 API로 POST 요청 보내기
     const response = await axiosInstance.post('/user/login', formData);
-    return response.data; // 성공 시 데이터 반환
+    return response.data;
   } catch (error) {
     throw error.response ? error.response.data : new Error('Login failed');
   }
 };
 
-// 회원가입 요청 함수
+/**
+ * Sign up request function.
+ * @param {Object} formData - The form data for sign up.
+ * @returns {Promise<Object>} - The response data containing sign up status.
+ */
 export const signUpUser = async (formData) => {
   try {
-    // 회원가입 API로 POST 요청 보내기
     const response = await axiosInstance.post('/user/sign-up', formData);
-    return response.data; // 성공 시 데이터 반환
+    return response.data; 
   } catch (error) {
-    // 에러 처리
     if (error.response && error.response.data && error.response.data.message) {
       throw new Error(error.response.data.message);
     } else {
@@ -50,16 +58,23 @@ export const signUpUser = async (formData) => {
   }
 };
 
-// 로그인 상태 확인
+/**
+ * Check login status.
+ * @returns {Promise<Object>} - The response data containing login status.
+ */
 export const getLoginUser = async () => {
   try {
     const response = await axiosInstance.get('/user/auth-status');
-    return response.data; // 서버로부터 받은 데이터 반환
+    return response.data;
   } catch (error) {
     throw new Error('Failed to check login status');
   }
 };
 
+/**
+ * Logout user.
+ * @returns {Promise<Object>} - The response data confirming logout.
+ */
 export const logoutUser = async () => {
   try {
     const response = await axiosInstance.post('/user/logout');
@@ -69,6 +84,11 @@ export const logoutUser = async () => {
   }
 };
 
+/**
+ * Check password.
+ * @param {string} password - The password to check.
+ * @returns {Promise<Object>} - The response data confirming password check.
+ */
 export const checkPassword = async (password) => {
   try {
     const response = await axiosInstance.post('/user/my-page', { password });
@@ -78,6 +98,11 @@ export const checkPassword = async (password) => {
   }
 };
 
+/**
+ * Change password.
+ * @param {string} newPassword - The new password to change.
+ * @returns {Promise<Object>} - The response data confirming password change.
+ */
 export const changePassword = async (newPassword) => {
   try {
     const response = await axiosInstance.post('/user/change-password', { password: newPassword });
@@ -86,6 +111,36 @@ export const changePassword = async (newPassword) => {
     throw error.response ? error.response.data : new Error('Password change failed');
   }
 };
+
+/**
+ * Change name.
+ * @param {string} newName - The new name to change.
+ * @returns {Promise<Object>} - The response data confirming name change.
+ */
+export const changeName = async (newName) => {
+  try {
+    const response = await axiosInstance.post('/user/change-name', { name: newName });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Name change failed');
+  }
+};
+
+/**
+ * Get user progress.
+ * @returns {Promise<Object>} - The response data containing user progress.
+ */
+export const getUserProgress = async () => {
+  try {
+    const response = await axiosInstance.get('/user/user-progress');
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch user progress');
+  }
+};
+
+
+// ------- Instance related ------
 
 /**
  * Start a new EC2 instance with the specified machineId.
@@ -175,6 +230,9 @@ export const receiveVpnIp = async (instanceId, vpnIp) => {
   }
 };
 
+
+// ------- Machine related ------
+
 /**
  * Create a new machine.
  * @param {Object} machineData - The data of the machine to create.
@@ -245,4 +303,138 @@ export const deleteMachine = async (machineId) => {
   }
 };
 
+/**
+ * Get machine hints.
+ * @param {string} machineId - The ID of the machine.
+ * @returns {Promise<Object>} - The response data containing machine hints.
+ */
+export const getMachineHints = async (machineId) => {
+  try {
+    const response = await axiosInstance.get(`/machines/${machineId}/hints`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch machine hints');
+  }
+};
+
+/**
+ * Submit a flag for a specific machine.
+ * @param {string} machineId - The ID of the machine.
+ * @param {string} flag - The flag to submit.
+ * @returns {Promise<Object>} - The response data confirming submission.
+ */
+export const submitFlagMachine = async (machineId, flag) => {
+  try {
+    const response = await axiosInstance.post(`/machines/${machineId}/submit-flag`, { flag });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to submit flag');
+  }
+};
+
+// ------- 대회 관련 함수 ------
+
+/**
+ * Get all contests.
+ * @returns {Promise<Object>} - The response data containing all contests.
+ */
+export const getContests = async () => {
+  try {
+    const response = await axiosInstance.get('/contest/');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch contests');
+  }
+};
+
+/**
+ * Create a new contest.
+ * @param {Object} contestData - The data of the contest to create.
+ * @returns {Promise<Object>} - The response data containing the created contest.
+ */
+export const createContest = async (contestData) => {
+  try {
+    const response = await axiosInstance.post('/contest/', contestData);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to create contest');
+  }
+};
+
+/**
+ * Participate in a specific contest.
+ * @param {string} contestId - The ID of the contest.
+ * @param {string} machineId - The ID of the machine.
+ * @returns {Promise<Object>} - The response data confirming participation.
+ */
+export const participateInContest = async (contestId, machineId) => {
+  try {
+    const response = await axiosInstance.post(`/contest/${contestId}/participate`, { machineId });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to participate in contest');
+  }
+};
+
+/**
+ * Submit a flag for a specific machine in a contest.
+ * @param {string} contestId - The ID of the contest.
+ * @param {string} machineId - The ID of the machine.
+ * @param {string} flag - The flag to submit.
+ * @returns {Promise<Object>} - The response data confirming submission.
+ */
+export const submitFlagForContest = async (contestId, machineId, flag) => {
+  try {
+    const response = await axiosInstance.post(`/contest/${contestId}/submit-flag`, { machineId, flag });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to submit flag for contest');
+  }
+};
+
+/**
+ * Get hints for a specific machine in a contest.
+ * @param {string} contestId - The ID of the contest.
+ * @param {string} machineId - The ID of the machine.
+ * @returns {Promise<Object>} - The response data containing hints.
+ */
+export const getHintInContest = async (contestId, machineId) => {
+  try {
+    const response = await axiosInstance.get(`/contest/${contestId}/hints`, { machineId });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch hints for contest');
+  }
+};
+
+/**
+ * Update a specific contest.
+ * @param {string} contestId - The ID of the contest to update.
+ * @param {Object} updateData - The data to update.
+ * @returns {Promise<Object>} - The response data containing the updated contest.
+ */
+export const updateContest = async (contestId, updateData) => {
+  try {
+    const response = await axiosInstance.put(`/contest/${contestId}`, updateData);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to update contest');
+  }
+};
+
+/**
+ * Delete a specific contest.
+ * @param {string} contestId - The ID of the contest to delete.
+ * @returns {Promise<Object>} - The response data confirming deletion.
+ */
+export const deleteContest = async (contestId) => {
+  try {
+    const response = await axiosInstance.delete(`/contest/${contestId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to delete contest');
+  }
+};
+
 export default axiosInstance;
+
