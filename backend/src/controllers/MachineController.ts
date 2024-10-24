@@ -24,6 +24,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
       res.status(400).json({ msg: 'Machine with this name already exists.' });
       return;
     }
+    const hashedFlag = await bcrypt.hash(flag, 10);
 
     const newMachine = new Machine({
       name,
@@ -32,6 +33,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
       exp,
       hints,
       amiId,
+      flag: hashedFlag,
     });
 
     await newMachine.save();

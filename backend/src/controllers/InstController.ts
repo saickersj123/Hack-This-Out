@@ -5,6 +5,7 @@ import {
   _InstanceType as EC2InstanceType 
 } from '@aws-sdk/client-ec2';
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 import Instance from '../models/Instance';
 import Machine from '../models/Machine';
 import config from '../config/config';
@@ -246,7 +247,24 @@ export const deleteInstance = async (req: Request, res: Response) => {
  * Validate the submitted flag.
  * Implement your own logic to validate the flag.
  */
-const validateFlag = (flag: string, userId: string, instanceId: string): boolean => {
-  // TODO: Implement flag validation logic
-  return true; // Placeholder
+const validateFlag = async (flag: string, userId: string, instanceId: string): Promise<boolean> => {
+  try {
+      //find instance
+    const instance = await Instance.findOne({ instanceId, user: userId });
+    if (!instance) {
+      return false;
+    }
+    //find machine
+    const machine = await Machine.findById(instance.machineType);
+    if (!machine) {
+      return false;
+  }
+    //compare flag
+    const isMatch = await bcrypt.compare(flag, machine.flag);
+    return isMatch;
+  } catch (error) {
+    console.error('Error validating flag:', error);
+    return false;
+  }
 };
+
