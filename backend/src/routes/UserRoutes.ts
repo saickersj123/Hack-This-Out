@@ -15,6 +15,7 @@ import {
     updateUsertoAdmin,
     updateUserLevel,
     addUserExp,
+    resetUserProgress,
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
@@ -57,5 +58,8 @@ UserRoutes.post("/update/user-level", verifyToken, updateUserLevel);
 
 // Add User EXP
 UserRoutes.post("/update/user-exp", verifyToken, addUserExp);
+
+// Reset User Progress
+UserRoutes.post("/reset", verifyToken, resetUserProgress);
 
 export default UserRoutes;

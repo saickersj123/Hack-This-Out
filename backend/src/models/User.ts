@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema({
 
 // Method to update level based on EXP
 UserSchema.methods.updateLevel = function() {
-    const levels = [0, 100, 300, 600, 1000]; // Example thresholds
+    const levels = [0, 100, 300, 600, 1000, 1500, 2100, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]; // Example thresholds
     let newLevel = 1;
     for (let i = 0; i < levels.length; i++) {
         if (this.exp >= levels[i]) {

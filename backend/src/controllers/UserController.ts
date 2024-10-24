@@ -408,3 +408,25 @@ export const updateUsertoAdmin = async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 };
+
+// Reset User Progress
+export const resetUserProgress = async (req: Request, res: Response) => {
+	try {
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		user.exp = 0;
+		user.level = 1;
+		await user.save();
+		const userProgress = await UserProgress.findOne({ user: user._id });
+		if (userProgress) {
+			await userProgress.deleteOne();
+		}
+		return res.status(200).json({ message: "OK", exp: user.exp, level: user.level, userProgress: userProgress });
+	} catch (error: any) {
+		console.error('Error resetting user progress:', error);
+		res.status(500).send('Server error');
+	}
+}
