@@ -327,18 +327,40 @@ export const getUserProgress = async (req: Request, res: Response): Promise<void
 			res.status(404).json({ msg: 'User progress not found.' });
 			return;
 		}
-		res.json(userProgress);
+		res.json({ userProgress, level: user.level, exp: user.exp });
 	} catch (error: any) {
 		console.error('Error getting user progress:', error);
 		res.status(500).send('Server error');
 	}
 };
 
-// Update user level
+// Get user progress by user_id(Admin Only)
+export const getUserProgressByUserId = async (req: Request, res: Response) => {
+	try {
+		const { user_id } = req.params;
+		const user = await User.findOne({ user_id });
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		const userProgress = await UserProgress.findOne({ user: user._id });
+		if (!userProgress) {
+			res.status(404).json({ msg: 'User progress not found.' });
+			return;
+		}
+		res.json({ userProgress, level: user.level, exp: user.exp });
+	} catch (error: any) {
+		console.error('Error getting user progress:', error);
+		res.status(500).send('Server error');
+	}
+}
+
+// Update user level(Admin Only)
 export const updateUserLevel = async (req: Request, res: Response) => {
 	try {
 		const { level } = req.body;
-		const user = await User.findById(res.locals.jwtData.id);
+		const { user_id } = req.params;
+		const user = await User.findOne({ user_id });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -352,11 +374,12 @@ export const updateUserLevel = async (req: Request, res: Response) => {
 	}
 }
 
-// Add user exp
+// Add user exp(Admin Only)
 export const addUserExp = async (req: Request, res: Response) => {
 	try {
 		const { exp } = req.body;
-		const user = await User.findById(res.locals.jwtData.id);
+		const { user_id } = req.params;
+		const user = await User.findOne({ user_id });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -434,4 +457,27 @@ export const resetUserProgress = async (req: Request, res: Response) => {
 		console.error('Error resetting user progress:', error);
 		res.status(500).send('Server error');
 	}
-}
+};
+
+// Reset User Progress(Admin Only)
+export const resetUserProgressByUserId = async (req: Request, res: Response) => {
+	try {
+		const { user_id } = req.params;
+		const user = await User.findOne({ user_id });
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		user.exp = 0;
+		user.level = 1;
+		await user.save();
+		const userProgress = await UserProgress.findOne({ user: user._id });
+		if (userProgress) {
+			await userProgress.deleteOne();
+		}
+		return res.status(200).json({ message: "OK", exp: user.exp, level: user.level, userProgress: userProgress });
+	} catch (error: any) {
+		console.error('Error resetting user progress:', error);
+		res.status(500).send('Server error');
+	}
+};
