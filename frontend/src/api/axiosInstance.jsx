@@ -197,6 +197,7 @@ export const updateUsertoAdmin = async (AdminPassword) => {
 
 /**
  * Reset user progress.
+ * @param {string} password - The password to reset.
  * @returns {Promise<Object>} - The response data confirming reset.
  */
 export const resetUserProgress = async (password) => {
