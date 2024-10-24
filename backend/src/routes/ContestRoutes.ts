@@ -11,6 +11,7 @@ import {
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
+import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 
 const ContestRoutes = express.Router();
 
@@ -31,7 +32,7 @@ ContestRoutes.post(
 ContestRoutes.post('/:contestId/participate', verifyToken, participateInContest);
 
 // Route to submit a flag for a contest
-ContestRoutes.post('/:contestId/submit-flag', verifyToken, submitFlagForContest);
+ContestRoutes.post('/:contestId/submit-flag', verifyToken, flagSubmissionLimiter, submitFlagForContest);
 
 // Route to update an existing contest (admin access)
 ContestRoutes.put(

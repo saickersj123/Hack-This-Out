@@ -1,6 +1,7 @@
 import express from 'express';
 import {verifyToken} from '../middlewares/Token.js';
 import validateMachine from '../middlewares/validateMachine';
+import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 import {
   createMachine,
   getAllMachines,
@@ -32,6 +33,6 @@ MachineRoutes.delete('/:machineId', verifyToken, deleteMachine);
 MachineRoutes.get('/:machineId/hints', verifyToken, getMachineHints);
 
 // Route to submit flag for a machine
-MachineRoutes.post('/:machineId/submit-flag', verifyToken, submitFlagMachine);
+MachineRoutes.post('/:machineId/submit-flag', verifyToken, flagSubmissionLimiter, submitFlagMachine);
 
 export default MachineRoutes;
