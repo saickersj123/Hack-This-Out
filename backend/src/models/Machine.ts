@@ -1,6 +1,17 @@
 import mongoose from 'mongoose';
-
-// 리뷰 스키마
+//hint schema
+const HintSchema = new mongoose.Schema({
+    content: {
+        type: String,
+        required: true
+    },
+    cost: {
+        type: Number,
+        required: true,
+        default: 1,
+    }
+});
+//review schema
 const ReviewSchema = new mongoose.Schema({
     reviewerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,7 +27,7 @@ const ReviewSchema = new mongoose.Schema({
         required: true
     },
     rating: {
-        type: Number, // 별점 필드 추가
+        type: Number, 
         required: true,
         min: 1.0,
         max: 5.0
@@ -27,7 +38,7 @@ const ReviewSchema = new mongoose.Schema({
     }
 });
 
-// 머신 스키마
+//machine schema
 const MachineSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -45,16 +56,21 @@ const MachineSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    amiId: { // New field for AMI ID
+    amiId: { 
         type: String,
         required: true,
         unique: true
     },
     repute: {
         type: Number,
-        default: 0.0 // 평균 별점
+        default: 1.0 
     },
-    reviews: [ReviewSchema]
+    flag: {
+        type: String,
+        required: true
+    },
+    reviews: [ReviewSchema],
+    hints: [HintSchema]
 }, {
     timestamps: true
 });
