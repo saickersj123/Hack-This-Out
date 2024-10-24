@@ -41,7 +41,8 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
  */
 export const participateInContest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { contestId, machineId } = req.body;
+        const { contestId } = req.params;
+        const { machineId } = req.body;
         const userId = res.locals.jwtData.id;
 
         const contest = await Contest.findById(contestId);
@@ -69,12 +70,11 @@ export const participateInContest = async (req: Request, res: Response): Promise
             return;
         }
 
-        // Create a new participation record with participationStartTime
+        // Create a new participation record without setting participationStartTime
         const newParticipation = new ContestParticipation({
             user: userId,
             contest: contestId,
-            machine: machineId,
-            participationStartTime: currentTime
+            machine: machineId
         });
 
         await newParticipation.save();
@@ -90,7 +90,8 @@ export const participateInContest = async (req: Request, res: Response): Promise
  */
 export const submitFlagForContest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { contestId, machineId, flag } = req.body;
+        const { contestId } = req.params;
+        const { machineId, flag } = req.body;
         const userId = res.locals.jwtData.id;
 
         const contest = await Contest.findById(contestId);
@@ -117,7 +118,7 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
             return;
         }
 
-        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: contest.machines[0]._id });
         if (!participation) {
             res.status(400).json({ msg: 'Participation not found. Please participate first.' });
             return;
@@ -130,6 +131,7 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
         }
 
         // Verify the flag
+
         const isMatch = await bcrypt.compare(flag, machine.flag);
         if (!isMatch) {
             res.status(400).json({ msg: 'Incorrect flag.' });
@@ -140,6 +142,7 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
         const timeTaken = (currentTime.getTime() - participation.participationStartTime.getTime()) / 1000; // in seconds
         const hintsUsed = participation.hintsUsed;
 
+        // EXP calculation
         // EXP calculation with better scaling
         let expEarned = contest.contestExp;
         const timePercentage = timeTaken / (contest.endTime.getTime() - contest.startTime.getTime());
@@ -147,6 +150,8 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
         expEarned = Math.floor(expEarned * timeMultiplier);
         expEarned -= hintsUsed * 5; // Hint penalty
         expEarned = Math.max(Math.floor(contest.contestExp * 0.1), expEarned); // Minimum 10% of base EXP
+
+        if (expEarned < 0) expEarned = 0;
 
         participation.participationEndTime = currentTime;
         participation.expEarned = expEarned;
@@ -171,9 +176,10 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
 /**
  * Use a hint in a contest.
  */
-export const useHintInContest = async (req: Request, res: Response): Promise<void> => {
+export const getHintInContest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { contestId, machineId } = req.body;
+        const { contestId } = req.params;
+        const { machineId } = req.body;
         const userId = res.locals.jwtData.id;
 
         const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
@@ -181,11 +187,17 @@ export const useHintInContest = async (req: Request, res: Response): Promise<voi
             res.status(400).json({ msg: 'Participation not found.' });
             return;
         }
+        
+        const machine = await Machine.findById(machineId);
+        if (!machine) {
+            res.status(404).json({ msg: 'Machine not found.' });
+            return;
+        }
 
         participation.hintsUsed += 1;
         await participation.save();
 
-        res.status(200).json({ msg: 'Hint used.', hintsUsed: participation.hintsUsed });
+        res.status(200).json({ msg: 'Hint used.', hintsUsed: participation.hintsUsed, hints: machine.hints });
     } catch (error: any) {
         console.error('Error using hint in contest:', error);
         res.status(500).send('Server error');
@@ -264,37 +276,12 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-export const getUserContestParticipation = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { contestId } = req.params;
-        const userId = res.locals.jwtData.id;
-
-        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId });
-        res.status(200).json({ participation });
-    } catch (error: any) {
-        console.error('Error fetching user contest participation:', error);
-        res.status(500).send('Server error');
-    }
-};
-
-export const getContestDetails = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { contestId } = req.params;
-        const contest = await Contest.findById(contestId);
-        res.status(200).json({ contest });
-    } catch (error: any) {
-        console.error('Error fetching contest details:', error);
-        res.status(500).send('Server error');
-    }
-};
-
 export const getContests = async (req: Request, res: Response): Promise<void> => {
     try {
         const contests = await Contest.find();
-        res.status(200).json({ contests });
+        res.json(contests);
     } catch (error: any) {
         console.error('Error fetching contests:', error);
         res.status(500).send('Server error');
     }
 };
-

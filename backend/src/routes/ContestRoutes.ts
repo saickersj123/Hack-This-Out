@@ -4,22 +4,22 @@ import {
     createContest,
     participateInContest,
     submitFlagForContest,
-    useHintInContest,
     updateContest,
     deleteContest,
-    getUserContestParticipation,
-    getContestDetails,
+    getHintInContest,
     getContests
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
-import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 
 const ContestRoutes = express.Router();
 
+// Route to get all contests
+ContestRoutes.get('/', getContests);
+
 // Route to create a new contest (admin access)
 ContestRoutes.post(
-    '/create',
+    '/',
     verifyToken,
     //verifyAdmin,
     createContestValidation,
@@ -28,35 +28,28 @@ ContestRoutes.post(
 );
 
 // Route to participate in a contest
-ContestRoutes.post('/participate', verifyToken, participateInContest);
+ContestRoutes.post('/:contestId/participate', verifyToken, participateInContest);
 
 // Route to submit a flag for a contest
-ContestRoutes.post('/submit-flag', verifyToken, flagSubmissionLimiter, submitFlagForContest);
-
-// Route to use a hint in a contest
-ContestRoutes.post('/use-hint', verifyToken, useHintInContest);
+ContestRoutes.post('/:contestId/submit-flag', verifyToken, submitFlagForContest);
 
 // Route to update an existing contest (admin access)
 ContestRoutes.put(
     '/:contestId',
     verifyToken,
-    verifyAdmin,
+    //verifyAdmin,
     updateContestValidation,
     handleValidation,
     updateContest
 );
 
-// Route to get user participation in a contest
-ContestRoutes.get('/participation/:contestId', verifyToken, getUserContestParticipation);
-
-// Route to get contest details
-ContestRoutes.get('/:contestId', verifyToken, getContestDetails);
-
-// Route to get all contests
-ContestRoutes.get('/', verifyToken, getContests);
-
-
 // Route to delete a contest (admin access)
-ContestRoutes.delete('/:contestId', verifyToken, verifyAdmin, deleteContest);
+ContestRoutes.delete('/:contestId',
+    verifyToken, 
+    //verifyAdmin,
+    deleteContest);
+
+// Route to get contest hints
+ContestRoutes.get('/:contestId/hints', verifyToken, getHintInContest);
 
 export default ContestRoutes;

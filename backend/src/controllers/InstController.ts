@@ -8,8 +8,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import Instance from '../models/Instance';
 import Machine from '../models/Machine';
-import config from '../config/config';
 import User from '../models/User';
+import config from '../config/config';
 
 // Configure AWS SDK v3
 const ec2Client = new EC2Client({
@@ -29,8 +29,8 @@ export const startInstance = async (req: Request, res: Response) => {
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
 
     // Fetch the machine from the database to get the AMI ID
     const machine = await Machine.findById(machineId);
@@ -88,7 +88,7 @@ export const startInstance = async (req: Request, res: Response) => {
 };
 
 /**
- * Receive VPN IP posted by the EC2 instance.
+ * Handle receiving VPN IP and updating instance status to 'running'.
  */
 export const receiveVpnIp = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -127,7 +127,7 @@ export const submitFlag = async (req: Request, res: Response) => {
 			return res.status(401).json("User not registered / token malfunctioned");
 		}
     // Validate flag
-    const isValidFlag = validateFlag(flag, user.id.toString(), instanceId);
+    const isValidFlag = await validateFlag(flag, user.id, instanceId);
     if (!isValidFlag) {
       res.status(400).json({ msg: 'Invalid flag' });
       return;
@@ -168,8 +168,8 @@ export const getAllInstances = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
 
     const instances = await Instance.find({ user: user.id });
     res.json(instances);
@@ -187,8 +187,8 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
     const { instanceId } = req.params;
     const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: user.id });
     if (!instance) {
@@ -212,8 +212,8 @@ export const deleteInstance = async (req: Request, res: Response) => {
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json("User not registered / token malfunctioned");
+    }
 
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: user.id });
@@ -245,21 +245,22 @@ export const deleteInstance = async (req: Request, res: Response) => {
 
 /**
  * Validate the submitted flag.
- * Implement your own logic to validate the flag.
  */
 const validateFlag = async (flag: string, userId: string, instanceId: string): Promise<boolean> => {
   try {
-      //find instance
+    // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
       return false;
     }
-    //find machine
-    const machine = await Machine.findById(instance.machineType);
+
+    // Find the machine associated with the instance
+    const machine = await Machine.findOne({ name: instance.machineType });
     if (!machine) {
       return false;
-  }
-    //compare flag
+    }
+
+    // Compare the submitted flag with the stored hashed flag
     const isMatch = await bcrypt.compare(flag, machine.flag);
     return isMatch;
   } catch (error) {
@@ -267,4 +268,3 @@ const validateFlag = async (flag: string, userId: string, instanceId: string): P
     return false;
   }
 };
-

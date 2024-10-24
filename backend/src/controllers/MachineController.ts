@@ -3,18 +3,16 @@ import Machine from '../models/Machine';
 import User from '../models/User';
 import UserProgress from '../models/UserProgress';
 import bcrypt from 'bcrypt';
-import path from 'path';
-import fs from 'fs';
 /**
  * Create a new machine.
  */
 export const createMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, category, info, exp, hints, amiId, flag } = req.body;
+    const { name, category, info, exp, amiId, hints, flag } = req.body;
 
     // Validate required fields
-    if (!name || !category || !amiId) {
-      res.status(400).json({ msg: 'Please provide name, category, and amiId.' });
+    if (!name || !category || !amiId || !flag) {
+      res.status(400).json({ msg: 'Please provide name, category, amiId, and flag.' });
       return;
     }
 
@@ -24,16 +22,19 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
       res.status(400).json({ msg: 'Machine with this name already exists.' });
       return;
     }
-    const hashedFlag = await bcrypt.hash(flag, 10);
+
+    // Hash the flag before saving
+    const saltRounds = 10;
+    const hashedFlag = await bcrypt.hash(flag, saltRounds);
 
     const newMachine = new Machine({
       name,
       category,
       info,
       exp,
-      hints,
       amiId,
-      flag: hashedFlag,
+      hints,
+      flag: hashedFlag, // Assign the hashed flag
     });
 
     await newMachine.save();
@@ -49,7 +50,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
  */
 export const getAllMachines = async (req: Request, res: Response): Promise<void> => {
   try {
-    const machines = await Machine.find({});
+    const machines = await Machine.find();
     res.json({ machines });
   } catch (error: any) {
     console.error('Error fetching machines:', error);
@@ -63,6 +64,7 @@ export const getAllMachines = async (req: Request, res: Response): Promise<void>
 export const getMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
+    console.log(machineId);
     const machine = await Machine.findById(machineId);
     if (!machine) {
       res.status(404).json({ msg: 'Machine not found.' });
@@ -81,7 +83,7 @@ export const getMachine = async (req: Request, res: Response): Promise<void> => 
 export const updateMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
-    const { name, category, info, exp, hints, amiId, flag } = req.body;
+    const { name, category, info, exp, amiId, flag } = req.body;
 
     // Find the machine
     const machine = await Machine.findById(machineId);
@@ -95,8 +97,13 @@ export const updateMachine = async (req: Request, res: Response): Promise<void> 
     if (category) machine.category = category;
     if (info) machine.info = info;
     if (exp !== undefined) machine.exp = exp;
-    if (hints) machine.hints = hints;
     if (amiId) machine.amiId = amiId;
+    if (flag) {
+      // Hash the new flag before updating
+      const saltRounds = 10;
+      const hashedFlag = await bcrypt.hash(flag, saltRounds);
+      machine.flag = hashedFlag;
+    } // Update flag if provided
 
     await machine.save();
     res.json({ msg: 'Machine updated successfully.', machine });
@@ -124,138 +131,119 @@ export const deleteMachine = async (req: Request, res: Response): Promise<void> 
     res.status(500).send('Server error');
   }
 };
-
-export const MachinesubmitFlag = async (req: Request, res: Response): Promise<void> => {
+/**
+ * Get machine hints.
+ */
+export const getMachineHints = async (req: Request, res: Response): Promise<void> => {
   try {
-      const { machineId, flag } = req.body;
-      const userId = res.locals.jwtData.id;
-      const machine = await Machine.findById(machineId);
-      if (!machine) {
-          res.status(404).json({ msg: 'Machine not found.' });
-          return;
-      }
+    const { machineId } = req.params;
+    const userId = res.locals.jwtData.id;
 
-      // Verify if user hasn't already completed this machine
-      const existingCompletion = await UserProgress.findOne({ 
-          user: userId, 
-          machine: machineId,
-          completed: true 
-      });
-      
-      if (existingCompletion) {
-          res.status(400).json({ msg: 'Machine already completed.' });
-          return;
-      }
+    // Find or create user progress
+    let progress = await UserProgress.findOne({ 
+        user: userId, 
+        machine: machineId 
+    });
 
-      // Verify flag
-      const isMatch = await bcrypt.compare(flag, machine.flag);
-      if (!isMatch) {
-          res.status(400).json({ msg: 'Incorrect flag.' });
-          return;
-      }
+    if (!progress) {
+        progress = new UserProgress({
+            user: userId,
+            machine: machineId
+        });
+    }
 
-      // Calculate EXP based on hints used
-      const progress = await UserProgress.findOne({ user: userId, machine: machineId });
-      const hintsUsed = progress ? progress.hintsUsed : 0;
-      let expEarned = machine.exp;
-      expEarned -= hintsUsed * 5; // 5 EXP penalty per hint
+    // Increment hints used
+    progress.hintsUsed += 1;
+    await progress.save();
 
-      if (expEarned < 0) expEarned = 0;
+    // Get the hint content
+    const machine = await Machine.findById(machineId);
+    if (!machine || !machine.hints || machine.hints.length === 0) {
+        res.status(404).json({ msg: 'No hints available for this machine.' });
+        return;
+    }
 
-      // Update user progress and EXP
-      await UserProgress.findOneAndUpdate(
-          { user: userId, machine: machineId },
-          { 
-              completed: true,
-              completedAt: new Date(),
-              expEarned: expEarned
-          },
-          { upsert: true }
-      );
+    // Get the next hint based on hintsUsed count
+    const hintIndex = Math.min(progress.hintsUsed - 1, machine.hints.length - 1);
+    const hint = machine.hints[hintIndex];
 
-      // Update user's total EXP and level
-      const user = await User.findById(userId);
-      if (user) {
-          user.exp += expEarned;
-          await (user as any).updateLevel();
-          await user.save();
-      }
-
-      res.status(200).json({ 
-          msg: 'Flag accepted.',
-          expEarned,
-          totalExp: user?.exp
-      });
-  } catch (error) {
-      console.error('Error submitting flag:', error);
-      res.status(500).send('Server error');
-  }
+    res.status(200).json({ 
+        msg: 'Hint revealed.',
+        hint: hint.content,
+        hintsUsed: progress.hintsUsed,
+        remainingHints: Math.max(0, machine.hints.length - progress.hintsUsed)
+    });
+} catch (error: any) {
+    console.error('Error using hint:', error);
+    res.status(500).send('Server error');
+}
 };
 
-export const useHint = async (req: Request, res: Response): Promise<void> => {
+export const submitFlagMachine = async (req: Request, res: Response): Promise<void> => {
     try {
         const { machineId } = req.params;
+        const { flag } = req.body;
         const userId = res.locals.jwtData.id;
-
-        // Find or create user progress
-        let progress = await UserProgress.findOne({ 
-            user: userId, 
-            machine: machineId 
-        });
-
-        if (!progress) {
-            progress = new UserProgress({
-                user: userId,
-                machine: machineId
-            });
-        }
-
-        // Increment hints used
-        progress.hintsUsed += 1;
-        await progress.save();
-
-        // Get the hint content
         const machine = await Machine.findById(machineId);
-        if (!machine || !machine.hints || machine.hints.length === 0) {
-            res.status(404).json({ msg: 'No hints available for this machine.' });
+        if (!machine) {
+            res.status(404).json({ msg: 'Machine not found.' });
             return;
         }
-
-        // Get the next hint based on hintsUsed count
-        const hintIndex = Math.min(progress.hintsUsed - 1, machine.hints.length - 1);
-        const hint = machine.hints[hintIndex];
-
-        res.status(200).json({ 
-            msg: 'Hint revealed.',
-            hint: hint.content,
-            hintsUsed: progress.hintsUsed,
-            remainingHints: Math.max(0, machine.hints.length - progress.hintsUsed)
+  
+        // Verify if user hasn't already completed this machine
+        const existingCompletion = await UserProgress.findOne({ 
+            user: userId, 
+            machine: machineId,
+            completed: true 
         });
-    } catch (error: any) {
-        console.error('Error using hint:', error);
+        
+        if (existingCompletion) {
+            res.status(400).json({ msg: 'Machine already completed.' });
+            return;
+        }
+  
+        // Verify flag
+        const isMatch = await bcrypt.compare(flag, machine.flag);
+        if (!isMatch) {
+            res.status(400).json({ msg: 'Incorrect flag.' });
+            return;
+        }
+  
+        // Calculate EXP based on hints used
+        const progress = await UserProgress.findOne({ user: userId, machine: machineId });
+        const hintsUsed = progress ? progress.hintsUsed : 0;
+        let expEarned = machine.exp;
+        expEarned -= hintsUsed * 5; // 5 EXP penalty per hint
+  
+        if (expEarned < 0) expEarned = 0;
+  
+        // Update user progress and EXP
+        await UserProgress.findOneAndUpdate(
+            { user: userId, machine: machineId },
+            { 
+                completed: true,
+                completedAt: new Date(),
+                expEarned: expEarned
+            },
+            { upsert: true }
+        );
+  
+        const user = await User.findById(userId);
+        if (user) {
+            user.exp += expEarned;
+            await (user as any).updateLevel();
+            await user.save();
+        }
+  
+        res.status(200).json({ 
+            msg: 'Flag accepted.',
+            expEarned,
+            totalExp: user?.exp
+        });
+    } catch (error) {
+        console.error('Error submitting flag:', error);
         res.status(500).send('Server error');
     }
 };
 
-export const downloadOpenVPNProfile = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { machineId } = req.params;
-    const machine = await Machine.findById(machineId);
-    if (!machine) {
-      res.status(404).json({ msg: 'Machine not found.' });
-      return;
-    }
 
-    // Assuming the OpenVPN profiles are stored in a directory and named after the machine ID
-    const profilePath = path.join(__dirname, '../../profiles', `hto_client.ovpn`);
-    if (!fs.existsSync(profilePath)) {
-      res.status(404).json({ msg: 'OpenVPN profile not found.' });
-      return;
-    }
-
-    res.download(profilePath, `${machine.name}.ovpn`);
-  } catch (error) {
-    console.error('Error downloading OpenVPN profile:', error);
-    res.status(500).send('Server error');
-  }
-};
