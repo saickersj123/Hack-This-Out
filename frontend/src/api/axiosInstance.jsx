@@ -127,6 +127,21 @@ export const changeName = async (newName) => {
 };
 
 /**
+ * Reset password.
+ * @param {string} user_id - The user_id to reset.
+ * @param {string} password - The new password to reset.
+ * @returns {Promise<Object>} - The response data confirming reset.
+ */
+export const resetPassword = async (user_id, password) => {
+  try {
+    const response = await axiosInstance.post(`/user/reset-password/${user_id}`, { password });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to reset password');
+  }
+};
+
+/**
  * Get user progress.
  * @returns {Promise<Object>} - The response data containing user progress.
  */
@@ -220,6 +235,19 @@ export const resetUserProgressByUserId = async (user_id) => {
     return response.data;
   } catch (error) {
     throw new Error('Failed to reset user progress');
+  }
+};
+
+/**
+ * Get leaderboard.
+ * @returns {Promise<Object>} - The response data containing leaderboard.
+ */
+export const getLeaderboard = async () => {
+  try {
+    const response = await axiosInstance.get('/user/leaderboard');
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch leaderboard');
   }
 };
 
@@ -516,6 +544,20 @@ export const deleteContest = async (contestId) => {
     return response.data;
   } catch (error) {
     throw error.response ? error.response.data : new Error('Failed to delete contest');
+  }
+};
+
+/**
+ * Get leaderboard by contest.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data containing leaderboard.
+ */
+export const getLeaderboardByContest = async (contestId) => {
+  try {
+    const response = await axiosInstance.get(`/contest/${contestId}/leaderboard`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch leaderboard by contest');
   }
 };
 
