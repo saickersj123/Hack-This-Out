@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // axios 인스턴스 생성. 모든 요청에 사용됩니다.
 const axiosInstance = axios.create({
-  //baseURL: 'http://localhost:5000/api', //for local test
-  baseURL: 'https://api.hackthisout.o-r.kr/api', // API 요청의 기본 URL 설정
+  baseURL: 'http://localhost:5000/api', //for local test
+  //baseURL: 'https://api.hackthisout.o-r.kr/api', // API 요청의 기본 URL 설정
   headers: {
     'Content-Type': 'application/json', // 요청 헤더에 Content-Type을 application/json으로 설정
   },
@@ -608,7 +608,112 @@ export const submitFlagMachine = async (machineId, flag) => {
   }
 };
 
-// ------- 대회 관련 함수 ------
+/**
+ * Post a machine review.
+ * @param {string} machineId - The ID of the machine.
+ * @param {Object} reviewData - The data of the review to post.
+ * @returns {Promise<Object>} - The response data containing the posted review.
+ */
+export const postMachineReview = async (machineId, reviewData) => {
+  try {
+    const response = await axiosInstance.post(`/machines/${machineId}/reviews`, reviewData);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to post machine review');
+  }
+};
+
+/**
+ * Update a machine review.
+ * @param {string} machineId - The ID of the machine.
+ * @param {string} reviewId - The ID of the review to update.
+ * @param {Object} updateData - The data to update.
+ * @returns {Promise<Object>} - The response data containing the updated review.
+ */
+export const updateMachineReview = async (machineId, reviewId, updateData) => {
+  try {
+    const response = await axiosInstance.put(`/machines/${machineId}/reviews/${reviewId}`, updateData);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to update machine review');
+  }
+};
+
+/**
+ * Delete a machine review.
+ * @param {string} machineId - The ID of the machine.
+ * @param {string} reviewId - The ID of the review to delete.
+ * @returns {Promise<Object>} - The response data confirming deletion.
+ */
+export const deleteMachineReview = async (machineId, reviewId) => {
+  try {
+    const response = await axiosInstance.delete(`/machines/${machineId}/reviews/${reviewId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to delete machine review');
+  }
+};
+
+/**
+ * Get a machine review by review ID.
+ * @param {string} machineId - The ID of the machine.
+ * @param {string} reviewId - The ID of the review to retrieve.
+ * @returns {Promise<Object>} - The response data containing the machine review.
+ */
+export const getMachineReview = async (machineId, reviewId) => {
+  try {
+    const response = await axiosInstance.get(`/machines/${machineId}/reviews/${reviewId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch machine review');
+  }
+};
+
+/**
+ * Get a machine rating.
+ * @param {string} machineId - The ID of the machine.
+ * @returns {Promise<Object>} - The response data containing the machine rating.
+ */
+export const getMachineRating = async (machineId) => {
+  try {
+    const response = await axiosInstance.get(`/machines/${machineId}/rating`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch machine rating');
+  }
+};  
+
+/**
+ * Get machine reviews.
+ * @param {string} machineId - The ID of the machine.
+ * @returns {Promise<Object>} - The response data containing machine reviews.
+ */
+export const getMachineReviews = async (machineId) => {
+  try {
+    const response = await axiosInstance.get(`/machines/${machineId}/reviews`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch machine reviews');
+  }
+};
+
+/**
+ * Delete a machine review forcefully.
+ * @param {string} machineId - The ID of the machine.
+ * @param {string} reviewId - The ID of the review to delete.
+ * @returns {Promise<Object>} - The response data confirming deletion.
+ * Admin only
+ */
+export const deleteMachineReviewForce = async (machineId, reviewId) => {
+  try {
+    const response = await axiosInstance.delete(`/machines/${machineId}/reviews/${reviewId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to delete machine review');
+  }
+};
+
+// ------- Contest related ------
 
 /**
  * Get all contests.

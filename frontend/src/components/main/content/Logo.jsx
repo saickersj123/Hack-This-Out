@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from 'react-router-dom';
+import logo from "../../../assets/img/icon/logo.png";
 
 const Logo = () => {
   return (
     <h1 className="sidebar__logo">
       <Link to="/" className='link-logo'>
         <div className="star"></div>
-        <span>Hack<br />ThisOut</span>
+        <img src={logo} alt="logo" />
       </Link>
     </h1>
   );

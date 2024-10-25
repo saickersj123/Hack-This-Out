@@ -18,6 +18,13 @@ import {
   deactivateMachine,
   getActiveMachineDetails,
   getInactiveMachineDetails,
+  getMachineReviews,
+  deleteMachineReview,
+  updateMachineReview,
+  postMachineReview,
+  deleteMachineReviewForce,
+  getMachineReview,
+  getMachineRating,
 } from '../controllers/MachineController.js';
 
 const MachineRoutes = express.Router();
@@ -37,6 +44,24 @@ MachineRoutes.post('/:machineId/submit-flag', verifyToken, flagSubmissionLimiter
 
 // Route to get active machines
 MachineRoutes.get('/active', verifyToken, getActiveMachines);
+
+// Route to get machine reviews
+MachineRoutes.get('/:machineId/reviews', verifyToken, getMachineReviews);
+
+// Route to create a machine review
+MachineRoutes.post('/:machineId/reviews', verifyToken, postMachineReview);
+
+// Route to delete a machine review
+MachineRoutes.delete('/:machineId/reviews/:reviewId', verifyToken, deleteMachineReview);
+
+// Route to update a machine review by review ID
+MachineRoutes.put('/:machineId/reviews/:reviewId', verifyToken, updateMachineReview);
+
+// Route to get machine review by review ID
+MachineRoutes.get('/:machineId/reviews/:reviewId', verifyToken, getMachineReview);
+
+// Route to get machine rating
+MachineRoutes.get('/:machineId/rating', verifyToken, getMachineRating);
 
 // Admin Routes
 // Route to get all machines(Admin only)
@@ -65,5 +90,8 @@ MachineRoutes.post('/:machineId/deactive', verifyToken, verifyAdmin, deactivateM
 
 // Route to get machine status(Admin only)
 MachineRoutes.get('/:machineId/status', verifyToken, verifyAdmin, getMachineStatus);
+
+// Route to delete machine review forcefully(Admin only)
+MachineRoutes.delete('/:machineId/reviews/:reviewId', verifyToken, verifyAdmin, deleteMachineReviewForce);
 
 export default MachineRoutes;

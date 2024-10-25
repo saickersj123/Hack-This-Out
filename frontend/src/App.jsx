@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, Navigate } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthContext';
 import LoginPage from './pages/public/LoginPage';
@@ -11,7 +11,8 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage'));
 const ContestPage = lazy(() => import('./pages/ContestPage'));
 const InstancesPage = lazy(() => import('./pages/InstancesPage'));
-const MachinesPage = lazy(() => import('./pages/MachinesPage'));
+const MachineListPage = lazy(() => import('./pages/machine/MachineListPage'));
+const MachineDetailPage = lazy(() => import('./pages/machine/MachineDetailPage'));
 const MyPage = lazy(() => import('./pages/user/MyPage'));
 
 // 새로운 App 구성
@@ -33,31 +34,38 @@ const App = () => {
               </ProtectedRoute>
             } 
           />
-          <Route path="/LeaderBoard" 
+          <Route path="/leaderboard" 
             element={
               <ProtectedRoute>
                 <LeaderBoardPage />
               </ProtectedRoute>
             } 
           />    
-          <Route path="/Contest" 
+          <Route path="/contest" 
             element={
               <ProtectedRoute>
                 <ContestPage />
               </ProtectedRoute>
             } 
           />
-          <Route path="/Instances" 
+          <Route path="/instances" 
             element={
               <ProtectedRoute>
                 <InstancesPage />
               </ProtectedRoute>
             } 
           />
-          <Route path="/Machines" 
+          <Route path="/machines" 
             element={
               <ProtectedRoute>
-                <MachinesPage />
+                <MachineListPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="/machine/:machineId" 
+            element={
+              <ProtectedRoute>
+                <MachineDetailPage />
               </ProtectedRoute>
             } 
           />

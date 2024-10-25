@@ -33,7 +33,7 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
         res.status(201).json({ msg: 'Contest created successfully.', contest: newContest });
     } catch (error: any) {
         console.error('Error creating contest:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to create contest.');
     }
 };
 
@@ -62,7 +62,7 @@ export const activateContest = async (req: Request, res: Response): Promise<void
         }
     } catch (error: any) {
         console.error('Error updating contest active status:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to activate contest.');
     }
 };
 
@@ -79,7 +79,7 @@ export const deactivateContest = async (req: Request, res: Response): Promise<vo
         }
     } catch (error: any) {
         console.error('Error deactivating contest:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to deactivate contest.');
     }
 };
 
@@ -92,7 +92,7 @@ export const getActiveContests = async (req: Request, res: Response): Promise<vo
         res.status(200).json({ msg: 'Active contests fetched successfully.', contests });
     } catch (error: any) {
         console.error('Error fetching active contests:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to fetch active contests.');
     }
 };
 
@@ -105,7 +105,7 @@ export const getInactiveContests = async (req: Request, res: Response): Promise<
         res.status(200).json({ msg: 'Inactive contests fetched successfully.', contests });
     } catch (error: any) {
         console.error('Error fetching inactive contests:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to fetch inactive contests.');
     }
 };
 
@@ -120,7 +120,7 @@ export const getContestStatus = async (req: Request, res: Response): Promise<voi
         res.status(200).json({ msg: 'Contest status fetched successfully.', isActive: contest?.isActive });
     } catch (error: any) {
         console.error('Error getting contest status:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to get contest status.');
     }
 };
 
@@ -169,7 +169,7 @@ export const participateInContest = async (req: Request, res: Response): Promise
         res.status(201).json({ msg: 'Participation successful.', participation: newParticipation });
     } catch (error: any) {
         console.error('Error participating in contest:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to participate in contest.');
     }
 };
 
@@ -184,7 +184,7 @@ export const getUserContestParticipation = async (req: Request, res: Response): 
         res.status(200).json({ msg: 'User contest participation fetched successfully.', participation });
     } catch (error: any) {
         console.error('Error getting user contest participation:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to get user contest participation.');
     }
 };
 
@@ -272,7 +272,7 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
         res.status(200).json({ msg: 'Flag accepted.', expEarned, totalExp: user?.exp });
     } catch (error: any) {
         console.error('Error submitting flag for contest:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to submit flag for contest.');
     }
 };
 
@@ -303,7 +303,7 @@ export const getHintInContest = async (req: Request, res: Response): Promise<voi
         res.status(200).json({ msg: 'Hint used.', hintsUsed: participation.hintsUsed, hints: machine.hints });
     } catch (error: any) {
         console.error('Error using hint in contest:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to use hint in contest.');
     }
 };
 
@@ -348,7 +348,7 @@ export const updateContestDetails = async (req: Request, res: Response): Promise
         res.status(200).json({ msg: 'Contest updated successfully.', contest });
     } catch (error: any) {
         console.error('Error updating contest:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to update contest.');
     }
 };
 
@@ -375,7 +375,7 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
         res.status(200).json({ msg: 'Contest and related participations deleted successfully.' });
     } catch (error: any) {
         console.error('Error deleting contest:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to delete contest.');
     }
 };
 
@@ -388,7 +388,7 @@ export const getContests = async (req: Request, res: Response): Promise<void> =>
         res.json(contests);
     } catch (error: any) {
         console.error('Error fetching contests:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to fetch contests.');
     }
 };
 
@@ -402,7 +402,7 @@ export const getActiveContestDetails = async (req: Request, res: Response): Prom
         res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
     } catch (error: any) {
         console.error('Error fetching contest details:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to fetch contest details.');
     }
 };
 
@@ -416,7 +416,7 @@ export const getInactiveContestDetails = async (req: Request, res: Response): Pr
         res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
     } catch (error: any) {
         console.error('Error fetching contest details:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to fetch contest details.');
     }
 };
 
@@ -430,7 +430,7 @@ export const getContestDetails = async (req: Request, res: Response): Promise<vo
         res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
     } catch (error: any) {
         console.error('Error fetching contest details:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to fetch contest details.');
     }
 };
 
@@ -444,7 +444,7 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
         return res.status(200).json({ message: "OK", users: participations.map((participation) => participation.user) });
     } catch (error: any) {
         console.error('Error getting leaderboard:', error);
-        res.status(500).send('Server error');
+        res.status(500).send('Failed to get leaderboard.');
     }
 }
 

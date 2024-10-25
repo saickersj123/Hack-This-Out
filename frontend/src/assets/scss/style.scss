@@ -1,14 +1,14 @@
 @charset "UTF-8";
 
 // setting
-@import "setting/fonts";
-@import "setting/vars";
-@import "setting/reset";
-@import "setting/mixin";
-@import "setting/common";
+@use "setting/fonts";
+@use "setting/vars";
+@use "setting/reset";
+@use "setting/mixin";
+@use "setting/common";
 
 // section
-@import "section/layout";
-@import "section/sidebar";
-@import "section/banner";
-@import "section/profile";
+@use "section/layout";
+@use "section/sidebar";
+@use "section/banner";
+@use "section/profile";
