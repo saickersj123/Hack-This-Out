@@ -83,7 +83,7 @@ export const startInstance = async (req: Request, res: Response) => {
     res.json({ msg: 'Instance is being created', instanceId });
   } catch (error) {
     console.error('Error starting instance:', error);
-    res.status(500).send('Server error');
+    res.status(500).send('Failed to create instance.');
   }
 };
 
@@ -110,7 +110,7 @@ export const receiveVpnIp = async (req: Request, res: Response): Promise<void> =
     res.json({ msg: 'VPN IP updated successfully' });
   } catch (error) {
     console.error('Error receiving VPN IP:', error);
-    res.status(500).send('Server error');
+    res.status(500).send('Failed to receive VPN IP.');
   }
 };
 
@@ -157,7 +157,7 @@ export const submitFlag = async (req: Request, res: Response) => {
     res.json({ msg: 'Flag accepted. Instance terminated.' });
   } catch (error) {
     console.error('Error submitting flag:', error);
-    res.status(500).send('Server error');
+    res.status(500).send('Failed to submit flag.');
   }
 };
 

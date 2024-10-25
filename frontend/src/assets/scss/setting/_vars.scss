@@ -1,7 +1,7 @@
 :root {
-    --mainfont-nanum: "nanumSquareNeo";
-    --mainfont-nexon: "nexonLv1";
-  
+    --mainfont-noto: "Noto Sans KR Variable";
+    --mainfont-roboto: "Roboto";
+
     --black: #000;
     --black100: #161616;
     --black200: #222;
@@ -19,10 +19,10 @@
     --red: #f00;
     
     // 폰트 셋팅
-    font-family: var(--mainfont-nanum), var(--mainfont-nexon);
-    font-size: 16px;
+    font-family: var(--mainfont-noto), var(--mainfont-roboto);
+    font-size: 18px;
     line-height: 1.5;
-    font-weight: 400;
+    font-weight: 500;
     
     // 폰트 최적화
     font-synthesis: none;

@@ -71,9 +71,13 @@ const MachineSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    repute: {
+    rating: {
         type: Number,
         default: 1.0
+    },
+    playerCount: {
+        type: Number,
+        default: 0
     },
     reviews: [ReviewSchema],
     hints: [HintSchema],
@@ -87,12 +91,12 @@ const MachineSchema = new mongoose.Schema({
 });
 
 // Function to update average repute after adding a review
-MachineSchema.methods.updateRepute = function() {
+MachineSchema.methods.updateRating = function() {
     if (this.reviews.length === 0) {
-        this.repute = 0.0;
+        this.rating = 0.0;
     } else {
         const totalRating = this.reviews.reduce((sum, review) => sum + review.rating, 0);
-        this.repute = totalRating / this.reviews.length; // Calculate average rating
+        this.rating = totalRating / this.reviews.length; // Calculate average rating
     }
     return this.save();
 };
