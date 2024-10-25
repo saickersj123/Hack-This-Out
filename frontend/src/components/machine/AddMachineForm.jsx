@@ -6,21 +6,27 @@ const AddMachineForm = ({ onMachineAdded }) => {
     name: '',
     category: '',
     info: '',
+    hints: '',
     exp: '',
     amiId: '',
+    flag: '', // Added flag field
   });
   const [loading, setLoading] = useState(false);
 
-  const { name, category, info, exp, amiId } = formData;
+  const { name, category, info, hints, exp, amiId, flag } = formData;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleAddHint = () => {
+    setFormData({ ...formData, hints: formData.hints + '\n' });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !category || !amiId) {
+    if (!name || !category || !amiId || !flag) { // Include flag in validation
       alert('Please fill in all required fields.');
       return;
     }
@@ -30,17 +36,21 @@ const AddMachineForm = ({ onMachineAdded }) => {
       const data = await createMachine({
         name,
         category,
-        info,
+        info, 
+        hints,
         exp: exp ? parseInt(exp) : 0,
         amiId,
+        flag, 
       });
       alert('Machine created successfully.');
       setFormData({
         name: '',
         category: '',
         info: '',
+        hints: '',
         exp: '',
         amiId: '',
+        flag: '', 
       });
       if (onMachineAdded) onMachineAdded(data.machine);
     } catch (error) {
@@ -86,6 +96,17 @@ const AddMachineForm = ({ onMachineAdded }) => {
         ></textarea>
       </div>
       <div>
+        <label htmlFor="hints">Hints:</label>
+        <textarea
+          id="hints"
+          name="hints"
+          value={hints}
+          onChange={handleChange}
+          placeholder="Enter hints"
+        ></textarea>
+        <button type="button" onClick={handleAddHint}>Add Hint</button>
+      </div>
+      <div>
         <label htmlFor="exp">Experience Points (EXP):</label>
         <input
           type="number"
@@ -105,6 +126,18 @@ const AddMachineForm = ({ onMachineAdded }) => {
           value={amiId}
           onChange={handleChange}
           placeholder="e.g., ami-0abcdef1234567890"
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="flag">Flag<span style={{ color: 'red' }}> *</span>:</label> {/* Added label */}
+        <input
+          type="text"
+          id="flag"
+          name="flag"
+          value={flag}
+          onChange={handleChange}
+          placeholder="Enter the flag"
           required
         />
       </div>

@@ -7,15 +7,34 @@ import UserProgress from '../models/UserProgress';
 import { createToken } from '../middlewares/Token';
 import { COOKIE_NAME } from '../middlewares/Constants';
 
-// GET all user information
+// GET all user information without password
 export const getAllUser = async (req: Request, res: Response) => {
     try {
-		const users = await User.find();
+		const users = await User.find().select('-password');
 		return res.status(200).json({ message: "OK", users });
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: "ERROR", cause: error.message });
 	}
+};
+
+// GET user Detail
+export const getUserDetail = async (req: Request, res: Response) => {
+    try {
+		const userId = res.locals.jwtData.id;
+        const user = await User.findById(userId).select('-password');
+        return res.status(200).json({ message: "OK", user });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "ERROR", cause: error.message });
+    }
+};
+
+// GET user Detail by user_id(Admin Only)
+export const getUserDetailByUserId = async (req: Request, res: Response) => {
+    const { user_id } = req.params;
+    const user = await User.findOne({ user_id });
+    return res.status(200).json({ message: "OK", user });
 };
 
 // POST user signup
@@ -224,7 +243,7 @@ export const changePassword = async (
 	next: NextFunction
 ) => {
 	try {
-		const { password } = req.body;
+		const { oldPassword, newPassword } = req.body;
 		const user = await User.findById(res.locals.jwtData.id); // get variable stored in previous middleware
 
 		if (!user)
@@ -239,7 +258,12 @@ export const changePassword = async (
 				.json({ message: "ERROR", cause: "Permissions didn't match" });
 		}
 
-		const hashedPassword = await bcrypt.hash(password, 10);
+		const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+		if (!isPasswordCorrect) {
+			return res.status(403).json({ message: "ERROR", cause: "Incorrect Password" });
+		}
+
+		const hashedPassword = await bcrypt.hash(newPassword, 10);
 		user.password = hashedPassword;
 		await user.save();
 
@@ -311,6 +335,69 @@ export const checkPassword = async (
 		return res
 			.status(200)
 			.json({ message: "ERROR", cause: err.message});
+	}
+};
+
+//reset user password
+export const resetPassword = async (req: Request, res: Response) => {
+	try {
+		const { user_id } = req.params;
+		const { password } = req.body;
+		const user = await User.findOne({ user_id });
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		const hashedPassword = await bcrypt.hash(password, 10);
+		user.password = hashedPassword;
+		await user.save();
+		return res.status(200).json({ message: "OK", name: user.name, email: user.email });
+	} catch (error: any) {
+		console.error('Error resetting password:', error);
+		res.status(500).send('Server error');
+	}
+}
+
+// Delete user
+export const deleteUser = async (req: Request, res: Response) => {
+	try {
+		const user_id = res.locals.jwtData.id;
+		const { password } = req.body;
+		const user = await User.findOne({ user_id });
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		const isPasswordCorrect = await bcrypt.compare(password, user.password);
+		if (!isPasswordCorrect) {
+			return res.status(401).json({ message: "ERROR", cause: "Incorrect Password" });
+		}
+		await user.deleteOne();
+		return res.status(200).json({ message: "OK" });
+	} catch (error: any) {
+		console.error('Error deleting user:', error);
+		res.status(500).send('Server error');
+	}
+};
+
+// Delete user by user_id(Admin Only)
+export const deleteUserByUserId = async (req: Request, res: Response) => {
+	try {
+		const { user_id } = req.params;
+		const { AdminPassword } = req.body;
+		if (AdminPassword !== process.env.ADMIN_PASSWORD) {
+			return res.status(401).json({ message: "ERROR", cause: "Incorrect Admin Password" });
+		}
+		const user = await User.findOne({ user_id });
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		await user.deleteOne();
+		return res.status(200).json({ message: "OK" });
+	} catch (error: any) {
+		console.error('Error deleting user:', error);
+		res.status(500).send('Server error');
 	}
 };
 
@@ -423,6 +510,9 @@ export const updateUsertoAdmin = async (req: Request, res: Response) => {
 		if (AdminPassword !== process.env.ADMIN_PASSWORD) {
 			return res.status(401).json({ message: "ERROR", cause: "Incorrect Admin Password" });
 		}
+		if (user.isAdmin) {
+			return res.status(401).json({ message: "ERROR", cause: "User already has admin permissions" });
+		}
 		user.isAdmin = true;
 		await user.save();
 		return res.status(200).json({ message: "OK", isAdmin: user.isAdmin });
@@ -481,3 +571,17 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 		res.status(500).send('Server error');
 	}
 };
+
+//Get Leaderboard
+export const getLeaderboard = async (req: Request, res: Response) => {
+	try {
+		const users = await User.find().sort({ exp: -1 });
+		return res.status(200).json({ message: "OK", users });
+	} catch (error: any) {
+		console.error('Error getting leaderboard:', error);
+		res.status(500).send('Server error');
+	}
+};
+
+
+

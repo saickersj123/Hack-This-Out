@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { checkPassword } from '../api/axiosInstance';
-import PasswordCheckForm from '../components/mypage/PasswordCheckForm';
-import PersonalInfoForm from '../components/mypage/PersonalInfoForm';
+import { checkPassword } from '../../api/axiosInstance';
+import PasswordCheckForm from '../../components/mypage/PasswordCheckForm';
+import PersonalInfoForm from '../../components/mypage/PersonalInfoForm';
+import ToAdmin from '../../components/mypage/toAdmin';
+import { useNavigate } from 'react-router-dom';
 
 const MyPage = () => {
   const [isPasswordVerified, setIsPasswordVerified] = useState(false);
-
+  const navigate = useNavigate();
   const handlePasswordCheck = async (password) => {
     try {
       await checkPassword(password);
@@ -17,12 +19,18 @@ const MyPage = () => {
   };
 
   return (
-    <div>
+    <div className="mypage-container">
       <h1>마이 페이지</h1>
+      <div className="go-back-button">
+        <button onClick={() => navigate('/')}>뒤로가기</button>
+      </div>
       {!isPasswordVerified ? (
         <PasswordCheckForm onSubmit={handlePasswordCheck} />
       ) : (
-        <PersonalInfoForm />
+        <>
+          <PersonalInfoForm />
+          <ToAdmin />
+        </>
       )}
     </div>
   );

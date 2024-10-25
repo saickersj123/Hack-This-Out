@@ -1,17 +1,18 @@
 import mongoose from 'mongoose';
-//hint schema
+// Hint Schema
 const HintSchema = new mongoose.Schema({
     content: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     cost: {
-        type: Number,
-        required: true,
-        default: 1,
+      type: Number,
+      required: true,
+      default: 1 // Cost in terms of reward reduction
     }
-});
-//review schema
+  });
+
+// Review Schema
 const ReviewSchema = new mongoose.Schema({
     reviewerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,7 +28,7 @@ const ReviewSchema = new mongoose.Schema({
         required: true
     },
     rating: {
-        type: Number, 
+        type: Number, // Added rating field
         required: true,
         min: 1.0,
         max: 5.0
@@ -38,7 +39,7 @@ const ReviewSchema = new mongoose.Schema({
     }
 });
 
-//machine schema
+// Machine Schema
 const MachineSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -56,32 +57,42 @@ const MachineSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    contestExp: { // New field for Contest EXP
+        type: Number,
+        required: true,
+        default: 0
+    },
     amiId: { 
         type: String,
         required: true,
         unique: true
     },
-    repute: {
-        type: Number,
-        default: 1.0 
-    },
-    flag: {
+    flag: { 
         type: String,
         required: true
     },
+    repute: {
+        type: Number,
+        default: 1.0
+    },
     reviews: [ReviewSchema],
-    hints: [HintSchema]
+    hints: [HintSchema],
+    isActive: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
 }, {
     timestamps: true
 });
 
-// 리뷰 추가 후 평균 별점 계산 함수
+// Function to update average repute after adding a review
 MachineSchema.methods.updateRepute = function() {
     if (this.reviews.length === 0) {
         this.repute = 0.0;
     } else {
         const totalRating = this.reviews.reduce((sum, review) => sum + review.rating, 0);
-        this.repute = totalRating / this.reviews.length; // 평균 별점 계산
+        this.repute = totalRating / this.reviews.length; // Calculate average rating
     }
     return this.save();
 };

@@ -28,8 +28,7 @@ const ContestDetail = () => {
 
   const checkParticipation = async () => {
     try {
-      // Implement an API to check if the user has already participated
-      const data = await getUserContestParticipation(contestId); // Assume this function exists
+      const data = await getUserContestParticipation(contestId);
       setParticipation(data.participation);
     } catch (error) {
       console.error('Error checking participation:', error);
@@ -67,7 +66,7 @@ const ContestDetail = () => {
     }
   };
 
-  const handleUseHint = async () => {
+  const handleGetHint = async () => {
     setErrors([]);
     setMessage('');
     try {

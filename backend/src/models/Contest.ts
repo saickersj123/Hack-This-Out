@@ -15,6 +15,11 @@ const ContestSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    isActive: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
     machines: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Machine',
@@ -24,7 +29,9 @@ const ContestSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 0
-    }
+    },
+}, {
+    timestamps: true
 });
 
 const Contest = mongoose.model('Contest', ContestSchema);

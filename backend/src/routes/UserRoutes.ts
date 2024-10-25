@@ -19,12 +19,27 @@ import {
     resetUserProgress,
     getUserProgressByUserId,
     resetUserProgressByUserId,
+    resetPassword,
+    getLeaderboard,
+    deleteUserByUserId,
+    deleteUser,
+    getUserDetail,
+    getUserDetailByUserId,
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
 
 // Get All Users
-UserRoutes.get("/", getAllUser);
+UserRoutes.get("/", verifyToken, 
+    //verifyAdmin, 
+    getAllUser
+);
+
+// Get User Detail
+UserRoutes.get("/detail", verifyToken, getUserDetail);
+
+// Get User Detail by user_id(Admin Only)
+UserRoutes.get("/detail/:user_id", verifyToken, verifyAdmin, getUserDetailByUserId);
 
 // Sign Up
 UserRoutes.post("/sign-up", validate(signUpValidator), postSignUp);
@@ -47,6 +62,12 @@ UserRoutes.post("/change-password", verifyToken, changePassword);
 // Change Name
 UserRoutes.post("/change-name", verifyToken, changeName);
 
+// Reset Password
+UserRoutes.post("/reset-password/:user_id", verifyToken, resetPassword);
+
+// Delete User
+UserRoutes.delete("/:user_id", verifyToken, deleteUser);
+
 // Get User Progress
 UserRoutes.get("/progress", verifyToken, getUserProgress);
 
@@ -57,15 +78,18 @@ UserRoutes.post("/update/avatar", verifyToken, updateUserAvatar);
 UserRoutes.post("/update/to-admin", verifyToken, updateUsertoAdmin);
 
 // Update User Level(Admin Only)
-UserRoutes.post("/update/:user_id/level", verifyToken, 
-    //verifyAdmin,
-    updateUserLevel);
+UserRoutes.post("/update/:user_id/level", 
+    verifyToken, 
+    verifyAdmin,
+    updateUserLevel 
+);
 
 // Add User EXP(Admin Only)
 UserRoutes.post("/update/:user_id/exp", 
     verifyToken, 
-    //verifyAdmin,
-    addUserExp);
+    verifyAdmin,
+    addUserExp
+);
 
 // Reset User Progress
 UserRoutes.post("/reset", verifyToken, resetUserProgress);
@@ -73,13 +97,26 @@ UserRoutes.post("/reset", verifyToken, resetUserProgress);
 // Get User Progress by User ID(Admin Only)
 UserRoutes.get("/progress/:user_id", 
     verifyToken, 
-    //verifyAdmin,
-    getUserProgressByUserId);
+    verifyAdmin,
+    getUserProgressByUserId
+);
 
 // Reset User Progress by User ID(Admin Only)
 UserRoutes.post("/reset/:user_id", 
     verifyToken, 
-    //verifyAdmin,
-    resetUserProgressByUserId);
+    verifyAdmin,
+    resetUserProgressByUserId
+);
+
+// Delete User by User ID(Admin Only)
+UserRoutes.delete("/:user_id", 
+    verifyToken, 
+    verifyAdmin, 
+    deleteUserByUserId
+);
+
+// Get Leaderboard
+UserRoutes.get("/leaderboard", verifyToken, getLeaderboard);
+
 
 export default UserRoutes;

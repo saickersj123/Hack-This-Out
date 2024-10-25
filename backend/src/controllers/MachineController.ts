@@ -35,6 +35,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
       amiId,
       hints,
       flag: hashedFlag, // Assign the hashed flag
+      isActive: false
     });
 
     await newMachine.save();
@@ -59,12 +60,11 @@ export const getAllMachines = async (req: Request, res: Response): Promise<void>
 };
 
 /**
- * Get a single machine by ID.
+ * Get a single machine details by ID(Admin only).
  */
-export const getMachine = async (req: Request, res: Response): Promise<void> => {
+export const getMachineDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
-    console.log(machineId);
     const machine = await Machine.findById(machineId);
     if (!machine) {
       res.status(404).json({ msg: 'Machine not found.' });
@@ -78,9 +78,105 @@ export const getMachine = async (req: Request, res: Response): Promise<void> => 
 };
 
 /**
- * Update a machine by ID.
+ * Get active machine details.
  */
-export const updateMachine = async (req: Request, res: Response): Promise<void> => {
+export const getActiveMachineDetails = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.params;
+    const machine = await Machine.findById(machineId, { isActive: true });
+    res.json({ machine });
+  } catch (error: any) {
+    console.error('Error fetching active machines:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Get inactive machine details(Admin only).
+ */
+export const getInactiveMachineDetails = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.params;
+    const machine = await Machine.findById(machineId, { isActive: false });
+    res.json({ machine });
+  } catch (error: any) {
+    console.error('Error fetching inactive machines:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Get active machines.
+ */
+export const getActiveMachines = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const machines = await Machine.find({ isActive: true });
+    res.json({ machines });
+  } catch (error: any) {
+    console.error('Error fetching active machines:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Get inactive machines(Admin only).
+ */
+export const getInactiveMachines = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const machines = await Machine.find({ isActive: false });
+    res.json({ machines });
+  } catch (error: any) {
+    console.error('Error fetching inactive machines:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Activate machine(Admin only).
+ */
+export const activateMachine = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.params;
+    await Machine.findByIdAndUpdate(machineId, { isActive: true });
+    res.json({ msg: 'Machine status updated successfully.' });
+  } catch (error: any) {
+    console.error('Error updating machine status:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Deactivate machine(Admin only).
+ */
+export const deactivateMachine = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.params;
+    await Machine.findByIdAndUpdate(machineId, { isActive: false });
+    res.json({ msg: 'Machine status updated successfully.' });
+  } catch (error: any) {
+    console.error('Error deactivating machine:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Get machine status.
+ */
+export const getMachineStatus = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.params;
+    const machine = await Machine.findById(machineId);
+    res.json({ machine });
+  } catch (error: any) {
+    console.error('Error fetching machine status:', error);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Update a machine details by ID.(Admin only)
+ */
+export const updateMachineDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
     const { name, category, info, exp, amiId, flag } = req.body;
@@ -114,7 +210,7 @@ export const updateMachine = async (req: Request, res: Response): Promise<void> 
 };
 
 /**
- * Delete a machine by ID.
+ * Delete a machine by ID.(Admin only)
  */
 export const deleteMachine = async (req: Request, res: Response): Promise<void> => {
   try {

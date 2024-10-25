@@ -1,8 +1,6 @@
 // Main.jsx
 import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import withAuth from '../withAuth';
-
 import Sidebar from './Sidebar'; // 사이드바 불러오기
 import Footer from './Footer';
 import Profile from './Profile';
@@ -38,4 +36,4 @@ const Main = (props) => {
   );
 };
 
-export default withAuth(Main);
+export default Main;

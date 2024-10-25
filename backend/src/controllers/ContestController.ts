@@ -25,13 +25,101 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
             startTime,
             endTime,
             machines,
-            contestExp
+            contestExp,
+            isActive: false
         });
 
         await newContest.save();
         res.status(201).json({ msg: 'Contest created successfully.', contest: newContest });
     } catch (error: any) {
         console.error('Error creating contest:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Activate contest(Admin only).
+ */
+export const activateContest = async (req: Request, res: Response): Promise<void> => {
+    try {
+        //Get Contest ID and Active Status from Request Body
+        const { contestId } = req.params;
+
+        //Find Contest by ID
+        const contest = await Contest.findById(contestId);
+        if (!contest) {
+            res.status(404).json({ msg: 'Contest not found.' });
+            return;
+        }
+
+        const currentTime = new Date();
+        if(contest.startTime < currentTime && contest.endTime > currentTime) {
+            contest.isActive = true;
+            await contest.save();
+            res.status(200).json({ msg: 'Contest active status updated successfully.', contest });
+        } else {
+            res.status(400).json({ msg: 'Contest is not active.' });
+        }
+    } catch (error: any) {
+        console.error('Error updating contest active status:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Deactivate contest(Admin only).
+ */
+export const deactivateContest = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const contest = await Contest.findById(contestId);
+        if (!contest) {
+            res.status(404).json({ msg: 'Contest not found.' });
+            return;
+        }
+    } catch (error: any) {
+        console.error('Error deactivating contest:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Get active contests.
+ */
+export const getActiveContests = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const contests = await Contest.find({ isActive: true });
+        res.status(200).json({ msg: 'Active contests fetched successfully.', contests });
+    } catch (error: any) {
+        console.error('Error fetching active contests:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Get inactive contests(Admin only).
+ */
+export const getInactiveContests = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const contests = await Contest.find({ isActive: false });
+        res.status(200).json({ msg: 'Inactive contests fetched successfully.', contests });
+    } catch (error: any) {
+        console.error('Error fetching inactive contests:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+
+/**
+ * Get contest status(Admin only).
+ */
+export const getContestStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const contest = await Contest.findById(contestId);
+        res.status(200).json({ msg: 'Contest status fetched successfully.', isActive: contest?.isActive });
+    } catch (error: any) {
+        console.error('Error getting contest status:', error);
         res.status(500).send('Server error');
     }
 };
@@ -81,6 +169,21 @@ export const participateInContest = async (req: Request, res: Response): Promise
         res.status(201).json({ msg: 'Participation successful.', participation: newParticipation });
     } catch (error: any) {
         console.error('Error participating in contest:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Get user is participated in contest.
+ */
+export const getUserContestParticipation = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const userId = res.locals.jwtData.id;
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId });
+        res.status(200).json({ msg: 'User contest participation fetched successfully.', participation });
+    } catch (error: any) {
+        console.error('Error getting user contest participation:', error);
         res.status(500).send('Server error');
     }
 };
@@ -205,9 +308,9 @@ export const getHintInContest = async (req: Request, res: Response): Promise<voi
 };
 
 /**
- * Update an existing contest.
+ * Update an existing contest details(Admin only).
  */
-export const updateContest = async (req: Request, res: Response): Promise<void> => {
+export const updateContestDetails = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
         const { name, description, startTime, endTime, machines, contestExp } = req.body;
@@ -250,7 +353,7 @@ export const updateContest = async (req: Request, res: Response): Promise<void> 
 };
 
 /**
- * Delete a contest.
+ * Delete a contest(Admin only).
  */
 export const deleteContest = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -276,6 +379,9 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
     }
 };
 
+/**
+ * Get all contests(Admin only).
+ */
 export const getContests = async (req: Request, res: Response): Promise<void> => {
     try {
         const contests = await Contest.find();
@@ -285,3 +391,60 @@ export const getContests = async (req: Request, res: Response): Promise<void> =>
         res.status(500).send('Server error');
     }
 };
+
+/**
+ * Get active contest details.
+ */
+export const getActiveContestDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const contest = await Contest.findById(contestId, { isActive: true });
+        res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
+    } catch (error: any) {
+        console.error('Error fetching contest details:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Get inactive contest details(Admin only).
+ */
+export const getInactiveContestDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const contest = await Contest.findById(contestId, { isActive: false });
+        res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
+    } catch (error: any) {
+        console.error('Error fetching contest details:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Get contest details(Admin only).
+ */
+export const getContestDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const contest = await Contest.findById(contestId);
+        res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
+    } catch (error: any) {
+        console.error('Error fetching contest details:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Get leaderboard by contest.
+ */
+export const getLeaderboardByContest = async (req: Request, res: Response) => {
+    try {
+        const { contestId } = req.params;
+        const participations = await ContestParticipation.find({ contest: contestId }).sort({ expEarned: -1 });
+        return res.status(200).json({ message: "OK", users: participations.map((participation) => participation.user) });
+    } catch (error: any) {
+        console.error('Error getting leaderboard:', error);
+        res.status(500).send('Server error');
+    }
+}
+
