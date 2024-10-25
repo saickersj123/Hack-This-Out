@@ -55,6 +55,6 @@ ContestRoutes.delete('/:contestId',
 ContestRoutes.get('/:contestId/hints', verifyToken, getHintInContest);
 
 // Route to get leaderboard by contest
-ContestRoutes.get('/:contestId/leaderboard', verifyToken, getLeaderboardByContest);
+ContestRoutes.get('/:contestId/leaderboard', getLeaderboardByContest);
 
 export default ContestRoutes;
