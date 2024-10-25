@@ -4,13 +4,20 @@ import {
     createContest,
     participateInContest,
     submitFlagForContest,
-    updateContest,
     deleteContest,
     getHintInContest,
     getContests,
     getLeaderboardByContest,
-    updateContestStatus,
-    getContestStatus
+    updateContestDetails,
+    getContestStatus,
+    getContestDetails,
+    getUserContestParticipation,
+    activateContest,
+    deactivateContest,
+    getActiveContests,
+    getInactiveContests,
+    getActiveContestDetails,
+    getInactiveContestDetails
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
@@ -18,51 +25,108 @@ import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 
 const ContestRoutes = express.Router();
 
-// Route to get all contests
-ContestRoutes.get('/', getContests);
-
-// Route to create a new contest (admin access)
+// Public Routes
+// Route to create a new contest
 ContestRoutes.post(
     '/',
     verifyToken,
-    //verifyAdmin,
     createContestValidation,
     handleValidation,
     createContest
 );
 
-// Route to update contest active status
-ContestRoutes.put('/:contestId/status', updateContestStatus);
+// Route to get active contest details
+ContestRoutes.get('/active/:contestId', verifyToken, getActiveContestDetails);
 
-// Route to get contest status
-ContestRoutes.get('/:contestId/status', getContestStatus);
+// Route to get all active contests
+ContestRoutes.get('/active', verifyToken, getActiveContests);
+
+// Route to get user contest participation
+ContestRoutes.get('/:contestId/participate', verifyToken, getUserContestParticipation);
 
 // Route to participate in a contest
 ContestRoutes.post('/:contestId/participate', verifyToken, participateInContest);
 
 // Route to submit a flag for a contest
-ContestRoutes.post('/:contestId/submit-flag', verifyToken, flagSubmissionLimiter, submitFlagForContest);
-
-// Route to update an existing contest (admin access)
-ContestRoutes.put(
-    '/:contestId',
+ContestRoutes.post('/:contestId/submit-flag',
     verifyToken,
-    //verifyAdmin,
-    updateContestValidation,
-    handleValidation,
-    updateContest
+    flagSubmissionLimiter,
+    submitFlagForContest
 );
-
-// Route to delete a contest (admin access)
-ContestRoutes.delete('/:contestId',
-    verifyToken, 
-    //verifyAdmin,
-    deleteContest);
 
 // Route to get contest hints
 ContestRoutes.get('/:contestId/hints', verifyToken, getHintInContest);
 
 // Route to get leaderboard by contest
-ContestRoutes.get('/:contestId/leaderboard', getLeaderboardByContest);
+ContestRoutes.get('/:contestId/leaderboard', verifyToken, getLeaderboardByContest);
+
+
+
+// Admin Routes
+// Route to get all contests(Admin only)
+ContestRoutes.get('/',
+    verifyToken,
+    verifyAdmin,
+    getContests
+);
+
+// Route to get contest details(Admin only)
+ContestRoutes.get('/:contestId',
+    verifyToken,
+    verifyAdmin,
+    getContestDetails
+);
+
+// Route to get inactive contest details(Admin only)
+ContestRoutes.get('/inactive/:contestId',
+    verifyToken,
+    verifyAdmin,
+    getInactiveContestDetails
+);
+
+// Route to get all inactive contests(Admin only)
+ContestRoutes.get('/inactive',
+    verifyToken,
+    verifyAdmin,
+    getInactiveContests
+);
+
+// Route to update an existing contest details(Admin only)
+ContestRoutes.put(
+    '/:contestId',
+    verifyToken,
+    verifyAdmin,
+    updateContestValidation,
+    handleValidation,
+    updateContestDetails
+);
+
+// Route to delete a contest(Admin only)
+ContestRoutes.delete('/:contestId',
+    verifyToken,
+    verifyAdmin,
+    deleteContest
+);
+
+// Route to activate a contest(Admin only)
+ContestRoutes.post('/:contestId/active',
+    verifyToken,
+    verifyAdmin,
+    activateContest
+);
+
+// Route to deactivate a contest(Admin only)
+ContestRoutes.post('/:contestId/deactive',
+    verifyToken,
+    verifyAdmin,
+    deactivateContest
+);
+
+// Route to get contest status(Admin only)
+ContestRoutes.get('/:contestId/status',
+    verifyToken,
+    verifyAdmin,
+    getContestStatus
+);
 
 export default ContestRoutes;

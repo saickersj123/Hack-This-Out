@@ -29,7 +29,9 @@ const ContestSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 0
-    }
+    },
+}, {
+    timestamps: true
 });
 
 const Contest = mongoose.model('Contest', ContestSchema);

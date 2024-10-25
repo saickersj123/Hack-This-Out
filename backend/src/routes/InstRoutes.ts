@@ -1,5 +1,6 @@
 import express from 'express';
-import {verifyToken} from '../middlewares/Token.js';
+import {verifyToken} from '../middlewares/Token';
+import { verifyAdmin } from '../middlewares/Admin';
 import validateInstance from '../middlewares/validateInstance';
 import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 import {
@@ -28,7 +29,7 @@ InstRoutes.get('/', verifyToken, getAllInstances);
 // Route to get details of a specific instance
 InstRoutes.get('/:instanceId', verifyToken, validateInstance, getInstanceDetails);
 
-// Route to delete a specific instance
-InstRoutes.delete('/:instanceId', verifyToken, validateInstance, deleteInstance);
+// Route to delete a specific instance(Admin only)
+InstRoutes.delete('/:instanceId', verifyToken, verifyAdmin, validateInstance, deleteInstance);
 
 export default InstRoutes;

@@ -25,8 +25,8 @@ import {
 
 const UserRoutes = express.Router();
 
-// Get All Users
-UserRoutes.get("/", getAllUser);
+// Get All Users(Admin only)
+UserRoutes.get("/", verifyToken, verifyAdmin, getAllUser);
 
 // Sign Up
 UserRoutes.post("/sign-up", validate(signUpValidator), postSignUp);
@@ -62,14 +62,15 @@ UserRoutes.post("/update/avatar", verifyToken, updateUserAvatar);
 UserRoutes.post("/update/to-admin", verifyToken, updateUsertoAdmin);
 
 // Update User Level(Admin Only)
-UserRoutes.post("/update/:user_id/level", verifyToken, 
-    //verifyAdmin,
+UserRoutes.post("/update/:user_id/level", 
+    verifyToken, 
+    verifyAdmin,
     updateUserLevel);
 
 // Add User EXP(Admin Only)
 UserRoutes.post("/update/:user_id/exp", 
     verifyToken, 
-    //verifyAdmin,
+    verifyAdmin,
     addUserExp);
 
 // Reset User Progress
@@ -78,17 +79,17 @@ UserRoutes.post("/reset", verifyToken, resetUserProgress);
 // Get User Progress by User ID(Admin Only)
 UserRoutes.get("/progress/:user_id", 
     verifyToken, 
-    //verifyAdmin,
+    verifyAdmin,
     getUserProgressByUserId);
 
 // Reset User Progress by User ID(Admin Only)
 UserRoutes.post("/reset/:user_id", 
     verifyToken, 
-    //verifyAdmin,
+    verifyAdmin,
     resetUserProgressByUserId);
 
 // Get Leaderboard
-UserRoutes.get("/leaderboard", getLeaderboard);
+UserRoutes.get("/leaderboard", verifyToken, getLeaderboard);
 
 
 export default UserRoutes;

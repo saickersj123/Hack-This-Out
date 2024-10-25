@@ -62,7 +62,7 @@ export const signUpUser = async (formData) => {
  * Check login status.
  * @returns {Promise<Object>} - The response data containing login status.
  */
-export const getLoginUser = async () => {
+export const getUserStatus = async () => {
   try {
     const response = await axiosInstance.get('/user/auth-status');
     return response.data;
@@ -361,6 +361,7 @@ export const createMachine = async (machineData) => {
 /**
  * Get all machines.
  * @returns {Promise<Object>} - The response data containing all machines.
+ * Admin only
  */
 export const getAllMachines = async () => {
   try {
@@ -372,9 +373,67 @@ export const getAllMachines = async () => {
 };
 
 /**
+ * Get active machines.
+ * @returns {Promise<Object>} - The response data containing active machines.
+ */
+export const getActiveMachines = async () => {
+  try {
+    const response = await axiosInstance.get('/machines/active');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch active machines');
+  }
+};
+
+/**
+ * Get inactive machines.
+ * @returns {Promise<Object>} - The response data containing inactive machines.
+ * Admin only
+ */
+export const getInactiveMachines = async () => {
+  try {
+    const response = await axiosInstance.get('/machines/inactive');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch inactive machines');
+  }
+};
+
+/**
+ * Activate a specific machine.
+ * @param {string} machineId - The ID of the machine to activate.
+ * @returns {Promise<Object>} - The response data confirming activation.
+ * Admin only
+ */
+export const activateMachine = async (machineId) => {
+  try {
+    const response = await axiosInstance.post(`/machines/${machineId}/active`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to activate machine');
+  }
+};
+
+/**
+ * Deactivate a specific machine.
+ * @param {string} machineId - The ID of the machine to deactivate.
+ * @returns {Promise<Object>} - The response data confirming deactivation.
+ * Admin only
+ */
+export const deactivateMachine = async (machineId) => {
+  try {
+    const response = await axiosInstance.post(`/machines/${machineId}/deactive`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to deactivate machine');
+  }
+};
+
+/**
  * Get details of a specific machine.
  * @param {string} machineId - The ID of the machine to retrieve.
  * @returns {Promise<Object>} - The response data containing machine details.
+ * Admin only
  */
 export const getMachineDetails = async (machineId) => {
   try {
@@ -386,10 +445,54 @@ export const getMachineDetails = async (machineId) => {
 };
 
 /**
+ * Get inactive machine details.
+ * @param {string} machineId - The ID of the machine to retrieve.
+ * @returns {Promise<Object>} - The response data containing machine details.
+ * Admin only
+ */
+export const getInactiveMachineDetails = async (machineId) => {
+  try {
+    const response = await axiosInstance.get(`/machines/inactive/${machineId}`);
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch machine details');
+  }
+};
+
+/**
+ * Get active machine details.
+ * @param {string} machineId - The ID of the machine to retrieve.
+ * @returns {Promise<Object>} - The response data containing machine details.
+ */
+export const getActiveMachineDetails = async (machineId) => {
+  try {
+    const response = await axiosInstance.get(`/machines/active/${machineId}`);
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch machine details');
+  }
+};
+
+/**
+ * Get machine status.
+ * @param {string} machineId - The ID of the machine to retrieve.
+ * @returns {Promise<Object>} - The response data containing machine status.
+ */
+export const getMachineStatus = async (machineId) => {
+  try {
+    const response = await axiosInstance.get(`/machines/${machineId}/status`);
+    return response.data; // Return the data received from the server
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch machine status');
+  }
+};
+
+/**
  * Update a specific machine.
  * @param {string} machineId - The ID of the machine to update.
  * @param {Object} updateData - The data to update.
  * @returns {Promise<Object>} - The response data containing the updated machine.
+ * Admin only
  */
 export const updateMachine = async (machineId, updateData) => {
   try {
@@ -404,6 +507,7 @@ export const updateMachine = async (machineId, updateData) => {
  * Delete a specific machine.
  * @param {string} machineId - The ID of the machine to delete.
  * @returns {Promise<Object>} - The response data confirming deletion.
+ * Admin only
  */
 export const deleteMachine = async (machineId) => {
   try {
@@ -448,6 +552,7 @@ export const submitFlagMachine = async (machineId, flag) => {
 /**
  * Get all contests.
  * @returns {Promise<Object>} - The response data containing all contests.
+ * Admin only
  */
 export const getContests = async () => {
   try {
@@ -523,6 +628,7 @@ export const getHintInContest = async (contestId, machineId) => {
  * @param {string} contestId - The ID of the contest to update.
  * @param {Object} updateData - The data to update.
  * @returns {Promise<Object>} - The response data containing the updated contest.
+ * Admin only
  */
 export const updateContest = async (contestId, updateData) => {
   try {
@@ -537,6 +643,7 @@ export const updateContest = async (contestId, updateData) => {
  * Delete a specific contest.
  * @param {string} contestId - The ID of the contest to delete.
  * @returns {Promise<Object>} - The response data confirming deletion.
+ * Admin only
  */
 export const deleteContest = async (contestId) => {
   try {
@@ -562,21 +669,6 @@ export const getLeaderboardByContest = async (contestId) => {
 };
 
 /**
- * Update contest active status.
- * @param {string} contestId - The ID of the contest.
- * @param {boolean} isActive - The active status to update.
- * @returns {Promise<Object>} - The response data confirming update.
- */
-export const updateContestStatus = async (contestId, isActive) => { 
-  try {
-    const response = await axiosInstance.put(`/contest/${contestId}/status`, { isActive });
-    return response.data;
-  } catch (error) {
-    throw error.response ? error.response.data : new Error('Failed to update contest active status');
-  }
-};
-
-/**
  * Get contest status.
  * @param {string} contestId - The ID of the contest.
  * @returns {Promise<Object>} - The response data containing contest status.
@@ -589,6 +681,123 @@ export const getContestStatus = async (contestId) => {
     throw error.response ? error.response.data : new Error('Failed to fetch contest status');
   }
 };
+
+/**
+ * Get contest details.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data containing contest details.
+ * Admin only
+ */
+export const getContestDetails = async (contestId) => {
+  try {
+    const response = await axiosInstance.get(`/contest/${contestId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch contest details');
+  }
+};
+
+/**
+ * Get user contest participation.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data containing user contest participation.
+ */
+export const getUserContestParticipation = async (contestId) => {
+  try {
+    const response = await axiosInstance.get(`/contest/${contestId}/participate`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch user contest participation');
+  }
+};
+
+/**
+ * Activate a specific contest.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data confirming activation.
+ * Admin only
+ */
+export const ActivateContest = async (contestId) => {
+  try {
+    const response = await axiosInstance.post(`/contest/${contestId}/active`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to activate contest');
+  }
+};
+
+/**
+ * Deactivate a specific contest.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data confirming deactivation.
+ * Admin only
+ */
+export const DeactivateContest = async (contestId) => { 
+  try {
+    const response = await axiosInstance.post(`/contest/${contestId}/deactive`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to deactivate contest');
+  }
+};
+
+/**
+ * Get active contest details.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data containing active contest details.
+ */
+export const getActiveContestDetails = async (contestId) => {
+  try {
+    const response = await axiosInstance.get(`/contest/active/${contestId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch active contest details');
+  }
+};
+
+/**
+ * Get all active contests.
+ * @returns {Promise<Object>} - The response data containing all active contests.
+ */
+export const getActiveContests = async () => {
+  try {
+    const response = await axiosInstance.get('/contest/active');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch active contests');
+  }
+};
+
+/**
+ * Get all inactive contests.
+ * @returns {Promise<Object>} - The response data containing all inactive contests.
+ * Admin only
+ */
+export const getInactiveContests = async () => {
+  try {
+    const response = await axiosInstance.get('/contest/inactive');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch inactive contests');
+  }
+};
+
+/**
+ * Get inactive contest details.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data containing inactive contest details.
+ * Admin only
+ */
+export const getInactiveContestDetails = async (contestId) => {
+  try {
+    const response = await axiosInstance.get(`/contest/inactive/${contestId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch inactive contest details');
+  }
+};
+
+
 
 export default axiosInstance;
 

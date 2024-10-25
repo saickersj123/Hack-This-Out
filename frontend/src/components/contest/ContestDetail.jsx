@@ -1,158 +1,143 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
-import Main from '../../components/main/Main'
-import { getMachineDetails } from '../../api/axiosInstance';
-import '../../assets/scss/contest/ContestDetail.scss';
-import emptyStar from '../../assets/img/icon/empty_star.png';
-import halfStar from '../../assets/img/icon/half_star.png';
-import fullStar from '../../assets/img/icon/full_star.png';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { getContestDetails, participateInContest, submitFlagForContest, getHintInContest, getUserContestParticipation } from '../../api/axiosInstance';
 
+const ContestDetail = () => {
+  const { contestId } = useParams();
+  const [contest, setContest] = useState(null);
+  const [participation, setParticipation] = useState(null);
+  const [selectedMachine, setSelectedMachine] = useState('');
+  const [flag, setFlag] = useState('');
+  const [hint, setHint] = useState(null);
+  const [errors, setErrors] = useState([]);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-const MachineDetail = () => {
-  const location = useLocation();
-  const { machineId } = location.state || {};
-  const { machineName, tabName } = useParams(); 
-  const [machineData, setMachineData] = useState();
-  const navigate = useNavigate();
+  const fetchContestDetails = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getContestDetails(contestId);
+      setContest(data.contest);
+    } catch (error) {
+      console.error('Error fetching contest details:', error);
+      setErrors([{ msg: 'Failed to load contest details.' }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  // 문제 데이터를 가져오는 useEffect
+  const checkParticipation = async () => {
+    try {
+      const data = await getUserContestParticipation(contestId);
+      setParticipation(data.participation);
+    } catch (error) {
+      console.error('Error checking participation:', error);
+    }
+  };
+
   useEffect(() => {
-    const getMachineData = async () => {
-      if (!machineId) {
-        console.error('No machineId found');
-        return;
-      }
-      
-      try {
-        console.log('MachineID: ', machineId);
-        const { machine } = await getMachineDetails(machineId); // 백엔드에서 machine 객체 받기
-        setMachineData(machine);
-      } catch (err) {
-        console.error('Error fetching machine details:', err.message || err);
-      }
-    };
+    fetchContestDetails();
+    checkParticipation();
+  }, [contestId]);
 
-    getMachineData();
-  }, [machineId]);
-
-  // 탭 내용이 변경될 때 강제 리렌더링 (탭 이동 시 내용 변경)
-  useEffect(() => { }, [tabName]);
-
-  const handleTabClick = (newTabName) => {
-    navigate(`/Contest/${machineName}/${newTabName}`); // 경로 변경 (탭 변경 시)
+  const handleParticipate = async () => {
+    setErrors([]);
+    setMessage('');
+    try {
+      const data = await participateInContest(contestId, selectedMachine);
+      setParticipation(data.participation);
+      setMessage(data.msg);
+      // Refetch contest details or update state accordingly
+      await fetchContestDetails();
+    } catch (error) {
+      setErrors(error.errors || [{ msg: error.msg }]);
+    }
   };
 
-  const renderStars = (repute) => {
-    const stars = [];
-
-    // 정수 부분과 소수 부분 구분
-    const fullStars = Math.floor(repute);
-    const hasHalfStar = repute % 1 !== 0;
-
-    // full stars 추가
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<img key={`full-${i}`} src={fullStar} alt="Full Star" />);
+  const handleSubmitFlag = async (e) => {
+    e.preventDefault();
+    setErrors([]);
+    setMessage('');
+    try {
+      const data = await submitFlagForContest(contestId, participation.machine, flag);
+      setMessage(`Flag submitted successfully! Earned EXP: ${data.expEarned}. Total EXP: ${data.totalExp}`);
+    } catch (error) {
+      setErrors(error.errors || [{ msg: error.msg }]);
     }
-
-    // half star 추가
-    if (hasHalfStar) {
-      stars.push(<img key="half" src={halfStar} alt="Half Star" />);
-    }
-
-    // empty stars 추가 (최대 5개)
-    const remainingStars = 5 - stars.length;
-    for (let i = 0; i < remainingStars; i++) {
-      stars.push(<img key={`empty-${i}`} src={emptyStar} alt="Empty Star" />);
-    }
-
-    return stars;
   };
+
+  const handleGetHint = async () => {
+    setErrors([]);
+    setMessage('');
+    try {
+      const data = await getHintInContest(contestId, participation.machine);
+      setHint(data.hint);
+      setMessage(`Hint used. Current hints used: ${data.hintsUsed}`);
+    } catch (error) {
+      setErrors(error.errors || [{ msg: error.msg }]);
+    }
+  };
+
+  if (isLoading) {
+    return <p>Loading contest details...</p>;
+  }
+
+  if (!contest) {
+    return <p>Loading contest details...</p>;
+  }
 
   return (
-    <Main title={`Machine: ${machineName}`} description="Machine 상세 정보 화면">
-      <div className='machine-main'>
-        {machineData ? (
-          <div className='machine-info'>
-            <div className='machine-info-upper'>
-              <div className='back-btn-container'>
-                <Link to='/Contest'>
-                  <button className='back-button'></button>
-                </Link>
-              </div>
-              <div className='info-container'>
-                {/* 상단 정보 (이름, 카테고리, EXP, 평점) */}
-                <div className='machine-image'></div>
-                <div className='name-category'>
-                  <p className='machine-name'>{machineData.name}</p>
-                  <p className='machine-category'>{machineData.category}</p>
-                </div>
-                <div className='exp-repute'>
-                  <p className='machine-exp'>EXP : {machineData.exp}</p>
-                  <div className='repute-star-container'>
-                    <div className='star-image'>{renderStars(machineData.repute)}</div>
-                    <p className='machine-repute'>Repute : {machineData.repute}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='machine-info-lower'>
-              <div className='machine-tabs'>
-                {/* 탭 버튼 */}
-                <button
-                  onClick={() => handleTabClick('')}
-                  className={tabName === '' ? 'active' : ''}
-                >
-                  Basic Info
-                </button>
-                <button
-                  onClick={() => handleTabClick('information')}
-                  className={tabName === 'information' ? 'active' : ''}
-                >
-                  Machine Info
-                </button>
-                <button
-                  onClick={() => handleTabClick('reviews')}
-                  className={tabName === 'reviews' ? 'active' : ''}
-                >
-                  Reviews
-                </button>
-              </div>
-              {/* 탭에 따른 조건부 렌더링 */}
-              <div className='detail-info'>
-                {tabName === 'information' && (
-                  <div>
-                    <h2>Machine Information</h2>
-                    <p>{machineData.info}</p> {/* 머신의 정보 표시 */}
-                  </div>
-                )}
+    <div className="contest-detail">
+      <h2>{contest.name}</h2>
+      <p>{contest.description}</p>
+      <p>Start Time: {new Date(contest.startTime).toLocaleString()}</p>
+      <p>End Time: {new Date(contest.endTime).toLocaleString()}</p>
 
-                {tabName === 'reviews' && (
-                  <div>
-                    <h2>Reviews</h2>
-                    <ul>
-                      {machineData.reviews.map((review, index) => (
-                        <li key={index}>{review}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+      {errors.length > 0 && (
+        <div className="error-messages">
+          {errors.map((error, idx) => (
+            <p key={idx} className="error">{error.msg}</p>
+          ))}
+        </div>
+      )}
 
-                {/* 기본 요약 정보 (탭이 없는 경우, /machine/:machineName 경로에 표시될 정보) */}
-                {!tabName && (
-                  <div>
-                    <h2>Basic Overview</h2>
-                    <p>This is a summary of the {machineData.name} machine.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
-    </Main >
+      {message && <p className="message">{message}</p>}
+
+      {!participation ? (
+        <div className="participation-form">
+          <h3>Participate in Contest</h3>
+          <label>Select Machine:</label>
+          <select value={selectedMachine} onChange={(e) => setSelectedMachine(e.target.value)} required>
+            <option value="">--Select Machine--</option>
+            {contest.machines.map(machine => (
+              <option key={machine._id} value={machine._id}>{machine.name}</option>
+            ))}
+          </select>
+          <button onClick={handleParticipate}>Participate</button>
+        </div>
+      ) : (
+        <div className="contest-actions">
+          <h3>Contest Actions</h3>
+          <form onSubmit={handleSubmitFlag}>
+            <label>Submit Flag:</label>
+            <input type="text" value={flag} onChange={(e) => setFlag(e.target.value)} required />
+            <button type="submit">Submit Flag</button>
+          </form>
+          <button onClick={handleUseHint}>Use Hint</button>
+          {hint && <p>Hint: {hint}</p>}
+        </div>
+      )}
+
+      <h3>Participating Machines:</h3>
+      <ul>
+        {contest.machines.map(machine => (
+          <li key={machine._id}>
+            <Link to={`/machines/${machine._id}`}>{machine.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
-export default MachineDetail;
+export default ContestDetail;

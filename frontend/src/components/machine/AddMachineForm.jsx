@@ -6,17 +6,22 @@ const AddMachineForm = ({ onMachineAdded }) => {
     name: '',
     category: '',
     info: '',
+    hints: '',
     exp: '',
     amiId: '',
     flag: '', // Added flag field
   });
   const [loading, setLoading] = useState(false);
 
-  const { name, category, info, exp, amiId, flag } = formData;
+  const { name, category, info, hints, exp, amiId, flag } = formData;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAddHint = () => {
+    setFormData({ ...formData, hints: formData.hints + '\n' });
   };
 
   const handleSubmit = async (e) => {
@@ -31,7 +36,8 @@ const AddMachineForm = ({ onMachineAdded }) => {
       const data = await createMachine({
         name,
         category,
-        info,
+        info, 
+        hints,
         exp: exp ? parseInt(exp) : 0,
         amiId,
         flag, 
@@ -41,6 +47,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
         name: '',
         category: '',
         info: '',
+        hints: '',
         exp: '',
         amiId: '',
         flag: '', 
@@ -87,6 +94,17 @@ const AddMachineForm = ({ onMachineAdded }) => {
           onChange={handleChange}
           placeholder="Enter machine description"
         ></textarea>
+      </div>
+      <div>
+        <label htmlFor="hints">Hints:</label>
+        <textarea
+          id="hints"
+          name="hints"
+          value={hints}
+          onChange={handleChange}
+          placeholder="Enter hints"
+        ></textarea>
+        <button type="button" onClick={handleAddHint}>Add Hint</button>
       </div>
       <div>
         <label htmlFor="exp">Experience Points (EXP):</label>

@@ -77,6 +77,11 @@ const MachineSchema = new mongoose.Schema({
     },
     reviews: [ReviewSchema],
     hints: [HintSchema],
+    isActive: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
 }, {
     timestamps: true
 });
