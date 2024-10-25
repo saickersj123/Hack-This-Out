@@ -7,7 +7,8 @@ import {
     updateContest,
     deleteContest,
     getHintInContest,
-    getContests
+    getContests,
+    getLeaderboardByContest
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
@@ -52,5 +53,8 @@ ContestRoutes.delete('/:contestId',
 
 // Route to get contest hints
 ContestRoutes.get('/:contestId/hints', verifyToken, getHintInContest);
+
+// Route to get leaderboard by contest
+ContestRoutes.get('/:contestId/leaderboard', verifyToken, getLeaderboardByContest);
 
 export default ContestRoutes;

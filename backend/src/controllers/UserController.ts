@@ -314,6 +314,26 @@ export const checkPassword = async (
 	}
 };
 
+//reset user password
+export const resetPassword = async (req: Request, res: Response) => {
+	try {
+		const { user_id } = req.params;
+		const { password } = req.body;
+		const user = await User.findOne({ user_id });
+		if (!user) {
+			res.status(404).json({ msg: 'User not found.' });
+			return;
+		}
+		const hashedPassword = await bcrypt.hash(password, 10);
+		user.password = hashedPassword;
+		await user.save();
+		return res.status(200).json({ message: "OK", name: user.name, email: user.email });
+	} catch (error: any) {
+		console.error('Error resetting password:', error);
+		res.status(500).send('Server error');
+	}
+}
+
 // Get user progress
 export const getUserProgress = async (req: Request, res: Response): Promise<void> => {
 	try {
@@ -481,3 +501,17 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 		res.status(500).send('Server error');
 	}
 };
+
+//Get Leaderboard
+export const getLeaderboard = async (req: Request, res: Response) => {
+	try {
+		const users = await User.find().sort({ exp: -1 });
+		return res.status(200).json({ message: "OK", users });
+	} catch (error: any) {
+		console.error('Error getting leaderboard:', error);
+		res.status(500).send('Server error');
+	}
+};
+
+
+

@@ -19,6 +19,8 @@ import {
     resetUserProgress,
     getUserProgressByUserId,
     resetUserProgressByUserId,
+    resetPassword,
+    getLeaderboard,
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
@@ -46,6 +48,9 @@ UserRoutes.post("/change-password", verifyToken, changePassword);
 
 // Change Name
 UserRoutes.post("/change-name", verifyToken, changeName);
+
+// Reset Password
+UserRoutes.post("/reset-password/:user_id", verifyToken, resetPassword);
 
 // Get User Progress
 UserRoutes.get("/progress", verifyToken, getUserProgress);
@@ -81,5 +86,9 @@ UserRoutes.post("/reset/:user_id",
     verifyToken, 
     //verifyAdmin,
     resetUserProgressByUserId);
+
+// Get Leaderboard
+UserRoutes.get("/leaderboard", getLeaderboard);
+
 
 export default UserRoutes;

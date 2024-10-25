@@ -276,6 +276,9 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
     }
 };
 
+/**
+ * Get all contests.
+ */
 export const getContests = async (req: Request, res: Response): Promise<void> => {
     try {
         const contests = await Contest.find();
@@ -285,3 +288,18 @@ export const getContests = async (req: Request, res: Response): Promise<void> =>
         res.status(500).send('Server error');
     }
 };
+
+/**
+ * Get leaderboard by contest.
+ */
+export const getLeaderboardByContest = async (req: Request, res: Response) => {
+    try {
+        const { contestId } = req.params;
+        const participations = await ContestParticipation.find({ contest: contestId }).sort({ expEarned: -1 });
+        return res.status(200).json({ message: "OK", users: participations.map((participation) => participation.user) });
+    } catch (error: any) {
+        console.error('Error getting leaderboard:', error);
+        res.status(500).send('Server error');
+    }
+}
+
