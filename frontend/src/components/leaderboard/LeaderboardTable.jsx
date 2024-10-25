@@ -1,14 +1,14 @@
 import React from 'react';
-import '../../assets/scss/ranking/RankingTable.scss';
+import '../../assets/scss/leaderboard/LeaderboardTable.scss';
 
 
-const RankingTable = ( {rankings} ) => {
+const LeaderboardTable = ( {rankings} ) => {
 
     return (
         
-            <div className='ranking-container'>
-                <div className='ranking-title'>Ranking</div>
-                <table className="ranking-table">
+            <div className='leaderboard-container'>
+                <div className='leaderboard-title'>Leaderboard</div>
+                <table className="leaderboard-table">
                     <thead>
                         <tr>
                             <th className="rank-col">Rank</th>
@@ -36,4 +36,4 @@ const RankingTable = ( {rankings} ) => {
     );
 }
 
-export default RankingTable;
+export default LeaderboardTable;

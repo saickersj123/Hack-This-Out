@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // axios 인스턴스 생성. 모든 요청에 사용됩니다.
 const axiosInstance = axios.create({
-  //baseURL: 'http://localhost:5000/api', //for local test
-  baseURL: 'https://api.hackthisout.o-r.kr/api', // API 요청의 기본 URL 설정
+  baseURL: 'http://localhost:5000/api', //for local test
+  //baseURL: 'https://api.hackthisout.o-r.kr/api', // API 요청의 기본 URL 설정
   headers: {
     'Content-Type': 'application/json', // 요청 헤더에 Content-Type을 application/json으로 설정
   },
@@ -23,6 +23,34 @@ export const getAllUser = async () => {
     return response.data; // 서버로부터 받은 데이터 반환
   } catch (error) {
     throw new Error('Failed to fetch user data');
+  }
+};
+
+/**
+ * Get user Detail
+ * @returns {Promise<Object>} - The response data containing user detail.
+ */
+export const getUserDetail = async () => {
+  try {
+    const response = await axiosInstance.get('/user/detail');
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch user detail');
+  }
+};
+
+/**
+ * Get user Detail by user_id(Admin Only)
+ * @param {string} user_id - The user_id to get user detail.
+ * @returns {Promise<Object>} - The response data containing user detail.
+ * Admin only
+*/
+export const getUserDetailByUserId = async (user_id) => {
+  try {
+    const response = await axiosInstance.get(`/user/detail/${user_id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch user detail');
   }
 };
 
@@ -103,9 +131,9 @@ export const checkPassword = async (password) => {
  * @param {string} newPassword - The new password to change.
  * @returns {Promise<Object>} - The response data confirming password change.
  */
-export const changePassword = async (newPassword) => {
+export const changePassword = async (oldPassword, newPassword) => {
   try {
-    const response = await axiosInstance.post('/user/change-password', { password: newPassword });
+    const response = await axiosInstance.post('/user/change-password', { oldPassword, newPassword });
     return response.data;
   } catch (error) {
     throw error.response ? error.response.data : new Error('Password change failed');
@@ -142,6 +170,21 @@ export const resetPassword = async (user_id, password) => {
 };
 
 /**
+ * Get user progress by user_id.
+ * @param {string} user_id - The user_id to get user progress.
+ * @returns {Promise<Object>} - The response data containing user progress.
+ * Admin only
+ */
+export const getUserProgressByUserId = async (user_id) => {
+  try {
+    const response = await axiosInstance.get(`/user/progress/${user_id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch user progress');
+  }
+};
+
+/**
  * Get user progress.
  * @returns {Promise<Object>} - The response data containing user progress.
  */
@@ -158,6 +201,7 @@ export const getUserProgress = async () => {
  * Add user exp.
  * @param {number} exp - The exp to add.
  * @returns {Promise<Object>} - The response data confirming exp addition.
+ * Admin only
  */
 export const addUserExp = async (user_id, exp) => {
   try {
@@ -172,6 +216,7 @@ export const addUserExp = async (user_id, exp) => {
  * Update user level.
  * @param {number} level - The level to update.
  * @returns {Promise<Object>} - The response data confirming level update.
+ * Admin only
  */
 export const updateUserLevel = async (user_id, level) => {
   try {
@@ -179,20 +224,6 @@ export const updateUserLevel = async (user_id, level) => {
     return response.data;
   } catch (error) {
     throw new Error('Failed to update user level');
-  }
-};
-
-/**
- * Update user avatar.
- * @param {string} avatar - The avatar to update.
- * @returns {Promise<Object>} - The response data confirming update.
- */
-export const updateUserAvatar = async (avatar) => {
-  try {
-    const response = await axiosInstance.post('/user/update/avatar', { avatar });
-    return response.data;
-  } catch (error) {
-    throw new Error('Failed to update user avatar');
   }
 };
 
@@ -228,6 +259,7 @@ export const resetUserProgress = async (password) => {
  * Reset user progress by user_id.
  * @param {string} user_id - The user_id to reset.
  * @returns {Promise<Object>} - The response data confirming reset.
+ * Admin only
  */
 export const resetUserProgressByUserId = async (user_id) => {
   try {
@@ -248,6 +280,35 @@ export const getLeaderboard = async () => {
     return response.data;
   } catch (error) {
     throw new Error('Failed to fetch leaderboard');
+  }
+};
+
+/**
+ * Delete user by user_id.
+ * @param {string} user_id - The user_id to delete.
+ * @returns {Promise<Object>} - The response data confirming deletion.
+ * Admin only
+ */
+export const deleteUserByUserId = async (user_id) => {  
+  try {
+    const response = await axiosInstance.delete(`/user/${user_id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to delete user');
+  }
+};
+
+/**
+ * Delete user.
+ * @param {string} password - The password to delete.
+ * @returns {Promise<Object>} - The response data confirming deletion.
+ */
+export const deleteUser = async (password) => {
+  try {
+    const response = await axiosInstance.delete('/user', { data: { password } });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to delete user');
   }
 };
 

@@ -1,30 +1,40 @@
-   import React, { createContext, useState, useEffect } from 'react';
-   import { getUserStatus } from '../api/axiosInstance';
+import React, { createContext, useState, useEffect } from 'react';
+import { getUserStatus } from '../api/axiosInstance';
 
-   export const AuthContext = createContext();
+export const AuthContext = createContext();
 
-   export const AuthProvider = ({ children }) => {
-     const [user, setUser] = useState(null);
-     const [loading, setLoading] = useState(true);
+export const AuthProvider = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-     const fetchUser = async () => {
-       try {
-         const data = await getUserStatus();
-         setUser(data.user);
-       } catch (error) {
-         setUser(null);
-       } finally {
-         setLoading(false);
-       }
-     };
+  const fetchUserStatus = async () => {
+    try {
+      const status = await getUserStatus();
+      setIsLoggedIn(status);
+    } catch (error) {
+      setIsLoggedIn(false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-     useEffect(() => {
-       fetchUser();
-     }, []);
+  useEffect(() => {
+    fetchUserStatus();
+  }, []);
 
-     return (
-       <AuthContext.Provider value={{ user, setUser, loading }}>
-         {children}
-       </AuthContext.Provider>
-     );
-   };
+  // Function to handle login
+  const login = () => {
+    setIsLoggedIn(true);
+  };
+
+  // Function to handle logout
+  const logout = () => {
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, loading, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

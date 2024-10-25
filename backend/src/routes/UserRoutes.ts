@@ -21,12 +21,25 @@ import {
     resetUserProgressByUserId,
     resetPassword,
     getLeaderboard,
+    deleteUserByUserId,
+    deleteUser,
+    getUserDetail,
+    getUserDetailByUserId,
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
 
-// Get All Users(Admin only)
-UserRoutes.get("/", verifyToken, verifyAdmin, getAllUser);
+// Get All Users
+UserRoutes.get("/", verifyToken, 
+    //verifyAdmin, 
+    getAllUser
+);
+
+// Get User Detail
+UserRoutes.get("/detail", verifyToken, getUserDetail);
+
+// Get User Detail by user_id(Admin Only)
+UserRoutes.get("/detail/:user_id", verifyToken, verifyAdmin, getUserDetailByUserId);
 
 // Sign Up
 UserRoutes.post("/sign-up", validate(signUpValidator), postSignUp);
@@ -52,6 +65,9 @@ UserRoutes.post("/change-name", verifyToken, changeName);
 // Reset Password
 UserRoutes.post("/reset-password/:user_id", verifyToken, resetPassword);
 
+// Delete User
+UserRoutes.delete("/:user_id", verifyToken, deleteUser);
+
 // Get User Progress
 UserRoutes.get("/progress", verifyToken, getUserProgress);
 
@@ -65,13 +81,15 @@ UserRoutes.post("/update/to-admin", verifyToken, updateUsertoAdmin);
 UserRoutes.post("/update/:user_id/level", 
     verifyToken, 
     verifyAdmin,
-    updateUserLevel);
+    updateUserLevel 
+);
 
 // Add User EXP(Admin Only)
 UserRoutes.post("/update/:user_id/exp", 
     verifyToken, 
     verifyAdmin,
-    addUserExp);
+    addUserExp
+);
 
 // Reset User Progress
 UserRoutes.post("/reset", verifyToken, resetUserProgress);
@@ -80,13 +98,22 @@ UserRoutes.post("/reset", verifyToken, resetUserProgress);
 UserRoutes.get("/progress/:user_id", 
     verifyToken, 
     verifyAdmin,
-    getUserProgressByUserId);
+    getUserProgressByUserId
+);
 
 // Reset User Progress by User ID(Admin Only)
 UserRoutes.post("/reset/:user_id", 
     verifyToken, 
     verifyAdmin,
-    resetUserProgressByUserId);
+    resetUserProgressByUserId
+);
+
+// Delete User by User ID(Admin Only)
+UserRoutes.delete("/:user_id", 
+    verifyToken, 
+    verifyAdmin, 
+    deleteUserByUserId
+);
 
 // Get Leaderboard
 UserRoutes.get("/leaderboard", verifyToken, getLeaderboard);

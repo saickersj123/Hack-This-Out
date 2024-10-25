@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-//import '../../css/Rankings.scss';
-import { getAllUser } from '../api/axiosInstance';
-import RankingTable from '../components/ranking/RankingTable'; // RankingTable import
-import Main from '../components/main/Main';
+import { getLeaderboard } from '../../api/axiosInstance';
+import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
+import Main from '../../components/main/Main';
 
 const LeaderBoardPage = () => {
   const [rankings, setRankings] = useState([]);
@@ -12,12 +11,8 @@ const LeaderBoardPage = () => {
     const fetchUserRankings = async () => {
       try {
         // getAllUser 함수를 호출하여 유저 데이터 가져오기
-        const response = await getAllUser();
-        const users = response.users;
-
-        // 경험치(exp) 기준으로 내림차순 정렬
-        const sortedRankings = users.sort((a, b) => b.exp - a.exp);
-        setRankings(sortedRankings); // 정렬된 데이터로 상태 업데이트
+        const response = await getLeaderboard();
+        setRankings(response.users); // 정렬된 데이터로 상태 업데이트
       } catch (error) {
         console.error('Error fetching user rankings:', error.message || error);
       }
@@ -28,7 +23,7 @@ const LeaderBoardPage = () => {
 
   return (
     <Main title="LeaderBoard" description="LeaderBoard 화면입니다.">
-      <RankingTable rankings={rankings} />
+      <LeaderboardTable rankings={rankings} />
     </Main>
   );
 };

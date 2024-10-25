@@ -1,29 +1,28 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, Navigate } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthContext';
-import LoginPage from './pages/LoginPage';
-import MainPage from './pages/MainPage';
+import LoginPage from './pages/public/LoginPage';
+import MainPage from './pages/public/MainPage';
 import LoadingPage from './pages/public/LoadingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
 
 // 비동기 로딩을 위한 Lazy 컴포넌트
-const LeaderBoardPage = lazy(() => import('./pages/LeaderBoardPage'));
+const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage'));
 const ContestPage = lazy(() => import('./pages/ContestPage'));
-const ContestDetail = lazy(() => import('./pages/contest/ContestDetail'));
 const InstancesPage = lazy(() => import('./pages/InstancesPage'));
 const MachinesPage = lazy(() => import('./pages/MachinesPage'));
-const MyPage = lazy(() => import('./pages/MyPage'));
+const MyPage = lazy(() => import('./pages/user/MyPage'));
 
 // 새로운 App 구성
 const App = () => {
   return (
-    <Router>
-      <AuthProvider>
+    <AuthProvider>
+      <Router>
         <Suspense fallback={<LoadingPage />}>
           <Routes>
             {/* Public Routes */}
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={ <LoginPage />} />
 
             {/* Protected Routes */}
           <Route
@@ -45,13 +44,6 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <ContestPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="/Contest/:contestId" 
-            element={
-              <ProtectedRoute>
-                <ContestDetail />
               </ProtectedRoute>
             } 
           />
@@ -78,8 +70,8 @@ const App = () => {
           />
           </Routes>
         </Suspense>
-      </AuthProvider>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 };
 

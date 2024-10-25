@@ -21,15 +21,29 @@ InstRoutes.post('/start-instance/:machineId', verifyToken, startInstance);
 InstRoutes.post('/receive-vpn-ip', receiveVpnIp);
 
 // Route to submit flag for a specific instance
-InstRoutes.post('/:instanceId/submit-flag', verifyToken, validateInstance, flagSubmissionLimiter, submitFlag);
+InstRoutes.post('/:instanceId/submit-flag',
+  verifyToken,
+  validateInstance,
+  flagSubmissionLimiter,
+  submitFlag
+);
 
 // Route to get details of all instances
 InstRoutes.get('/', verifyToken, getAllInstances);
 
 // Route to get details of a specific instance
-InstRoutes.get('/:instanceId', verifyToken, validateInstance, getInstanceDetails);
+InstRoutes.get('/:instanceId',
+  verifyToken,
+  validateInstance,
+  getInstanceDetails
+);
 
 // Route to delete a specific instance(Admin only)
-InstRoutes.delete('/:instanceId', verifyToken, verifyAdmin, validateInstance, deleteInstance);
+InstRoutes.delete('/:instanceId', 
+  verifyToken, 
+  verifyAdmin, 
+  validateInstance, 
+  deleteInstance
+);
 
 export default InstRoutes;

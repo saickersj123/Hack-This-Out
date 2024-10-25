@@ -17,9 +17,9 @@ export const headerMenus = [
         src: "/Tutorial"
     },
     {
-        title: "Rankings",
+        title: "Leaderboard",
         icon: <CiRouter />,
-        src: "/Rankings"
+        src: "/Leaderboard"
     },
     {
         title: "Contest",
