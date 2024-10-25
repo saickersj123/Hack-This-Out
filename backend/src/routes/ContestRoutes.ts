@@ -8,7 +8,9 @@ import {
     deleteContest,
     getHintInContest,
     getContests,
-    getLeaderboardByContest
+    getLeaderboardByContest,
+    updateContestStatus,
+    getContestStatus
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
@@ -28,6 +30,12 @@ ContestRoutes.post(
     handleValidation,
     createContest
 );
+
+// Route to update contest active status
+ContestRoutes.put('/:contestId/status', updateContestStatus);
+
+// Route to get contest status
+ContestRoutes.get('/:contestId/status', getContestStatus);
 
 // Route to participate in a contest
 ContestRoutes.post('/:contestId/participate', verifyToken, participateInContest);

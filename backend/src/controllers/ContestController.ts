@@ -37,6 +37,51 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
 };
 
 /**
+ * Update contest active status.
+ */
+export const updateContestStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+        //Get Contest ID and Active Status from Request Body
+        const { contestId } = req.params;
+        const { isActive } = req.body;
+
+        //Find Contest by ID
+        const contest = await Contest.findById(contestId);
+        if (!contest) {
+            res.status(404).json({ msg: 'Contest not found.' });
+            return;
+        }
+
+        //Check if Contest is Active
+        const currentTime = new Date();
+        if(contest.startTime > currentTime && contest.endTime > currentTime) {
+            contest.isActive = isActive;
+            await contest.save();       
+            res.status(200).json({ msg: 'Contest active status updated successfully.', contest });
+        } else {
+            res.status(400).json({ msg: 'Contest is not active.' });
+        }
+    } catch (error: any) {
+        console.error('Error updating contest active status:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
+ * Get contest status.
+ */
+export const getContestStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const contest = await Contest.findById(contestId);
+        res.status(200).json({ msg: 'Contest status fetched successfully.', isActive: contest?.isActive });
+    } catch (error: any) {
+        console.error('Error getting contest status:', error);
+        res.status(500).send('Server error');
+    }
+};
+
+/**
  * Participate in a contest.
  */
 export const participateInContest = async (req: Request, res: Response): Promise<void> => {

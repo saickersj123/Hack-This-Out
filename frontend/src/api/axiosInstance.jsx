@@ -561,5 +561,34 @@ export const getLeaderboardByContest = async (contestId) => {
   }
 };
 
+/**
+ * Update contest active status.
+ * @param {string} contestId - The ID of the contest.
+ * @param {boolean} isActive - The active status to update.
+ * @returns {Promise<Object>} - The response data confirming update.
+ */
+export const updateContestStatus = async (contestId, isActive) => { 
+  try {
+    const response = await axiosInstance.put(`/contest/${contestId}/status`, { isActive });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to update contest active status');
+  }
+};
+
+/**
+ * Get contest status.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data containing contest status.
+ */
+export const getContestStatus = async (contestId) => {
+  try {
+    const response = await axiosInstance.get(`/contest/${contestId}/status`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Failed to fetch contest status');
+  }
+};
+
 export default axiosInstance;
 
