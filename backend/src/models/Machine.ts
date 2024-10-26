@@ -55,12 +55,13 @@ const MachineSchema = new mongoose.Schema({
     },
     exp: {
         type: Number,
-        required: true
+        required: true,
+        default: 50
     },
     contestExp: { // New field for Contest EXP
         type: Number,
         required: true,
-        default: 0
+        default: 100
     },
     amiId: { 
         type: String,

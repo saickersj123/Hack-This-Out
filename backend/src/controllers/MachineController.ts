@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
  */
 export const createMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, category, info, exp, amiId, hints, flag } = req.body;
+    const { name, category, info, exp, amiId, hints, hintCosts, flag } = req.body;
 
     // Validate required fields
     if (!name || !category || !amiId || !flag) {
@@ -26,6 +26,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
     // Hash the flag before saving
     const saltRounds = 10;
     const hashedFlag = await bcrypt.hash(flag, saltRounds);
+    const hintsArray = hints.filter((hint: string) => hint.trim() !== '');
 
     const newMachine = new Machine({
       name,
@@ -33,7 +34,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
       info,
       exp,
       amiId,
-      hints,
+      hints: hintsArray.map((hint: string, index: number) => ({ content: hint, cost: hintCosts[index] })),
       flag: hashedFlag, // Assign the hashed flag
       isActive: false
     });
@@ -110,7 +111,7 @@ export const getInactiveMachineDetails = async (req: Request, res: Response): Pr
  */
 export const getActiveMachines = async (req: Request, res: Response): Promise<void> => {
   try {
-    const machines = await Machine.find({ isActive: true });
+    const machines = await Machine.find({ isActive: true }).select('-hints');
     if (machines.length === 0) {
       res.status(404).json({ msg: 'No active machines found.' });
       return;
@@ -170,7 +171,7 @@ export const getMachineStatus = async (req: Request, res: Response): Promise<voi
   try {
     const { machineId } = req.params;
     const machine = await Machine.findById(machineId);
-    res.json({ machine });
+    res.json({ machine: machine.isActive });
   } catch (error: any) {
     console.error('Error fetching machine status:', error);
     res.status(500).send('Failed to fetch machine status.');
@@ -242,27 +243,31 @@ export const getMachineHints = async (req: Request, res: Response): Promise<void
     // Find or create user progress
     let progress = await UserProgress.findOne({ 
         user: userId, 
-        machine: machineId 
+        machine: machineId,
+        expEarned: 0
     });
 
     if (!progress) {
         progress = new UserProgress({
             user: userId,
-            machine: machineId
+            machine: machineId,
         });
     }
-
-    // Increment hints used
-    progress.hintsUsed += 1;
-    await progress.save();
-
     // Get the hint content
     const machine = await Machine.findById(machineId);
     if (!machine || !machine.hints || machine.hints.length === 0) {
         res.status(404).json({ msg: 'No hints available for this machine.' });
         return;
     }
-
+    // Limit hintsUsed to the number of hints available
+    if (progress.hintsUsed > machine.hints.length-1) {
+      res.status(400).json({ msg: 'No more hints available.' });
+      return;
+  } else {
+      // Increment hints used
+      progress.hintsUsed += 1;
+      await progress.save();
+  }
     // Get the next hint based on hintsUsed count
     const hintIndex = Math.min(progress.hintsUsed - 1, machine.hints.length - 1);
     const hint = machine.hints[hintIndex];
@@ -289,19 +294,7 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
             res.status(404).json({ msg: 'Machine not found.' });
             return;
         }
-  
-        // Verify if user hasn't already completed this machine
-        const existingCompletion = await UserProgress.findOne({ 
-            user: userId, 
-            machine: machineId,
-            completed: true 
-        });
         
-        if (existingCompletion) {
-            res.status(400).json({ msg: 'Machine already completed.' });
-            return;
-        }
-  
         // Verify flag
         const isMatch = await bcrypt.compare(flag, machine.flag);
         if (!isMatch) {
@@ -319,7 +312,7 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
   
         // Update user progress and EXP
         await UserProgress.findOneAndUpdate(
-            { user: userId, machine: machineId },
+            { user: userId, machine: machineId, completedAt: null },
             { 
                 completed: true,
                 completedAt: new Date(),

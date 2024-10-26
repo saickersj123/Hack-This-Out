@@ -13,6 +13,8 @@ const ContestPage = lazy(() => import('./pages/ContestPage'));
 const InstancesPage = lazy(() => import('./pages/InstancesPage'));
 const MachineListPage = lazy(() => import('./pages/machine/MachineListPage'));
 const MachineDetailPage = lazy(() => import('./pages/machine/MachineDetailPage'));
+const MachineRegisterPage = lazy(() => import('./pages/machine/MachineRegisterPage'));
+const MachinePlayPage = lazy(() => import('./pages/machine/MachinePlayPage'));
 const MyPage = lazy(() => import('./pages/user/MyPage'));
 
 // 새로운 App 구성
@@ -62,10 +64,24 @@ const App = () => {
               </ProtectedRoute>
             } 
           />
+          <Route path="/machine/register" 
+            element={
+              <ProtectedRoute>
+                <MachineRegisterPage />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="/machine/:machineId" 
             element={
               <ProtectedRoute>
                 <MachineDetailPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="/machine/:machineId/play" 
+            element={
+              <ProtectedRoute>
+                <MachinePlayPage />
               </ProtectedRoute>
             } 
           />

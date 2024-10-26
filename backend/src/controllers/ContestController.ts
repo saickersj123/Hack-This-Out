@@ -290,10 +290,15 @@ export const getHintInContest = async (req: Request, res: Response): Promise<voi
             res.status(400).json({ msg: 'Participation not found.' });
             return;
         }
-        
+
         const machine = await Machine.findById(machineId);
         if (!machine) {
             res.status(404).json({ msg: 'Machine not found.' });
+            return;
+        }
+        
+        if (participation.hintsUsed >= machine.hints.length) {
+            res.status(400).json({ msg: 'No more hints available.' });
             return;
         }
 

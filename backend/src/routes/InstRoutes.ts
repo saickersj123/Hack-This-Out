@@ -1,7 +1,6 @@
 import express from 'express';
 import {verifyToken} from '../middlewares/Token';
 import { verifyAdmin } from '../middlewares/Admin';
-import validateInstance from '../middlewares/validateInstance';
 import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 import {
   startInstance,
@@ -9,41 +8,27 @@ import {
   submitFlag,
   getInstanceDetails,
   deleteInstance,
+  getInstanceByMachine,
   getAllInstances,
+  downloadOpenVPNProfile,
+  terminateInstance,
 } from '../controllers/InstController.js';
 
 const InstRoutes = express.Router();
 
-// Route to start a new instance with machineId
+// Most specific routes first
+InstRoutes.get('/download-ovpn', verifyToken, downloadOpenVPNProfile);
 InstRoutes.post('/start-instance/:machineId', verifyToken, startInstance);
-
-// Route for EC2 instance to post VPN IP, differentiated by instanceId
 InstRoutes.post('/receive-vpn-ip', receiveVpnIp);
 
-// Route to submit flag for a specific instance
-InstRoutes.post('/:instanceId/submit-flag',
-  verifyToken,
-  validateInstance,
-  flagSubmissionLimiter,
-  submitFlag
-);
+// Route to get all instances (should come before parameterized routes)
+InstRoutes.get('/', verifyToken, verifyAdmin, getAllInstances);
 
-// Route to get details of all instances
-InstRoutes.get('/', verifyToken, getAllInstances);
-
-// Route to get details of a specific instance
-InstRoutes.get('/:instanceId',
-  verifyToken,
-  validateInstance,
-  getInstanceDetails
-);
-
-// Route to delete a specific instance(Admin only)
-InstRoutes.delete('/:instanceId', 
-  verifyToken, 
-  verifyAdmin, 
-  validateInstance, 
-  deleteInstance
-);
+// Parameterized routes
+InstRoutes.post('/:machineId/submit-flag', verifyToken, flagSubmissionLimiter, submitFlag);
+InstRoutes.get('/:machineId', verifyToken, getInstanceByMachine);
+InstRoutes.get('/:instanceId', verifyToken, getInstanceDetails);
+InstRoutes.delete('/:instanceId', verifyToken, verifyAdmin, deleteInstance);
+InstRoutes.delete('/:machineId', verifyToken, terminateInstance);
 
 export default InstRoutes;

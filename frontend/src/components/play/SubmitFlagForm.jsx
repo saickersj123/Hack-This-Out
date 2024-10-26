@@ -1,25 +1,39 @@
 import React, { useState } from 'react';
-import { MachinesubmitFlag, submitFlagForContest } from '../../api/axiosInstance';
-
-const SubmitFlagForm = ({ machineId, mode, contestId }) => {
+import { submitFlagMachine, submitFlag } from '../../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
+const SubmitFlagForm = ({ machineId }) => {
   const [flag, setFlag] = useState('');
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState([]);
-
+  const navigate = useNavigate();
   const handleSubmitFlag = async (e) => {
     e.preventDefault();
     setErrors([]);
     setMessage('');
+
+    // Validate that machineId and flag are present
+    if (!machineId) {
+      setErrors([{ msg: 'Machine ID is missing.' }]);
+      return;
+    }
+
+    if (!flag.trim()) {
+      setErrors([{ msg: 'Flag cannot be empty.' }]);
+      return;
+    }
+
     try {
-      let data;
-      if (mode === 'contest') {
-        data = await submitFlagForContest({ contestId, machineId, flag });
-      } else {
-        data = await MachinesubmitFlag(machineId, flag);
-      }
-      setMessage(data.msg);
+      const machine_response = await submitFlagMachine(machineId, flag);
+      const instance_response = await submitFlag(machineId, flag);
+      setMessage(machine_response.msg || instance_response.msg || 'Flag submitted successfully!');
+      navigate(`/machine/${machineId}`);
     } catch (error) {
-      setErrors(error.errors || [{ msg: error.msg }]);
+      // Handle different error structures
+      if (error.response && error.response.data) {
+        setErrors(error.response.data.errors || [{ msg: error.response.data.msg || 'An error occurred.' }]);
+      } else {
+        setErrors([{ msg: 'An unexpected error occurred.' }]);
+      }
     }
   };
 
@@ -36,11 +50,13 @@ const SubmitFlagForm = ({ machineId, mode, contestId }) => {
       {message && <p className="message">{message}</p>}
       <form onSubmit={handleSubmitFlag}>
         <div>
-          <label>Flag:</label>
+          <label htmlFor="flag">Flag:</label>
           <input 
+            id="flag"
             type="text" 
             value={flag} 
-            onChange={(e) => setFlag(e.target.value)} 
+            onChange={(e) => setFlag(e.target.value)}
+            placeholder="Enter flag here"
             required 
           />
         </div>

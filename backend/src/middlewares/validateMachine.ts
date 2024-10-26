@@ -10,8 +10,21 @@ const validateMachine = [
   body('category')
     .notEmpty()
     .withMessage('Category is required.')
-    .isIn(['Web', 'Network', 'Database', 'Other'])
+    .isIn(['Web', 'Network', 'Database', 'Crypto', 'Cloud', 'AI', 'OS', 'Other'])
     .withMessage('Invalid category selected.'),
+  body('info')
+    .notEmpty()
+    .withMessage('Info is required.')
+    .isLength({ min: 5 })
+    .withMessage('Info must be at least 5 characters long.'),
+  body('hints')
+    .optional()
+    .isArray({ min: 1 })
+    .withMessage('Hints must be an array.'),
+  body('hintCosts')
+    .optional()
+    .isArray({ min: 1 })
+    .withMessage('Hint costs must be an array.'),
   body('amiId')
     .notEmpty()
     .withMessage('AMI ID is required.')
@@ -19,7 +32,7 @@ const validateMachine = [
     .withMessage('Invalid AMI ID format.'),
   body('exp')
     .optional()
-    .isInt({ min: 0 })
+    .isInt({ min: 50 })
     .withMessage('Experience points must be a positive integer.'),
   body('flag')
     .notEmpty()

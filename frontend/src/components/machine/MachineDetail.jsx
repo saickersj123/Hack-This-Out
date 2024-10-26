@@ -1,15 +1,17 @@
 import React from 'react';
 
-const MachineDetail = ({ machine }) => {
+const MachineDetail = ({ machineDetail }) => {
+
   return (
     <div className="machine-detail-container">
       <div className="machine-detail-content">
         <h3>Machine Details</h3>
-        <p><strong>Name:</strong> {machine.name}</p>
-        <p><strong>Category:</strong> {machine.category}</p>
-        <p><strong>Info:</strong> {machine.info || 'N/A'}</p>
-        <p><strong>Experience Points (EXP):</strong> {machine.exp}</p>
-        <p><strong>AMI ID:</strong> {machine.amiId}</p>
+        <p><strong>Name:</strong> {machineDetail.name}</p>
+        <p><strong>Category:</strong> {machineDetail.category}</p>
+        <p><strong>Info:</strong> {machineDetail.info || 'N/A'}</p>
+        <p><strong>Experience Points (EXP):</strong> {machineDetail.exp}</p>
+        <p><strong>AMI ID:</strong> {machineDetail.amiId}</p>
+        {/* Add more fields as necessary */}
       </div>
     </div>
   );
