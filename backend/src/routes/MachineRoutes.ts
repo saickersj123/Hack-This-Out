@@ -34,7 +34,7 @@ const MachineRoutes = express.Router();
 MachineRoutes.post('/', validateMachine, verifyToken, createMachine);
 
 // Route to get active machine details by ID
-MachineRoutes.get('/:machineId', verifyToken, getActiveMachineDetails);
+MachineRoutes.get('/active/:machineId', verifyToken, getActiveMachineDetails);
 
 // Route to get machine hints
 MachineRoutes.get('/:machineId/hints', verifyToken, getMachineHints);
@@ -68,7 +68,7 @@ MachineRoutes.get('/:machineId/rating', verifyToken, getMachineRating);
 MachineRoutes.get('/', verifyToken, verifyAdmin, getAllMachines);
 
 // Route to get inactive machine details by ID(Admin only)
-MachineRoutes.get('/:machineId', verifyToken, verifyAdmin, getInactiveMachineDetails);
+MachineRoutes.get('/inactive/:machineId', verifyToken, verifyAdmin, getInactiveMachineDetails);
 
 // Route to get a single machine details by ID(Admin only)
 MachineRoutes.get('/:machineId', verifyToken, verifyAdmin, getMachineDetails);

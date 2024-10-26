@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getAllMachines } from '../../api/axiosInstance';
-import { Link } from 'react-router-dom';
-
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import '../../assets/scss/machine/MachineList.scss';
+import { useNavigate } from 'react-router-dom';
 
 const MachineList = () => {
   const [machines, setMachines] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch all machines on component mount
@@ -29,38 +23,45 @@ const MachineList = () => {
     fetchMachines();
   }, []);
 
+  const handleMachineClick = (machine) => {
+    navigate(`/machine/${machine._id}`);
+  };
+
   return (
-    <div className='machine-list'>
-      <h2>Available Machines</h2>
-      {machines.length === 0 ? (
-        <p>No machines available.</p>
-      ) : (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Rating</TableCell>
-                <TableCell>User Played</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+    <div className='machine-list-container'>
+      <div className='machine-list-title'> <h2>Machine List</h2> </div>
+        <table className='machine-list-table'>
+          {machines.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="no-data">No machines available.</td>
+            </tr>
+          ) : (
+            <>
+            <thead>
+              <tr>
+                <th className='machine-name'>Name</th>
+                <th className='machine-category'>Category</th>
+                <th className='machine-rating'>Rating</th>
+                <th className='machine-playCount'>User Played</th>
+                <th className='machine-details'></th>
+              </tr>
+            </thead>
+            <tbody>
               {machines.map((machine) => (
-                <TableRow key={machine._id}>
-                  <TableCell>{machine.name}</TableCell>
-                  <TableCell>{machine.category}</TableCell>
-                  <TableCell>{machine.rating}</TableCell>
-                  <TableCell>{machine.playCount}</TableCell>
-                  <TableCell>
-                    <Link to={`/machine/${machine._id}`}>Details</Link>
-                  </TableCell>
-                </TableRow>
+                <tr key={machine._id}>
+                  <td>{machine.name}</td>
+                  <td>{machine.category}</td>
+                  <td>{machine.rating}</td>
+                  <td>{machine.playCount}</td>
+                  <td>
+                    <button onClick={() => handleMachineClick(machine)}>Details</button>
+                  </td>
+                </tr>
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
+            </tbody>
+            </>
+          )}
+        </table>
     </div>
   );
 };

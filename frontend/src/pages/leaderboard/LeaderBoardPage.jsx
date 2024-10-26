@@ -6,11 +6,10 @@ import Main from '../../components/main/Main';
 const LeaderBoardPage = () => {
   const [rankings, setRankings] = useState([]);
 
-  // 유저 데이터를 가져오는 useEffect
+  //fetch leaderboard
   useEffect(() => {
     const fetchUserRankings = async () => {
       try {
-        // getAllUser 함수를 호출하여 유저 데이터 가져오기
         const response = await getLeaderboard();
         setRankings(response.users); // 정렬된 데이터로 상태 업데이트
       } catch (error) {

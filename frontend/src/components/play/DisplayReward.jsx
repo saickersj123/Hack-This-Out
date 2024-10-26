@@ -1,11 +1,11 @@
 import React from 'react';
 
-const PrizeDisplay = ({ prize }) => {
+const DisplayReward = ({ reward }) => {
   return (
     <div className="prize-display">
-      <h4>Prize: {prize} EXP</h4>
+      <h4>Reward: {reward} EXP</h4>
     </div>
   );
 };
 
-export default PrizeDisplay;
+export default DisplayReward;

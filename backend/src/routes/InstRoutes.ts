@@ -10,6 +10,7 @@ import {
   getInstanceDetails,
   deleteInstance,
   getAllInstances,
+  downloadOpenVPNProfile,
 } from '../controllers/InstController.js';
 
 const InstRoutes = express.Router();
@@ -45,5 +46,8 @@ InstRoutes.delete('/:instanceId',
   validateInstance, 
   deleteInstance
 );
+
+// Route to download OpenVPN profile for a specific instance
+InstRoutes.get('/:instanceId/download-vpn', verifyToken, downloadOpenVPNProfile);
 
 export default InstRoutes;

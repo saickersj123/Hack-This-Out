@@ -1,27 +1,27 @@
 import React from 'react';
 import { downloadOpenVPNProfile } from '../../api/axiosInstance';
 
-const DownloadOpenVPNButton = ({ machineId }) => {
+const DownloadOpenVPNButton = () => {
   const handleDownload = async () => {
     try {
-      const data = await downloadOpenVPNProfile(machineId);
-      // Assuming the server sends the file as a blob
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const response = await downloadOpenVPNProfile();
+      const blob = new Blob([response.data], { type: 'application/octet-stream' });
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `machine-${machineId}-profile.ovpn`);
+      link.setAttribute('download', `vpn-profile.ovpn`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
     } catch (error) {
       console.error('Error downloading OpenVPN profile:', error);
-      alert(error.msg || 'Failed to download OpenVPN profile.');
+      alert(error.response?.data?.msg || 'Failed to download OpenVPN profile.');
     }
   };
 
   return (
     <button onClick={handleDownload}>
-      Download OpenVPN Profile
+      Download VPN Profile
     </button>
   );
 };

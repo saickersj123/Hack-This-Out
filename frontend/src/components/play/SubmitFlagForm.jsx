@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { MachinesubmitFlag, submitFlagForContest } from '../../api/axiosInstance';
+import { submitFlag, submitFlagMachine } from '../../api/axiosInstance';
 
-const SubmitFlagForm = ({ machineId, mode, contestId }) => {
+const SubmitFlagForm = ({ machineId, instanceId }) => {
   const [flag, setFlag] = useState('');
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState([]);
@@ -12,11 +12,8 @@ const SubmitFlagForm = ({ machineId, mode, contestId }) => {
     setMessage('');
     try {
       let data;
-      if (mode === 'contest') {
-        data = await submitFlagForContest({ contestId, machineId, flag });
-      } else {
-        data = await MachinesubmitFlag(machineId, flag);
-      }
+        data = await submitFlag({ instanceId, flag });
+        data = await submitFlagMachine(machineId, flag);
       setMessage(data.msg);
     } catch (error) {
       setErrors(error.errors || [{ msg: error.msg }]);
@@ -40,7 +37,8 @@ const SubmitFlagForm = ({ machineId, mode, contestId }) => {
           <input 
             type="text" 
             value={flag} 
-            onChange={(e) => setFlag(e.target.value)} 
+            onChange={(e) => setFlag(e.target.value)}
+            placeholder="Enter flag here"
             required 
           />
         </div>

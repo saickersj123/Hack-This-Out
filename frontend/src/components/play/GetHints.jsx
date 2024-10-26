@@ -1,14 +1,10 @@
 import React from 'react';
-import { getHint, getHintInContest } from '../../api/axiosInstance';
+import { getMachineHints } from '../../api/axiosInstance';
 
-const UseHints = ({ machineId, mode }) => {
+const UseHints = ({ machineId }) => {
   const handleUseHint = async () => {
     try {
-      if (mode === 'contest') {
-        await getHintInContest(machineId, machineId); // Correct parameter mapping
-      } else {
-        await getHint(machineId);
-      }
+        await getMachineHints(machineId);
       alert('Hint used successfully.');
       // Optionally refresh machine data or hints display
     } catch (error) {

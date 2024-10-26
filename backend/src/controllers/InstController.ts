@@ -4,15 +4,27 @@ import {
   TerminateInstancesCommand, 
   _InstanceType as EC2InstanceType 
 } from '@aws-sdk/client-ec2';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import Instance from '../models/Instance';
 import Machine from '../models/Machine';
 import User from '../models/User';
 import config from '../config/config';
+import path from 'path';
+import fs from 'fs';
 
 // Configure AWS SDK v3
 const ec2Client = new EC2Client({
+  region: config.aws.region,
+  credentials: {
+    accessKeyId: config.aws.accessKeyId!,
+    secretAccessKey: config.aws.secretAccessKey!,
+  },
+});
+
+// Configure AWS SDK v3
+const s3Client = new S3Client({ // Initialize S3 client
   region: config.aws.region,
   credentials: {
     accessKeyId: config.aws.accessKeyId!,
@@ -42,10 +54,10 @@ export const startInstance = async (req: Request, res: Response) => {
     const ImageId = machine.amiId;
     const params = {
       ImageId,
-      InstanceType: EC2InstanceType.t2_micro, // Use the enum for InstanceType
+      InstanceType: EC2InstanceType.t2_micro,
       MinCount: 1,
       MaxCount: 1,
-      SecurityGroupIds: [config.aws.securityGroupId!], // Add your Security Group ID here
+      SecurityGroupIds: [config.aws.securityGroupId!],
       TagSpecifications: [
         {
           ResourceType: 'instance',
@@ -53,7 +65,7 @@ export const startInstance = async (req: Request, res: Response) => {
         },
       ],
     };
-    // Create and send RunInstancesCommand
+
     const runCommand = new RunInstancesCommand({
       ...params,
       TagSpecifications: [
@@ -64,7 +76,7 @@ export const startInstance = async (req: Request, res: Response) => {
       ],
     });
     const data = await ec2Client.send(runCommand);
-    
+
     if (!data.Instances || data.Instances.length === 0 || !data.Instances[0].InstanceId) {
       res.status(500).json({ msg: 'Failed to create instance' });
       return;
@@ -266,5 +278,28 @@ const validateFlag = async (flag: string, userId: string, instanceId: string): P
   } catch (error) {
     console.error('Error validating flag:', error);
     return false;
+  }
+};
+
+export const downloadOpenVPNProfile = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+      throw new Error("User not registered / token malfunctioned");
+    }
+    const bucketName = config.aws.s3BucketName; // Specify your S3 bucket name
+    const key = config.aws.keyName; // Specify the key for the S3 object
+
+    const command = new GetObjectCommand({ // Create S3 GetObject command
+      Bucket: bucketName,
+      Key: key,
+    });
+
+    const data = await s3Client.send(command); // Fetch the object from S3
+    res.setHeader('Content-Type', data.ContentType || 'application/octet-stream'); // Set content type
+    res.send(data.Body); // Send the S3 response body to the Express response
+  } catch (error: any) {
+    console.error('Error downloading OpenVPN profile from S3:', error);
+    res.status(500).json({ msg: 'Failed to download OpenVPN profile.' });
   }
 };

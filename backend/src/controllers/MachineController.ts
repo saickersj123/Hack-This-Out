@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
  */
 export const createMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, category, info, exp, amiId, hints, flag } = req.body;
+    const { name, category, info, exp, amiId, hints, hintCosts, flag } = req.body;
 
     // Validate required fields
     if (!name || !category || !amiId || !flag) {
@@ -26,6 +26,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
     // Hash the flag before saving
     const saltRounds = 10;
     const hashedFlag = await bcrypt.hash(flag, saltRounds);
+    const hintsArray = hints.filter((hint: string) => hint.trim() !== '');
 
     const newMachine = new Machine({
       name,
@@ -33,7 +34,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
       info,
       exp,
       amiId,
-      hints,
+      hints: hintsArray.map((hint: string, index: number) => ({ content: hint, cost: hintCosts[index] })),
       flag: hashedFlag, // Assign the hashed flag
       isActive: false
     });
