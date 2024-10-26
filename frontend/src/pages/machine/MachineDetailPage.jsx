@@ -27,7 +27,7 @@ const MachineDetailPage = () => {
     return (
         <Main>
             <MachineDetail machineDetail={machineDetail} />
-            <button onClick={() => navigate(`/machine/${machineId}/play`)}>Play</button>
+            <button onClick={() => navigate(`/machine/${machineDetail._id}/play`)}>Play</button>
         </Main>
     );
 };

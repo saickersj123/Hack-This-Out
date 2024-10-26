@@ -194,7 +194,8 @@ const AddMachineForm = ({ onMachineAdded }) => {
           name="exp"
           value={exp}
           onChange={handleChange}
-          min="0"
+          placeholder="Enter the EXP"
+          min="50"
         />
       </div>
       <div>

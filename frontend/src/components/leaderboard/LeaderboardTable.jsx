@@ -20,9 +20,9 @@ const LeaderboardTable = ( {rankings} ) => {
                         {rankings.length > 0 ? (
                             rankings.map((user, index) => (
                                 <tr key={user._id}>
-                                    <td className="rank-col">{index + 1}</td> {/* 순위는 index + 1 */}
-                                    <td className="user-col">{user.name}</td> {/* 유저 이름 */}
-                                    <td className="exp-col">{user.exp}</td> {/* 경험치 */}
+                                    <td className="rank-col">{index + 1}</td>
+                                    <td className="user-col">{user.name}</td>
+                                    <td className="exp-col">{user.exp}</td>
                                 </tr>
                             ))
                         ) : (

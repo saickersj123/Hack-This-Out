@@ -1,23 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getMachineHints } from '../../api/axiosInstance';
 
-const UseHints = ({ machineId }) => {
-  const handleUseHint = async () => {
+const GetHints = ({ machineId }) => {
+  const [hint, setHint] = useState('');
+
+  const handleGetHints = async () => {
     try {
-        await getMachineHints(machineId);
-      alert('Hint used successfully.');
+        const response = await getMachineHints(machineId);
+        setHint(response.hint);
+      alert('Hints fetched successfully.');
       // Optionally refresh machine data or hints display
     } catch (error) {
-      console.error('Error using hint:', error);
-      alert(error.msg || 'Failed to use hint.');
+      console.error('Error fetching hints:', error);
+      alert(error.msg || 'Failed to fetch hints.');
     }
   };
 
   return (
-    <button onClick={handleUseHint}>
-      Use Hint
-    </button>
+    <div>
+      <button onClick={handleGetHints}>
+        Get Hints
+      </button>
+      {hint && (
+        <div className="hint-display">
+          <h3>Hint:</h3>
+          <p>{hint}</p>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default UseHints;
+export default GetHints;

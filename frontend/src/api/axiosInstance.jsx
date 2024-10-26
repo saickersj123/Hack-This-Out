@@ -329,11 +329,27 @@ export const startInstance = async (machineId) => {
 };
 
 /**
- * Get details of all instances.
+ * Get details of all instances(Admin only)
+ * @returns {Promise<Object>} - The response data containing instance details.
+ * Admin only
  */
 export const getAllInstances = async () => {
   try {
     const response = await axiosInstance.get('/inst/');
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch all instances');
+  }
+};
+
+/**
+ * Get details of all instances by machine.
+ * @param {string} machineId - The ID of the machine to get instances.
+ * @returns {Promise<Object>} - The response data containing instance details.
+ */
+export const getInstanceByMachine = async (machineId) => {
+  try {
+    const response = await axiosInstance.get(`/inst/${machineId}`);
     return response.data; // Return the data received from the server
   } catch (error) {
     throw error.response ? error.response.data : new Error('Failed to fetch instances');
@@ -356,13 +372,13 @@ export const getInstanceDetails = async (instanceId) => {
 
 /**
  * Submit a flag for a specific instance.
- * @param {string} instanceId - The ID of the instance.
+ * @param {string} machineId - The ID of the machine.
  * @param {string} flag - The flag to submit.
  * @returns {Promise<Object>} - The response data confirming submission.
  */
-export const submitFlag = async (instanceId, flag) => {
+export const submitFlag = async (machineId, flag) => {
   try {
-    const response = await axiosInstance.post(`/inst/${instanceId}/submit-flag`, { flag });
+    const response = await axiosInstance.post(`/inst/${machineId}/submit-flag`, { flag });
     return response.data; // Return the data received from the server
   } catch (error) {
     throw error.response ? error.response.data : new Error('Failed to submit flag');
@@ -404,17 +420,18 @@ export const receiveVpnIp = async (instanceId, vpnIp) => {
 
 /**
  * Download OpenVPN profile for a specific instance.
- * @returns {Promise<Object>} - The response data containing the OpenVPN profile.
+ * @returns {Promise<Blob>} - The OpenVPN profile file blob.
  */
 export const downloadOpenVPNProfile = async () => {
   try {
-    const response = await axiosInstance.get(`/inst/download-vpn`);
-    return response.data; // Return the data received from the server
+    const response = await axiosInstance.get(`/inst/download-ovpn`, {
+      responseType: 'blob', // Important for handling binary data
+    });
+    return response.data; // This is the blob
   } catch (error) {
-    throw error.response ? error.response.data : new Error('Failed to download OpenVPN profile');
+    throw error.response?.data || new Error('Failed to download OpenVPN profile');
   }
 };
-
 // ------- Machine related ------
 
 /**

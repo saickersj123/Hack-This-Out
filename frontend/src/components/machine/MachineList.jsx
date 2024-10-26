@@ -16,7 +16,7 @@ const MachineList = () => {
         setMachines(data.machines);
       } catch (error) {
         console.error('Error fetching machines:', error);
-        alert('Error fetching machines:', error.msg);
+        alert(`Error fetching machines: ${error.msg}`);
       }
     };
 
@@ -32,33 +32,35 @@ const MachineList = () => {
       <div className='machine-list-title'> <h2>Machine List</h2> </div>
         <table className='machine-list-table'>
           {machines.length === 0 ? (
-            <tr>
-              <td colSpan="5" className="no-data">No machines available.</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td colSpan="5" className="no-data">No machines available.</td>
+              </tr>
+            </tbody>
           ) : (
             <>
-            <thead>
-              <tr>
-                <th className='machine-name'>Name</th>
-                <th className='machine-category'>Category</th>
-                <th className='machine-rating'>Rating</th>
-                <th className='machine-playCount'>User Played</th>
-                <th className='machine-details'></th>
-              </tr>
-            </thead>
-            <tbody>
-              {machines.map((machine) => (
-                <tr key={machine._id}>
-                  <td>{machine.name}</td>
-                  <td>{machine.category}</td>
-                  <td>{machine.rating}</td>
-                  <td>{machine.playCount}</td>
-                  <td>
-                    <button onClick={() => handleMachineClick(machine)}>Details</button>
-                  </td>
+              <thead>
+                <tr>
+                  <th className='machine-name'>Name</th>
+                  <th className='machine-category'>Category</th>
+                  <th className='machine-rating'>Rating</th>
+                  <th className='machine-playCount'>User Played</th>
+                  <th className='machine-details'></th>
                 </tr>
-              ))}
-            </tbody>
+              </thead>
+              <tbody>
+                {machines.map((machine) => (
+                  <tr key={machine._id}>
+                    <td>{machine.name}</td>
+                    <td>{machine.category}</td>
+                    <td>{machine.rating}</td>
+                    <td>{machine.playCount}</td>
+                    <td>
+                      <button onClick={() => handleMachineClick(machine)}>Details</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </>
           )}
         </table>
