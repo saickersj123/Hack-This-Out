@@ -1,35 +1,56 @@
+:root {
+    --sidebar-width: 300px; /* 사이드바의 기본 너비 */
+}
+
 body {
-    overflow: hidden; /* 전체 페이지의 스크롤을 제거 */
+    overflow: hidden;
 }
 
-#header {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 260px;
-    height: 100%;
-    overflow-y: auto;
-    z-index: 10000;
-    border-right: 1px solid var(--black100);
-}
+.main-container {
+    display: flex;
+    height: 100vh; 
 
-#main_dash {
-    max-width: 2000px;
-    min-height: 100vh;
-    margin: 0 auto;
-    padding-left: 260px;
-    padding-bottom: 80px; /* Adjust based on footer height if necessary */
-    overflow-y: auto;
-}
+    /* Sidebar */
+    .logo-sidebar-container {
+        width: var(--sidebar-width);
+        min-width: var(--sidebar-width);
+        height: 100vh;
+        border-right: 1px solid var(--black100);
+        position: fixed; 
+        left: 0;
+        top: 0;
+    }
 
-#footer {
-    position: fixed;
-    bottom: 0;
-    left: 260px;
-    width: calc(100% - 260px);
-    text-align: center;
-    background-color: var(--black200);
-    padding: 20px;
-    color: var(--black400);
-    z-index: 10000;
+    /* Sidebar 오른쪽 영역 */
+    .content-container {
+        margin-left: var(--sidebar-width);
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - var(--sidebar-width));
+        height: 100vh; 
+        overflow-y: auto; 
+    }
+
+    /* Profile */
+    .profile-container {
+        display: flex;
+        align-items: center;
+        height: 80px; 
+        padding: 0 20px;
+        border-bottom: 1px solid var(--black100);
+    }
+
+    /* Props children container */
+    .props-container {
+        flex: 1; /* 남은 공간을 모두 차지 */
+        padding: 20px; 
+    }
+
+    /* Footer */
+    #footer {
+        text-align: center;
+        background-color: var(--black200);
+        padding: 20px;
+        color: var(--black400);
+    }
 }
