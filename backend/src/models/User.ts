@@ -22,10 +22,6 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String
     },
-    date: {
-        type: Date,
-        default: Date.now
-    },
     exp: {
         type: Number,
         default: 0
@@ -38,6 +34,8 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
+}, {
+    timestamps: true
 });
 
 // Method to update level based on EXP

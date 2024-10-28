@@ -43,7 +43,7 @@ export const postSignUp = async (req: Request, res: Response) => {
 
     try {
         // Check if user exists
-        let user = await User.findOne({ email, user_id });
+        let user = await User.findOne({ email, user_id, name });
         if (user) {
             res.status(400).json({
                 errors: [{
@@ -283,12 +283,28 @@ export const changeName = async (req: Request, res: Response) => {
 	try {
 		const { name } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
+		const isSameName = await User.findOne({ name });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
 		}
 		if (user._id.toString() !== res.locals.jwtData.id) {
 			return res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
+		}
+		if (name === user.name) {
+			return res.status(401).json({ message: "ERROR", cause: "Name is the same as before" });
+		}
+		if (name.length > 10) {
+			return res.status(401).json({ message: "ERROR", cause: "Name is too long" });
+		}
+		if (name.length < 3) {
+			return res.status(401).json({ message: "ERROR", cause: "Name is too short" });
+		}
+		if (name.includes(' ')) {
+			return res.status(401).json({ message: "ERROR", cause: "Name cannot contain spaces" });
+		}
+		if (isSameName) {
+			return res.status(401).json({ message: "ERROR", cause: "Name already taken" });
 		}
 		user.name = name;
 		await user.save();

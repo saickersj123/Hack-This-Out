@@ -25,6 +25,8 @@ import {
   deleteMachineReviewForce,
   getMachineReview,
   getMachineRating,
+  getMachineReviewCount,
+  getMachineReviewsbyUser,
 } from '../controllers/MachineController.js';
 
 const MachineRoutes = express.Router();
@@ -62,6 +64,13 @@ MachineRoutes.get('/:machineId/reviews/:reviewId', verifyToken, getMachineReview
 
 // Route to get machine rating
 MachineRoutes.get('/:machineId/rating', verifyToken, getMachineRating);
+
+// Route to get machine review count
+MachineRoutes.get('/:machineId/reviews/count', verifyToken, verifyAdmin, getMachineReviewCount);
+
+// Route to get machine reviews by user
+MachineRoutes.get('/reviews/by/:userId', verifyToken, verifyAdmin, getMachineReviewsbyUser);
+
 
 // Admin Routes
 // Route to get all machines(Admin only)
