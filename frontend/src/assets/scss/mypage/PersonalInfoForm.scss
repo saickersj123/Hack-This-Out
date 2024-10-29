@@ -1,67 +1,145 @@
-.mypage-container {
+@import '../setting/mixin.scss';
+
+.personalInfo-container {
+    width: 80%;
+    height: 80%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+
+    .info-container {
+        width: 100%;
+        height: 320px;
+        display: flex;
+
+        .avatar-container {
+            width: 30%;
+            min-width: 200px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; // 가로 중앙 정렬
+
+            .avatar-img {
+                width: 200px;
+                height: 200px;
+                border-radius: 100px;
+            }
+
+            .avatar-form {
+                width: 200px;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: stretch;
+                margin-top: 15px;
+
+                .avatar-input {
+                    margin-top: 5px;
+                    margin-right: 15px;
+                    width: 100px;
+                    height: 32px;
+
+                    color: black;
+                    background: var(--white100);
+                    border-radius: 12px;
+
+                    font-size: 16px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    &:hover {
+                      background: rgb(77,77,77);
+                      color: #fff;
+                    }
+                }
+
+                .avatar-button {
+                    width: 50px;
+                    height: 32px;
+                    border-radius: 12px;
+                    margin-top: 5px;
+                    margin-left: 10px;
+
+                    &:hover {
+                        background: rgb(77,77,77);
+                        color: #fff;
+                      }
+                }
+            }
+        }
+
+        .user-container {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+
+            .name-container {
+                font-size: 24px;
+                padding: 20px 15px 10px;
+            }
+
+            .email-container {
+                text-align: end;
+                padding: 20px 15px 10px;
+            }
+
+            .user_id-container {
+                padding-left: 15px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid var(--black300);
+            }
+
+            .exp-container {
+                text-align: end;
+                padding: 10px 15px 10px;
+            }
+        }
+    }
+
+    .modify-container {
+        width: 100%;
+        height: 350px;
+        flex-grow: 1;
+        display: flex;
+        padding-top: 20px;
+        
+        border-top: 2px solid var(--black300);
+
+        input {
+            width: 250px;
+            height: 40px;
+            padding-left: 10px;
+            margin: 10px 5px;
+            border-radius: 12px;
+        }
+
+        button {
+            width: 60px;
+            height: 40px;
+            padding: 5px;
+            margin: 10px 5px;
+            border-radius: 12px;
+        }
+
+        .name-form {
+            width: 50%;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            padding-left: 20px;
+        }
+        
+        .password-form {
+            width: 50%;
+            min-width: 450px;
+            display: flex;
+            flex-direction: column;
+            padding-left: 40px;
+        }
+    }
 }
 
-.name-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.email-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.user_id-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.avatar-container {
-    display: flex;
-    flex-direction: column;
-    size: 50px;
-    align-items: center;
-}
-
-.avatar-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.name-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.password-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.avatar-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.name-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.password-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
+#file {
+    display: none;
+  }
