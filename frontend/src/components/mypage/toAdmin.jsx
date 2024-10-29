@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { updateUsertoAdmin } from '../../api/axiosInstance';
+import '../../assets/scss/mypage/mypage.scss';
 
 const ToAdmin = () => {
     const [password, setPassword] = useState('');

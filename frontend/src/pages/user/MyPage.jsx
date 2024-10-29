@@ -4,6 +4,8 @@ import PasswordCheckForm from '../../components/mypage/PasswordCheckForm';
 import PersonalInfoForm from '../../components/mypage/PersonalInfoForm';
 import ToAdmin from '../../components/mypage/toAdmin';
 import { useNavigate } from 'react-router-dom';
+import Main from '../../components/main/Main'
+import '../../assets/scss/mypage/toAdmin.scss';
 
 const MyPage = () => {
   const [isPasswordVerified, setIsPasswordVerified] = useState(false);
@@ -19,20 +21,24 @@ const MyPage = () => {
   };
 
   return (
-    <div className="mypage-container">
-      <h1>마이 페이지</h1>
-      <div className="go-back-button">
-        <button onClick={() => navigate('/')}>뒤로가기</button>
+    <Main>
+      <div className="mypage-container">
+        <div className="upper-container">
+          <div className="back-btn-container">
+            <button className="back-button" onClick={() => navigate('/')}></button>
+          </div>
+          <h1>My Page</h1>
+        </div>
+        {!isPasswordVerified ? (
+          <PasswordCheckForm onSubmit={handlePasswordCheck} />
+        ) : (
+          <>
+            <PersonalInfoForm />
+            <ToAdmin />
+          </>
+        )}
       </div>
-      {!isPasswordVerified ? (
-        <PasswordCheckForm onSubmit={handlePasswordCheck} />
-      ) : (
-        <>
-          <PersonalInfoForm />
-          <ToAdmin />
-        </>
-      )}
-    </div>
+    </Main>
   );
 };
 

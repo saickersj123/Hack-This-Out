@@ -23,7 +23,7 @@ const PersonalInfoForm = () => {
     fetchUserDetail();
   }, []);
 
-  
+
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -63,68 +63,82 @@ const PersonalInfoForm = () => {
 
   return (
     <div className="personalInfo-container">
-      <h2>개인정보 수정</h2>
-      <form>
+      <div className='info-container'>
         <div className="avatar-container">
-          <img src={userData.avatar} alt="avatar" />
+          <img className="avatar-img" src={userData.avatar} alt="avatar" />
+          <form className="avatar-form" onSubmit={handleAvatarChange}>
+            <label for="file">
+              <div className='avatar-input'>파일 업로드</div>
+            </label>
+            <input
+              type="file"
+              name="file"
+              id="file"
+              accept=".png,.jpg,.jpeg"
+              value={avatar}
+              onChange={(e) => setAvatar(e.target.value)}
+              required
+            />
+            <button className="avatar-button" type="submit">변경</button>
+          </form>
         </div>
-        <div className="name-container">
-          <label>이름: {userData.name}</label>
+        <div className='user-container'>
+          <div className="name-container">
+            <label>Name : {userData.name}</label>
+          </div>
+          <div className="user_id-container">
+            <label>ID : {userData.user_id}</label>
+          </div>
+          <div className="email-container">
+            <label>Email : {userData.email}</label>
+          </div>
+          <div className="exp-container">
+            <label>EXP : {userData.exp}</label>
+          </div>
         </div>
-        <div className="email-container">
-          <label>이메일: {userData.email}</label>
-        </div>
-        <div className="user_id-container">
-          <label>아이디: {userData.user_id}</label>
-        </div>
-      </form>
-      <form className="avatar-form" onSubmit={handleAvatarChange}>
-        <h3> 아바타 변경 </h3>  
-        <input
-          type="file"
-          value={avatar}
-          onChange={(e) => setAvatar(e.target.value)}
-          placeholder="새 아바타"
-          required
-        />
-        <button className="avatar-button" type="submit">아바타 변경</button>
-      </form>
-      <form className="name-form" onSubmit={handleNameChange}>
-        <h3>이름 변경</h3>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="새 이름"
-          required
-        />
-        <button className="name-button" type="submit">이름 변경</button>
-      </form>
-      <form className="password-form" onSubmit={handlePasswordChange}>
-        <h3>비밀번호 변경</h3>
-        <input
-          type="password"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
-          placeholder="기존 비밀번호"
-          required
-        />
-        <input
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          placeholder="새 비밀번호"
-          required
-        />
-        <input
-          type="password"
-          value={confirmNewPassword}
-          onChange={(e) => setConfirmNewPassword(e.target.value)}
-          placeholder="새 비밀번호 확인"
-          required
-        />
-        <button className="password-button" type="submit">비밀번호 변경</button>
-      </form>
+      </div>
+      <div className='modify-container'>
+        <form className="name-form" onSubmit={handleNameChange}>
+          <h3>이름 변경</h3>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="새 이름"
+            required
+          />
+          <div className="button-container">
+            <button className="name-button" type="submit">변경</button>
+          </div>
+        </form>
+        <form className="password-form" onSubmit={handlePasswordChange}>
+          <h3>비밀번호 변경</h3>
+          <input
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            placeholder="기존 비밀번호"
+            required
+          />
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="새 비밀번호"
+            required
+          />
+          <input
+            type="password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+            placeholder="새 비밀번호 확인"
+            required
+          />
+          <div className="button-container">
+            <button className="password-button" type="submit">변경</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

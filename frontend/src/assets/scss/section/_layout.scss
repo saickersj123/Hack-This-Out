@@ -2,13 +2,10 @@
     --sidebar-width: 300px; /* 사이드바의 기본 너비 */
 }
 
-body {
-    overflow: hidden;
-}
-
 .main-container {
     display: flex;
     height: 100vh; 
+    overflow: hidden;
 
     /* Sidebar */
     .logo-sidebar-container {
@@ -28,14 +25,14 @@ body {
         flex-direction: column;
         width: calc(100% - var(--sidebar-width));
         height: 100vh; 
-        overflow-y: auto; 
     }
 
     /* Profile */
     .profile-container {
         display: flex;
         align-items: center;
-        height: 80px; 
+        height: 80px;
+        min-height: 80px;
         padding: 0 20px;
         border-bottom: 1px solid var(--black100);
     }
@@ -43,7 +40,7 @@ body {
     /* Props children container */
     .props-container {
         flex: 1; /* 남은 공간을 모두 차지 */
-        padding: 20px; 
+        overflow-y: auto;
     }
 
     /* Footer */

@@ -9,3 +9,23 @@
     border-bottom: $border-width solid $border-color;
     padding-bottom: 10px;
 }
+
+@mixin button-back {
+    background: url('../../img/icon/left_icon.png') no-repeat center center;
+    background-size: cover;
+    border: none;
+    margin: 0px;
+    background-color: transparent;
+    width: 30px;
+    min-width: 10px;
+    height: 36px;
+    display: flex;
+    border-radius: 4px;
+
+    filter: brightness(0) invert(1);
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(128, 128, 128, 0.4);
+    }
+}
