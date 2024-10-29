@@ -13,9 +13,6 @@ $suggestion-background: #3c3c3c;
 $suggestion-hover-background: #555555;
 $suggestion-text-color: #f5f5f5;
 
-@import '../setting/mixin.scss';
-@import '../setting/vars.scss';
-
 .add-contest-form {
     background-color: $background-color;
     color: $label-color;
