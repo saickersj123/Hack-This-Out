@@ -27,6 +27,9 @@ import {
   getMachineRating,
   getMachineReviewCount,
   getMachineReviewsbyUser,
+  getMachineDetailsById,
+  getInactiveMachineDetailsById,
+  getActiveMachineDetailsById,
 } from '../controllers/MachineController.js';
 
 const MachineRoutes = express.Router();
@@ -36,6 +39,9 @@ const MachineRoutes = express.Router();
 MachineRoutes.post('/', validateMachine, verifyToken, createMachine);
 
 // Route to get active machine details by ID
+MachineRoutes.get('/active/details', verifyToken, getActiveMachineDetailsById);
+
+// Route to get active machine details by ID(params)
 MachineRoutes.get('/active/:machineId', verifyToken, getActiveMachineDetails);
 
 // Route to get machine hints
@@ -75,6 +81,12 @@ MachineRoutes.get('/reviews/by/:userId', verifyToken, verifyAdmin, getMachineRev
 // Admin Routes
 // Route to get all machines(Admin only)
 MachineRoutes.get('/', verifyToken, verifyAdmin, getAllMachines);
+
+// Route to get machine details by ID(Admin only)
+MachineRoutes.get('/details', verifyToken, verifyAdmin, getMachineDetailsById);
+
+// Route to get inactive machine details by ID(Admin only)
+MachineRoutes.get('/inactive/details', verifyToken, verifyAdmin, getInactiveMachineDetailsById);
 
 // Route to get inactive machine details by ID(Admin only)
 MachineRoutes.get('/inactive/:machineId', verifyToken, verifyAdmin, getInactiveMachineDetails);

@@ -8,7 +8,7 @@ const MachineDetail = ({ machineDetail }) => {
         <h3>Machine Details</h3>
         <p><strong>Name:</strong> {machineDetail.name}</p>
         <p><strong>Category:</strong> {machineDetail.category}</p>
-        <p><strong>Info:</strong> {machineDetail.info || 'N/A'}</p>
+        <p><strong>Description:</strong> {machineDetail.description || 'N/A'}</p>
         <p><strong>Experience Points (EXP):</strong> {machineDetail.exp}</p>
         <p><strong>AMI ID:</strong> {machineDetail.amiId}</p>
         {/* Add more fields as necessary */}

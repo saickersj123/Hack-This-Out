@@ -8,14 +8,18 @@ import { useNavigate } from 'react-router-dom';
 const MachineDetailPage = () => {
     const [machineDetail, setMachineDetail] = useState([]);
     const { machineId } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     //fetch machine detail
     useEffect(() => {
         const fetchMachineDetail = async () => {
             try {
+                //const response = await getMachineDetails(machineId);
                 const response = await getMachineDetails(machineId);
                 setMachineDetail(response.machine);
+                setIsLoading(false);
             } catch (error) {
+                setIsLoading(false);
                 console.error('Error fetching machine details:', error.message || error);
             }
         };
@@ -23,6 +27,9 @@ const MachineDetailPage = () => {
         fetchMachineDetail();
     }, [machineId]);
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Main>

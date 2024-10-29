@@ -6,7 +6,11 @@ const ContestSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    description: String,
+    description: {
+        type: String,
+        default: '',
+        required: true
+    },
     startTime: {
         type: Date,
         required: true

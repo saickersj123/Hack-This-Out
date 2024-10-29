@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const MachineList = () => {
   const [machines, setMachines] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,9 +15,11 @@ const MachineList = () => {
         const data = await getAllMachines();
         //const data = await getActiveMachines();
         setMachines(data.machines);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching machines:', error);
         alert(`Error fetching machines: ${error.msg}`);
+        setLoading(false);
       }
     };
 
@@ -26,6 +29,10 @@ const MachineList = () => {
   const handleMachineClick = (machine) => {
     navigate(`/machine/${machine._id}`);
   };
+
+  if (loading) {
+    return <p>Loading machines...</p>;
+  }
 
   return (
     <div className='machine-list-container'>
@@ -44,7 +51,7 @@ const MachineList = () => {
                   <th className='machine-name'>Name</th>
                   <th className='machine-category'>Category</th>
                   <th className='machine-rating'>Rating</th>
-                  <th className='machine-playCount'>User Played</th>
+                  <th className='machine-playCount'>Played</th>
                   <th className='machine-details'></th>
                 </tr>
               </thead>
@@ -54,7 +61,7 @@ const MachineList = () => {
                     <td>{machine.name}</td>
                     <td>{machine.category}</td>
                     <td>{machine.rating}</td>
-                    <td>{machine.playCount}</td>
+                    <td>{machine.playerCount}</td>
                     <td>
                       <button onClick={() => handleMachineClick(machine)}>Details</button>
                     </td>

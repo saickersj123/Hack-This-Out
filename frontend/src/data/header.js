@@ -7,8 +7,6 @@ import { AiFillYoutube } from "react-icons/ai";
 import { AiOutlineInstagram } from "react-icons/ai";
 
 import { PiComputerTower } from "react-icons/pi";
-import { GrCloudComputer } from "react-icons/gr";
-
 
 export const headerMenus = [
     {
@@ -31,11 +29,6 @@ export const headerMenus = [
         icon: < PiComputerTower />,
         src: "/machines"
     },
-    {
-        title: "Instances",
-        icon: <GrCloudComputer />,
-        src: "/instances"
-    }
 ];
 
 export const searchKeyword = [

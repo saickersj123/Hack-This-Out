@@ -12,7 +12,8 @@ export const createContestValidation: ValidationChain[] = [
         .isLength({ min: 3 })
         .withMessage('Name must be at least 3 characters long.'),
     body('description')
-        .optional()
+        .notEmpty()
+        .withMessage('Description is required.')
         .isString()
         .withMessage('Description must be a string.')
         .isLength({ max: 500 })

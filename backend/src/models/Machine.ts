@@ -50,7 +50,7 @@ const MachineSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
-    info: {
+    description: {
         type: String
     },
     exp: {

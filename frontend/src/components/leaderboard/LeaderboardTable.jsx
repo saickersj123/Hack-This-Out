@@ -12,6 +12,7 @@ const LeaderboardTable = ( {rankings} ) => {
                     <thead>
                         <tr>
                             <th className="rank-col">Rank</th>
+                            <th className="level-col">Level</th>
                             <th className="user-col">User</th>
                             <th className="exp-col">Exp</th>
                         </tr>
@@ -21,6 +22,7 @@ const LeaderboardTable = ( {rankings} ) => {
                             rankings.map((user, index) => (
                                 <tr key={user._id}>
                                     <td className="rank-col">{index + 1}</td>
+                                    <td className="level-col">{user.level}</td>
                                     <td className="user-col">{user.name}</td>
                                     <td className="exp-col">{user.exp}</td>
                                 </tr>

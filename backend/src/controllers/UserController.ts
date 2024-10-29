@@ -22,7 +22,7 @@ export const getAllUser = async (req: Request, res: Response) => {
 export const getUserDetail = async (req: Request, res: Response) => {
     try {
 		const userId = res.locals.jwtData.id;
-        const user = await User.findById(userId).select('-password -isAdmin -email -createdAt -updatedAt');
+        const user = await User.findById(userId).select('-password -isAdmin -email -createdAt -updatedAt -__v -_id');
         return res.status(200).json({ message: "OK", user });
     } catch (error) {
         console.log(error);
@@ -591,7 +591,7 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 //Get Leaderboard
 export const getLeaderboard = async (req: Request, res: Response) => {
 	try {
-		const users = await User.find().sort({ exp: -1 }).select('-password -isAdmin -email -createdAt -updatedAt');
+		const users = await User.find().sort({ exp: -1 }).select('-password -isAdmin -email -createdAt -updatedAt -__v -_id');
 		return res.status(200).json({ message: "OK", users });
 	} catch (error: any) {
 		console.error('Error getting leaderboard:', error);

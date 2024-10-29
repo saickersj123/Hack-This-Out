@@ -6,7 +6,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
-    info: '',
+    description: '',
     hints: [''], // Initialize hints as an array with one empty string
     hintCosts: [''], // Initialize hintCosts as an array with one empty string
     exp: '',
@@ -16,23 +16,23 @@ const AddMachineForm = ({ onMachineAdded }) => {
   const [loading, setLoading] = useState(false);
   
   // Ref for the info textarea
-  const infoRef = useRef(null);
+  const descriptionRef = useRef(null);
 
-  const { name, category, info, hints, hintCosts, exp, amiId, flag } = formData;
+  const { name, category, description, hints, hintCosts, exp, amiId, flag } = formData;
 
   // Function to adjust textarea height
   const adjustTextareaHeight = () => {
-    if (infoRef.current) {
-      infoRef.current.style.height = 'auto'; // Reset height
-      infoRef.current.style.width = '250px';
-      infoRef.current.style.height = `${infoRef.current.scrollHeight}px`; // Set to scrollHeight
+    if (descriptionRef.current) {
+      descriptionRef.current.style.height = 'auto'; // Reset height
+      descriptionRef.current.style.width = '250px';
+      descriptionRef.current.style.height = `${descriptionRef.current.scrollHeight}px`; // Set to scrollHeight
     }
   };
 
   // useEffect to adjust height when info changes
   useEffect(() => {
     adjustTextareaHeight();
-  }, [info]);
+  }, [description]);
 
   const handleChange = (e) => {
     const { name, value, dataset } = e.target;
@@ -74,6 +74,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
     e.preventDefault();
     if (!name || !category || !amiId || !flag) { // Include flag in validation
       alert('Please fill in all required fields.');
+      setLoading(false);
       return;
     }
 
@@ -86,7 +87,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
       const data = await createMachine({
         name,
         category,
-        info, 
+        description, 
         hints: filteredHints,
         hintCosts: filteredHintCosts, // Include hint costs
         exp: exp ? parseInt(exp) : 0,
@@ -97,7 +98,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
       setFormData({
         name: '',
         category: '',
-        info: '',
+        description: '',
         hints: [''],
         hintCosts: [''],
         exp: '',
@@ -124,6 +125,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
           name="name"
           value={name}
           onChange={handleChange}
+          placeholder="Enter the machine name"
           required
         />
       </div>
@@ -142,14 +144,14 @@ const AddMachineForm = ({ onMachineAdded }) => {
         </select>
       </div>
       <div>
-        <label htmlFor="info">Info:</label>
+        <label htmlFor="description">Description:</label>
         <textarea
-          id="info"
-          name="info"
-          value={info}
+          id="description"
+          name="description"
+          value={description}
           onChange={handleChange}
           placeholder="Enter machine description"
-          ref={infoRef} // Attach ref to textarea
+          ref={descriptionRef} // Attach ref to textarea
           style={{
             overflow: 'hidden',
             resize: 'none',
@@ -187,7 +189,7 @@ const AddMachineForm = ({ onMachineAdded }) => {
         <button type="button" onClick={handleAddHintField}>Add Hint</button>
       </div>
       <div>
-        <label htmlFor="exp">Experience Points (EXP):</label>
+        <label htmlFor="exp">Experience Points (EXP): </label>
         <input
           type="number"
           id="exp"

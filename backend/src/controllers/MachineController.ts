@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
  */
 export const createMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, category, info, exp, amiId, hints, hintCosts, flag } = req.body;
+    const { name, category, description, exp, amiId, hints, hintCosts, flag } = req.body;
 
     // Validate required fields
     if (!name || !category || !amiId || !flag) {
@@ -31,7 +31,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
     const newMachine = new Machine({
       name,
       category,
-      info,
+      description,
       exp,
       amiId,
       hints: hintsArray.map((hint: string, index: number) => ({ content: hint, cost: hintCosts[index] })),
@@ -84,7 +84,7 @@ export const getMachineDetails = async (req: Request, res: Response): Promise<vo
 export const getActiveMachineDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
-    const machine = await Machine.findById(machineId, { isActive: true }).select('-hints -flag');
+    const machine = await Machine.findById(machineId, { isActive: true }).select('-hints -flag -__v -reviews');
     res.json({ machine });
   } catch (error: any) {
     console.error('Error fetching active machines:', error);
@@ -107,6 +107,34 @@ export const getInactiveMachineDetails = async (req: Request, res: Response): Pr
 };
 
 /**
+ * Get machine details by ID(Admin only).
+ */
+export const getMachineDetailsById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.body;
+    const machine = await Machine.findById(machineId);
+    res.json({ machine });
+  } catch (error: any) {
+    console.error('Error fetching machine:', error);
+    res.status(500).send('Failed to fetch machine.');
+  }
+};
+
+/**
+ * Get active machine details by ID.
+ */
+export const getActiveMachineDetailsById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.body;
+    const machine = await Machine.find({ _id: machineId, isActive: true }).select('-hints -flag -__v -reviews');
+    res.json({ machine });
+  } catch (error: any) {
+    console.error('Error fetching machine:', error);
+    res.status(500).send('Failed to fetch machine.');
+  }
+};
+
+/**
  * Get active machines.
  */
 export const getActiveMachines = async (req: Request, res: Response): Promise<void> => {
@@ -120,6 +148,20 @@ export const getActiveMachines = async (req: Request, res: Response): Promise<vo
   } catch (error: any) {
     console.error('Error fetching active machines:', error);
     res.status(500).send('Failed to fetch active machines.');
+  }
+};
+
+/**
+ * Get inactive machine details by ID(Admin only).
+ */
+export const getInactiveMachineDetailsById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.body;
+    const machine = await Machine.find({ _id: machineId, isActive: false });
+    res.json({ machine });
+  } catch (error: any) {
+    console.error('Error fetching inactive machines:', error);
+    res.status(500).send('Failed to fetch inactive machines.');
   }
 };
 
@@ -184,7 +226,7 @@ export const getMachineStatus = async (req: Request, res: Response): Promise<voi
 export const updateMachineDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
-    const { name, category, info, exp, amiId, flag, hints, hintCosts } = req.body;
+    const { name, category, description, exp, amiId, flag, hints, hintCosts } = req.body;
 
     // Find the machine
     const machine = await Machine.findById(machineId);
@@ -196,7 +238,7 @@ export const updateMachineDetails = async (req: Request, res: Response): Promise
     // Update fields if provided
     if (name) machine.name = name;
     if (category) machine.category = category;
-    if (info) machine.info = info;
+    if (description) machine.description = description;
     if (exp !== undefined) machine.exp = exp;
     if (amiId) machine.amiId = amiId;
     if (flag) {
