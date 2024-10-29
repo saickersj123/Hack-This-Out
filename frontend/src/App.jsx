@@ -9,8 +9,9 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 
 // 비동기 로딩을 위한 Lazy 컴포넌트
 const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage'));
-const ContestPage = lazy(() => import('./pages/ContestPage'));
-const InstancesPage = lazy(() => import('./pages/InstancesPage'));
+const ContestListPage = lazy(() => import('./pages/contest/ContestListPage'));
+const ContestDetailPage = lazy(() => import('./pages/contest/ContestDetailPage'));
+const ContestRegisterPage = lazy(() => import('./pages/contest/ContestRegisterPage'));
 const MachineListPage = lazy(() => import('./pages/machine/MachineListPage'));
 const MachineDetailPage = lazy(() => import('./pages/machine/MachineDetailPage'));
 const MachineRegisterPage = lazy(() => import('./pages/machine/MachineRegisterPage'));
@@ -46,14 +47,21 @@ const App = () => {
           <Route path="/contest" 
             element={
               <ProtectedRoute>
-                <ContestPage />
+                <ContestListPage />
               </ProtectedRoute>
             } 
           />
-          <Route path="/instances" 
+          <Route path="/contest/register" 
             element={
               <ProtectedRoute>
-                <InstancesPage />
+                <ContestRegisterPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="/contest/:contestId" 
+            element={
+              <ProtectedRoute>
+                <ContestDetailPage />
               </ProtectedRoute>
             } 
           />
