@@ -10,7 +10,9 @@ const HintSchema = new mongoose.Schema({
       required: true,
       default: 1 // Cost in terms of reward reduction
     }
-  });
+  }, {
+    timestamps: true
+});
 
 // Review Schema
 const ReviewSchema = new mongoose.Schema({
@@ -33,10 +35,8 @@ const ReviewSchema = new mongoose.Schema({
         min: 1.0,
         max: 5.0
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+}, {
+    timestamps: true
 });
 
 // Machine Schema
@@ -50,7 +50,7 @@ const MachineSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
-    info: {
+    description: {
         type: String
     },
     exp: {

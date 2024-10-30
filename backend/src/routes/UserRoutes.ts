@@ -29,13 +29,10 @@ import {
 
 const UserRoutes = express.Router();
 
-// Get All Users
-UserRoutes.get("/", verifyToken, 
-    //verifyAdmin, 
-    getAllUser
-);
+// Get All Users(Admin Only)
+UserRoutes.get("/", verifyToken, verifyAdmin, getAllUser);
 
-// Get User Detail
+// Get User Detail(User Only)
 UserRoutes.get("/detail", verifyToken, getUserDetail);
 
 // Get User Detail by user_id(Admin Only)

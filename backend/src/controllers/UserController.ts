@@ -7,7 +7,7 @@ import UserProgress from '../models/UserProgress';
 import { createToken } from '../middlewares/Token';
 import { COOKIE_NAME } from '../middlewares/Constants';
 
-// GET all user information without password
+// GET all user information (Admin Only)
 export const getAllUser = async (req: Request, res: Response) => {
     try {
 		const users = await User.find().select('-password');
@@ -18,11 +18,11 @@ export const getAllUser = async (req: Request, res: Response) => {
 	}
 };
 
-// GET user Detail
+// GET user Detail(User Only)
 export const getUserDetail = async (req: Request, res: Response) => {
     try {
 		const userId = res.locals.jwtData.id;
-        const user = await User.findById(userId).select('-password');
+        const user = await User.findById(userId).select('-password -isAdmin -email -createdAt -updatedAt -__v -_id');
         return res.status(200).json({ message: "OK", user });
     } catch (error) {
         console.log(error);
@@ -43,7 +43,7 @@ export const postSignUp = async (req: Request, res: Response) => {
 
     try {
         // Check if user exists
-        let user = await User.findOne({ email, user_id });
+        let user = await User.findOne({ email, user_id, name });
         if (user) {
             res.status(400).json({
                 errors: [{
@@ -227,7 +227,7 @@ export const verifyUserStatus = async (
 
 		return res
 			.status(200)
-			.json({ message: "OK", user_id: user.user_id, name: user.name, email: user.email });
+			.json({ message: "OK", user_id: user.user_id, name: user.name });
 	} catch (err) {
 		console.log(err);
 		return res
@@ -283,12 +283,28 @@ export const changeName = async (req: Request, res: Response) => {
 	try {
 		const { name } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
+		const isNameExist = await User.findOne({ name });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
 		}
 		if (user._id.toString() !== res.locals.jwtData.id) {
 			return res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
+		}
+		if (name === user.name) {
+			return res.status(401).json({ message: "ERROR", cause: "Name is the same as before" });
+		}
+		if (name.length > 10) {
+			return res.status(401).json({ message: "ERROR", cause: "Name is too long" });
+		}
+		if (name.length < 3) {
+			return res.status(401).json({ message: "ERROR", cause: "Name is too short" });
+		}
+		if (name.includes(' ')) {
+			return res.status(401).json({ message: "ERROR", cause: "Name cannot contain spaces" });
+		}
+		if (isNameExist) {
+			return res.status(401).json({ message: "ERROR", cause: "Name already taken" });
 		}
 		user.name = name;
 		await user.save();
@@ -409,7 +425,7 @@ export const getUserProgress = async (req: Request, res: Response): Promise<void
 			res.status(404).json({ msg: 'User not found.' });
 			return;
 		}
-		const userProgress = await UserProgress.findOne({ user: user._id });
+		const userProgress = await UserProgress.find({ user: user._id });
 		if (!userProgress) {
 			res.status(404).json({ msg: 'User progress not found.' });
 			return;
@@ -430,7 +446,7 @@ export const getUserProgressByUserId = async (req: Request, res: Response) => {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
 		}
-		const userProgress = await UserProgress.findOne({ user: user._id });
+		const userProgress = await UserProgress.find({ user: user._id });
 		if (!userProgress) {
 			res.status(404).json({ msg: 'User progress not found.' });
 			return;
@@ -538,9 +554,9 @@ export const resetUserProgress = async (req: Request, res: Response) => {
 		user.exp = 0;
 		user.level = 1;
 		await user.save();
-		const userProgress = await UserProgress.findOne({ user: user._id });
-		if (userProgress) {
-			await userProgress.deleteOne();
+		const userProgress = await UserProgress.findByIdAndDelete(user._id);
+		if (!userProgress) {
+			return res.status(404).json({ message: "ERROR", cause: "User progress not found." });
 		}
 		return res.status(200).json({ message: "OK", exp: user.exp, level: user.level, userProgress: userProgress });
 	} catch (error: any) {
@@ -561,9 +577,9 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 		user.exp = 0;
 		user.level = 1;
 		await user.save();
-		const userProgress = await UserProgress.findOne({ user: user._id });
-		if (userProgress) {
-			await userProgress.deleteOne();
+		const userProgress = await UserProgress.findByIdAndDelete(user._id);
+		if (!userProgress) {
+			return res.status(404).json({ message: "ERROR", cause: "User progress not found." });
 		}
 		return res.status(200).json({ message: "OK", exp: user.exp, level: user.level, userProgress: userProgress });
 	} catch (error: any) {
@@ -575,7 +591,7 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 //Get Leaderboard
 export const getLeaderboard = async (req: Request, res: Response) => {
 	try {
-		const users = await User.find().sort({ exp: -1 });
+		const users = await User.find().sort({ exp: -1 }).select('-password -isAdmin -email -createdAt -updatedAt -__v -_id');
 		return res.status(200).json({ message: "OK", users });
 	} catch (error: any) {
 		console.error('Error getting leaderboard:', error);

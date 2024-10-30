@@ -19,6 +19,12 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
+        const contestExists = await Contest.findOne({ name, startTime, endTime });
+        if (contestExists) {
+            res.status(400).json({ msg: 'Contest with this name and time already exists.' });
+            return;
+        }
+
         const newContest = new Contest({
             name,
             description,
@@ -390,7 +396,7 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
 export const getContests = async (req: Request, res: Response): Promise<void> => {
     try {
         const contests = await Contest.find();
-        res.json(contests);
+        res.json({ contests });
     } catch (error: any) {
         console.error('Error fetching contests:', error);
         res.status(500).send('Failed to fetch contests.');
@@ -431,7 +437,12 @@ export const getInactiveContestDetails = async (req: Request, res: Response): Pr
 export const getContestDetails = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
-        const contest = await Contest.findById(contestId);
+        const contest = await Contest.findById(contestId).populate('machines', 'name');
+        if (!contest) {
+            res.status(404).json({ msg: 'Contest not found.' });
+            return;
+        }
+
         res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
     } catch (error: any) {
         console.error('Error fetching contest details:', error);
