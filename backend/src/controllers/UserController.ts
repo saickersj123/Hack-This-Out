@@ -11,7 +11,7 @@ import { COOKIE_NAME } from '../middlewares/Constants';
 export const getAllUser = async (req: Request, res: Response) => {
     try {
 		const users = await User.find().select('-password');
-		return res.status(200).json({ message: "OK", users });
+		return res.status(200).json({ message: "OK", users: users });
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: "ERROR", cause: error.message });
@@ -23,7 +23,7 @@ export const getUserDetail = async (req: Request, res: Response) => {
     try {
 		const userId = res.locals.jwtData.id;
         const user = await User.findById(userId).select('-password -isAdmin -createdAt -updatedAt -__v -_id');
-        return res.status(200).json({ message: "OK", user });
+        return res.status(200).json({ message: "OK", user: user });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "ERROR", cause: error.message });
@@ -34,7 +34,7 @@ export const getUserDetail = async (req: Request, res: Response) => {
 export const getUserDetailByUserId = async (req: Request, res: Response) => {
     const { user_id } = req.params;
     const user = await User.findOne({ user_id });
-    return res.status(200).json({ message: "OK", user });
+    return res.status(200).json({ message: "OK", user: user });
 };
 
 // POST user signup
@@ -592,7 +592,7 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 export const getLeaderboard = async (req: Request, res: Response) => {
 	try {
 		const users = await User.find().sort({ exp: -1 }).select('-password -isAdmin -email -createdAt -updatedAt -__v -_id');
-		return res.status(200).json({ message: "OK", users });
+		return res.status(200).json({ message: "OK", users: users });
 	} catch (error: any) {
 		console.error('Error getting leaderboard:', error);
 		res.status(500).send('Server error');

@@ -12,14 +12,14 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
 
     // Validate required fields
     if (!name || !category || !amiId || !flag) {
-      res.status(400).json({ msg: 'Please provide name, category, amiId, and flag.' });
+      res.status(400).json({ message: "ERROR", msg: 'Please provide name, category, amiId, and flag.' });
       return;
     }
 
     // Check if machine with the same name already exists
     const existingMachine = await Machine.findOne({ name });
     if (existingMachine) {
-      res.status(400).json({ msg: 'Machine with this name already exists.' });
+      res.status(400).json({ message: "ERROR", msg: 'Machine with this name already exists.' });
       return;
     }
 
@@ -40,7 +40,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
     });
 
     await newMachine.save();
-    res.status(201).json({ msg: 'Machine created successfully.', machine: newMachine });
+    res.status(201).json({ message: "OK", msg: 'Machine created successfully.', machine: newMachine });
   } catch (error: any) {
     console.error('Error creating machine:', error);
     res.status(500).send('Failed to create machine.');
@@ -53,7 +53,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
 export const getAllMachines = async (req: Request, res: Response): Promise<void> => {
   try {
     const machines = await Machine.find();
-    res.json({ machines });
+    res.status(200).json({ message: "OK", msg: 'Machines fetched successfully.', machines: machines });
   } catch (error: any) {
     console.error('Error fetching machines:', error);
     res.status(500).send('Failed to fetch machines.');
@@ -71,7 +71,7 @@ export const getMachineDetails = async (req: Request, res: Response): Promise<vo
       res.status(404).json({ msg: 'Machine not found.' });
       return;
     }
-    res.json({ machine });
+    res.status(200).json({ message: "OK", msg: 'Machine fetched successfully.', machine: machine });
   } catch (error: any) {
     console.error('Error fetching machine:', error);
     res.status(500).send('Failed to fetch machine.');
@@ -85,7 +85,7 @@ export const getActiveMachineDetails = async (req: Request, res: Response): Prom
   try {
     const { machineId } = req.params;
     const machine = await Machine.findById(machineId, { isActive: true }).select('-hints -flag -__v -reviews');
-    res.json({ machine });
+    res.status(200).json({ message: "OK", msg: 'Active machine fetched successfully.', machine: machine });
   } catch (error: any) {
     console.error('Error fetching active machines:', error);
     res.status(500).send('Failed to fetch active machines.');
@@ -99,7 +99,7 @@ export const getInactiveMachineDetails = async (req: Request, res: Response): Pr
   try {
     const { machineId } = req.params;
     const machine = await Machine.findById(machineId, { isActive: false });
-    res.json({ machine });
+    res.status(200).json({ message: "OK", msg: 'Inactive machine fetched successfully.', machine: machine });
   } catch (error: any) {
     console.error('Error fetching inactive machines:', error);
     res.status(500).send('Failed to fetch inactive machines.');
@@ -113,7 +113,7 @@ export const getMachineDetailsById = async (req: Request, res: Response): Promis
   try {
     const { machineId } = req.body;
     const machine = await Machine.findById(machineId);
-    res.json({ machine });
+    res.status(200).json({ message: "OK", msg: 'Machine fetched successfully.', machine: machine });
   } catch (error: any) {
     console.error('Error fetching machine:', error);
     res.status(500).send('Failed to fetch machine.');
@@ -127,7 +127,7 @@ export const getActiveMachineDetailsById = async (req: Request, res: Response): 
   try {
     const { machineId } = req.body;
     const machine = await Machine.find({ _id: machineId, isActive: true }).select('-hints -flag -__v -reviews');
-    res.json({ machine });
+    res.status(200).json({ message: "OK", msg: 'Active machine fetched successfully.', machine: machine });
   } catch (error: any) {
     console.error('Error fetching machine:', error);
     res.status(500).send('Failed to fetch machine.');
@@ -144,7 +144,7 @@ export const getActiveMachines = async (req: Request, res: Response): Promise<vo
       res.status(404).json({ msg: 'No active machines found.' });
       return;
     };
-    res.json({ machines });
+    res.status(200).json({ message: "OK", msg: 'Active machines fetched successfully.', machines: machines });
   } catch (error: any) {
     console.error('Error fetching active machines:', error);
     res.status(500).send('Failed to fetch active machines.');
@@ -158,7 +158,7 @@ export const getInactiveMachineDetailsById = async (req: Request, res: Response)
   try {
     const { machineId } = req.body;
     const machine = await Machine.find({ _id: machineId, isActive: false });
-    res.json({ machine });
+    res.status(200).json({ message: "OK", msg: 'Inactive machine fetched successfully.', machine: machine });
   } catch (error: any) {
     console.error('Error fetching inactive machines:', error);
     res.status(500).send('Failed to fetch inactive machines.');
@@ -171,7 +171,7 @@ export const getInactiveMachineDetailsById = async (req: Request, res: Response)
 export const getInactiveMachines = async (req: Request, res: Response): Promise<void> => {
   try {
     const machines = await Machine.find({ isActive: false });
-    res.json({ machines });
+    res.status(200).json({ message: "OK", msg: 'Inactive machines fetched successfully.', machines: machines });
   } catch (error: any) {
     console.error('Error fetching inactive machines:', error);
     res.status(500).send('Failed to fetch inactive machines.');
@@ -213,7 +213,7 @@ export const getMachineStatus = async (req: Request, res: Response): Promise<voi
   try {
     const { machineId } = req.params;
     const machine = await Machine.findById(machineId);
-    res.json({ machine: machine.isActive });
+    res.status(200).json({ message: "OK", machine: machine.isActive });
   } catch (error: any) {
     console.error('Error fetching machine status:', error);
     res.status(500).send('Failed to fetch machine status.');
@@ -250,7 +250,7 @@ export const updateMachineDetails = async (req: Request, res: Response): Promise
     if (hints) machine.hints = hints.map((hint: string, index: number) => ({ content: hint, cost: hintCosts[index] }));
 
     await machine.save();
-    res.json({ msg: 'Machine updated successfully.', machine });
+    res.status(200).json({ message: "OK", msg: 'Machine updated successfully.', machine: machine });
   } catch (error: any) {
     console.error('Error updating machine:', error);
     res.status(500).send('Failed to update machine.');
@@ -375,7 +375,7 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
   
         res.status(200).json({ 
             msg: 'Flag accepted.',
-            expEarned,
+            expEarned: expEarned,
             totalExp: user?.exp
         });
     } catch (error) {
@@ -460,8 +460,8 @@ export const getMachineReviewCount = async (req: Request, res: Response): Promis
 export const getMachineReviewsbyUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const { userId } = req.params;
-        const machine = await Machine.find({ reviews: { $elemMatch: { reviewerId: userId } } });
-        res.json({ machine });
+        const machineReviews = await Machine.find({ reviews: { $elemMatch: { reviewerId: userId } } });
+        res.status(200).json({ message: "OK", reviews: machineReviews });
     } catch (error) {
         console.error('Error fetching machine reviews by user:', error);
         res.status(500).send('Failed to fetch machine reviews by user.');
@@ -476,7 +476,7 @@ export const getMachineReview = async (req: Request, res: Response): Promise<voi
         const { machineId, reviewId } = req.params;
         const machine = await Machine.findById(machineId);
         const review = machine?.reviews.find((r) => r._id.toString() === reviewId);
-        res.json({ review });
+        res.status(200).json({ message: "OK", review: review });
     } catch (error) {
         console.error('Error fetching machine review:', error);
         res.status(500).send('Failed to fetch machine review.');
@@ -492,13 +492,13 @@ export const deleteMachineReview = async (req: Request, res: Response): Promise<
         const machine = await Machine.findById(machineId);
         const review = machine?.reviews.find((r) => r._id.toString() === reviewId);
         if (!machine || !review) {
-            res.status(404).json({ msg: 'Machine or review not found.' });
+            res.status(404).json({ message: "ERROR", msg: 'Machine or review not found.' });
             return;
         }
         await Machine.findByIdAndUpdate(machineId, {
             $pull: { reviews: { _id: reviewId } }
         });
-        res.json({ msg: 'Review deleted successfully.' });
+        res.status(200).json({ message: "OK", msg: 'Review deleted successfully.' });
     } catch (error) {
         console.error('Error deleting machine review:', error);
         res.status(500).send('Failed to delete machine review.');
@@ -530,7 +530,7 @@ export const updateMachineReview = async (req: Request, res: Response): Promise<
         if (newReview) review.content = newReview;
         if (newRating) review.rating = newRating; 
         await machine.save();
-        res.json({ msg: 'Review updated successfully.' });
+        res.status(200).json({ message: "OK", msg: 'Review updated successfully.' });
     } catch (error) {
         console.error('Error updating machine review:', error);
         res.status(500).send('Failed to update machine review.');
@@ -544,7 +544,7 @@ export const getMachineRating = async (req: Request, res: Response): Promise<voi
     try {
         const { machineId } = req.params;
         const machine = await Machine.findById(machineId);
-        res.json({ rating: machine?.rating });
+        res.status(200).json({ message: "OK", rating: machine?.rating });
     } catch (error) {
         console.error('Error fetching machine rating:', error);
         res.status(500).send('Failed to fetch machine rating.');
@@ -567,7 +567,7 @@ export const deleteMachineReviewForce = async (req: Request, res: Response): Pro
         await Machine.findByIdAndUpdate(machineId, {
             $pull: { reviews: { _id: reviewId } }
         });
-        res.json({ msg: 'Review deleted forcefully.' });
+        res.status(200).json({ message: "OK", msg: 'Review deleted forcefully.' });
     } catch (error) {
         console.error('Error deleting machine review forcefully:', error);
         res.status(500).send('Failed to delete machine review forcefully.');

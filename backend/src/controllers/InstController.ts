@@ -214,7 +214,7 @@ export const getInstanceByMachine = async (req: Request, res: Response) => {
 export const getAllInstances = async (req: Request, res: Response) => {
   try {
     const instances = await Instance.find();
-    res.json({ instances });
+    res.status(200).json({ message: "OK", instances: instances });
   } catch (error) {
     console.error('Error fetching all instances:', error);  
     res.status(500).send('Server error');
@@ -234,11 +234,11 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ message: "ERROR", msg: 'Instance not found' });
       return;
     }
 
-    res.json(instance);
+    res.status(200).json({ message: "OK", instance: instance });
   } catch (error) {
     console.error('Error fetching instance details:', error);
     res.status(500).send('Server error');
@@ -260,7 +260,7 @@ export const deleteInstance = async (req: Request, res: Response) => {
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ message: "ERROR", msg: 'Instance not found' });
       return;
     }
 
@@ -278,7 +278,7 @@ export const deleteInstance = async (req: Request, res: Response) => {
     // Optionally, delete the instance record from DB
     await Instance.deleteOne({ instanceId });
 
-    res.json({ msg: 'Instance terminated and deleted successfully.' });
+    res.status(200).json({ message: "OK", msg: 'Instance terminated and deleted successfully.' });
   } catch (error) {
     console.error('Error deleting instance:', error);
     res.status(500).send('Server error');
@@ -318,7 +318,7 @@ export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
     const userId = res.locals.jwtData.id;
 
     if (!userId) {
-      return res.status(401).json({ msg: "User not registered / token malfunctioned" });
+      return res.status(401).json({ message: "ERROR", msg: "User not registered / token malfunctioned" });
     }
 
     const bucketName = config.aws.s3BucketName;
@@ -332,7 +332,7 @@ export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
     const data = await s3Client.send(command);
 
     if (!data.Body) {
-      return res.status(404).json({ msg: 'VPN profile not found.' });
+      return res.status(404).json({ message: "ERROR", msg: 'VPN profile not found.' });
     }
 
     // Set appropriate headers for file download
@@ -348,9 +348,9 @@ export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('Error downloading OpenVPN profile from S3:', error);
     if (error.name === 'NoSuchKey') {
-      res.status(404).json({ msg: 'VPN profile does not exist.' });
+      res.status(404).json({ message: "ERROR", msg: 'VPN profile does not exist.' });
     } else {
-      res.status(500).json({ msg: 'Failed to download OpenVPN profile.' });
+      res.status(500).json({ message: "ERROR", msg: 'Failed to download OpenVPN profile.' });
     }
   }
 };
@@ -361,16 +361,16 @@ export const terminateInstance = async (req: Request, res: Response) => {
     const userId = res.locals.jwtData.id;
 
     if (!userId) {
-      return res.status(401).json("User not registered / token malfunctioned");
+      return res.status(401).json({ message: "ERROR", msg: "User not registered / token malfunctioned" });
     }
     const machine = await Machine.findById(machineId);
     if (!machine) { 
-      res.status(400).json({ msg: 'Invalid machine ID selected' });
+      res.status(400).json({ message: "ERROR", msg: 'Invalid machine ID selected' });
       return;
     }
     const instance = await Instance.findOne({ machineType: machine.name, user: userId });
     if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ message: "ERROR", msg: 'Instance not found' });
       return;
     }
 
@@ -383,7 +383,7 @@ export const terminateInstance = async (req: Request, res: Response) => {
     instance.status = 'terminated';
     await instance.save();
 
-    res.json({ msg: 'Instance terminated successfully.' });
+    res.status(200).json({ message: "OK", msg: 'Instance terminated successfully.' });
   } catch (error) {
     console.error('Error terminating instance:', error);
     res.status(500).send('Server error');
