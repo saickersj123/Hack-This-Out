@@ -322,7 +322,14 @@ const AddContestForm = ({ onContestAdded }) => {
                             required
                             aria-autocomplete="list"
                             aria-controls={`suggestions-${index}`}
-                            aria-expanded={focusedMachineIndex === index && suggestions[index] && suggestions[index].length > 0}
+                            aria-expanded={focusedMachineIndex === index && suggestions[index]?.length > 0}
+                            role="combobox"
+                            aria-haspopup="listbox"
+                            aria-activedescendant={
+                                activeSuggestion[index] >= 0
+                                    ? `suggestion-${index}-${activeSuggestion[index]}`
+                                    : undefined
+                            }
                         />
                         {machines.length > 1 && (
                             <button
@@ -333,10 +340,15 @@ const AddContestForm = ({ onContestAdded }) => {
                             </button>
                         )}
                         {focusedMachineIndex === index && suggestions[index] && suggestions[index].length > 0 ? (
-                            <ul className="suggestions-list" id={`suggestions-${index}`} role="listbox">
+                            <ul
+                                className="suggestions-list"
+                                id={`suggestions-${index}`}
+                                role="listbox"
+                            >
                                 {suggestions[index].map((suggestion, sIndex) => (
                                     <li
                                         key={sIndex}
+                                        id={`suggestion-${index}-${sIndex}`}
                                         className={activeSuggestion[index] === sIndex ? 'active' : ''}
                                         onMouseDown={() => handleSuggestionClick(index, suggestion)}
                                         onMouseEnter={() =>
