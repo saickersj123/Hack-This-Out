@@ -40,7 +40,12 @@ const Profile: React.FC = () => {
     const fetchUserDetail = async () => {
         try {
             const response = await getUserDetail();
-            setUser(response.user);
+            console.log('User detail response:', response);
+            if (response && response.user) {
+                setUser(response.user);
+            } else {
+                console.error('User data is missing in the response');
+            }
         } catch (error) {
             console.error('Failed to fetch user details:', error);
             // Optionally, handle the error (e.g., show a notification)
