@@ -54,6 +54,7 @@
   "devDependencies": {
     "@babel/plugin-transform-private-property-in-object": "^7.25.9",
     "sass": "^1.80.6",
-    "sass-loader": "^16.0.3"
+    "sass-loader": "^16.0.3",
+    "react-scripts": "^5.0.1"
   }
 }
