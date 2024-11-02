@@ -2,14 +2,14 @@
   "name": "hackthisout",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
-    "@craco/craco": "^7.1.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fontsource-variable/noto-sans-kr": "^5.1.0",
     "@fontsource/roboto": "^5.1.0",
-    "@mui/icons-material": "^6.1.5",
-    "@mui/material": "^6.1.5",
+    "@mui/icons-material": "^6.1.6",
+    "@mui/material": "^6.1.6",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -26,12 +26,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "eslintConfig": {
     "extends": [
@@ -53,8 +53,18 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-private-property-in-object": "^7.25.9",
-    "react-scripts": "^5.0.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^9.14.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
     "sass": "^1.80.6",
-    "sass-loader": "^16.0.3"
+    "sass-loader": "^16.0.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
   }
 }

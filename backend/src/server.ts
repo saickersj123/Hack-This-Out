@@ -16,8 +16,7 @@ connectDB();
 
 //CORS
 app.use(cors({
-    //origin: "http://localhost:3000", //for local test
-    origin: "https://app.hackthisout.o-r.kr",
+    origin: process.env.ORIGIN_URL,
     credentials: true
 }));
 

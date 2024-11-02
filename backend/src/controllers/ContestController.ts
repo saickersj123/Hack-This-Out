@@ -136,7 +136,6 @@ export const getContestStatus = async (req: Request, res: Response): Promise<voi
 export const participateInContest = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
-        const { machineId } = req.body;
         const userId = res.locals.jwtData.id;
 
         const contest = await Contest.findById(contestId);
@@ -151,24 +150,17 @@ export const participateInContest = async (req: Request, res: Response): Promise
             return;
         }
 
-        // Check if machine is part of the contest
-        if (!contest.machines.includes(machineId)) {
-            res.status(400).json({ msg: 'Machine not part of the contest.' });
-            return;
-        }
-
         // Check if already participated
-        const existingParticipation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
+        const existingParticipation = await ContestParticipation.findOne({ user: userId, contest: contestId });
         if (existingParticipation) {
-            res.status(400).json({ msg: 'Already participated in this contest for this machine.' });
+            res.status(400).json({ msg: 'Already participated in this contest.' });
             return;
         }
 
         // Create a new participation record without setting participationStartTime
         const newParticipation = new ContestParticipation({
             user: userId,
-            contest: contestId,
-            machine: machineId
+            contest: contestId
         });
 
         await newParticipation.save();
@@ -176,6 +168,46 @@ export const participateInContest = async (req: Request, res: Response): Promise
     } catch (error: any) {
         console.error('Error participating in contest:', error);
         res.status(500).send('Failed to participate in contest.');
+    }
+};
+
+/**
+ * Start playing a contest.
+ */
+export const startPlayingContest = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const userId = res.locals.jwtData.id;
+        if (!userId) {
+            res.status(400).json({ msg: 'User not found.' });
+            return;
+        }
+
+        const contest = await Contest.findById(contestId);
+        if (!contest) {
+            res.status(404).json({ msg: 'Contest not found.' });
+            return;
+        }
+
+        const currentTime = new Date();
+        if (currentTime < contest.startTime) {
+            res.status(400).json({ msg: 'Contest has not started yet.' });
+            return;
+        }
+
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId });
+        if (!participation) {
+            res.status(400).json({ msg: 'You are not participating in this contest.' });
+            return;
+        }
+
+        participation.participationStartTime = currentTime;
+        await participation.save();
+
+        res.status(200).json({ msg: 'Contest started successfully.', participation });
+    } catch (error: any) {
+        console.error('Error starting contest:', error);
+        res.status(500).send('Failed to start contest.');
     }
 };
 
@@ -199,8 +231,8 @@ export const getUserContestParticipation = async (req: Request, res: Response): 
  */
 export const submitFlagForContest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { contestId } = req.params;
-        const { machineId, flag } = req.body;
+        const { contestId, machineId } = req.params;
+        const { flag } = req.body;
         const userId = res.locals.jwtData.id;
 
         const contest = await Contest.findById(contestId);
@@ -222,12 +254,12 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
         }
 
         // Verify if the machine is part of the contest
-        if (!contest.machines.includes(machineId)) {
+        if(contest.machines.indexOf(machineId as any) === -1) {    
             res.status(400).json({ msg: 'Machine not part of the contest.' });
             return;
         }
 
-        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: contest.machines[0]._id });
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
         if (!participation) {
             res.status(400).json({ msg: 'Participation not found. Please participate first.' });
             return;
@@ -262,7 +294,6 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
 
         if (expEarned < 0) expEarned = 0;
 
-        participation.participationEndTime = currentTime;
         participation.expEarned = expEarned;
 
         await participation.save();
@@ -283,12 +314,40 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
 };
 
 /**
+ * End playing a contest.
+ */
+export const endPlayingContest = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId, machineId } = req.params;
+        const userId = res.locals.jwtData.id;
+        if (!userId) {
+            res.status(400).json({ msg: 'User not found.' });
+            return;
+        }
+
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
+        if (!participation) {
+            res.status(400).json({ msg: 'Participation not found.' });
+            return;
+        }
+
+        participation.participationEndTime = new Date();
+        await participation.save();
+
+        res.status(200).json({ msg: 'Contest ended successfully.', participation });
+    } catch (error: any) {
+        console.error('Error ending playing contest:', error);
+        res.status(500).send('Failed to end playing contest.');
+    }
+};
+
+
+/**
  * Use a hint in a contest.
  */
 export const getHintInContest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { contestId } = req.params;
-        const { machineId } = req.body;
+        const { contestId, machineId } = req.params;
         const userId = res.locals.jwtData.id;
 
         const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
