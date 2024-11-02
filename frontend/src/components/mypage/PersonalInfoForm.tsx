@@ -9,6 +9,7 @@ interface UserData {
   user_id: string;
   avatar: string;
   exp: number;
+  level: number;
 }
 
 const PersonalInfoForm: React.FC = () => {
@@ -18,6 +19,7 @@ const PersonalInfoForm: React.FC = () => {
     user_id: '',
     avatar: '',
     exp: 0,
+    level: 0,
   });
   const [name, setName] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
