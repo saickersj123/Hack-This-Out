@@ -40,12 +40,7 @@ const Profile: React.FC = () => {
     const fetchUserDetail = async () => {
         try {
             const response = await getUserDetail();
-            console.log('User detail response:', response);
-            if (response && response.user) {
-                setUser(response.user);
-            } else {
-                console.error('User data is missing in the response');
-            }
+            setUser(response.user);
         } catch (error) {
             console.error('Failed to fetch user details:', error);
             // Optionally, handle the error (e.g., show a notification)
@@ -82,7 +77,7 @@ const Profile: React.FC = () => {
                         <img className="profile_icon" alt="profile_icon" src={profileIcon} />
                     </span>
                     <span className="userNametext">
-                        <p>{user?.name || 'Loading...'}</p>
+                        <p>{user.name}</p>
                     </span>
                     <img src={arrowIcon} alt="arrow_icon" className="arrow-icon" />
                 </button>
