@@ -46,7 +46,7 @@ const LeaderBoardPage: React.FC = () => {
       <div className="leaderboard-page">
         {loading && <p>Loading leaderboard...</p>}
         {error && <p className="error">{error}</p>}
-        {!loading && !error && <LeaderboardTable rankings={leaderboard} />}
+        {!loading && !error && <LeaderboardTable leaderboard={leaderboard} />}
       </div>
     </Main>
   );

@@ -9,10 +9,10 @@ interface User {
 }
 
 interface LeaderboardTableProps {
-    rankings: User[];
+    leaderboard: User[];
 }
 
-const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ rankings }) => {
+const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard }) => {
     return (
         <div className='leaderboard-container'>
             <div className='leaderboard-title'>Leaderboard</div>
@@ -26,9 +26,9 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ rankings }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {rankings.length > 0 ? (
-                        rankings.map((user, index) => (
-                            <tr key={user._id}>
+                    {leaderboard.length > 0 ? (
+                        leaderboard.map((user, index) => (
+                            <tr key={`${user._id}-${index}`}>
                                 <td className="rank-col">{index + 1}</td>
                                 <td className="level-col">{user.level}</td>
                                 <td className="user-col">{user.name}</td>
@@ -36,7 +36,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ rankings }) => {
                             </tr>
                         ))
                     ) : (
-                        <tr>
+                        <tr key="no-users-found">
                             <td colSpan={4} className="no-data">No users found</td>
                         </tr>
                     )}

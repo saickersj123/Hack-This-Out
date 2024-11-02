@@ -14,6 +14,4 @@ root.render(
 );
 
 // Only report web vitals in production
-if (import.meta.env.PROD) {
-  reportWebVitals(console.log);
-}
+reportWebVitals(console.log);
