@@ -84,7 +84,7 @@ const Profile: React.FC = () => {
                         <img className="profile_icon" alt="profile_icon" src={profileIcon} />
                     </span>
                     <span className="userNametext">
-                        <p>{user.name || 'Guest'}</p>
+                        <p>{user.name || ''}</p>
                     </span>
                     <img src={arrowIcon} alt="arrow_icon" className="arrow-icon" />
                 </button>
