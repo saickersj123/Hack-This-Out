@@ -136,13 +136,13 @@ export const postLoginUser = async (req: Request, res: Response) => {
             return;
         }
         // Clear any existing token
-        res.cookie(COOKIE_NAME, 'clear_token', {
+        res.clearCookie(COOKIE_NAME, {
 			path: '/',
 			httpOnly: true,
 			signed: true,
 			sameSite: isProduction ? 'none' : 'lax',
 			secure: isProduction,
-			maxAge: 0,
+			domain: process.env.DOMAIN,
 		});
 
 		// create token
@@ -192,13 +192,13 @@ export const logoutUser = async (
 		}
 
         // Clear any existing token
-		res.cookie(COOKIE_NAME, 'clear_token', {
+		res.clearCookie(COOKIE_NAME, {
 			path: '/',
 			httpOnly: true,
 			signed: true,
 			sameSite: isProduction ? 'none' : 'lax',
 			secure: isProduction,
-			maxAge: 0,
+			domain: process.env.DOMAIN,
 		});
 
 		return res
