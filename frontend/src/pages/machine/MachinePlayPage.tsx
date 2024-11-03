@@ -82,14 +82,14 @@ const MachinePlayPage: React.FC = () => {
           <h2>Machine Play</h2>
         </div>
         <div className="machine-play-name">
-          <h3>{machine.name}</h3>
+          <h3>Now Playing: {machine.name}</h3>
         </div>
         <DisplayReward reward={machine.exp} />
         <DownloadVPNProfile />
         <InstanceInfo machineId={machineId || ''} />
         <StartInstanceButton machineId={machineId || ''} />
-        <GetHints machineId={machineId || ''} />
-        <SubmitFlagForm machineId={machineId || ''} />
+        <GetHints machineId={machineId || ''} playType="machine" />
+        <SubmitFlagForm machineId={machineId || ''} playType="machine" />
       </div>
     </Main>
   );

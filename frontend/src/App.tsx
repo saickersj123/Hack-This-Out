@@ -5,16 +5,21 @@ import LoginPage from './pages/public/LoginPage';
 import MainPage from './pages/public/MainPage';
 import LoadingPage from './pages/public/LoadingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import PreContestPage from './pages/contest/PreContestPage';
 
 // Lazy-loaded components
 const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage'));
 const ContestListPage = lazy(() => import('./pages/contest/ContestListPage'));
 const ContestDetailPage = lazy(() => import('./pages/contest/ContestDetailPage'));
 const ContestRegisterPage = lazy(() => import('./pages/contest/ContestRegisterPage'));
+const ContestCompletePage = lazy(() => import('./pages/contest/ContestCompletePage'));
+const ContestPendingPage = lazy(() => import('./pages/contest/ContestPendingPage'));
+const ContestPlayPage = lazy(() => import('./pages/contest/ContestPlayPage'));
 const MachineListPage = lazy(() => import('./pages/machine/MachineListPage'));
 const MachineDetailPage = lazy(() => import('./pages/machine/MachineDetailPage'));
 const MachineRegisterPage = lazy(() => import('./pages/machine/MachineRegisterPage'));
 const MachinePlayPage = lazy(() => import('./pages/machine/MachinePlayPage'));
+const MachineCompletePage = lazy(() => import('./pages/machine/MachineCompletePage'));
 const MyPage = lazy(() => import('./pages/user/MyPage'));
 
 const App: React.FC = () => {
@@ -68,6 +73,38 @@ const App: React.FC = () => {
               }
             />
             <Route
+              path="/contest/:contestId/pre"
+              element={
+                <ProtectedRoute>
+                  <PreContestPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/contest/:contestId/play"
+              element={
+                <ProtectedRoute>
+                  <ContestPlayPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/contest/:contestId/complete"
+              element={
+                <ProtectedRoute>
+                  <ContestCompletePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/contest/:contestId/pending"
+              element={
+                <ProtectedRoute>
+                  <ContestPendingPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/machines"
               element={
                 <ProtectedRoute>
@@ -92,10 +129,10 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path="/mypage"
+              path="/machine/:machineId/complete"
               element={
                 <ProtectedRoute>
-                  <MyPage />
+                  <MachineCompletePage />
                 </ProtectedRoute>
               }
             />
@@ -104,6 +141,14 @@ const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <MachinePlayPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mypage"
+              element={
+                <ProtectedRoute>
+                  <MyPage />
                 </ProtectedRoute>
               }
             />

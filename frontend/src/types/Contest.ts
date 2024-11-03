@@ -15,7 +15,7 @@ export interface ContestDetail {
   description: string;
   contestExp: number;
   machines: Machine[];
-  startTime: Date | null;
-  endTime: Date | null;
+  startTime: Date;
+  endTime: Date;
   isActive: boolean;
 } 

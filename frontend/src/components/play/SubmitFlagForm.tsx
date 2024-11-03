@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from 'react';
-import { submitFlagMachine, submitFlag } from '../../api/axiosInstance';
+import { submitFlagMachine, submitFlagForContest, submitFlag } from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
  */
 interface SubmitFlagFormProps {
   machineId: string;
+  playType: 'machine' | 'contest';
+  contestId?: string; // Optional, required only for contest mode
 }
 
 /**
@@ -26,9 +28,9 @@ interface SubmitFlagResponse {
 }
 
 /**
- * Component for submitting a flag for a machine.
+ * Component for submitting a flag for a machine or contest.
  */
-const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId }) => {
+const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, contestId }) => {
   const [flag, setFlag] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [errors, setErrors] = useState<ErrorMessage[]>([]);
@@ -49,16 +51,34 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId }) => {
       return;
     }
 
+    if (playType === 'contest' && !contestId) {
+      setErrors([{ msg: 'Contest ID is missing for contest mode.' }]);
+      return;
+    }
+
     if (!flag.trim()) {
       setErrors([{ msg: 'Flag cannot be empty.' }]);
       return;
     }
 
     try {
-      const machineResponse: SubmitFlagResponse = await submitFlagMachine(machineId, flag);
-      const instanceResponse: SubmitFlagResponse = await submitFlag(machineId, flag);
-      setMessage(machineResponse.msg || instanceResponse.msg || 'Flag submitted successfully!');
-      navigate(`/machine/${machineId}`);
+      let response: SubmitFlagResponse;
+
+      if (playType === 'machine') {
+        response = await submitFlagMachine(machineId, flag);
+        const instanceResponse = await submitFlag(machineId, flag);
+        setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully!');
+        navigate(`/machine/${machineId}`);
+      } else if (playType === 'contest') {
+        if (!contestId) {
+          setErrors([{ msg: 'Contest ID is required for contest mode.' }]);
+          return;
+        }
+        const instanceResponse = await submitFlag(machineId, flag);
+        response = await submitFlagForContest(contestId, machineId, flag);
+        setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully for contest!');
+        navigate(`/contest/${contestId}/complete`);
+      }
     } catch (error: any) {
       // Handle different error structures
       if (error.response && error.response.data) {

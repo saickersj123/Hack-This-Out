@@ -1,52 +1,86 @@
-import React, { useState } from 'react';
-import { getMachineHints } from '../../api/axiosInstance';
+import React, { useState, useEffect } from 'react';
+import { getMachineHints, getHintInContest } from '../../api/axiosInstance';
 
 /**
  * Props interface for GetHints component.
  */
 interface GetHintsProps {
   machineId: string;
+  playType: 'machine' | 'contest';
+  contestId?: string; // Optional, required only for contest mode
 }
 
 /**
- * Component to fetch and display hints for a machine.
+ * Interface representing the hint data.
  */
-const GetHints: React.FC<GetHintsProps> = ({ machineId }) => {
-  const [hint, setHint] = useState<string>('');
+interface Hint {
+  id: string;
+  content: string;
+}
+
+/**
+ * Interface representing an error message.
+ */
+interface ErrorMessage {
+  msg: string;
+}
+
+/**
+ * Component to fetch and display hints for a machine or contest.
+ */
+const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) => {
+  const [hints, setHints] = useState<Hint[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ErrorMessage | null>(null);
 
   /**
-   * Handles fetching hints from the API.
+   * Fetch hints based on play type.
    */
-  const handleGetHints = async () => {
+  const fetchHints = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await getMachineHints(machineId);
-      setHint(response.hint);
-      alert('Hints fetched successfully.');
-    } catch (error: any) {
-      console.error('Error fetching hints:', error);
-      setError(error.msg || 'Failed to fetch hints.');
-      alert(error.msg || 'Failed to fetch hints.');
+      let fetchedHints: Hint[] = [];
+      if (playType === 'machine') {
+        const response = await getMachineHints(machineId);
+        fetchedHints = response.hints;
+      } else if (playType === 'contest') {
+        if (!contestId) {
+          throw new Error('Contest ID is missing for contest mode.');
+        }
+        const response = await getHintInContest(contestId, machineId);
+        fetchedHints = response.hints;
+      }
+      setHints(fetchedHints);
+    } catch (err: any) {
+      console.error('Error fetching hints:', err);
+      setError({ msg: err.msg || 'Failed to fetch hints.' });
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchHints();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [machineId, playType, contestId]);
+
   return (
     <div className="get-hints-container">
-      <button onClick={handleGetHints} disabled={loading}>
-        {loading ? 'Fetching Hints...' : 'Get Hints'}
-      </button>
-      {error && <div className="error-message">{error}</div>}
-      {hint && (
-        <div className="hint-display">
-          <h3>Hint:</h3>
-          <p>{hint}</p>
-        </div>
+      <h3>Hints</h3>
+      {loading && <p>Loading hints...</p>}
+      {error && <div className="error-message">{error.msg}</div>}
+      {!loading && !error && hints.length === 0 && <p>No hints available.</p>}
+      {!loading && !error && hints.length > 0 && (
+        <ul className="hints-list">
+          {hints.map((hint) => (
+            <li key={hint.id}>{hint.content}</li>
+          ))}
+        </ul>
       )}
+      <button onClick={fetchHints} disabled={loading} className="refresh-hints-button">
+        {loading ? 'Refreshing...' : 'Refresh Hints'}
+      </button>
     </div>
   );
 };

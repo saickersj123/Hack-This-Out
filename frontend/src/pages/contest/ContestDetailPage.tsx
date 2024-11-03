@@ -31,7 +31,7 @@ const ContestDetailPage: React.FC = () => {
 
       try {
         const response = await getContestDetails(contestId);
-        setContestDetail(response.contest); // Assumes response.contest is of type ContestDetailType
+        setContestDetail(response.contest);
       } catch (error: any) {
         console.error('Error fetching contest details:', error.message || error);
         setError('Failed to fetch contest details.');
@@ -46,11 +46,13 @@ const ContestDetailPage: React.FC = () => {
   /**
    * Handles navigation to the participate page.
    */
-  const handleParticipate = () => {
-    if (contestDetail && contestDetail._id) {
-      navigate(`/contest/${contestDetail._id}/participate`);
+  const handlePlay = () => {
+    const isContestActive = contestDetail && contestDetail._id && contestDetail.isActive 
+      && contestDetail.startTime.getTime() > Date.now() && contestDetail.endTime.getTime() > Date.now();
+    if (isContestActive) {
+      navigate(`/contest/${contestDetail?._id}/pre`);
     } else {
-      alert('Invalid contest details.');
+      navigate(`/contest/${contestDetail?._id}/pending`);
     }
   };
 
@@ -78,8 +80,8 @@ const ContestDetailPage: React.FC = () => {
     <Main title="Contest Detail" description="Contest Detail 화면입니다.">
       <div className="contest-detail-page">
         <ContestDetail contestDetail={contestDetail} />
-        <button onClick={handleParticipate} className="participate-button">
-          Participate
+        <button onClick={handlePlay} className="participate-button">
+          Play
         </button>
       </div>
     </Main>
