@@ -89,6 +89,9 @@ export const postSignUp = async (req: Request, res: Response) => {
         user.password = await bcrypt.hash(password, salt);
         await user.save();
 
+		// Clear any existing token
+		res.clearCookie(COOKIE_NAME, getCookieOptions());
+
 		// create token
 		const token = createToken(user._id.toString(), user.email, "7d");
 
@@ -136,14 +139,7 @@ export const postLoginUser = async (req: Request, res: Response) => {
             return;
         }
         // Clear any existing token
-        res.clearCookie(COOKIE_NAME, {
-			path: '/',
-			httpOnly: true,
-			signed: true,
-			sameSite: isProduction ? 'none' : 'lax',
-			secure: isProduction,
-			domain: process.env.DOMAIN,
-		});
+		res.clearCookie(COOKIE_NAME, getCookieOptions());
 
 		// create token
 		const token = createToken(user._id.toString(), user.email, "7d");
@@ -184,14 +180,7 @@ export const logoutUser = async (
 		}
 
         // Clear any existing token
-		res.clearCookie(COOKIE_NAME, {
-			path: '/',
-			httpOnly: true,
-			signed: true,
-			sameSite: isProduction ? 'none' : 'lax',
-			secure: isProduction,
-			domain: process.env.DOMAIN,
-		});
+		res.clearCookie(COOKIE_NAME, getCookieOptions());
 
 		return res
 			.status(200)
