@@ -151,15 +151,7 @@ export const postLoginUser = async (req: Request, res: Response) => {
 		const expires = new Date();
 		expires.setDate(expires.getDate() + 7);
 
-		res.cookie(COOKIE_NAME, token, {
-			path: "/", //cookie directory in browser
-			domain: process.env.DOMAIN, // our website domain
-			expires, // same as token expiration time
-			httpOnly: true,
-			signed: true,
-			sameSite: 'lax',
-			secure: true,
-		});
+		res.cookie(COOKIE_NAME, token, getCookieOptions());
 
 		return res
 			.status(200)
