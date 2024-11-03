@@ -643,7 +643,7 @@ export const submitFlagMachine = async (machineId: string, flag: string) => {
  */
 export const postMachineReview = async (machineId: string, reviewData: any) => {
   try {
-    const response = await axiosInstance.post(`/machines/${machineId}/reviews`, reviewData);
+    const response = await axiosInstance.post(`/machines/${machineId}/review`, reviewData);
     return response.data;
   } catch (error: any) {
     throw error.response ? error.response.data : new Error('Failed to post machine review');
@@ -675,6 +675,15 @@ export const updateMachineReview = async (machineId: string, reviewId: string, u
 export const deleteMachineReview = async (machineId: string, reviewId: string) => {
   try {
     const response = await axiosInstance.delete(`/machines/${machineId}/reviews/${reviewId}`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : new Error('Failed to delete machine review');
+  }
+};
+
+export const deleteMyMachineReview = async (machineId: string) => {
+  try {
+    const response = await axiosInstance.delete(`/machines/${machineId}/reviews`);
     return response.data;
   } catch (error: any) {
     throw error.response ? error.response.data : new Error('Failed to delete machine review');

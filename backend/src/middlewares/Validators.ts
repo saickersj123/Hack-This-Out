@@ -34,3 +34,14 @@ export const signUpValidator = [
 		.isLength({ min: 8, max: 15 })
 		.withMessage("Password should contain minimum 8 and maximum 15 characters")
 ];
+
+export const machineReviewValidator = [
+	body("content")
+		.trim()
+		.notEmpty()
+		.withMessage("Content is required"),
+	body("rating")
+		.trim()
+		.notEmpty()
+		.withMessage("Rating is required")
+];

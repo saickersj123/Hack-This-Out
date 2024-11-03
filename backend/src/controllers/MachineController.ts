@@ -12,7 +12,14 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
 
     // Validate required fields
     if (!name || !category || !amiId || !flag) {
-      res.status(400).json({ message: "ERROR", msg: 'Please provide name, category, amiId, and flag.' });
+      const missingFields = [];
+      if (!name) missingFields.push('name');
+      if (!category) missingFields.push('category');
+      if (!amiId) missingFields.push('amiId');
+      if (!flag) missingFields.push('flag');
+      
+      console.error('Missing fields:', missingFields);
+      res.status(400).json({ message: "ERROR", msg: `Missing fields: ${missingFields.join(', ')}` });
       return;
     }
 
@@ -26,15 +33,22 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
     // Hash the flag before saving
     const saltRounds = 10;
     const hashedFlag = await bcrypt.hash(flag, saltRounds);
-    const hintsArray = hints.filter((hint: string) => hint.trim() !== '');
+    const hintsArray = hints && Array.isArray(hints) ? hints.filter((hint: string) => hint.trim() !== '') : [];
+    const hintCostsArray = hintCosts && Array.isArray(hintCosts) ? hintCosts : [];
+
+    // Ensure hints and hintCosts arrays are of the same length
+    if (hintsArray.length !== hintCostsArray.length) {
+      res.status(400).json({ message: "ERROR", msg: 'Number of hints and hint costs must match.' });
+      return;
+    }
 
     const newMachine = new Machine({
       name,
       category,
       description,
-      exp,
+      exp: exp || 50,
       amiId,
-      hints: hintsArray.map((hint: string, index: number) => ({ content: hint, cost: hintCosts[index] })),
+      hints: hintsArray.map((hint: string, index: number) => ({ content: hint, cost: hintCostsArray[index] })),
       flag: hashedFlag, // Assign the hashed flag
       isActive: false
     });
@@ -417,7 +431,7 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
   
         if (expEarned < 0) expEarned = 0;
   
-        // Update user progress and EXP
+        // Update user progress
         await UserProgress.findOneAndUpdate(
             { user: userId, machine: machineId, completedAt: null },
             { 
@@ -427,7 +441,10 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
             },
             { upsert: true }
         );
-  
+        // Update time spent
+        await (progress as any).updateTimeSpent();
+
+        // Update user EXP and level
         const user = await User.findById(userId);
         if (user) {
             user.exp += expEarned;
@@ -464,6 +481,7 @@ export const postMachineReview = async (req: Request, res: Response): Promise<vo
             });
             return;
         }
+
         const user = await User.findById(userId);
         if (!user) {
             res.status(404).json({ 
@@ -472,6 +490,7 @@ export const postMachineReview = async (req: Request, res: Response): Promise<vo
             });
             return;
         }
+
         const machine = await Machine.findById(machineId);
         if (!machine) {
             res.status(404).json({ 
@@ -480,7 +499,8 @@ export const postMachineReview = async (req: Request, res: Response): Promise<vo
             });
             return;
         }
-        //Only one review per user
+
+        // Only one review per user
         if (machine.reviews.some((r) => r.reviewerId.toString() === userId)) {
             res.status(400).json({ 
                 message: "ERROR", 
@@ -488,13 +508,19 @@ export const postMachineReview = async (req: Request, res: Response): Promise<vo
             });
             return;
         }
+
         machine.reviews.push({
             reviewerId: userId,
             reviewerName: user.name,
             content: review,
             rating,
         });
+
         await machine.save();
+
+        // Recalculate and update the machine's average rating
+        await (machine as any).updateRating();
+
         res.status(200).json({ 
             message: "OK", 
             msg: 'Review posted successfully.' 
@@ -584,18 +610,41 @@ export const getMachineReview = async (req: Request, res: Response): Promise<voi
 export const deleteMachineReview = async (req: Request, res: Response): Promise<void> => {
     try {
         const { machineId, reviewId } = req.params;
+        const userId = res.locals.jwtData.id;
+
         const machine = await Machine.findById(machineId);
-        const review = machine?.reviews.find((r) => r._id.toString() === reviewId);
-        if (!machine || !review) {
+        if (!machine) {
             res.status(404).json({ 
                 message: "ERROR", 
-                msg: 'Machine or review not found.' 
+                msg: 'Machine not found.' 
             });
             return;
         }
-        await Machine.findByIdAndUpdate(machineId, {
-            $pull: { reviews: { _id: reviewId } }
-        });
+
+        const review = machine.reviews.id(reviewId);
+        if (!review) {
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Review not found.' 
+            });
+            return;
+        }
+
+        // Ensure the user deleting the review is the original reviewer or an admin
+        if (review.reviewerId.toString() !== userId && !res.locals.isAdmin) {
+            res.status(403).json({ 
+                message: "ERROR", 
+                msg: 'You are not authorized to delete this review.' 
+            });
+            return;
+        }
+
+        (review as any).remove();
+        await machine.save();
+
+        // Recalculate and update the machine's average rating
+        await (machine as any).updateRating();
+
         res.status(200).json({ 
             message: "OK", 
             msg: 'Review deleted successfully.' 
@@ -607,22 +656,66 @@ export const deleteMachineReview = async (req: Request, res: Response): Promise<
 };
 
 /**
+ * Delete a machine review.
+ */
+export const deleteMyMachineReview = async (req: Request, res: Response): Promise<void> => {
+  try {
+      const { machineId } = req.params;
+      const userId = res.locals.jwtData.id;
+
+      const machine = await Machine.findById(machineId);
+      if (!machine) {
+          res.status(404).json({ 
+              message: "ERROR", 
+              msg: 'Machine not found.' 
+          });
+          return;
+      }
+
+      const review = machine.reviews.find((r) => r.reviewerId.toString() === userId);
+      if (!review) {
+          res.status(404).json({ 
+              message: "ERROR", 
+              msg: 'Review not found.' 
+          });
+          return;
+      }
+
+      // Ensure the user deleting the review is the original reviewer or an admin
+      if (review.reviewerId.toString() !== userId && !res.locals.isAdmin) {
+          res.status(403).json({ 
+              message: "ERROR", 
+              msg: 'You are not authorized to delete this review.' 
+          });
+          return;
+      }
+
+      (review as any).remove();
+      await machine.save();
+
+      // Recalculate and update the machine's average rating
+      await (machine as any).updateRating();
+
+      res.status(200).json({ 
+          message: "OK", 
+          msg: 'Review deleted successfully.' 
+      });
+  } catch (error) {
+      console.error('Error deleting machine review:', error);
+      res.status(500).send('Failed to delete machine review.');
+  }
+};
+
+/**
  * Update machine review.
  */
 export const updateMachineReview = async (req: Request, res: Response): Promise<void> => {
     try {
         const { machineId, reviewId } = req.params;
         const { newRating, newReview } = req.body;
+        const userId = res.locals.jwtData.id;
+
         const machine = await Machine.findById(machineId);
-        const user = await User.findById(res.locals.jwtData.id);
-        const review = machine?.reviews.find((r) => r._id.toString() === reviewId);
-        if (!user) {
-            res.status(404).json({ 
-                message: "ERROR", 
-                msg: 'User not found.' 
-            });
-            return;
-        }
         if (!machine) {
             res.status(404).json({ 
                 message: "ERROR", 
@@ -630,6 +723,8 @@ export const updateMachineReview = async (req: Request, res: Response): Promise<
             });
             return;
         }
+
+        const review = machine.reviews.id(reviewId);
         if (!review) {
             res.status(404).json({ 
                 message: "ERROR", 
@@ -637,9 +732,24 @@ export const updateMachineReview = async (req: Request, res: Response): Promise<
             });
             return;
         }
+
+        // Ensure the user updating the review is the original reviewer
+        if (review.reviewerId.toString() !== userId) {
+            res.status(403).json({ 
+                message: "ERROR", 
+                msg: 'You are not authorized to update this review.' 
+            });
+            return;
+        }
+
         if (newReview) review.content = newReview;
         if (newRating) review.rating = newRating; 
+
         await machine.save();
+
+        // Recalculate and update the machine's average rating
+        await (machine as any).updateRating();
+
         res.status(200).json({ 
             message: "OK", 
             msg: 'Review updated successfully.' 
@@ -694,5 +804,44 @@ export const deleteMachineReviewForce = async (req: Request, res: Response): Pro
     } catch (error) {
         console.error('Error deleting machine review forcefully:', error);
         res.status(500).send('Failed to delete machine review forcefully.');
+    }
+};
+
+export const updateMachineRating = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { machineId } = req.params;
+        const machine = await Machine.findById(machineId);
+        if (!machine) {
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Machine not found.' 
+            });
+            return;
+        }
+        await (machine as any).updateRating();
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Machine rating updated successfully.' 
+        });
+    } catch (error) {
+        console.error('Error updating machine rating:', error);
+        res.status(500).send('Failed to update machine rating.');
+    }
+};
+
+export const updateAllMachineRatings = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const machines = await Machine.find();
+        for (const machine of machines) {
+            await (machine as any).updateRating();
+        }
+
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'All machine ratings updated successfully.' 
+        });
+    } catch (error) {
+        console.error('Error updating all machine ratings:', error);
+        res.status(500).send('Failed to update all machine ratings.');
     }
 };

@@ -1,168 +1,152 @@
-import React, { useState, useRef, useEffect, ChangeEvent, FormEvent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createMachine } from '../../api/axiosInstance';
-import '../../assets/scss/machine/AddMachineForm.scss';
+import { useNavigate } from 'react-router-dom';
 
-interface AddMachineFormProps {
-  onMachineAdded: (machine: Machine) => void;
-}
-
-interface Machine {
-  id: string;
+interface MachineFormData {
   name: string;
   category: string;
-  description: string;
+  amiId: string;
+  flag: string;
+  description?: string;
+  exp?: number;
   hints: string[];
   hintCosts: number[];
-  exp: number;
-  amiId: string;
-  flag: string;
 }
 
-interface FormData {
-  name: string;
-  category: string;
-  description: string;
-  hints: string[];
-  hintCosts: string[];
-  exp: string;
-  amiId: string;
-  flag: string;
-}
-
-const AddMachineForm: React.FC<AddMachineFormProps> = ({ onMachineAdded }) => {
-  const [formData, setFormData] = useState<FormData>({
+const AddMachineForm: React.FC = () => {
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const [formData, setFormData] = useState<MachineFormData>({
     name: '',
     category: '',
-    description: '',
-    hints: [''], // Initialize hints as an array with one empty string
-    hintCosts: [''], // Initialize hintCosts as an array with one empty string
-    exp: '',
     amiId: '',
-    flag: '', // Added flag field
+    flag: '',
+    description: '',
+    exp: 50,
+    hints: [''],
+    hintCosts: [1],
   });
-  const [loading, setLoading] = useState<boolean>(false);
-  
-  // Ref for the description textarea
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const { name, category, description, hints, hintCosts, exp, amiId, flag } = formData;
-
-  // Function to adjust textarea height
-  const adjustTextareaHeight = () => {
-    if (descriptionRef.current) {
-      descriptionRef.current.style.height = 'auto'; // Reset height
-      descriptionRef.current.style.width = '250px';
-      descriptionRef.current.style.height = `${descriptionRef.current.scrollHeight}px`; // Set to scrollHeight
-    }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: name === 'exp' || name === 'contestExp' ? Number(value) : value,
+    }));
   };
 
-  // useEffect to adjust height when description changes
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [description]);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
-    const { name, value, dataset } = e.target as HTMLInputElement;
-    
-    if (name.startsWith('hint-cost-')) { // Check for 'hint-cost-' first
-      const index = parseInt(dataset.index || '0', 10);
-      const newHintCosts = [...hintCosts];
-      newHintCosts[index] = value;
-      setFormData({ ...formData, hintCosts: newHintCosts });
-    } else if (name.startsWith('hint-')) { // Then check for 'hint-'
-      const index = parseInt(dataset.index || '0', 10);
-      const newHints = [...hints];
-      newHints[index] = value;
-      setFormData({ ...formData, hints: newHints });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  const handleAddHintField = (): void => {
-    setFormData({ 
-      ...formData, 
-      hints: [...hints, ''], 
-      hintCosts: [...hintCosts, ''] // Add corresponding hint cost
-    });
-  };
-
-  const handleDeleteHintField = (index: number): void => {
-    const newHints = hints.filter((_, i) => i !== index);
-    const newHintCosts = hintCosts.filter((_, i) => i !== index);
-    setFormData({ 
-      ...formData, 
+  const handleHintChange = (index: number, value: string) => {
+    const newHints = [...formData.hints];
+    newHints[index] = value;
+    setFormData((prevData) => ({
+      ...prevData,
       hints: newHints,
-      hintCosts: newHintCosts 
-    });
+    }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleHintCostChange = (index: number, value: number) => {
+    const newHintCosts = [...formData.hintCosts];
+    newHintCosts[index] = value;
+    setFormData((prevData) => ({
+      ...prevData,
+      hintCosts: newHintCosts,
+    }));
+  };
+
+  const addHint = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      hints: [...prevData.hints, ''],
+      hintCosts: [...prevData.hintCosts, 1],
+    }));
+  };
+
+  const removeHint = (index: number) => {
+    const newHints = [...formData.hints];
+    const newHintCosts = [...formData.hintCosts];
+    newHints.splice(index, 1);
+    newHintCosts.splice(index, 1);
+    setFormData((prevData) => ({
+      ...prevData,
+      hints: newHints,
+      hintCosts: newHintCosts,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name || !category || !amiId || !flag) { // Include flag in validation
-      alert('Please fill in all required fields.');
-      setLoading(false);
+    setError(null);
+
+    // Basic Frontend Validation
+    if (
+      !formData.name ||
+      !formData.category ||
+      !formData.amiId ||
+      !formData.flag
+    ) {
+      setError('Please fill in all required fields.');
       return;
     }
 
-    setLoading(true);
     try {
-      const filteredHints = hints.filter(hint => hint.trim() !== '');
-      const filteredHintCosts = hintCosts
-        .slice(0, filteredHints.length)
-        .map(cost => parseInt(cost, 10) || 0);
-      const data = await createMachine({
-        name,
-        category,
-        description, 
-        hints: filteredHints,
-        hintCosts: filteredHintCosts, // Include hint costs
-        exp: exp ? parseInt(exp, 10) : 0,
-        amiId,
-        flag, 
-      });
-      alert('Machine registered successfully.');
-      setFormData({
-        name: '',
-        category: '',
-        description: '',
-        hints: [''],
-        hintCosts: [''],
-        exp: '',
-        amiId: '',
-        flag: '', 
-      });
-      if (onMachineAdded) onMachineAdded(data.machine);
-    } catch (error: any) {
-      console.error('Error registering machine:', error);
-      alert(error.msg || 'Failed to register machine.');
-    } finally {
-      setLoading(false);
+      await createMachine(formData);
+      navigate('/machines'); // Redirect to machine list or detail page
+    } catch (err: any) {
+      setError(err.msg || 'Failed to create machine.');
     }
   };
 
+  const adjustTextareaHeight = () => {
+    if (descriptionRef.current) {
+      descriptionRef.current.style.height = 'auto';
+      descriptionRef.current.style.width = '50%';
+      descriptionRef.current.style.height = `${descriptionRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [formData.description]);
+  
   return (
-    <form className='add-machine-form' onSubmit={handleSubmit}>
-      <h2>Register a New Machine</h2>
+    <form onSubmit={handleSubmit}>
+      <h2>Add New Machine</h2>
+      
+      {error && <p className='error-message'>{error}</p>}
+      
       <div>
-        <label htmlFor="name">Name<span style={{ color: 'red' }}> *</span>:</label>
+        <label htmlFor='name'>Name
+          <span style={{ color: 'red' }}> *</span>
+        </label>
         <input
-          type="text"
-          id="name"
-          name="name"
-          value={name}
+          type='text'
+          id='name'
+          name='name'
+          value={formData.name}
           onChange={handleChange}
-          placeholder="Enter the machine name"
           required
         />
       </div>
+      
       <div>
-        <label htmlFor="category">Category<span style={{ color: 'red' }}> *</span>:</label>
-        <select id="category" name="category" value={category} onChange={handleChange} required>
-          <option value="">--Select Category--</option>
-          <option value="Web">Web</option>
-          <option value="Network">Network</option>
-          <option value="Database">Database</option>
+        <label htmlFor='category'>Category
+          <span style={{ color: 'red' }}> *</span>
+            // Start of Selection
+            </label>
+            <select 
+              id="category" 
+              name="category" 
+              value={formData.category} 
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e as unknown as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)} 
+              required
+            >
+              <option value="">--Select Category--</option>
+              <option value="Web">Web</option>
+              <option value="Network">Network</option>
+              <option value="Database">Database</option>
           <option value="Crypto">Crypto</option>
           <option value="Cloud">Cloud</option>
           <option value="AI">AI</option>
@@ -171,89 +155,93 @@ const AddMachineForm: React.FC<AddMachineFormProps> = ({ onMachineAdded }) => {
         </select>
       </div>
       <div>
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          name="description"
-          value={description}
+        <label htmlFor='amiId'>AMI ID
+          <span style={{ color: 'red' }}> *</span>
+        </label>
+        <input
+          type='text'
+          id='amiId'
+          name='amiId'
+          value={formData.amiId}
           onChange={handleChange}
-          placeholder="Enter machine description"
-          ref={descriptionRef} // Attach ref to textarea
-          style={{
-            overflow: 'hidden',
-            resize: 'none',
-          }}
-        ></textarea>
+          placeholder='AMI-XXXXXX'
+          required
+        />
+      </div>
+      
+      <div>
+        <label htmlFor='flag'>Flag
+          <span style={{ color: 'red' }}> *</span>
+        </label>
+        <input
+          type='text'
+          id='flag'
+          name='flag'
+          value={formData.flag}
+          onChange={handleChange}
+          required
+          placeholder='Flag of the machine here'
+        />
+      </div>
+      
+      <div>
+        <label htmlFor='description'>Description</label>
+        <textarea
+          ref={descriptionRef}
+          id='description'
+          name='description'
+          value={formData.description}
+          placeholder='Description of the machine here'
+          onChange={handleChange}
+        />
+      </div>
+      
+      <div>
+        <label htmlFor='exp'>EXP
+          <span style={{ color: 'red' }}> *</span>
+        </label>
+        <input
+          type='number'
+          id='exp'
+          name='exp'
+          value={formData.exp}
+          onChange={handleChange}
+          min={0}
+        />
       </div>
       <div>
-        <label>Hints:</label>
-        {hints.map((hint, index) => (
-          <div key={index} className="hint-field">
+        <label>Hints</label>
+        {formData.hints.map((hint, index) => (
+          <div key={index}>
             <input
-              type="text"
-              name={`hint-${index}`}
-              data-index={index}
+              type='text'
               value={hint}
-              onChange={handleChange}
-              placeholder={`Hint ${index + 1}`}
+              onChange={(e) => handleHintChange(index, e.target.value)}
+              placeholder='Hint'
             />
             <input
-              type="number"
-              name={`hint-cost-${index}`}
-              data-index={index}
-              value={hintCosts[index]}
-              onChange={handleChange}
-              placeholder={`Cost for Hint ${index + 1}`}
-              min="0"
+              type='number'
+              value={formData.hintCosts[index]}
+              onChange={(e) =>
+                handleHintCostChange(index, Number(e.target.value))
+              }
+              placeholder='Cost'
+              min={0}
             />
-            {hints.length > 1 && (
-              <button type="button" onClick={() => handleDeleteHintField(index)}>
-                Delete
+            {formData.hints.length > 1 && (
+              <button type='button' onClick={() => removeHint(index)}>
+                Remove
               </button>
             )}
+            <button type='button' onClick={addHint}>
+              Add Hint
+            </button>
           </div>
         ))}
-        <button type="button" onClick={handleAddHintField}>Add Hint</button>
       </div>
-      <div>
-        <label htmlFor="exp">Experience Points (EXP): </label>
-        <input
-          type="number"
-          id="exp"
-          name="exp"
-          value={exp}
-          onChange={handleChange}
-          placeholder="Enter the EXP"
-          min="50"
-        />
+      <div className='add-machine-form-button'>
+        <button type='submit'>Create Machine</button>
       </div>
-      <div>
-        <label htmlFor="amiId">AMI ID<span style={{ color: 'red' }}> *</span>:</label>
-        <input
-          type="text"
-          id="amiId"
-          name="amiId"
-          value={amiId}
-          onChange={handleChange}
-          placeholder="e.g., ami-0abcdef1234567890"
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="flag">Flag<span style={{ color: 'red' }}> *</span>:</label> {/* Added label */}
-        <input
-          type="text"
-          id="flag"
-          name="flag"
-          value={flag}
-          onChange={handleChange}
-          placeholder="Enter the flag"
-          required
-        />
-      </div>
-      <button type="submit" disabled={loading}>
-        {loading ? 'Registering...' : 'Register Machine'}
-      </button>
     </form>
   );
 };

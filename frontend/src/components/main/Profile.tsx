@@ -1,16 +1,10 @@
-import React, { useState, useContext, useEffect, useCallback } from 'react';
-import { logoutUser, getUserDetail } from '../../api/axiosInstance';
+import React, { useState, useContext, useCallback } from 'react';
+import { logoutUser } from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthUserContext } from '../../contexts/AuthUserContext';
 import profileIcon from '../../assets/img/icon/profile_default.png';
 import arrowIcon from '../../assets/img/icon/down_arrow.png';
 import bell from '../../assets/img/icon/notification-bell.png';
-
-interface UserType {
-    name?: string;
-    email?: string;
-    // Add other user properties as needed
-}
 
 interface MenuItemProps {
     onClick?: () => void;
@@ -23,39 +17,17 @@ const MenuItem: React.FC<MenuItemProps> = ({ onClick, children }) => (
 
 const Profile: React.FC = () => {
     const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
-    const [user, setUser] = useState<UserType>({ name: '', email: '' });
     const navigate = useNavigate();
-    const authContext = useContext(AuthContext);
+    const authUserContext = useContext(AuthUserContext);
 
-    if (!authContext) {
-        throw new Error('AuthContext must be used within an AuthProvider');
+    if (!authUserContext) {
+        throw new Error('AuthUserContext must be used within an AuthUserProvider');
     }
 
-    const { logout } = authContext;
+    const { currentUser, logout } = authUserContext;
 
     const toggleMenu = useCallback(() => {
         setMenuOpen(prev => !prev);
-    }, []);
-
-    const fetchUserDetail = async () => {
-        try {
-            const response = await getUserDetail();
-            if (response && response.user) {
-                setUser(response.user);
-            } else {
-                console.error('User data is missing in the response.');
-                // Set default user or handle as needed
-                setUser({ name: 'Guest', email: 'guest@example.com' });
-            }
-        } catch (error) {
-            console.error('Failed to fetch user details:', error);
-            // Optionally, set default user or handle the error
-            setUser({ name: 'Guest', email: 'guest@example.com' });
-        }
-    };
-
-    useEffect(() => {
-        fetchUserDetail();
     }, []);
 
     const handleLogout = async () => {
@@ -84,7 +56,7 @@ const Profile: React.FC = () => {
                         <img className="profile_icon" alt="profile_icon" src={profileIcon} />
                     </span>
                     <span className="userNametext">
-                        <p>{user.name || ''}</p>
+                        <p>{currentUser?.name || 'Guest'}</p>
                     </span>
                     <img src={arrowIcon} alt="arrow_icon" className="arrow-icon" />
                 </button>

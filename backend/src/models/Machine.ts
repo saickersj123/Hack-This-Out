@@ -91,13 +91,13 @@ const MachineSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Function to update average repute after adding a review
-MachineSchema.methods.updateRating = function() {
+// Function to update average rating after adding/updating/deleting a review
+MachineSchema.methods.updateRating = async function() {
     if (this.reviews.length === 0) {
-        this.rating = 0.0;
+        this.rating = 1.0;
     } else {
-        const totalRating = this.reviews.reduce((sum, review) => sum + review.rating, 0);
-        this.rating = totalRating / this.reviews.length; // Calculate average rating
+        const totalRating = this.reviews.reduce((sum: number, review: any) => sum + review.rating, 0);
+        this.rating = parseFloat((totalRating / this.reviews.length).toFixed(1)); // Round to one decimal place
     }
     return this.save();
 };

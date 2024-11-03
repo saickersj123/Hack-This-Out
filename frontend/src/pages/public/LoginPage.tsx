@@ -1,27 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import '../../assets/scss/login/LoginPage.scss';
 import LoginForm from '../../components/login/LoginForm'; 
-import Modal from '../../components/Modal'; // 모달 import
+import Modal from '../../components/Modal'; // Modal import
 import RegisterForm from '../../components/login/RegisterForm'; // RegisterForm import
+import { AuthUserContext } from '../../contexts/AuthUserContext'; // Import AuthUserContext
 
 const LoginPage: React.FC = () => {
   const [isClicked, setIsClicked] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state management
+  const navigate = useNavigate(); // Initialize navigate
 
-  // 배경 클릭 시 배경 상태 변경
+  // Consume AuthUserContext
+  const authUserContext = useContext(AuthUserContext);
+
+  if (!authUserContext) {
+    throw new Error('AuthUserContext must be used within an AuthUserProvider');
+  }
+
+  const { isLoggedIn, isLoading } = authUserContext;
+
+  // Handle redirection if user is already logged in
+  useEffect(() => {
+    if (!isLoading && isLoggedIn) {
+      navigate('/'); // Redirect to main page
+    }
+  }, [isLoggedIn, isLoading, navigate]);
+
+  // Background click handler
   const handleBackgroundClick = () => {
     setIsClicked(!isClicked);
   };
 
-  // 회원가입 모달 열기
+  // Open registration modal
   const openModal = () => {
     setIsModalOpen(true);
   };
 
-  // 회원가입 모달 닫기
+  // Close registration modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  // While checking authentication status, you might want to show a loader
+  if (isLoading) {
+    return <div className="loader">Loading...</div>; // You can style this as needed
+  }
 
   return (
     <div>
@@ -30,10 +54,10 @@ const LoginPage: React.FC = () => {
         onClick={handleBackgroundClick}
       ></div>
       <div className={isClicked ? "content-wrapper visible" : "content-wrapper"}>
-        <LoginForm openRegisterModal={openModal} /> {/* 모달 여는 함수를 LoginForm에 전달 */}
+        <LoginForm openRegisterModal={openModal} /> {/* Pass the modal opening function to LoginForm */}
       </div>
 
-      {/* 회원가입 모달 */}
+      {/* Registration Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <RegisterForm closeRegisterModal={closeModal}/>
       </Modal>

@@ -8,5 +8,13 @@ export interface MachineDetail {
   description?: string;
   exp: number;
   amiId: string;
+  rating: number;
   // Add other relevant fields as necessary
+}
+
+export interface Review {
+  reviewerId: string;
+  reviewerName: string;
+  rating: number;
+  content: string;
 }

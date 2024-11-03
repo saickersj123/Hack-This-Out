@@ -5,6 +5,7 @@ import Main from '../../components/main/Main';
 import { getMachineDetails } from '../../api/axiosInstance';
 import { MachineDetail as MachineDetailType } from '../../types/Machine';
 //import '../../assets/scss/machine/MachineDetailPage.scss';
+import MachineReviewList from '../../components/machine/MachineReviewList';
 
 /**
  * Component representing the Machine Detail Page.
@@ -55,6 +56,14 @@ const MachineDetailPage: React.FC = () => {
     }
   };
 
+  const handleRegisterReview = () => {
+    if (machineId) {
+      navigate(`/machine/${machineId}/review/new`);
+    } else {
+      alert('Invalid machine ID.');
+    }
+  };
+
   if (isLoading) {
     return (
       <Main title="Machine Detail" description="Loading machine details.">
@@ -82,6 +91,14 @@ const MachineDetailPage: React.FC = () => {
         <button onClick={handlePlay} className="play-button">
           Play
         </button>
+      </div>
+      <div className='machine-detail-page-new-review'>
+        <button onClick={handleRegisterReview} className='machine-detail-page-new-review-button'>
+          Add New Review
+        </button>
+      </div>
+      <div className='machine-detail-page-review'>
+        <MachineReviewList machineId={machineId || ''} />
       </div>
     </Main>
   );

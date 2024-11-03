@@ -16,7 +16,7 @@ interface MachineDetailProps {
  * @returns {JSX.Element} The rendered MachineDetail component.
  */
 const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
-  const { name, category, description, exp, amiId } = machineDetail;
+  const { name, category, description, exp, amiId, rating } = machineDetail;
 
   return (
     <div className="machine-detail-container">
@@ -24,6 +24,7 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
         <h3>Machine Details</h3>
         <p><strong>Name:</strong> {name || 'N/A'}</p>
         <p><strong>Category:</strong> {category || 'N/A'}</p>
+        <p><strong>Rating:</strong> {rating.toFixed(1) || 'N/A'}</p>
         <p><strong>Description:</strong> {description || 'N/A'}</p>
         <p><strong>Experience Points (EXP):</strong> {exp || 0}</p>
         <p><strong>AMI ID:</strong> {amiId || 'N/A'}</p>

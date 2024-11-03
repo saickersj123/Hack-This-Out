@@ -34,8 +34,13 @@ const UserProgressSchema = new mongoose.Schema({
     timestamps: true
 });
 
-UserProgressSchema.methods.getTimeSpent = function(createdAt: Date, updatedAt: Date): number {
-    return updatedAt.getTime() - createdAt.getTime();
+UserProgressSchema.methods.updateTimeSpent = function() {
+    if (this.createdAt && this.updatedAt) {
+        this.timeSpent = this.updatedAt.getTime() - this.createdAt.getTime();
+    } else {
+        this.timeSpent = 0;
+    }
+    return this.save();
 };
 
 const UserProgress = mongoose.model('UserProgress', UserProgressSchema);

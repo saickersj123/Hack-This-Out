@@ -3,13 +3,17 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import "./assets/scss/style.scss";
+import { AuthUserProvider } from './contexts/AuthUserContext';
+
 
 const rootElement = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthUserProvider>
+      <App />
+    </AuthUserProvider>
   </React.StrictMode>
 );
 

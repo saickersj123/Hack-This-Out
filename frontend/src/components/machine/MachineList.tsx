@@ -19,6 +19,7 @@ interface MachinesResponse {
 const MachineList: React.FC = () => {
   const [machines, setMachines] = useState<Machine[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const MachineList: React.FC = () => {
         setLoading(false);
       } catch (error: any) {
         console.error('Error fetching machines:', error);
-        alert(`Error fetching machines: ${error.msg}`);
+        setError(`Error fetching machines: ${error.msg || error.message}`);
         setLoading(false);
       }
     };
@@ -45,9 +46,15 @@ const MachineList: React.FC = () => {
     return <p>Loading machines...</p>;
   }
 
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   return (
     <div className='machine-list-container'>
-      <div className='machine-list-title'> <h2>Machine List</h2> </div>
+      <div className='machine-list-title'>
+        <h2>Machine List</h2>
+      </div>
         <table className='machine-list-table'>
           {machines.length === 0 ? (
             <tbody>
@@ -71,7 +78,7 @@ const MachineList: React.FC = () => {
                   <tr key={machine._id}>
                     <td>{machine.name}</td>
                     <td>{machine.category}</td>
-                    <td>{machine.rating}</td>
+                    <td>{machine.rating.toFixed(1)}</td>
                     <td>{machine.playerCount}</td>
                     <td>
                       <button onClick={() => handleMachineClick(machine)}>Details</button>

@@ -7,6 +7,25 @@ import UserProgress from '../models/UserProgress';
 import { createToken } from '../middlewares/Token';
 import { COOKIE_NAME } from '../middlewares/Constants';
 
+const isProduction = process.env.MODE === 'production';
+
+const getCookieOptions = () => {
+	const options: any = {
+	  path: '/',
+	  httpOnly: true,
+	  signed: true,
+	  sameSite: isProduction ? 'none' : 'lax',
+	  secure: isProduction,
+	  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+	};
+  
+	if (isProduction && process.env.DOMAIN) {
+	  options.domain = process.env.DOMAIN;
+	}
+  
+	return options;
+};
+
 // GET all user information (Admin Only)
 export const getAllUser = async (req: Request, res: Response) => {
     try {
@@ -76,15 +95,7 @@ export const postSignUp = async (req: Request, res: Response) => {
 		const expires = new Date();
 		expires.setDate(expires.getDate() + 7);
 
-		res.cookie(COOKIE_NAME, token, {
-			path: "/", //cookie directory in browser
-			domain: process.env.DOMAIN, // our website domain
-			expires, // same as token expiration time
-			httpOnly: true,
-			signed: true,
-			sameSite: 'lax',
-			secure: true,
-		});
+		res.cookie(COOKIE_NAME, token, getCookieOptions());
 
 		return res
 			.status(201)
@@ -124,17 +135,15 @@ export const postLoginUser = async (req: Request, res: Response) => {
             });
             return;
         }
-        // if user will login again we have to -> set new cookies -> erase previous cookies
-		res.cookie(COOKIE_NAME,'clear_token' ,
-			{
-				path: "/", //cookie directory in browser
-				domain: process.env.DOMAIN, // our website domain
-				maxAge: 0,
-				httpOnly: true,
-				signed: true,
-				sameSite: 'lax',
-				secure: true,
-			});
+        // Clear any existing token
+        res.cookie(COOKIE_NAME, 'clear_token', {
+			path: '/',
+			httpOnly: true,
+			signed: true,
+			sameSite: isProduction ? 'none' : 'lax',
+			secure: isProduction,
+			maxAge: 0,
+		});
 
 		// create token
 		const token = createToken(user._id.toString(), user.email, "7d");
@@ -182,16 +191,15 @@ export const logoutUser = async (
 				.json({ message: "ERROR", cause: "Permissions didn't match" });
 		}
 
-        res.cookie(COOKIE_NAME,'clear_token' ,
-			{
-				path: "/", //cookie directory in browser
-				domain: process.env.DOMAIN, // our website domain
-				maxAge: 0,
-				httpOnly: true,
-				signed: true,
-				sameSite: 'lax',
-				secure: true,
-			});
+        // Clear any existing token
+		res.cookie(COOKIE_NAME, 'clear_token', {
+			path: '/',
+			httpOnly: true,
+			signed: true,
+			sameSite: isProduction ? 'none' : 'lax',
+			secure: isProduction,
+			maxAge: 0,
+		});
 
 		return res
 			.status(200)
@@ -211,7 +219,7 @@ export const verifyUserStatus = async (
 	next: NextFunction
 ) => {
 	try {
-		const user = await User.findById(res.locals.jwtData.id); // get variable stored in previous middleware
+		const user = await User.findById(res.locals.jwtData.id).select('-password -date -updatedAt -__v -level -exp');
 
 		if (!user)
 			return res.status(401).json({
@@ -227,7 +235,7 @@ export const verifyUserStatus = async (
 
 		return res
 			.status(200)
-			.json({ message: "OK", user_id: user.user_id, name: user.name });
+			.json({ message: "OK", user: user });
 	} catch (err) {
 		console.log(err);
 		return res

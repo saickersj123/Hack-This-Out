@@ -1,11 +1,11 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from './contexts/AuthContext';
 import LoginPage from './pages/public/LoginPage';
 import MainPage from './pages/public/MainPage';
 import LoadingPage from './pages/public/LoadingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PreContestPage from './pages/contest/PreContestPage';
+import NewMachineReview from './pages/machine/NewMachineReview';
 
 // Lazy-loaded components
 const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage'));
@@ -24,7 +24,6 @@ const MyPage = lazy(() => import('./pages/user/MyPage'));
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
       <Router>
         <Suspense fallback={<LoadingPage />}>
           <Routes>
@@ -129,6 +128,14 @@ const App: React.FC = () => {
               }
             />
             <Route
+              path="/machine/:machineId/review/new"
+              element={
+                <ProtectedRoute>
+                  <NewMachineReview />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/machine/:machineId/complete"
               element={
                 <ProtectedRoute>
@@ -155,7 +162,6 @@ const App: React.FC = () => {
           </Routes>
         </Suspense>
       </Router>
-    </AuthProvider>
   );
 };
 

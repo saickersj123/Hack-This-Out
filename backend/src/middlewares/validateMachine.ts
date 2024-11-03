@@ -12,11 +12,10 @@ const validateMachine = [
     .withMessage('Category is required.')
     .isIn(['Web', 'Network', 'Database', 'Crypto', 'Cloud', 'AI', 'OS', 'Other'])
     .withMessage('Invalid category selected.'),
-  body('info')
-    .notEmpty()
-    .withMessage('Info is required.')
-    .isLength({ min: 5 })
-    .withMessage('Info must be at least 5 characters long.'),
+  body('description')
+    .optional()
+    .isLength({ min: 4 })
+    .withMessage('Description must be at least 4 characters long.'),
   body('hints')
     .optional()
     .isArray({ min: 1 })

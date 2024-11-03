@@ -1,5 +1,5 @@
 import React, { useContext, ReactNode } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthUserContext } from '../../contexts/AuthUserContext';
 import { Navigate } from 'react-router-dom';
 import LoadingPage from '../../pages/public/LoadingPage'; // Ensure you have a LoadingPage component
 
@@ -8,15 +8,15 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const authContext = useContext(AuthContext);
+  const authUserContext = useContext(AuthUserContext);
 
-  if (!authContext) {
-    throw new Error('ProtectedRoute must be used within an AuthProvider');
+  if (!authUserContext) {
+    throw new Error('ProtectedRoute must be used within an AuthUserProvider');
   }
 
-  const { isLoggedIn, loading } = authContext;
+  const { isLoggedIn, isLoading } = authUserContext;
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingPage />; // Show a loading indicator while checking auth status
   }
 
