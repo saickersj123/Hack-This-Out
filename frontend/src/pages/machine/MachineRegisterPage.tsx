@@ -5,7 +5,7 @@ import AddMachineForm from '../../components/machine/AddMachineForm';
 const MachineRegisterPage: React.FC = () => {
     return (
         <Main>
-            <AddMachineForm onMachineAdded={() => {}} />
+            <AddMachineForm />
         </Main>
     );
 };
