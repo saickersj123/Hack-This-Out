@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Main from '../../components/main/Main';
 import { getContestStatus } from '../../api/axiosInstance';
-
+import { formatDate } from '../../utils/dateUtils';
 interface GetContestStatusResponse {
   contestName: string;
   isActive: boolean;
@@ -38,8 +38,8 @@ const ContestPendingPage: React.FC = () => {
           <h2>Contest Pending</h2>
           <p>Contest Name: {contestStatus.contestName}</p>
           <p>Status: {contestStatus.isActive ? 'Active' : 'Inactive'}</p>
-          <p>Start Time: {contestStatus.startTime.toLocaleString()}</p>
-          <p>End Time: {contestStatus.endTime.toLocaleString()}</p>
+          <p>Start Time: {formatDate(contestStatus.startTime)}</p>
+          <p>End Time: {formatDate(contestStatus.endTime)}</p>
           <p>Contest is not active yet. Please wait for the contest to start.</p>
           <button><Link to={`/contest/${contestId}`}>View Contest</Link></button>
         </>
