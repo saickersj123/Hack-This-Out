@@ -34,6 +34,8 @@ import {
   updateAllMachineRatings,
   updateMachineRating,
   deleteMyMachineReview,
+  getUsedHints,
+  getUserProgress,
 } from '../controllers/MachineController.js';
 
 const MachineRoutes = express.Router();
@@ -50,6 +52,12 @@ MachineRoutes.get('/active/:machineId', verifyToken, getActiveMachineDetails);
 
 // Route to get machine hints
 MachineRoutes.get('/:machineId/hints', verifyToken, getMachineHints);
+
+// Route to get user progress
+MachineRoutes.get('/:machineId/progress', verifyToken, getUserProgress);
+
+// Route to get used hints in machine
+MachineRoutes.get('/:machineId/used-hints', verifyToken, getUsedHints);
 
 // Route to submit flag for a machine
 MachineRoutes.post('/:machineId/submit-flag', verifyToken, flagSubmissionLimiter, submitFlagMachine);

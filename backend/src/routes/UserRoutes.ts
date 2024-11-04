@@ -11,7 +11,6 @@ import {
     logoutUser,
     changePassword,
     changeName,
-    getUserProgress,
     updateUserAvatar,
     updateUsertoAdmin,
     updateUserLevel,
@@ -64,9 +63,6 @@ UserRoutes.post("/reset-password/:user_id", verifyToken, resetPassword);
 
 // Delete User
 UserRoutes.delete("/:user_id", verifyToken, deleteUser);
-
-// Get User Progress
-UserRoutes.get("/progress", verifyToken, getUserProgress);
 
 // Update User Avatar
 UserRoutes.post("/update/avatar", verifyToken, updateUserAvatar);

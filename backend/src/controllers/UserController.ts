@@ -427,26 +427,6 @@ export const deleteUserByUserId = async (req: Request, res: Response) => {
 	}
 };
 
-// Get user progress
-export const getUserProgress = async (req: Request, res: Response): Promise<void> => {
-	try {
-		const user = await User.findById(res.locals.jwtData.id);
-		if (!user) {
-			res.status(404).json({ msg: 'User not found.' });
-			return;
-		}
-		const userProgress = await UserProgress.find({ user: user._id });
-		if (!userProgress) {
-			res.status(404).json({ msg: 'User progress not found.' });
-			return;
-		}
-		res.json({ userProgress, level: user.level, exp: user.exp });
-	} catch (error: any) {
-		console.error('Error getting user progress:', error);
-		res.status(500).send('Server error');
-	}
-};
-
 // Get user progress by user_id(Admin Only)
 export const getUserProgressByUserId = async (req: Request, res: Response) => {
 	try {

@@ -183,19 +183,6 @@ export const getUserProgressByUserId = async (user_id: string) => {
 };
 
 /**
- * Get user progress.
- * @returns {Promise<Object>} - The response data containing user progress.
- */
-export const getUserProgress = async () => {
-  try {
-    const response = await axiosInstance.get('/user/progress');
-    return response.data;
-  } catch (error: any) {
-    throw new Error('Failed to fetch user progress');
-  }
-};
-
-/**
  * Add user exp.
  * @param {number} exp - The exp to add.
  * @returns {Promise<Object>} - The response data confirming exp addition.
@@ -617,6 +604,33 @@ export const getMachineHints = async (machineId: string) => {
     return response.data;
   } catch (error: any) {
     throw error.response ? error.response.data : new Error('Failed to fetch machine hints');
+  }
+};
+
+/**
+ * Get used hints in a machine.
+ * @param {string} machineId - The ID of the machine.
+ * @returns {Promise<Object>} - The response data containing used hints.
+ */
+export const getUsedHints = async (machineId: string) => {
+  try {
+    const response = await axiosInstance.get(`/machines/${machineId}/used-hints`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : new Error('Failed to fetch used hints');
+  }
+};
+
+/**
+ * Get user progress.
+ * @returns {Promise<Object>} - The response data containing user progress.
+ */
+export const getUserProgress = async (machineId: string) => {
+  try {
+    const response = await axiosInstance.get(`/machines/${machineId}/progress`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : new Error('Failed to fetch user progress');
   }
 };
 

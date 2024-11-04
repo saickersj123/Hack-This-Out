@@ -65,8 +65,14 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
       let response: SubmitFlagResponse;
 
       if (playType === 'machine') {
-        response = await submitFlagMachine(machineId, flag);
+        
         const instanceResponse = await submitFlag(machineId, flag);
+        if (instanceResponse.message === "ERROR") {
+          setErrors([{ msg: instanceResponse.cause }]);
+          return;
+        } else {
+          response = await submitFlagMachine(machineId, flag);
+        }
         setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully!');
         navigate(`/machine/${machineId}`);
       } else if (playType === 'contest') {
@@ -75,7 +81,12 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
           return;
         }
         const instanceResponse = await submitFlag(machineId, flag);
-        response = await submitFlagForContest(contestId, machineId, flag);
+        if (instanceResponse.message === "ERROR") {
+          setErrors([{ msg: instanceResponse.cause }]);
+          return;
+        } else {
+          response = await submitFlagForContest(contestId, machineId, flag);
+        }
         setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully for contest!');
         navigate(`/contest/${contestId}/complete`);
       }

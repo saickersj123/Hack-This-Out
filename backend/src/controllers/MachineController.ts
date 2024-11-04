@@ -352,6 +352,37 @@ export const deleteMachine = async (req: Request, res: Response): Promise<void> 
     res.status(500).send('Failed to delete machine.');
   }
 };
+
+// Get user progress
+export const getUserProgress = async (req: Request, res: Response): Promise<void> => {
+	try {
+		const { machineId } = req.params;
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ message: "ERROR", cause: "User not found." });
+			return;
+		}
+		const machine = await Machine.findById(machineId);
+		if (!machine) {
+			res.status(404).json({ message: "ERROR", cause: "Machine not found." });
+			return;
+		}
+		let userProgress = await UserProgress.findOne({ user: user._id, machine: machineId, completed: false });
+		if (!userProgress) {
+			userProgress = new UserProgress({
+				user: user._id,
+				machine: machineId,
+				remainingHints: machine.hints.length,
+			});
+			await userProgress.save();
+		}
+		res.json({ message: "OK", userProgress: userProgress });
+	} catch (error: any) {
+		console.error('Error getting user progress:', error);
+		res.status(500).send('Server error');
+	}
+};
+
 /**
  * Get machine hints.
  */
@@ -362,49 +393,99 @@ export const getMachineHints = async (req: Request, res: Response): Promise<void
 
     // Find or create user progress
     let progress = await UserProgress.findOne({ 
-        user: userId, 
-        machine: machineId,
-        expEarned: 0
+      user: userId, 
+      machine: machineId,
+      expEarned: 0
     });
 
-    if (!progress) {
-        progress = new UserProgress({
-            user: userId,
-            machine: machineId,
-        });
-    }
-    // Get the hint content
+    const hintsUsed = progress ? progress.hintsUsed : 0;
+
     const machine = await Machine.findById(machineId);
     if (!machine || !machine.hints || machine.hints.length === 0) {
-        res.status(404).json({ msg: 'No hints available for this machine.' });
-        return;
+      res.status(404).json({ msg: 'No hints available for this machine.' });
+      return;
     }
-    // Limit hintsUsed to the number of hints available
-    if (progress.hintsUsed > machine.hints.length-1) {
+
+    if (hintsUsed >= machine.hints.length) {
       res.status(400).json({ msg: 'No more hints available.' });
       return;
-  } else {
-      // Increment hints used
-      progress.hintsUsed += 1;
-      await progress.save();
-  }
-    // Get the next hint based on hintsUsed count
-    const hintIndex = Math.min(progress.hintsUsed - 1, machine.hints.length - 1);
+    }
+
+    // Get the next hint
+    const hintIndex = hintsUsed;
     const hint = machine.hints[hintIndex];
 
-    res.status(200).json({ 
-        message: "OK",
-        msg: 'Hint revealed.',
-        hint: hint.content,
-        hintsUsed: progress.hintsUsed,
-        remainingHints: Math.max(0, machine.hints.length - progress.hintsUsed)
+    // Update user progress
+    if (progress) {
+      progress.hintsUsed += 1;
+      progress.usedHints.push(hint.content); // Store the used hint
+      await progress.save();
+    } else {
+      const newProgress = new UserProgress({
+        user: userId,
+        machine: machineId,
+        hintsUsed: 1,
+        usedHints: [hint.content], // Initialize with the first hint
+        remainingHints: machine.hints.length - hintsUsed,
+      });
+      await newProgress.save();
+    }
+
+    res.status(200).json({
+      message: "OK",
+      msg: 'Hint revealed.',
+      hint: hint.content,
+      hintsUsed: hintsUsed + 1,
+      remainingHints: Math.max(0, machine.hints.length - (hintsUsed + 1)),
+      usedHints: progress ? progress.usedHints : [hint.content], // Include used hints in response
     });
-} catch (error: any) {
+  } catch (error: any) {
     console.error('Error using hint:', error);
     res.status(500).send('Failed to get hint.');
-}
+  }
 };
 
+/**
+ * Fetch all used hints for a machine and user.
+ */
+export const getUsedHints = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { machineId } = req.params;
+    const userId = res.locals.jwtData.id;
+
+    const progress = await UserProgress.findOne({ user: userId, machine: machineId, completed: false });
+
+    if (!progress) {
+      res.status(200).json({
+        message: "OK",
+        msg: 'No hints used yet.',
+        usedHints: [],
+        hintsUsed: 0,
+        remainingHints: (await Machine.findById(machineId))?.hints.length || 0,
+      });
+      return;
+    }
+
+    const machine = await Machine.findById(machineId);
+    const totalHints = machine?.hints.length || 0;
+
+    res.status(200).json({
+      message: "OK",
+      msg: 'Used hints fetched successfully.',
+      usedHints: progress.usedHints,
+      hintsUsed: progress.hintsUsed,
+      remainingHints: Math.max(0, totalHints - progress.hintsUsed),
+    });
+  } catch (error: any) {
+    console.error('Error fetching used hints:', error);
+    res.status(500).send('Failed to fetch used hints.');
+  }
+};
+
+
+/**
+ * Submit a flag for a machine.
+ */
 export const submitFlagMachine = async (req: Request, res: Response): Promise<void> => {
     try {
         const { machineId } = req.params;
@@ -455,6 +536,7 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
         await machine.save();
   
         res.status(200).json({ 
+            message: "OK",
             msg: 'Flag accepted.',
             expEarned: expEarned,
             totalExp: user?.exp
