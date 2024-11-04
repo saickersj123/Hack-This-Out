@@ -4,6 +4,7 @@ import '../../assets/scss/leaderboard/LeaderboardTable.scss';
 interface User {
     _id: string;
     level: number;
+    name: string;
     user_id: string;
     exp: number;
 }
@@ -31,7 +32,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard }) => {
                             <tr key={`${user._id}-${index}`}>
                                 <td className="rank-col">{index + 1}</td>
                                 <td className="level-col">{user.level}</td>
-                                <td className="user-col">{user.user_id}</td>
+                                <td className="user-col">{user.name} ({user.user_id})</td>
                                 <td className="exp-col">{user.exp}</td>
                             </tr>
                         ))

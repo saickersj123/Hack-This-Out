@@ -10,6 +10,7 @@ interface User {
   _id: string;
   level: number;
   user_id: string;
+  name: string;
   exp: number;
 }
 
