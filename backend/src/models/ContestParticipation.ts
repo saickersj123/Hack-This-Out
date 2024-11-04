@@ -11,11 +11,6 @@ const ContestParticipationSchema = new mongoose.Schema({
         ref: 'Contest',
         required: true
     },
-    machine: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Machine',
-        required: true
-    },
     // Participation-specific timings
     participationStartTime: {
         type: Date,

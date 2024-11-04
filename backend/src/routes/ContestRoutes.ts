@@ -48,14 +48,14 @@ ContestRoutes.get('/:contestId/participate', verifyToken, getUserContestParticip
 ContestRoutes.post('/:contestId/participate', verifyToken, participateInContest);
 
 // Route to submit a flag for a contest
-ContestRoutes.post('/:contestId/submit-flag',
+ContestRoutes.post('/:contestId/:machineId/submit-flag',
     verifyToken,
     flagSubmissionLimiter,
     submitFlagForContest
 );
 
 // Route to get contest hints
-ContestRoutes.get('/:contestId/hints', verifyToken, getHintInContest);
+ContestRoutes.get('/:contestId/:machineId/hints', verifyToken, getHintInContest);
 
 // Route to get leaderboard by contest
 ContestRoutes.get('/:contestId/leaderboard', verifyToken, getLeaderboardByContest);

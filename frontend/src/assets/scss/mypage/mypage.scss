@@ -1,5 +1,4 @@
-@import '../setting/mixin.scss';
-
+@use '../setting/mixin' as *;
 
 .mypage-container {
     width: 100%;

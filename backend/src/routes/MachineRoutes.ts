@@ -2,6 +2,7 @@ import express from 'express';
 import {verifyToken} from '../middlewares/Token';
 import { verifyAdmin } from '../middlewares/Admin';
 import validateMachine from '../middlewares/validateMachine';
+import { machineReviewValidator } from '../middlewares/Validators';
 import { flagSubmissionLimiter } from '../middlewares/rateLimiter';
 import {
   createMachine,
@@ -30,6 +31,9 @@ import {
   getMachineDetailsById,
   getInactiveMachineDetailsById,
   getActiveMachineDetailsById,
+  updateAllMachineRatings,
+  updateMachineRating,
+  deleteMyMachineReview,
 } from '../controllers/MachineController.js';
 
 const MachineRoutes = express.Router();
@@ -57,10 +61,13 @@ MachineRoutes.get('/active', verifyToken, getActiveMachines);
 MachineRoutes.get('/:machineId/reviews', verifyToken, getMachineReviews);
 
 // Route to create a machine review
-MachineRoutes.post('/:machineId/reviews', verifyToken, postMachineReview);
+MachineRoutes.post('/:machineId/review', verifyToken, machineReviewValidator, postMachineReview);
 
 // Route to delete a machine review
 MachineRoutes.delete('/:machineId/reviews/:reviewId', verifyToken, deleteMachineReview);
+
+// Route to delete a machine review by user
+MachineRoutes.delete('/:machineId/reviews', verifyToken, deleteMyMachineReview);
 
 // Route to update a machine review by review ID
 MachineRoutes.put('/:machineId/reviews/:reviewId', verifyToken, updateMachineReview);

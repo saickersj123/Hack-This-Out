@@ -1,5 +1,5 @@
 /* frontend/src/assets/scss/contest/AddContestForm.scss */
-
+@use 'sass:color';
 /* Define color variables for the dark theme */
 $background-color: #2c2c2c;
 $input-background: #3c3c3c;
@@ -51,8 +51,8 @@ $suggestion-text-color: #f5f5f5;
 
             &:focus {
                 outline: none;
-                border-color: lighten($border-color, 20%);
-                box-shadow: 0 0 5px lighten($border-color, 20%);
+                border-color: color.adjust($border-color, $lightness: 20%);
+                box-shadow: 0 0 5px color.adjust($border-color, $lightness: 20%);
             }
         }
 

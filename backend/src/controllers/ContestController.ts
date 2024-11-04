@@ -15,13 +15,19 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
         // Validate machines
         const machineDocs = await Machine.find({ _id: { $in: machines } });
         if (machineDocs.length !== machines.length) {
-            res.status(400).json({ msg: 'One or more machines are invalid.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'One or more machines are invalid.' 
+            });
             return;
         }
 
         const contestExists = await Contest.findOne({ name, startTime, endTime });
         if (contestExists) {
-            res.status(400).json({ msg: 'Contest with this name and time already exists.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Contest with this name and time already exists.' 
+            });
             return;
         }
 
@@ -36,7 +42,11 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
         });
 
         await newContest.save();
-        res.status(201).json({ msg: 'Contest created successfully.', contest: newContest });
+        res.status(201).json({ 
+            message: "OK", 
+            msg: 'Contest created successfully.', 
+            contest: newContest 
+        });
     } catch (error: any) {
         console.error('Error creating contest:', error);
         res.status(500).send('Failed to create contest.');
@@ -54,7 +64,10 @@ export const activateContest = async (req: Request, res: Response): Promise<void
         //Find Contest by ID
         const contest = await Contest.findById(contestId);
         if (!contest) {
-            res.status(404).json({ msg: 'Contest not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
             return;
         }
 
@@ -62,9 +75,16 @@ export const activateContest = async (req: Request, res: Response): Promise<void
         if(contest.startTime < currentTime && contest.endTime > currentTime) {
             contest.isActive = true;
             await contest.save();
-            res.status(200).json({ msg: 'Contest active status updated successfully.', contest });
+            res.status(200).json({ 
+                message: "OK", 
+                msg: 'Contest active status updated successfully.', 
+                contest 
+            });
         } else {
-            res.status(400).json({ msg: 'Contest is not active.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Contest is not active.' 
+            });
         }
     } catch (error: any) {
         console.error('Error updating contest active status:', error);
@@ -80,7 +100,10 @@ export const deactivateContest = async (req: Request, res: Response): Promise<vo
         const { contestId } = req.params;
         const contest = await Contest.findById(contestId);
         if (!contest) {
-            res.status(404).json({ msg: 'Contest not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
             return;
         }
     } catch (error: any) {
@@ -95,7 +118,11 @@ export const deactivateContest = async (req: Request, res: Response): Promise<vo
 export const getActiveContests = async (req: Request, res: Response): Promise<void> => {
     try {
         const contests = await Contest.find({ isActive: true });
-        res.status(200).json({ msg: 'Active contests fetched successfully.', contests });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Active contests fetched successfully.', 
+            contests: contests 
+        });
     } catch (error: any) {
         console.error('Error fetching active contests:', error);
         res.status(500).send('Failed to fetch active contests.');
@@ -108,7 +135,11 @@ export const getActiveContests = async (req: Request, res: Response): Promise<vo
 export const getInactiveContests = async (req: Request, res: Response): Promise<void> => {
     try {
         const contests = await Contest.find({ isActive: false });
-        res.status(200).json({ msg: 'Inactive contests fetched successfully.', contests });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Inactive contests fetched successfully.', 
+            contests: contests 
+        });
     } catch (error: any) {
         console.error('Error fetching inactive contests:', error);
         res.status(500).send('Failed to fetch inactive contests.');
@@ -123,7 +154,14 @@ export const getContestStatus = async (req: Request, res: Response): Promise<voi
     try {
         const { contestId } = req.params;
         const contest = await Contest.findById(contestId);
-        res.status(200).json({ msg: 'Contest status fetched successfully.', isActive: contest?.isActive });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest status fetched successfully.', 
+            contestName: contest?.name, 
+            isActive: contest?.isActive, 
+            startTime: contest?.startTime, 
+            endTime: contest?.endTime 
+        });
     } catch (error: any) {
         console.error('Error getting contest status:', error);
         res.status(500).send('Failed to get contest status.');
@@ -136,46 +174,107 @@ export const getContestStatus = async (req: Request, res: Response): Promise<voi
 export const participateInContest = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
-        const { machineId } = req.body;
         const userId = res.locals.jwtData.id;
 
         const contest = await Contest.findById(contestId);
         if (!contest) {
-            res.status(404).json({ msg: 'Contest not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
             return;
         }
 
         const currentTime = new Date();
         if (currentTime < contest.startTime || currentTime > contest.endTime) {
-            res.status(400).json({ msg: 'Contest is not active.' });
-            return;
-        }
-
-        // Check if machine is part of the contest
-        if (!contest.machines.includes(machineId)) {
-            res.status(400).json({ msg: 'Machine not part of the contest.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Contest is not active.' 
+            });
             return;
         }
 
         // Check if already participated
-        const existingParticipation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
+        const existingParticipation = await ContestParticipation.findOne({ user: userId, contest: contestId });
         if (existingParticipation) {
-            res.status(400).json({ msg: 'Already participated in this contest for this machine.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Already participated in this contest.' 
+            });
             return;
         }
 
         // Create a new participation record without setting participationStartTime
         const newParticipation = new ContestParticipation({
             user: userId,
-            contest: contestId,
-            machine: machineId
+            contest: contestId
         });
 
         await newParticipation.save();
-        res.status(201).json({ msg: 'Participation successful.', participation: newParticipation });
+        res.status(201).json({ 
+            message: "OK", 
+            msg: 'Participation successful.', 
+            participation: newParticipation 
+        });
     } catch (error: any) {
         console.error('Error participating in contest:', error);
         res.status(500).send('Failed to participate in contest.');
+    }
+};
+
+/**
+ * Start playing a contest.
+ */
+export const startPlayingContest = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId } = req.params;
+        const userId = res.locals.jwtData.id;
+        if (!userId) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'User not found.' 
+            });
+            return;
+        }
+
+        const contest = await Contest.findById(contestId);
+        if (!contest) {
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
+            return;
+        }
+
+        const currentTime = new Date();
+        if (currentTime < contest.startTime) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Contest has not started yet.' 
+            });
+            return;
+        }
+
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId });
+        if (!participation) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'You are not participating in this contest.' 
+            });
+            return;
+        }
+
+        participation.participationStartTime = currentTime;
+        await participation.save();
+
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest started successfully.', 
+            participation: participation 
+        });
+    } catch (error: any) {
+        console.error('Error starting contest:', error);
+        res.status(500).send('Failed to start contest.');
     }
 };
 
@@ -187,7 +286,11 @@ export const getUserContestParticipation = async (req: Request, res: Response): 
         const { contestId } = req.params;
         const userId = res.locals.jwtData.id;
         const participation = await ContestParticipation.findOne({ user: userId, contest: contestId });
-        res.status(200).json({ msg: 'User contest participation fetched successfully.', participation });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'User contest participation fetched successfully.', 
+            participation: participation 
+        });
     } catch (error: any) {
         console.error('Error getting user contest participation:', error);
         res.status(500).send('Failed to get user contest participation.');
@@ -199,43 +302,61 @@ export const getUserContestParticipation = async (req: Request, res: Response): 
  */
 export const submitFlagForContest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { contestId } = req.params;
-        const { machineId, flag } = req.body;
+        const { contestId, machineId } = req.params;
+        const { flag } = req.body;
         const userId = res.locals.jwtData.id;
 
         const contest = await Contest.findById(contestId);
         if (!contest) {
-            res.status(404).json({ msg: 'Contest not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
             return;
         }
 
         const currentTime = new Date();
         if (currentTime < contest.startTime || currentTime > contest.endTime) {
-            res.status(400).json({ msg: 'Contest is not active.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Contest is not active.' 
+            });
             return;
         }
 
         const machine = await Machine.findById(machineId);
         if (!machine) {
-            res.status(404).json({ msg: 'Machine not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Machine not found.' 
+            });
             return;
         }
 
         // Verify if the machine is part of the contest
-        if (!contest.machines.includes(machineId)) {
-            res.status(400).json({ msg: 'Machine not part of the contest.' });
+        if(contest.machines.indexOf(machineId as any) === -1) {    
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Machine not part of the contest.' 
+            });
             return;
         }
 
-        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: contest.machines[0]._id });
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
         if (!participation) {
-            res.status(400).json({ msg: 'Participation not found. Please participate first.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Participation not found. Please participate first.' 
+            });
             return;
         }
 
         // Ensure that the contest has started for this participation
         if (!participation.participationStartTime) {
-            res.status(400).json({ msg: 'Contest has not started yet. Please wait until the instance is running.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Contest has not started yet. Please wait until the instance is running.' 
+            });
             return;
         }
 
@@ -243,7 +364,10 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
 
         const isMatch = await bcrypt.compare(flag, machine.flag);
         if (!isMatch) {
-            res.status(400).json({ msg: 'Incorrect flag.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Incorrect flag.' 
+            });
             return;
         }
 
@@ -260,9 +384,8 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
         expEarned -= hintsUsed * 5; // Hint penalty
         expEarned = Math.max(Math.floor(contest.contestExp * 0.1), expEarned); // Minimum 10% of base EXP
 
-        if (expEarned < 0) expEarned = 0;
+        if (expEarned < 1) expEarned = 1; // Minimum 1 EXP
 
-        participation.participationEndTime = currentTime;
         participation.expEarned = expEarned;
 
         await participation.save();
@@ -275,7 +398,12 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
             await user.save();
         }
 
-        res.status(200).json({ msg: 'Flag accepted.', expEarned, totalExp: user?.exp });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Flag accepted.', 
+            expEarned: expEarned, 
+            totalExp: user?.exp 
+        });
     } catch (error: any) {
         console.error('Error submitting flag for contest:', error);
         res.status(500).send('Failed to submit flag for contest.');
@@ -283,35 +411,90 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
 };
 
 /**
+ * End playing a contest.
+ */
+export const endPlayingContest = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { contestId, machineId } = req.params;
+        const userId = res.locals.jwtData.id;
+        if (!userId) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'User not found.' 
+            });
+            return;
+        }
+
+        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
+        if (!participation) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Participation not found.' 
+            });
+            return;
+        }
+
+        participation.participationEndTime = new Date();
+        await participation.save();
+
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest ended successfully.', 
+            participation: participation 
+        });
+    } catch (error: any) {
+        console.error('Error ending playing contest:', error);
+        res.status(500).send('Failed to end playing contest.');
+    }
+};
+
+
+/**
  * Use a hint in a contest.
  */
 export const getHintInContest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { contestId } = req.params;
-        const { machineId } = req.body;
+        const { contestId, machineId } = req.params;
         const userId = res.locals.jwtData.id;
 
         const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, machine: machineId });
         if (!participation) {
-            res.status(400).json({ msg: 'Participation not found.' });
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Participation not found.' 
+            });
             return;
         }
 
         const machine = await Machine.findById(machineId);
         if (!machine) {
-            res.status(404).json({ msg: 'Machine not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Machine not found.' 
+            });
             return;
         }
         
-        if (participation.hintsUsed >= machine.hints.length) {
-            res.status(400).json({ msg: 'No more hints available.' });
+        if (participation.hintsUsed >= machine.hints.length-1) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'No more hints available.' 
+            });
             return;
+        } else {
+            participation.hintsUsed += 1;
+            await participation.save();
         }
 
-        participation.hintsUsed += 1;
-        await participation.save();
-
-        res.status(200).json({ msg: 'Hint used.', hintsUsed: participation.hintsUsed, hints: machine.hints });
+        const hintIndex = Math.min(participation.hintsUsed - 1, machine.hints.length - 1);
+        const hint = machine.hints[hintIndex];
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Hint used.', 
+            hintsUsed: participation.hintsUsed, 
+            hint: hint.content,
+            remainingHints: Math.max(0, machine.hints.length - participation.hintsUsed)
+        });
     } catch (error: any) {
         console.error('Error using hint in contest:', error);
         res.status(500).send('Failed to use hint in contest.');
@@ -329,7 +512,10 @@ export const updateContestDetails = async (req: Request, res: Response): Promise
         // Find the contest
         const contest = await Contest.findById(contestId);
         if (!contest) {
-            res.status(404).json({ msg: 'Contest not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
             return;
         }
 
@@ -342,7 +528,10 @@ export const updateContestDetails = async (req: Request, res: Response): Promise
         if (machines) {
             const machineDocs = await Machine.find({ _id: { $in: machines } });
             if (machineDocs.length !== machines.length) {
-                res.status(400).json({ msg: 'One or more machines are invalid.' });
+                res.status(400).json({ 
+                    message: "ERROR", 
+                    msg: 'One or more machines are invalid.' 
+                });
                 return;
             }
             contest.machines = machines;
@@ -356,7 +545,11 @@ export const updateContestDetails = async (req: Request, res: Response): Promise
         if (contestExp !== undefined) contest.contestExp = contestExp;
 
         await contest.save();
-        res.status(200).json({ msg: 'Contest updated successfully.', contest });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest updated successfully.', 
+            contest: contest 
+        });
     } catch (error: any) {
         console.error('Error updating contest:', error);
         res.status(500).send('Failed to update contest.');
@@ -373,7 +566,10 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
         // Find the contest
         const contest = await Contest.findById(contestId);
         if (!contest) {
-            res.status(404).json({ msg: 'Contest not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
             return;
         }
 
@@ -383,7 +579,10 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
         // Delete the contest
         await Contest.findByIdAndDelete(contestId);
 
-        res.status(200).json({ msg: 'Contest and related participations deleted successfully.' });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest and related participations deleted successfully.' 
+        });
     } catch (error: any) {
         console.error('Error deleting contest:', error);
         res.status(500).send('Failed to delete contest.');
@@ -396,7 +595,11 @@ export const deleteContest = async (req: Request, res: Response): Promise<void> 
 export const getContests = async (req: Request, res: Response): Promise<void> => {
     try {
         const contests = await Contest.find();
-        res.json({ contests });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contests fetched successfully.', 
+            contests: contests 
+        });
     } catch (error: any) {
         console.error('Error fetching contests:', error);
         res.status(500).send('Failed to fetch contests.');
@@ -409,8 +612,12 @@ export const getContests = async (req: Request, res: Response): Promise<void> =>
 export const getActiveContestDetails = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
-        const contest = await Contest.findById(contestId, { isActive: true });
-        res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
+        const contest = await Contest.findById(contestId, { isActive: true }).populate('machines', 'name').select('-__v');
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest details fetched successfully.', 
+            contest: contest 
+        });
     } catch (error: any) {
         console.error('Error fetching contest details:', error);
         res.status(500).send('Failed to fetch contest details.');
@@ -424,7 +631,11 @@ export const getInactiveContestDetails = async (req: Request, res: Response): Pr
     try {
         const { contestId } = req.params;
         const contest = await Contest.findById(contestId, { isActive: false });
-        res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest details fetched successfully.', 
+            contest: contest 
+        });
     } catch (error: any) {
         console.error('Error fetching contest details:', error);
         res.status(500).send('Failed to fetch contest details.');
@@ -437,13 +648,20 @@ export const getInactiveContestDetails = async (req: Request, res: Response): Pr
 export const getContestDetails = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
-        const contest = await Contest.findById(contestId).populate('machines', 'name');
+        const contest = await Contest.findById(contestId).populate('machines', 'name').select('-__v');
         if (!contest) {
-            res.status(404).json({ msg: 'Contest not found.' });
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
             return;
         }
 
-        res.status(200).json({ msg: 'Contest details fetched successfully.', contest });
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest details fetched successfully.', 
+            contest: contest 
+        });
     } catch (error: any) {
         console.error('Error fetching contest details:', error);
         res.status(500).send('Failed to fetch contest details.');
@@ -457,7 +675,11 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
     try {
         const { contestId } = req.params;
         const participations = await ContestParticipation.find({ contest: contestId }).sort({ expEarned: -1 });
-        return res.status(200).json({ message: "OK", users: participations.map((participation) => participation.user) });
+        return res.status(200).json({ 
+            message: "OK", 
+            msg: 'Leaderboard fetched successfully.', 
+            users: participations.map((participation) => participation.user) 
+        });
     } catch (error: any) {
         console.error('Error getting leaderboard:', error);
         res.status(500).send('Failed to get leaderboard.');

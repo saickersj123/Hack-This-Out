@@ -41,18 +41,27 @@ export const startInstance = async (req: Request, res: Response) => {
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-      return res.status(401).json("User not registered / token malfunctioned");
+      return res.status(401).json({ 
+        message: "ERROR", 
+        msg: "User not registered / token malfunctioned" 
+      });
     }
 
     // Fetch the machine from the database to get the AMI ID
     const machine = await Machine.findById(machineId);
     if (!machine) {
-      res.status(400).json({ msg: 'Invalid machine ID selected' });
+      res.status(400).json({ 
+        message: "ERROR", 
+        msg: 'Invalid machine ID selected' 
+      });
       return;
     }
     const instance = await Instance.findOne({ user: user.id });
     if (instance) {
-      res.status(400).json({ msg: 'Instance already exists' });
+      res.status(400).json({ 
+        message: "ERROR", 
+        msg: 'Instance for this machine already exists' 
+      });
       return;
     }
 
@@ -83,7 +92,10 @@ export const startInstance = async (req: Request, res: Response) => {
     const data = await ec2Client.send(runCommand);
 
     if (!data.Instances || data.Instances.length === 0 || !data.Instances[0].InstanceId) {
-      res.status(500).json({ msg: 'Failed to create instance' });
+      res.status(500).json({ 
+        message: "ERROR", 
+        msg: 'Failed to create instance' 
+      });
       return;
     }
 
@@ -97,7 +109,11 @@ export const startInstance = async (req: Request, res: Response) => {
     });
     await newInstance.save();
 
-    res.json({ msg: 'Instance is being created', instanceId });
+    res.status(200).json({ 
+      message: "OK", 
+      msg: 'Instance is being created', 
+      instanceId 
+    });
   } catch (error) {
     console.error('Error starting instance:', error);
     res.status(500).send('Failed to create instance.');
@@ -115,7 +131,10 @@ export const receiveVpnIp = async (req: Request, res: Response): Promise<void> =
     // Find the instance
     const instance = await Instance.findOne({ instanceId });
     if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ 
+        message: "ERROR", 
+        msg: 'Instance not found' 
+      });
       return;
     }
 
@@ -124,7 +143,10 @@ export const receiveVpnIp = async (req: Request, res: Response): Promise<void> =
     instance.status = 'running';
     await instance.save();
 
-    res.json({ msg: 'VPN IP updated successfully' });
+    res.status(200).json({ 
+      message: "OK", 
+      msg: 'VPN IP updated successfully' 
+    });
   } catch (error) {
     console.error('Error receiving VPN IP:', error);
     res.status(500).send('Failed to receive VPN IP.');
@@ -141,25 +163,37 @@ export const submitFlag = async (req: Request, res: Response) => {
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-			return res.status(401).json("User not registered / token malfunctioned");
-		}
+      return res.status(401).json({ 
+        message: "ERROR", 
+        msg: "User not registered / token malfunctioned" 
+      });
+    }
     // Validate flag
     const isValidFlag = await validateFlag(flag, user.id, machineId);
     if (!isValidFlag) {
-      res.status(400).json({ msg: 'Invalid flag' });
+      res.status(400).json({ 
+        message: "ERROR", 
+        msg: 'Invalid flag' 
+      });
       return;
     }
     //find machine
     const machine = await Machine.findById(machineId);
     if (!machine) {
-      res.status(400).json({ msg: 'Invalid machine ID selected' });
+      res.status(400).json({ 
+        message: "ERROR", 
+        msg: 'Invalid machine ID selected' 
+      });
       return;
     }
 
     // Find the instance
     const instance = await Instance.findOne({ machineType: machine.name, user: user.id });
     if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ 
+        message: "ERROR", 
+        msg: 'Instance not found' 
+      });
       return;
     }
 
@@ -177,7 +211,10 @@ export const submitFlag = async (req: Request, res: Response) => {
     // Optionally, delete the instance record from DB
     await Instance.deleteOne({ instanceId: instance.instanceId });
 
-    res.json({ msg: 'Flag accepted. Instance terminated.' });
+    res.status(200).json({ 
+      message: "OK", 
+      msg: 'Flag accepted. Instance terminated.' 
+    });
   } catch (error) {
     console.error('Error submitting flag:', error);
     res.status(500).send('Failed to submit flag.');
@@ -192,12 +229,18 @@ export const getInstanceByMachine = async (req: Request, res: Response) => {
     const userId = res.locals.jwtData.id;
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(401).json("User not registered / token malfunctioned");
+      return res.status(401).json({ 
+        message: "ERROR", 
+        msg: "User not registered / token malfunctioned" 
+      });
     }
     const { machineId } = req.params;
     const machine = await Machine.findById(machineId);
     if (!machine) {
-      res.status(400).json({ msg: 'Invalid machine ID selected' });
+      res.status(400).json({ 
+        message: "ERROR", 
+        msg: 'Invalid machine ID selected' 
+      });
       return;
     }
     const instance = await Instance.find({ user: user.id, machineType: machine.name });
@@ -214,7 +257,10 @@ export const getInstanceByMachine = async (req: Request, res: Response) => {
 export const getAllInstances = async (req: Request, res: Response) => {
   try {
     const instances = await Instance.find();
-    res.json({ instances });
+    res.status(200).json({ 
+      message: "OK", 
+      instances: instances 
+    });
   } catch (error) {
     console.error('Error fetching all instances:', error);  
     res.status(500).send('Server error');
@@ -229,16 +275,25 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
     const { instanceId } = req.params;
     const userId = res.locals.jwtData.id;
     if (!userId) {
-      return res.status(401).json("User not registered / token malfunctioned");
+      return res.status(401).json({ 
+        message: "ERROR", 
+        msg: "User not registered / token malfunctioned" 
+      });
     }
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ 
+        message: "ERROR", 
+        msg: 'Instance not found' 
+      });
       return;
     }
 
-    res.json(instance);
+    res.status(200).json({ 
+      message: "OK", 
+      instance: instance 
+    });
   } catch (error) {
     console.error('Error fetching instance details:', error);
     res.status(500).send('Server error');
@@ -254,13 +309,19 @@ export const deleteInstance = async (req: Request, res: Response) => {
     const userId = res.locals.jwtData.id;
 
     if (!userId) {
-      return res.status(401).json("User not registered / token malfunctioned");
+      return res.status(401).json({ 
+        message: "ERROR", 
+        msg: "User not registered / token malfunctioned" 
+      });
     }
 
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
     if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ 
+        message: "ERROR", 
+        msg: 'Instance not found' 
+      });
       return;
     }
 
@@ -278,7 +339,10 @@ export const deleteInstance = async (req: Request, res: Response) => {
     // Optionally, delete the instance record from DB
     await Instance.deleteOne({ instanceId });
 
-    res.json({ msg: 'Instance terminated and deleted successfully.' });
+    res.status(200).json({ 
+      message: "OK", 
+      msg: 'Instance terminated and deleted successfully.' 
+    });
   } catch (error) {
     console.error('Error deleting instance:', error);
     res.status(500).send('Server error');
@@ -318,7 +382,10 @@ export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
     const userId = res.locals.jwtData.id;
 
     if (!userId) {
-      return res.status(401).json({ msg: "User not registered / token malfunctioned" });
+      return res.status(401).json({ 
+        message: "ERROR", 
+        msg: "User not registered / token malfunctioned" 
+      });
     }
 
     const bucketName = config.aws.s3BucketName;
@@ -332,7 +399,10 @@ export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
     const data = await s3Client.send(command);
 
     if (!data.Body) {
-      return res.status(404).json({ msg: 'VPN profile not found.' });
+      return res.status(404).json({ 
+        message: "ERROR", 
+        msg: 'VPN profile not found.' 
+      });
     }
 
     // Set appropriate headers for file download
@@ -348,9 +418,15 @@ export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('Error downloading OpenVPN profile from S3:', error);
     if (error.name === 'NoSuchKey') {
-      res.status(404).json({ msg: 'VPN profile does not exist.' });
+      res.status(404).json({ 
+        message: "ERROR", 
+        msg: 'VPN profile does not exist.' 
+      });
     } else {
-      res.status(500).json({ msg: 'Failed to download OpenVPN profile.' });
+      res.status(500).json({ 
+        message: "ERROR", 
+        msg: 'Failed to download OpenVPN profile.' 
+      });
     }
   }
 };
@@ -361,16 +437,25 @@ export const terminateInstance = async (req: Request, res: Response) => {
     const userId = res.locals.jwtData.id;
 
     if (!userId) {
-      return res.status(401).json("User not registered / token malfunctioned");
+      return res.status(401).json({ 
+        message: "ERROR", 
+        msg: "User not registered / token malfunctioned" 
+      });
     }
     const machine = await Machine.findById(machineId);
     if (!machine) { 
-      res.status(400).json({ msg: 'Invalid machine ID selected' });
+      res.status(400).json({ 
+        message: "ERROR", 
+        msg: 'Invalid machine ID selected' 
+      });
       return;
     }
     const instance = await Instance.findOne({ machineType: machine.name, user: userId });
     if (!instance) {
-      res.status(404).json({ msg: 'Instance not found' });
+      res.status(404).json({ 
+        message: "ERROR", 
+        msg: 'Instance not found' 
+      });
       return;
     }
 
@@ -383,7 +468,10 @@ export const terminateInstance = async (req: Request, res: Response) => {
     instance.status = 'terminated';
     await instance.save();
 
-    res.json({ msg: 'Instance terminated successfully.' });
+    res.status(200).json({ 
+      message: "OK", 
+      msg: 'Instance terminated successfully.' 
+    });
   } catch (error) {
     console.error('Error terminating instance:', error);
     res.status(500).send('Server error');
