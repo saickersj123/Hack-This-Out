@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getMachineHints, getHintInContest } from '../../api/axiosInstance';
 
 /**
@@ -43,13 +43,13 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) =
       let fetchedHints: Hint[] = [];
       if (playType === 'machine') {
         const response = await getMachineHints(machineId);
-        fetchedHints = response.hints;
+        fetchedHints = response.hints || [];
       } else if (playType === 'contest') {
         if (!contestId) {
           throw new Error('Contest ID is missing for contest mode.');
         }
         const response = await getHintInContest(contestId, machineId);
-        fetchedHints = response.hints;
+        fetchedHints = response.hints || [];
       }
       setHints(fetchedHints);
     } catch (err: any) {
@@ -59,11 +59,6 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) =
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchHints();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [machineId, playType, contestId]);
 
   return (
     <div className="get-hints-container">
