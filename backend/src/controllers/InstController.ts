@@ -303,7 +303,7 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
 /**
  * Delete a specific instance.
  */
-export const deleteInstance = async (req: Request, res: Response) => {
+export const terminateInstanceByInstanceId = async (req: Request, res: Response) => {
   try {
     const { instanceId } = req.params;
     const userId = res.locals.jwtData.id;

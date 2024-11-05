@@ -297,6 +297,34 @@ export const deleteUser = async (password: string) => {
   }
 };
 
+/**
+ * Make user to admin.
+ * @param {string} user_id - The user_id to make to admin.
+ * @returns {Promise<Object>} - The response data confirming update.
+ */
+export const makeUsertoAdmin = async (user_id: string) => {
+  try {
+    const response = await axiosInstance.post(`/user/${user_id}/to-admin`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error('Failed to make user to admin');
+  }
+};
+
+/**
+ * Make admin to user.
+ * @param {string} user_id - The user_id to make to user.
+ * @returns {Promise<Object>} - The response data confirming update.
+ */
+export const makeAdmintoUser = async (user_id: string) => {
+  try {
+    const response = await axiosInstance.post(`/user/${user_id}/to-user`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error('Failed to make user to user');
+  }
+};
+
 // ------- Instance related ------
 
 /**
@@ -371,16 +399,31 @@ export const submitFlag = async (machineId: string, flag: string) => {
 };
 
 /**
- * Delete a specific instance.
- * @param {string} instanceId - The ID of the instance to delete.
- * @returns {Promise<Object>} - The response data confirming deletion.
- */
-export const deleteInstance = async (instanceId: string) => {
+ * Terminate a specific instance.
+ * @param {string} instanceId - The ID of the instance to terminate.
+ * @returns {Promise<Object>} - The response data confirming termination.
+ * Admin only
+*/
+export const TerminateInstanceById = async (instanceId: string) => {
   try {
     const response = await axiosInstance.delete(`/inst/${instanceId}`);
     return response.data; // Return the data received from the server
   } catch (error: any) {
-    throw error.response ? error.response.data : new Error('Failed to delete instance');
+    throw error.response ? error.response.data : new Error('Failed to terminate instance');
+  }
+};
+
+/**
+ * Terminate all instances by machine.
+ * @param {string} machineId - The ID of the machine to terminate.
+ * @returns {Promise<Object>} - The response data confirming termination.
+ */
+export const TerminateInstance = async (machineId: string) => {
+  try {
+    const response = await axiosInstance.delete(`/inst/${machineId}`);
+    return response.data; // Return the data received from the server
+  } catch (error: any) {
+    throw error.response ? error.response.data : new Error('Failed to terminate instance');
   }
 };
 

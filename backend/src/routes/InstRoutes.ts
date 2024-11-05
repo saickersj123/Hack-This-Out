@@ -7,11 +7,11 @@ import {
   receiveVpnIp,
   submitFlag,
   getInstanceDetails,
-  deleteInstance,
   getInstanceByMachine,
   getAllInstances,
   downloadOpenVPNProfile,
   terminateInstance,
+  terminateInstanceByInstanceId,
 } from '../controllers/InstController.js';
 
 const InstRoutes = express.Router();
@@ -28,7 +28,7 @@ InstRoutes.get('/', verifyToken, verifyAdmin, getAllInstances);
 InstRoutes.post('/:machineId/submit-flag', verifyToken, flagSubmissionLimiter, submitFlag);
 InstRoutes.get('/:machineId', verifyToken, getInstanceByMachine);
 InstRoutes.get('/:instanceId', verifyToken, getInstanceDetails);
-InstRoutes.delete('/:instanceId', verifyToken, verifyAdmin, deleteInstance);
+InstRoutes.delete('/:instanceId', verifyToken, verifyAdmin, terminateInstanceByInstanceId);
 InstRoutes.delete('/:machineId', verifyToken, terminateInstance);
 
 export default InstRoutes;

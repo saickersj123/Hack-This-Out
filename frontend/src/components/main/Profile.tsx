@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import profileIcon from '../../assets/img/icon/profile_default.png';
 import arrowIcon from '../../assets/img/icon/down_arrow.png';
-import bell from '../../assets/img/icon/notification-bell.png';
 
 interface MenuItemProps {
     onClick?: () => void;
@@ -46,9 +45,7 @@ const Profile: React.FC = () => {
     return (
         <div className="profile">
             <div className="notification-wrapper">
-                <button id="notification" type="button" className="bell">
-                    <img className="bell_icon" alt="bell_icon" src={bell} />
-                </button>
+                {/*notification*/}
             </div>
             <div className="profile-wrapper">
                 <button id="profileButton" type="button" className="menuButton" onClick={toggleMenu}>

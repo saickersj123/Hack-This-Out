@@ -24,6 +24,9 @@ import {
     deleteUser,
     getUserDetail,
     getUserDetailByUserId,
+    makeUserAdmin,
+    checkAdminPassword,
+    makeAdminToUser,
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
@@ -111,5 +114,13 @@ UserRoutes.delete("/:user_id",
 // Get Leaderboard
 UserRoutes.get("/leaderboard", verifyToken, getLeaderboard);
 
+// Check Admin Password(Admin Only)
+UserRoutes.post("/verify-admin", verifyToken, verifyAdmin, checkAdminPassword);
+
+// Make User Admin by User ID(Admin Only)
+UserRoutes.post("/:user_id/to-admin", verifyToken, verifyAdmin, makeUserAdmin);
+
+// Make Admin to User by User ID(Admin Only)
+UserRoutes.post("/:user_id/to-user", verifyToken, verifyAdmin, makeAdminToUser);
 
 export default UserRoutes;

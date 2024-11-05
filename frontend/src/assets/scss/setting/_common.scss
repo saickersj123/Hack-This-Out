@@ -1,4 +1,5 @@
 body {
-    background-color: var(--black);
-    color: var(--white);
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-family: var(--mainfont-noto), var(--mainfont-roboto);
 }

@@ -589,5 +589,83 @@ export const getLeaderboard = async (req: Request, res: Response) => {
 	}
 };
 
+// Make User Admin by User ID(Admin Only)
+export const makeUserAdmin = async (req: Request, res: Response) => {
+	try {
+		const { user_id } = req.params;
+		const user = await User.findOne({ user_id });
+		if (!user) {
+			res.status(404).json({ 
+				message: "ERROR", 
+				msg: "User not found." 
+			});
+			return;
+		}
+		user.isAdmin = true;
+		await user.save();
+		return res.status(200).json({ 
+			message: "OK",
+			name: user.name,
+			user_id: user.user_id,
+			isAdmin: user.isAdmin 
+		});
+	} catch (error: any) {
+		console.error('Error promoting user to admin:', error);
+		res.status(500).send('Server error');
+	}
+};
 
+// Make Admin to User by User ID(Admin Only)
+export const makeAdminToUser = async (req: Request, res: Response) => {
+	try {
+		const { user_id } = req.params;
+		const user = await User.findOne({ user_id });
+		if (!user) {
+			res.status(404).json({ 
+				message: "ERROR", 
+				msg: "User not found." 
+			});
+			return;
+		}
+		user.isAdmin = false;
+		await user.save();
+		return res.status(200).json({ 
+			message: "OK",
+			name: user.name,
+			user_id: user.user_id,
+			isAdmin: user.isAdmin 
+		});
+	} catch (error: any) {
+		console.error('Error demoting user from admin:', error);
+		res.status(500).send('Server error');
+	}
+};
+
+// Check Admin Password(Admin Only)
+export const checkAdminPassword = async (req: Request, res: Response) => {
+	try {
+		const { adminPassword } = req.body;
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ 
+				message: "ERROR", 
+				msg: "User not found." 
+			});
+			return;
+		}
+		if (adminPassword !== process.env.ADMIN_PASSWORD) {
+			return res.status(401).json({ 
+				message: "ERROR", 
+				msg: "Incorrect Admin Password" 
+			});
+		}
+		return res.status(200).json({ 
+			message: "OK", 
+			isAdmin: user.isAdmin 
+		});
+	} catch (error: any) {
+		console.error('Error verifying user admin:', error);
+		res.status(500).send('Server error');
+	}
+};
 
