@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../assets/scss/admin/Unauthorized.scss';
+import '../assets/scss/admin/Unauthorized.scss';
 
 const Unauthorized: React.FC = () => {
   return (
