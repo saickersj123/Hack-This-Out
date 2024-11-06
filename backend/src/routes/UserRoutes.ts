@@ -105,7 +105,7 @@ UserRoutes.post("/reset/:user_id",
 );
 
 // Delete User by User ID(Admin Only)
-UserRoutes.delete("/:user_id", 
+UserRoutes.delete("/:user_id/delete", 
     verifyToken, 
     verifyAdmin, 
     deleteUserByUserId

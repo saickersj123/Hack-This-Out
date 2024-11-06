@@ -276,7 +276,7 @@ export const getLeaderboard = async () => {
  */
 export const deleteUserByUserId = async (user_id: string) => {  
   try {
-    const response = await axiosInstance.delete(`/user/${user_id}`);
+    const response = await axiosInstance.delete(`/user/${user_id}/delete`);
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to delete user');

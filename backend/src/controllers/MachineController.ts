@@ -673,12 +673,21 @@ export const getMachineReviewsbyUser = async (req: Request, res: Response): Prom
 export const getMachineReview = async (req: Request, res: Response): Promise<void> => {
     try {
         const { machineId, reviewId } = req.params;
+        const userId = res.locals.jwtData.id;
+        const user = await User.findById(userId);
+        if (!user) {
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'User not found.' 
+            });
+            return;
+        }
         const machine = await Machine.findById(machineId);
         const review = machine?.reviews.find((r) => r._id.toString() === reviewId);
         res.status(200).json({ 
             message: "OK", 
             msg: 'Machine review fetched successfully.', 
-            review: review 
+            review: review,
         });
     } catch (error) {
         console.error('Error fetching machine review:', error);

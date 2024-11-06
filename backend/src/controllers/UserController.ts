@@ -410,13 +410,9 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const deleteUserByUserId = async (req: Request, res: Response) => {
 	try {
 		const { user_id } = req.params;
-		const { AdminPassword } = req.body;
-		if (AdminPassword !== process.env.ADMIN_PASSWORD) {
-			return res.status(401).json({ message: "ERROR", cause: "Incorrect Admin Password" });
-		}
-		const user = await User.findOne({ user_id });
+		const user = await User.findById(user_id);
 		if (!user) {
-			res.status(404).json({ msg: 'User not found.' });
+			res.status(404).json({ message: "ERROR", msg: 'User not found.' });
 			return;
 		}
 		await user.deleteOne();
@@ -593,7 +589,7 @@ export const getLeaderboard = async (req: Request, res: Response) => {
 export const makeUserAdmin = async (req: Request, res: Response) => {
 	try {
 		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const user = await User.findById(user_id);
 		if (!user) {
 			res.status(404).json({ 
 				message: "ERROR", 

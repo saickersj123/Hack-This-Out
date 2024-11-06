@@ -3,7 +3,7 @@ import DataTable from '../../components/admin/DataTable/DataTable';
 import ActionButtons from '../../components/admin/ActionButtons';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import ErrorMessage from '../../components/admin/ErrorMessage';
-import { getAllUser, updateUsertoAdmin, deleteUserByUserId } from '../../api/axiosInstance';
+import { getAllUser, makeUsertoAdmin, deleteUserByUserId } from '../../api/axiosInstance';
 import Sidebar from '../../components/admin/AdminSidebar';
 interface User {
   _id: string;
@@ -49,7 +49,7 @@ const UsersManagement: React.FC = () => {
 
     try {
       if (action === 'makeAdmin') {
-        await updateUsertoAdmin(userId);
+        await makeUsertoAdmin(userId);
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
             user._id === userId ? { ...user, isAdmin: true } : user
@@ -68,7 +68,7 @@ const UsersManagement: React.FC = () => {
   };
 
   const columns = [
-    { header: 'Username', accessor: 'user_id' },
+    { header: 'User ID', accessor: 'user_id' },
     { header: 'Email', accessor: 'email' },
     { header: 'Admin', accessor: 'isAdmin' },
   ];
