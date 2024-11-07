@@ -46,7 +46,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
       
       // Since LoginPage handles navigation based on isLoggedIn, no need to navigate here
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      setError(err.msg || 'Login failed');
     }
   };
 

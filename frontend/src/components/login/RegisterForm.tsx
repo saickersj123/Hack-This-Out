@@ -62,7 +62,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
           <div className="input-box">
             <input
               type="text"
-              name="user_id"
+              name="username"
               placeholder="아이디"
               value={formData.username}
               onChange={handleChange}

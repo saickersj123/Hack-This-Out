@@ -168,7 +168,7 @@ export const postLoginUser = async (req: Request, res: Response) => {
 			.json({ message: "OK", name: user.name, username: user.username, email: user.email });
     } catch (err: any) {
         console.error(err.message);
-        res.status(500).send('Server error');
+        res.status(500).send({ message: "ERROR", cause: err.message });
     }
 };
 
