@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMachineDetails } from '../../api/axiosInstance';
+import { getActiveMachineDetails } from '../../api/axiosInstance';
 import DisplayReward from '../../components/play/DisplayReward';
 import GetHints from '../../components/play/GetHints';
 import StartInstanceButton from '../../components/play/StartInstanceButton';
@@ -43,7 +43,7 @@ const MachinePlayPage: React.FC = () => {
         if (!machineId) {
           throw new Error('Machine ID is missing');
         }
-        const response: GetMachineDetailsResponse = await getMachineDetails(machineId);
+        const response: GetMachineDetailsResponse = await getActiveMachineDetails(machineId);
         setMachine(response.machine);
       } catch (error: any) {
         console.error('Error fetching machine details:', error.message || error);

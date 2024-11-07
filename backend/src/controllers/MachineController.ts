@@ -110,7 +110,7 @@ export const getMachineDetails = async (req: Request, res: Response): Promise<vo
 export const getActiveMachineDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
-    const machine = await Machine.findById(machineId, { isActive: true }).select('-hints -flag -__v -reviews');
+    const machine = await Machine.findOne({ _id: machineId, isActive: true }).select('-hints -flag -__v -reviews');
     res.status(200).json({ 
       message: "OK", 
       msg: 'Active machine fetched successfully.', 

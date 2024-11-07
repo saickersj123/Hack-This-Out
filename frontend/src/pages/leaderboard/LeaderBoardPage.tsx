@@ -9,7 +9,7 @@ import Main from '../../components/main/Main';
 interface User {
   _id: string;
   level: number;
-  user_id: string;
+  username: string;
   name: string;
   exp: number;
 }

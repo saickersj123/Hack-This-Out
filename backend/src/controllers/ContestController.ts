@@ -71,21 +71,13 @@ export const activateContest = async (req: Request, res: Response): Promise<void
             return;
         }
 
-        const currentTime = new Date();
-        if(contest.startTime < currentTime && contest.endTime > currentTime) {
-            contest.isActive = true;
-            await contest.save();
-            res.status(200).json({ 
-                message: "OK", 
-                msg: 'Contest active status updated successfully.', 
-                contest 
-            });
-        } else {
-            res.status(400).json({ 
-                message: "ERROR", 
-                msg: 'Contest is not active.' 
-            });
-        }
+        contest.isActive = true;
+        await contest.save();
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest activated successfully.', 
+            contest 
+        });
     } catch (error: any) {
         console.error('Error updating contest active status:', error);
         res.status(500).send('Failed to activate contest.');
@@ -186,10 +178,17 @@ export const participateInContest = async (req: Request, res: Response): Promise
         }
 
         const currentTime = new Date();
-        if (currentTime < contest.startTime || currentTime > contest.endTime) {
+        if (currentTime < contest.startTime) {
             res.status(400).json({ 
                 message: "ERROR", 
-                msg: 'Contest is not active.' 
+                msg: 'Contest is not started yet.' 
+            });
+            return;
+        }
+        if (currentTime > contest.endTime) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Contest has ended.' 
             });
             return;
         }
@@ -197,9 +196,10 @@ export const participateInContest = async (req: Request, res: Response): Promise
         // Check if already participated
         const existingParticipation = await ContestParticipation.findOne({ user: userId, contest: contestId });
         if (existingParticipation) {
-            res.status(400).json({ 
-                message: "ERROR", 
-                msg: 'Already participated in this contest.' 
+            res.status(302).json({ 
+                message: "OK", 
+                msg: 'Already participated in this contest.',
+                participation: existingParticipation
             });
             return;
         }

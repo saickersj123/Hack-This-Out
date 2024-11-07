@@ -10,7 +10,7 @@ interface RegisterFormProps {
 
 interface FormData {
   name: string;
-  user_id: string;
+  username: string;
   password: string;
   email: string;
 }
@@ -19,7 +19,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     name: '',
-    user_id: '',
+    username: '',
     password: '',
     email: '',
   });
@@ -64,7 +64,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
               type="text"
               name="user_id"
               placeholder="아이디"
-              value={formData.user_id}
+              value={formData.username}
               onChange={handleChange}
             />
           </div>

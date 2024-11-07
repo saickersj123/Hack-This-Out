@@ -49,20 +49,20 @@ export const getUserDetail = async (req: Request, res: Response) => {
     }
 };
 
-// GET user Detail by user_id(Admin Only)
+// GET user Detail by userId(Admin Only)
 export const getUserDetailByUserId = async (req: Request, res: Response) => {
-    const { user_id } = req.params;
-    const user = await User.findOne({ user_id });
+    const { userId } = req.params;
+    const user = await User.findOne({ id: userId });
     return res.status(200).json({ message: "OK", user: user });
 };
 
 // POST user signup
 export const postSignUp = async (req: Request, res: Response) => {
-    const { name, user_id, email, password } = req.body;
+    const { name, username, email, password } = req.body;
 
     try {
         // Check if user exists
-        let user = await User.findOne({ email, user_id, name });
+        let user = await User.findOne({ email, username, name });
         if (user) {
             res.status(400).json({
                 errors: [{
@@ -79,7 +79,7 @@ export const postSignUp = async (req: Request, res: Response) => {
         });
         user = new User({
             name,
-            user_id,
+            username,
             email,
             avatar,
             password
@@ -125,9 +125,9 @@ export const postLoginUser = async (req: Request, res: Response) => {
         });
         return;
     }
-    const { user_id, password } = req.body;
+    const { username, password } = req.body;
     try {
-        let user = await User.findOne({ user_id });
+        let user = await User.findOne({ username });
         if (!user) {
             res.status(400).json({
                 errors: [{
@@ -165,7 +165,7 @@ export const postLoginUser = async (req: Request, res: Response) => {
 
 		return res
 			.status(200)
-			.json({ message: "OK", name: user.name, email: user.email });
+			.json({ message: "OK", name: user.name, username: user.username, email: user.email });
     } catch (err: any) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -205,7 +205,7 @@ export const logoutUser = async (
 
 		return res
 			.status(200)
-			.json({ message: "OK", name: user.name, email: user.email });
+			.json({ message: "OK", niname: user.name, email: user.email });
 	} catch (err) {
 		console.log(err);
 		return res
@@ -367,9 +367,9 @@ export const checkPassword = async (
 //reset user password
 export const resetPassword = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
+		const { userId } = req.params;
 		const { password } = req.body;
-		const user = await User.findOne({ user_id });
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -387,9 +387,9 @@ export const resetPassword = async (req: Request, res: Response) => {
 // Delete user
 export const deleteUser = async (req: Request, res: Response) => {
 	try {
-		const user_id = res.locals.jwtData.id;
+		const userId = res.locals.jwtData.id;
 		const { password } = req.body;
-		const user = await User.findOne({ user_id });
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -406,11 +406,11 @@ export const deleteUser = async (req: Request, res: Response) => {
 	}
 };
 
-// Delete user by user_id(Admin Only)
+// Delete user by userId(Admin Only)
 export const deleteUserByUserId = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
-		const user = await User.findById(user_id);
+		const { userId } = req.params;
+		const user = await User.findById(userId);
 		if (!user) {
 			res.status(404).json({ message: "ERROR", msg: 'User not found.' });
 			return;
@@ -423,11 +423,11 @@ export const deleteUserByUserId = async (req: Request, res: Response) => {
 	}
 };
 
-// Get user progress by user_id(Admin Only)
+// Get user progress by userId(Admin Only)
 export const getUserProgressByUserId = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -448,8 +448,8 @@ export const getUserProgressByUserId = async (req: Request, res: Response) => {
 export const updateUserLevel = async (req: Request, res: Response) => {
 	try {
 		const { level } = req.body;
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -467,8 +467,8 @@ export const updateUserLevel = async (req: Request, res: Response) => {
 export const addUserExp = async (req: Request, res: Response) => {
 	try {
 		const { exp } = req.body;
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -554,8 +554,8 @@ export const resetUserProgress = async (req: Request, res: Response) => {
 // Reset User Progress(Admin Only)
 export const resetUserProgressByUserId = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -588,8 +588,8 @@ export const getLeaderboard = async (req: Request, res: Response) => {
 // Make User Admin by User ID(Admin Only)
 export const makeUserAdmin = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
-		const user = await User.findById(user_id);
+		const { userId } = req.params;
+		const user = await User.findById(userId);
 		if (!user) {
 			res.status(404).json({ 
 				message: "ERROR", 
@@ -602,7 +602,7 @@ export const makeUserAdmin = async (req: Request, res: Response) => {
 		return res.status(200).json({ 
 			message: "OK",
 			name: user.name,
-			user_id: user.user_id,
+			username: user.username,
 			isAdmin: user.isAdmin 
 		});
 	} catch (error: any) {
@@ -614,8 +614,8 @@ export const makeUserAdmin = async (req: Request, res: Response) => {
 // Make Admin to User by User ID(Admin Only)
 export const makeAdminToUser = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ 
 				message: "ERROR", 
@@ -628,7 +628,7 @@ export const makeAdminToUser = async (req: Request, res: Response) => {
 		return res.status(200).json({ 
 			message: "OK",
 			name: user.name,
-			user_id: user.user_id,
+			username: user.username,
 			isAdmin: user.isAdmin 
 		});
 	} catch (error: any) {

@@ -18,7 +18,7 @@ export const validate = (validations: ValidationChain[]) => {
 };
 
 export const loginValidator = [
-	body("user_id").trim().notEmpty().withMessage("ID is required"),
+	body("username").trim().notEmpty().withMessage("ID is required"),
 	body("password")
 		.trim()
 		.isLength({ min: 8, max: 15 })
@@ -32,7 +32,7 @@ export const signUpValidator = [
 		.withMessage("Name should contain minimum 3 and maximum 10 characters")
 		.notEmpty()
 		.withMessage("Name is required"),
-	body("user_id")
+	body("username")
 		.trim()
 		.notEmpty()
 		.withMessage("ID is required"),

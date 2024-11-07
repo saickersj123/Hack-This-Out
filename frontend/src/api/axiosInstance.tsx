@@ -38,14 +38,14 @@ export const getUserDetail = async () => {
 };
 
 /**
- * Get user Detail by user_id(Admin Only)
- * @param {string} user_id - The user_id to get user detail.
+ * Get user Detail by userId(Admin Only)
+ * @param {string} userId - The userId to get user detail.
  * @returns {Promise<Object>} - The response data containing user detail.
  * Admin only
 */
-export const getUserDetailByUserId = async (user_id: string) => {
+export const getUserDetailByUserId = async (userId: string) => {
   try {
-    const response = await axiosInstance.get(`/user/detail/${user_id}`);
+    const response = await axiosInstance.get(`/user/detail/${userId}`);
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to fetch user detail');
@@ -154,13 +154,13 @@ export const changeName = async (newName: string) => {
 
 /**
  * Reset password.
- * @param {string} user_id - The user_id to reset.
+ * @param {string} userId - The userId to reset.
  * @param {string} password - The new password to reset.
  * @returns {Promise<Object>} - The response data confirming reset.
  */
-export const resetPassword = async (user_id: string, password: string) => {
+export const resetPassword = async (userId: string, password: string) => {
   try {
-    const response = await axiosInstance.post(`/user/reset-password/${user_id}`, { password });
+    const response = await axiosInstance.post(`/user/reset-password/${userId}`, { password });
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to reset password');
@@ -168,14 +168,14 @@ export const resetPassword = async (user_id: string, password: string) => {
 };
 
 /**
- * Get user progress by user_id.
- * @param {string} user_id - The user_id to get user progress.
+ * Get user progress by userId.
+ * @param {string} userId - The userId to get user progress.
  * @returns {Promise<Object>} - The response data containing user progress.
  * Admin only
  */
-export const getUserProgressByUserId = async (user_id: string) => {
+export const getUserProgressByUserId = async (userId: string) => {
   try {
-    const response = await axiosInstance.get(`/user/progress/${user_id}`);
+    const response = await axiosInstance.get(`/user/progress/${userId}`);
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to fetch user progress');
@@ -188,9 +188,9 @@ export const getUserProgressByUserId = async (user_id: string) => {
  * @returns {Promise<Object>} - The response data confirming exp addition.
  * Admin only
  */
-export const addUserExp = async (user_id: string, exp: number) => {
+export const addUserExp = async (userId: string, exp: number) => {
   try {
-    const response = await axiosInstance.post(`/user/update/${user_id}/exp`, { exp });
+    const response = await axiosInstance.post(`/user/update/${userId}/exp`, { exp });
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to add user exp');
@@ -203,9 +203,9 @@ export const addUserExp = async (user_id: string, exp: number) => {
  * @returns {Promise<Object>} - The response data confirming level update.
  * Admin only
  */
-export const updateUserLevel = async (user_id: string, level: number) => {
+export const updateUserLevel = async (userId: string, level: number) => {
   try {
-    const response = await axiosInstance.post(`/user/update/${user_id}/level`, { level });
+    const response = await axiosInstance.post(`/user/update/${userId}/level`, { level });
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to update user level');
@@ -241,14 +241,14 @@ export const resetUserProgress = async (password: string) => {
 };
 
 /**
- * Reset user progress by user_id.
- * @param {string} user_id - The user_id to reset.
+ * Reset user progress by userId.
+ * @param {string} userId - The userId to reset.
  * @returns {Promise<Object>} - The response data confirming reset.
  * Admin only
  */
-export const resetUserProgressByUserId = async (user_id: string) => {
+export const resetUserProgressByUserId = async (userId: string) => {
   try {
-    const response = await axiosInstance.post(`/user/reset/${user_id}`);
+    const response = await axiosInstance.post(`/user/reset/${userId}`);
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to reset user progress');
@@ -269,14 +269,14 @@ export const getLeaderboard = async () => {
 };
 
 /**
- * Delete user by user_id.
- * @param {string} user_id - The user_id to delete.
+ * Delete user by userId.
+ * @param {string} userId - The userId to delete.
  * @returns {Promise<Object>} - The response data confirming deletion.
  * Admin only
  */
-export const deleteUserByUserId = async (user_id: string) => {  
+export const deleteUserByUserId = async (userId: string) => {  
   try {
-    const response = await axiosInstance.delete(`/user/${user_id}/delete`);
+    const response = await axiosInstance.delete(`/user/${userId}/delete`);
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to delete user');
@@ -299,12 +299,12 @@ export const deleteUser = async (password: string) => {
 
 /**
  * Make user to admin.
- * @param {string} user_id - The user_id to make to admin.
+ * @param {string} userId - The userId to make to admin.
  * @returns {Promise<Object>} - The response data confirming update.
  */
-export const makeUsertoAdmin = async (user_id: string) => {
+export const makeUsertoAdmin = async (userId: string) => {
   try {
-    const response = await axiosInstance.post(`/user/${user_id}/to-admin`);
+    const response = await axiosInstance.post(`/user/${userId}/to-admin`);
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to make user to admin');
@@ -313,12 +313,12 @@ export const makeUsertoAdmin = async (user_id: string) => {
 
 /**
  * Make admin to user.
- * @param {string} user_id - The user_id to make to user.
+ * @param {string} userId - The userId to make to user.
  * @returns {Promise<Object>} - The response data confirming update.
  */
-export const makeAdmintoUser = async (user_id: string) => {
+export const makeAdmintoUser = async (userId: string) => {
   try {
-    const response = await axiosInstance.post(`/user/${user_id}/to-user`);
+    const response = await axiosInstance.post(`/user/${userId}/to-user`);
     return response.data;
   } catch (error: any) {
     throw new Error('Failed to make user to user');

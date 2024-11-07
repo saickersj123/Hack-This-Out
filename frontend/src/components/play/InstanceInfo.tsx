@@ -38,7 +38,7 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId }) => {
         const response = await getInstanceByMachine(machineId);
         console.log('Fetched instance data:', response);
         if (isMounted) {
-          setInstance(response.instance[0]);
+          setInstance(response.instance);
         }
       } catch (error: any) {
         console.error('Error fetching instance info:', error.message || error);

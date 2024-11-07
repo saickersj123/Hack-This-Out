@@ -173,7 +173,7 @@ export const submitFlag = async (req: Request, res: Response) => {
     if (!isValidFlag) {
       res.status(400).json({ 
         message: "ERROR", 
-        msg: 'Invalid flag' 
+        msg: 'Incorrect flag' 
       });
       return;
     }
@@ -243,11 +243,22 @@ export const getInstanceByMachine = async (req: Request, res: Response) => {
       });
       return;
     }
-    const instance = await Instance.find({ user: user.id, machineType: machine.name });
-    res.json({ instance });
+    const instance = await Instance.findOne({ user: user.id, machineType: machine.name })
+    .select('-__v -user -activeContests -createdAt -runningTime -__v ');
+    if (!instance) {
+      res.status(200).json({ 
+        message: "OK", 
+        msg: 'Instance not found, start your instance first' 
+      });
+      return;
+    }
+    res.status(200).json({ 
+      message: "OK", 
+      instance: instance
+    });
   } catch (error) {
     console.error('Error fetching all instances:', error);  
-    res.status(500).send('Server error');
+    res.status(500).send('Failed to fetch instance status');
   }
 };
 

@@ -7,7 +7,7 @@ import { getAllUser, makeUsertoAdmin, deleteUserByUserId } from '../../api/axios
 import Sidebar from '../../components/admin/AdminSidebar';
 interface User {
   _id: string;
-  user_id: string;
+  username: string;
   email: string;
   isAdmin: boolean;
 }
@@ -68,7 +68,7 @@ const UsersManagement: React.FC = () => {
   };
 
   const columns = [
-    { header: 'User ID', accessor: 'user_id' },
+    { header: 'Username', accessor: 'username' },
     { header: 'Email', accessor: 'email' },
     { header: 'Admin', accessor: 'isAdmin' },
   ];
@@ -98,7 +98,7 @@ const UsersManagement: React.FC = () => {
           <tbody>
             {users.map(user => (
               <tr key={user._id}>
-                <td>{user.user_id}</td>
+                <td>{user.username}</td>
                 <td>{user.email}</td>
                 <td>{user.isAdmin ? 'Yes' : 'No'}</td>
                 <td>

@@ -34,7 +34,7 @@ const InstanceSchema = new mongoose.Schema({
     default: Date.now,
     },
   runningTime: {
-    type: Date,
+    type: Number,
     default: null,
   },
   activeContests: {

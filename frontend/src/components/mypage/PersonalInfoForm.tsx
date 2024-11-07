@@ -6,7 +6,7 @@ import '../../assets/scss/mypage/PersonalInfoForm.scss';
 interface UserData {
   name: string;
   email: string;
-  user_id: string;
+  username: string;
   avatar: string;
   exp: number;
   level: number;
@@ -16,7 +16,7 @@ const PersonalInfoForm: React.FC = () => {
   const [userData, setUserData] = useState<UserData>({
     name: '',
     email: '',
-    user_id: '',
+    username: '',
     avatar: '',
     exp: 0,
     level: 0,
@@ -142,8 +142,8 @@ const PersonalInfoForm: React.FC = () => {
           <div className="name-container">
             <label>Name : {userData.name}</label>
           </div>
-          <div className="user_id-container">
-            <label>ID : {userData.user_id}</label>
+          <div className="username-container">
+            <label>ID : {userData.username}</label>
           </div>
           <div className="email-container">
             <label>Email : {userData.email}</label>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { createContest, getAllMachines } from '../../api/axiosInstance';
+import { createContest, getActiveMachines } from '../../api/axiosInstance';
 import '../../assets/scss/contest/AddContestForm.scss';
 
 interface Contest {
@@ -68,7 +68,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     useEffect(() => {
         const fetchAllMachines = async () => {
             try {
-                const data = await getAllMachines();
+                const data = await getActiveMachines();
                 if (
                     Array.isArray(data.machines) &&
                     typeof data.machines[0] === 'object' &&

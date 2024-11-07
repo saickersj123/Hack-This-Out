@@ -18,7 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
 
   const { setCurrentUser, setIsLoggedIn } = authUserContext;
 
-  const [formData, setFormData] = useState({ user_id: '', password: '' });
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState<string | null>(null);
   const navigate: NavigateFunction = useNavigate();
 
@@ -56,9 +56,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
       <div className="input-box">
         <input 
           type="text" 
-          name="user_id" 
+          name="username" 
           placeholder="아이디" 
-          value={formData.user_id} 
+          value={formData.username} 
           onChange={handleChange}
           required
         />

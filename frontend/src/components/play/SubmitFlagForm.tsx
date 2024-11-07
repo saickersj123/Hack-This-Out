@@ -70,11 +70,16 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
         if (instanceResponse.message === "ERROR") {
           setErrors([{ msg: instanceResponse.cause }]);
           return;
-        } else {
-          response = await submitFlagMachine(machineId, flag);
-        }
+            // Start of Selection
+            } else {
+              response = await submitFlagMachine(machineId, flag);
+              if (response.msg === "ERROR") {
+                setErrors([{ msg: response.msg || 'An error occurred.' }]);
+                return;
+              }
+            }
         setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully!');
-        navigate(`/machine/${machineId}`);
+        navigate(`/machine/${machineId}/complete`);
       } else if (playType === 'contest') {
         if (!contestId) {
           setErrors([{ msg: 'Contest ID is required for contest mode.' }]);
@@ -95,7 +100,7 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
       if (error.response && error.response.data) {
         setErrors(error.response.data.errors || [{ msg: error.response.data.msg || 'An error occurred.' }]);
       } else {
-        setErrors([{ msg: 'An unexpected error occurred.' }]);
+        setErrors([{ msg: error.msg || error }]);
       }
     }
   };
