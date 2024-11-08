@@ -4,6 +4,7 @@ import Modal from './Modal';
 import { giveUpMachine } from '../../api/axiosMachine';
 import { TerminateInstance } from '../../api/axiosInstance';
 import '../../assets/scss/etc/GiveUpModal.scss';
+import { giveUpContest } from '../../api/axiosContest';
 
 interface GiveUpModalProps {
   isOpen: boolean;
@@ -28,15 +29,20 @@ const GiveUpModal: React.FC<GiveUpModalProps> = ({
     try {
       const terminateResponse = await TerminateInstance(machineId);
       if (terminateResponse) {
-        const machineResponse = await giveUpMachine(machineId);
-        if (machineResponse) {
-          if (mode === "contest") {
-            navigate(`/contest/${contestId}`);
-          } else if (mode === "machine") {
+        if (mode === "machine") {
+          const machineResponse = await giveUpMachine(machineId);
+          if (machineResponse) {
             navigate(`/machine/${machineId}`);
+          } else {
+            alert(machineResponse.msg);
           }
-        } else {
-          alert(machineResponse.msg);
+        } else if (mode === "contest") {
+          const contestResponse = await giveUpContest(contestId || "");
+          if (contestResponse) {
+            navigate(`/contest/${contestId}`);
+          } else {
+            alert(contestResponse.msg);
+          }
         }
       } else {
         alert(terminateResponse.msg);
