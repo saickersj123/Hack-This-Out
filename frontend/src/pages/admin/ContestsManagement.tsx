@@ -9,7 +9,7 @@ import {
   ActivateContest,
   DeactivateContest,
   deleteContest,
-} from '../../api/axiosInstance';
+} from '../../api/axiosContest';
 
 interface Contest {
   _id: string;

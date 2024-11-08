@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getMachineHints, getHintInContest, getUsedHints } from '../../api/axiosInstance';
+import { getUsedHintsInContest, getHintInContest } from '../../api/axiosContest';
+import { getUsedHints, getMachineHints } from '../../api/axiosMachine';
 
 /**
  * Props interface for GetHints component.
@@ -8,6 +9,7 @@ interface GetHintsProps {
   machineId: string;
   playType: 'machine' | 'contest';
   contestId?: string; // Optional, required only for contest mode
+  disabled?: boolean; // Optional, to disable the component
 }
 
 /**
@@ -27,7 +29,7 @@ interface ErrorMessage {
 /**
  * Component to fetch and display hints for a machine or contest.
  */
-const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) => {
+const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId, disabled = false }) => {
   const [hints, setHints] = useState<Hint[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<ErrorMessage | null>(null);
@@ -35,17 +37,43 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) =
   const [remainingHints, setRemainingHints] = useState<number>(0);
 
   /**
-   * Fetch used hints and progress.
+   * Fetch used hints and progress for contest mode.
    */
-  const fetchUsedHints = async () => {
+  const fetchUsedHintsInContestMode = async () => {
+    try {
+      if (!contestId) {
+        throw new Error('Contest ID is missing.');
+      }
+
+      const response = await getUsedHintsInContest(contestId, machineId);
+
+      if (response && response.usedHints) {
+        setHints(response.usedHints.map((hintContent: string) => ({ content: hintContent })));
+        setHintsUsed(response.hintsUsed);
+        setRemainingHints(response.remainingHints);
+      } else {
+        setHints([]);
+        setHintsUsed(0);
+        setRemainingHints(0);
+      }
+    } catch (err: any) {
+      console.error('Error fetching used hints in contest:', err);
+      setError({ msg: err.message || 'Failed to fetch used hints in contest.' });
+    }
+  };
+
+  /**
+   * Fetch used hints and progress for machine mode.
+   */
+  const fetchUsedHintsMachineMode = async () => {
     try {
       const response = await getUsedHints(machineId);
-      if (response && Array.isArray(response.usedHints)) {
+
+      if (response && response.usedHints) {
         setHints(response.usedHints.map((hintContent: string) => ({ content: hintContent })));
-        setHintsUsed(response.hintsUsed); // Correctly set from top-level
-        setRemainingHints(response.remainingHints); // Correctly set from top-level
+        setHintsUsed(response.hintsUsed);
+        setRemainingHints(response.remainingHints);
       } else {
-        // If no used hints, reset the state
         setHints([]);
         setHintsUsed(0);
         setRemainingHints(0);
@@ -82,17 +110,21 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) =
       }
     } catch (err: any) {
       console.error('Error fetching hint:', err);
-      setError({ msg: err.message || 'Failed to fetch hint.' });
+      setError({ msg: err.msg || 'Failed to fetch hint.' });
     } finally {
       setLoading(false);
     }
   };
 
   /**
-   * Fetch used hints on component mount.
+   * Fetch used hints on component mount or when machine/playType changes.
    */
   useEffect(() => {
-    fetchUsedHints();
+    if (playType === 'contest') {
+      fetchUsedHintsInContestMode();
+    } else if (playType === 'machine') {
+      fetchUsedHintsMachineMode();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [machineId, playType, contestId]);
 
@@ -119,13 +151,15 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) =
       {!loading && !error && hintsUsed === 0 && <p>No hints used yet.</p>}
       <button
         onClick={fetchHint}
-        disabled={loading || remainingHints === 0}
+        disabled={loading || remainingHints === 0 || disabled}
         className="get-hints-button"
       >
         {loading
           ? 'Loading...'
           : remainingHints === 0
           ? 'No More Hints'
+          : disabled
+          ? 'Disabled'
           : 'Get Hint'}
       </button>
     </div>

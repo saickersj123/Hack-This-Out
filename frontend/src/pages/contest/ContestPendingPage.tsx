@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate, NavigateFunction } from 'react-router-dom';
-import { getContestStatus } from '../../api/axiosInstance';
+import { getContestStatus } from '../../api/axiosContest';
 import { formatDate } from '../../utils/dateUtils';
-import Modal from '../../components/Modal';
+import Modal from '../../components/modal/Modal';
 interface GetContestStatusResponse {
   contestName: string;
   isActive: boolean;

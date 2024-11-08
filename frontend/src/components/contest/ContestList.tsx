@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getActiveContests } from '../../api/axiosInstance';
+import { getActiveContests } from '../../api/axiosContest';
 import { useNavigate } from 'react-router-dom';
 import formatDate from '../../utils/dateUtils';
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getActiveMachines } from '../../api/axiosInstance';
+import { getActiveMachines } from '../../api/axiosMachine';
 import '../../assets/scss/machine/MachineList.scss';
 import { useNavigate } from 'react-router-dom';
 

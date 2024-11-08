@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { submitFlagForContest } from '../../api/axiosInstance';
+import { submitFlagForContest } from '../../api/axiosContest';
 import { useParams } from 'react-router-dom';
 
 type HintError = {

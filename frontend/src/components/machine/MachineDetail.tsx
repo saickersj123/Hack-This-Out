@@ -1,6 +1,6 @@
 import React from 'react';
 import { MachineDetail as MachineDetailType } from '../../types/Machine';
-import '../../assets/scss/machine/MachineDetail.scss'; // Ensure correct styling
+import '../../assets/scss/machine/MachineDetail.scss';
 
 /**
  * Props interface for MachineDetail component.

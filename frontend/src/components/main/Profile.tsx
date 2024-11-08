@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { logoutUser } from '../../api/axiosInstance';
+import { logoutUser } from '../../api/axiosUser';
 import { useNavigate } from 'react-router-dom';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import profileIcon from '../../assets/img/icon/profile_default.png';
@@ -53,7 +53,7 @@ const Profile: React.FC = () => {
                         <img className="profile_icon" alt="profile_icon" src={profileIcon} />
                     </span>
                     <span className="userNametext">
-                        <p>{currentUser?.name || 'Guest'}</p>
+                        <p>{currentUser?.username || 'Guest'}</p>
                     </span>
                     <img src={arrowIcon} alt="arrow_icon" className="arrow-icon" />
                 </button>

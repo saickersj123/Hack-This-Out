@@ -1,5 +1,7 @@
 import React, { useState, FormEvent } from 'react';
-import { submitFlagMachine, submitFlagForContest, submitFlag } from '../../api/axiosInstance';
+import { submitFlagMachine } from '../../api/axiosMachine';
+import { submitFlagForContest } from '../../api/axiosContest';
+import { submitFlagInstance } from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -9,6 +11,7 @@ interface SubmitFlagFormProps {
   machineId: string;
   playType: 'machine' | 'contest';
   contestId?: string; // Optional, required only for contest mode
+  disabled?: boolean; // Added optional disabled prop
 }
 
 /**
@@ -30,7 +33,7 @@ interface SubmitFlagResponse {
 /**
  * Component for submitting a flag for a machine or contest.
  */
-const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, contestId }) => {
+const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, contestId, disabled = false }) => {
   const [flag, setFlag] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [errors, setErrors] = useState<ErrorMessage[]>([]);
@@ -42,6 +45,8 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
    */
   const handleSubmitFlag = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    if (disabled) return; // Prevent submission if disabled
+
     setErrors([]);
     setMessage('');
 
@@ -65,19 +70,17 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
       let response: SubmitFlagResponse;
 
       if (playType === 'machine') {
-        
-        const instanceResponse = await submitFlag(machineId, flag);
+        const instanceResponse = await submitFlagInstance(machineId, flag);
         if (instanceResponse.message === "ERROR") {
           setErrors([{ msg: instanceResponse.cause }]);
           return;
-            // Start of Selection
-            } else {
-              response = await submitFlagMachine(machineId, flag);
-              if (response.msg === "ERROR") {
-                setErrors([{ msg: response.msg || 'An error occurred.' }]);
-                return;
-              }
-            }
+        } else {
+          response = await submitFlagMachine(machineId, flag);
+          if (response.msg === "ERROR") {
+            setErrors([{ msg: response.msg || 'An error occurred.' }]);
+            return;
+          }
+        }
         setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully!');
         navigate(`/machine/${machineId}/complete`);
       } else if (playType === 'contest') {
@@ -85,7 +88,7 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
           setErrors([{ msg: 'Contest ID is required for contest mode.' }]);
           return;
         }
-        const instanceResponse = await submitFlag(machineId, flag);
+        const instanceResponse = await submitFlagInstance(machineId, flag);
         if (instanceResponse.message === "ERROR") {
           setErrors([{ msg: instanceResponse.cause }]);
           return;
@@ -128,10 +131,15 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
             onChange={(e) => setFlag(e.target.value)}
             placeholder="Enter flag here"
             required
+            disabled={disabled} // Disable input when disabled
           />
         </div>
-        <button type="submit" className="submit-flag-button">
-          Submit Flag
+        <button
+          type="submit"
+          className="submit-flag-button"
+          disabled={disabled} // Disable button when disabled
+        >
+          {disabled ? 'Disabled' : 'Submit Flag'}
         </button>
       </form>
     </div>

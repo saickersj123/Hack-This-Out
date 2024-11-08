@@ -3,7 +3,11 @@ import DataTable from '../../components/admin/DataTable/DataTable';
 import ActionButtons from '../../components/admin/ActionButtons';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import ErrorMessage from '../../components/admin/ErrorMessage';
-import { getAllUser, makeUsertoAdmin, deleteUserByUserId } from '../../api/axiosInstance';
+import { 
+  getAllUser, 
+  makeUsertoAdmin, 
+  deleteUserByUserId 
+} from '../../api/axiosUser';
 import Sidebar from '../../components/admin/AdminSidebar';
 interface User {
   _id: string;

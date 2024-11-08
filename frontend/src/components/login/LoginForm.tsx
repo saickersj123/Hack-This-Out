@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { loginUser, getUserStatus } from '../../api/axiosInstance';
+import { loginUser, getUserStatus } from '../../api/axiosUser';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
 import '../../assets/scss/login/LoginForm.scss';
@@ -18,7 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
 
   const { setCurrentUser, setIsLoggedIn } = authUserContext;
 
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
   const navigate: NavigateFunction = useNavigate();
 
@@ -56,9 +56,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
       <div className="input-box">
         <input 
           type="text" 
-          name="username" 
-          placeholder="아이디" 
-          value={formData.username} 
+          name="email" 
+          placeholder="이메일" 
+          value={formData.email} 
           onChange={handleChange}
           required
         />

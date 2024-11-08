@@ -28,7 +28,7 @@ InstRoutes.get('/', verifyToken, verifyAdmin, getAllInstances);
 InstRoutes.post('/:machineId/submit-flag', verifyToken, flagSubmissionLimiter, submitFlag);
 InstRoutes.get('/:machineId', verifyToken, getInstanceByMachine);
 InstRoutes.get('/:instanceId', verifyToken, getInstanceDetails);
-InstRoutes.delete('/:instanceId', verifyToken, verifyAdmin, terminateInstanceByInstanceId);
-InstRoutes.delete('/:machineId', verifyToken, terminateInstance);
+InstRoutes.post('/terminate-admin/:instanceId', verifyToken, verifyAdmin, terminateInstanceByInstanceId);
+InstRoutes.post('/terminate/:machineId', verifyToken, terminateInstance);
 
 export default InstRoutes;

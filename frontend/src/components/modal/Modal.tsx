@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect } from 'react';
-import '../assets/scss/etc/Modal.scss';
+import '../../assets/scss/etc/Modal.scss';
 import { AiOutlineClose } from 'react-icons/ai';
 
 interface ModalProps {

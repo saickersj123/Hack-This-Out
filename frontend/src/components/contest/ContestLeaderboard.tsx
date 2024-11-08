@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getLeaderboardByContest } from '../../api/axiosInstance';
+import { getLeaderboardByContest } from '../../api/axiosContest';
 import '../../assets/scss/contest/ContestLeaderboard.scss';
 
 interface LeaderboardEntry {
@@ -26,7 +26,7 @@ interface ContestLeaderboardProps {
  */
 const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ contestId, contestStatus }) => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   /**
@@ -36,19 +36,24 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ contestId, cont
     const fetchLeaderboard = async () => {
       // Only fetch leaderboard if contest is active and has started
       if (contestStatus.isActive && contestStatus.isStarted) {
+        setIsLoading(true);
+        setError(null);
         try {
           const response = await getLeaderboardByContest(contestId);
           setLeaderboard(response.users);
         } catch (err: any) {
           console.error('Error fetching leaderboard:', err.message || err);
           setError('Failed to load leaderboard.');
+        } finally {
+          setIsLoading(false);
         }
+      } else {
+        setLeaderboard([]);
       }
-      setIsLoading(false);
     };
 
     fetchLeaderboard();
-  }, [contestId, contestStatus]);
+  }, [contestId, contestStatus.isActive, contestStatus.isStarted]);
 
   /**
    * Renders a status message based on the contest's state.
@@ -61,7 +66,7 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ contestId, cont
     }
 
     if (!contestStatus.isStarted) {
-      return 'Contest is not started yet.';
+      return 'Contest has not started yet.';
     }
 
     return 'No leaderboard data available.';
@@ -78,41 +83,31 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ contestId, cont
         <div className="leaderboard error">
           <p className="error-message">{error}</p>
         </div>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Participant</th>
-              <th>EXP Earned</th>
-            </tr>
-          </thead>
-          <tbody>
-            {contestStatus.isActive && contestStatus.isStarted ? (
-              leaderboard.length > 0 ? (
-                leaderboard.map((entry, index) => (
-                  <tr key={entry.userId}>
-                    <td>{index + 1}</td>
-                    <td>{entry.username}</td>
-                    <td>{entry.expEarned}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={3} className="no-data">
-                    No leaderboard data available.
-                  </td>
-                </tr>
-              )
-            ) : (
+      ) : contestStatus.isActive && contestStatus.isStarted ? (
+        leaderboard.length > 0 ? (
+          <table>
+            <thead>
               <tr>
-                <td colSpan={3} className="status-message">
-                  {getStatusMessage()}
-                </td>
+                <th>Rank</th>
+                <th>Participant</th>
+                <th>EXP Earned</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {leaderboard.map((entry, index) => (
+                <tr key={entry.userId}>
+                  <td>{index + 1}</td>
+                  <td>{entry.username}</td>
+                  <td>{entry.expEarned}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No leaderboard data available.</p>
+        )
+      ) : (
+        <p>{getStatusMessage()}</p>
       )}
     </div>
   );

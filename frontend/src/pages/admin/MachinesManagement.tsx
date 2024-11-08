@@ -9,7 +9,7 @@ import {
   activateMachine,
   deactivateMachine,
   deleteMachine,
-} from '../../api/axiosInstance';
+} from '../../api/axiosMachine';
 
 interface Machine {
   _id: string;

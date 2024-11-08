@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import '../../assets/scss/login/LoginPage.scss';
 import LoginForm from '../../components/login/LoginForm'; 
-import Modal from '../../components/Modal'; // Modal import
+import Modal from '../../components/modal/Modal'; // Modal import
 import RegisterForm from '../../components/login/RegisterForm'; // RegisterForm import
 import { AuthUserContext } from '../../contexts/AuthUserContext'; // Import AuthUserContext
 

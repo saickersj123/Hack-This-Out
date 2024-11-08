@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { createContest, getActiveMachines } from '../../api/axiosInstance';
+import { createContest } from '../../api/axiosContest';
+import { getActiveMachines } from '../../api/axiosMachine';
 import '../../assets/scss/contest/AddContestForm.scss';
 
 interface Contest {

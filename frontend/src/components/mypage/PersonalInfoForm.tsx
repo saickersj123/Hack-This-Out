@@ -1,10 +1,13 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
-import { changePassword, changeName, getUserDetail } from '../../api/axiosInstance';
+import {
+  changePassword,
+  changeName,
+  getUserDetail,
+} from '../../api/axiosUser';
 import { updateUserAvatar } from '../../api/axiosMulti';
 import '../../assets/scss/mypage/PersonalInfoForm.scss';
 
 interface UserData {
-  name: string;
   email: string;
   username: string;
   avatar: string;
@@ -14,14 +17,13 @@ interface UserData {
 
 const PersonalInfoForm: React.FC = () => {
   const [userData, setUserData] = useState<UserData>({
-    name: '',
     email: '',
     username: '',
     avatar: '',
     exp: 0,
     level: 0,
   });
-  const [name, setName] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
   const [oldPassword, setOldPassword] = useState<string>('');
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>('');
@@ -60,6 +62,8 @@ const PersonalInfoForm: React.FC = () => {
       setNewPassword('');
       setOldPassword('');
       setConfirmNewPassword('');
+      //refresh
+      window.location.reload();
     } catch (error) {
       console.error('Error changing password:', error);
       alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
@@ -73,11 +77,13 @@ const PersonalInfoForm: React.FC = () => {
   const handleNameChange = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     try {
-      await changeName(name);
+      await changeName(username);
       alert('이름이 성공적으로 변경되었습니다.');
       // Optionally, refetch user data to reflect changes
       fetchUserDetail();
-      setName('');
+      setUsername('');
+      //refresh
+      window.location.reload();
     } catch (error) {
       console.error('Error changing name:', error);
       alert('이름 변경에 실패했습니다. 다시 시도해주세요.');
@@ -100,6 +106,8 @@ const PersonalInfoForm: React.FC = () => {
       // Optionally, refetch user data to reflect changes
       fetchUserDetail();
       setAvatar(null);
+      //refresh
+      window.location.reload();
     } catch (error) {
       console.error('Error changing avatar:', error);
       alert('아바타 변경에 실패했습니다. 다시 시도해주세요.');
@@ -140,7 +148,7 @@ const PersonalInfoForm: React.FC = () => {
         </div>
         <div className="user-container">
           <div className="name-container">
-            <label>Name : {userData.name}</label>
+            <label>Name : {userData.username}</label>
           </div>
           <div className="username-container">
             <label>ID : {userData.username}</label>
@@ -158,8 +166,8 @@ const PersonalInfoForm: React.FC = () => {
           <h3>이름 변경</h3>
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             placeholder="새 이름"
             required
           />

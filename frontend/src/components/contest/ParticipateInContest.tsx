@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { participateInContest, getContestDetails } from '../../api/axiosInstance';
+import { participateInContest, getContestDetails } from '../../api/axiosContest';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface Machine {

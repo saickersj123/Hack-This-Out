@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import ContestDetail from '../../components/contest/ContestDetail';
 import Main from '../../components/main/Main';
-import { getContestDetails } from '../../api/axiosInstance';
+import { getContestDetails } from '../../api/axiosContest';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
 import ContestLeaderboard from '../../components/contest/ContestLeaderboard';
 //import '../../assets/scss/contest/ContestDetailPage.scss';
@@ -73,8 +73,8 @@ const ContestDetailPage: React.FC = () => {
 
     const isContestActive =
       isActive &&
-      startTime.getTime() <= now &&
-      endTime.getTime() >= now;
+      new Date(startTime).getTime() <= now &&
+      new Date(endTime).getTime() >= now;
 
     if (isContestActive) {
       navigate(`/contest/${_id}/pre`);
@@ -98,7 +98,7 @@ const ContestDetailPage: React.FC = () => {
 
     return {
       isActive,
-      isStarted: startTime.getTime() <= now,
+      isStarted: new Date(startTime).getTime() <= now,
     };
   };
 

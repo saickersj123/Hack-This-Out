@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getMachineReviews } from '../../api/axiosInstance';
+import { getMachineReviews } from '../../api/axiosMachine';
 import { Review } from '../../types/Machine';
 
 interface MachineReviewListProps {

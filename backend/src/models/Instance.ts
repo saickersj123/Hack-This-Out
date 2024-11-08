@@ -21,7 +21,8 @@ const InstanceSchema = new mongoose.Schema({
     },
   },
   machineType: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Machine',
     required: true,
   },
   status: {

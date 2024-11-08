@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import StatCard from '../../components/admin/StatCard';
 import { FaUsers, FaServer, FaClipboardList, FaCogs } from 'react-icons/fa';
-import { getAllUser, getAllMachines, getContests, getAllInstances } from '../../api/axiosInstance';
+import { getAllUser } from '../../api/axiosUser';
+import { getAllMachines } from '../../api/axiosMachine';
+import { getContests } from '../../api/axiosContest';
+import { getAllInstances } from '../../api/axiosInstance';
 import ErrorMessage from '../../components/admin/ErrorMessage';
 import Sidebar from '../../components/admin/AdminSidebar';
 interface DashboardStats {

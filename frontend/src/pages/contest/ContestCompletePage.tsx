@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../../components/Modal';
+import Modal from '../../components/modal/Modal';
 
 const ContestCompletePage: React.FC = () => {
   const navigate = useNavigate();
