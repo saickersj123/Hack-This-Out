@@ -65,7 +65,7 @@ const ParticipateInContest: React.FC = () => {
     }
 
     try {
-      const data: ParticipateResponse = await participateInContest(contestId, selectedMachine);
+      const data: ParticipateResponse = await participateInContest(contestId);
       setMessage(data.msg);
       navigate(`/contests/${contestId}`);
     } catch (error: any) {
