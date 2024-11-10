@@ -7,11 +7,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
   box-sizing: border-box;
-  transition: width 1s ease; // 접힐 때 부드러운 애니메이션
+  transition: width 1s ease;
   font-size: var(--body-regular-regular-16-size);
-  color: var(--colors-neutral-grey-900);
+  color: var(--color-gainsboro);
   font-family: var(--body-regular-regular-16);
 
   .headerParent {
@@ -24,17 +23,16 @@
       align-self: stretch;
       border-bottom: 1px dashed #aaa7af;
       width: 100%;
-      height: 80px;
+      height: 105px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: var(--padding-5xl) 0;
+      padding-bottom: 9px;
       box-sizing: border-box;
 
       .logoimage {
         width: 100%;
         height: 100%;
-        padding: 10px 10px 5px;
 
         .logoContainerIcon {
           width: 100%;
@@ -71,13 +69,14 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 20px 0;
+    padding: 20px 16px;
 
     .verticalMenuList {
       align-self: stretch;
       display: flex;
       flex-direction: column;
       gap: 8px;
+
 
       .verticalMenuItem {
         height: 60px;
@@ -88,6 +87,12 @@
         padding: 4px 16px;
         box-sizing: border-box;
 
+        &:hover {
+          background-color: #3F4147;
+        }
+
+
+  
         .menuIcon {
           width: 24px;
           height: 24px;
@@ -131,5 +136,15 @@
         }
       }
     }
+  }
+}
+
+.selected {
+  background-color: #D1D1D1; /* 선택된 항목의 배경 색상 */
+  border-radius: 5px;
+  pointer-events: none;
+
+  .label {
+    color: #393939;
   }
 }

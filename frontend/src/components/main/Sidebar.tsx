@@ -1,4 +1,3 @@
-// Sidebar.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSidebar } from '../../contexts/SidebarContext.tsx';
@@ -18,7 +17,13 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
-  
+  const { selectedItem, setSelectedItem } = useSidebar();
+
+  // 클릭된 항목을 선택된 상태로 설정하는 함수
+  const handleMenuItemClick = (item: string) => {
+    setSelectedItem(item);
+  };
+
   return (
     <div className={`${styles.sidebarMenu} ${isCollapsed ? styles.collapsed : ''}`}>
       <div className={styles.headerParent}>
@@ -35,19 +40,35 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         <div className={styles.headerParent}>
           <div className={styles.topMenu}>
             <li className={styles.verticalMenuList}>
-              <Link to="/tutorial" className={styles.verticalMenuItem}>
+              <Link
+                to="/tutorial"
+                className={`${styles.verticalMenuItem} ${selectedItem === 'tutorial' ? styles.selected : ''}`}
+                onClick={() => handleMenuItemClick('tutorial')}
+              >
                 <img className={styles.menuIcon} alt="" src={tutorial} />
                 <div className={styles.label}>Tutorial</div>
               </Link>
-              <Link to="/leaderboard" className={styles.verticalMenuItem}>
+              <Link
+                to="/leaderboard"
+                className={`${styles.verticalMenuItem} ${selectedItem === 'leaderboard' ? styles.selected : ''}`}
+                onClick={() => handleMenuItemClick('leaderboard')}
+              >
                 <img className={styles.menuIcon} alt="" src={leaderboard} />
                 <div className={styles.label}>LeaderBoard</div>
               </Link>
-              <Link to="/contest" className={styles.verticalMenuItem}>
+              <Link
+                to="/contest"
+                className={`${styles.verticalMenuItem} ${selectedItem === 'contest' ? styles.selected : ''}`}
+                onClick={() => handleMenuItemClick('contest')}
+              >
                 <img className={styles.menuIcon} alt="" src={contest} />
                 <div className={styles.label}>Contest</div>
               </Link>
-              <Link to="/machines" className={styles.verticalMenuItem}>
+              <Link
+                to="/machines"
+                className={`${styles.verticalMenuItem} ${selectedItem === 'machines' ? styles.selected : ''}`}
+                onClick={() => handleMenuItemClick('machines')}
+              >
                 <img className={styles.menuIcon} alt="" src={machines} />
                 <div className={styles.label}>Machines</div>
               </Link>
@@ -58,4 +79,5 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
     </div>
   );
 }
+
 export default Sidebar;

@@ -38,8 +38,8 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: flex-start;
-        gap: var(--gap-mini);
+        justify-content: space-between;
+        gap: 15px;
 
         .userIcon {
           width: 55px;
@@ -54,7 +54,7 @@
           flex-direction: column;
           align-items: flex-start;
           justify-content: flex-start;
-          gap: var(--gap-8xs);
+          gap: 5px;
 
           .userName {
             position: relative;
@@ -75,6 +75,9 @@
         position: relative;
         overflow: hidden;
         flex-shrink: 0;
+        padding-right: 10px;
+
+        cursor: pointer;
       }
     }
 
@@ -86,6 +89,8 @@
     }
 
     .userMenu {
+      cursor: pointer;
+
       &.collapsed {
         display: none;
       }
@@ -96,17 +101,18 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
-        gap: var(--gap-8xs);
+        margin-bottom: 10px;
+        gap: 5px;
 
         .settingsInner,
         .settingsChild {
           align-self: stretch;
-          border-radius: var(--br-smi-5);
+          border-radius: 12.5px;
           display: flex;
           flex-direction: row;
           align-items: center;
-          padding: var(--padding-mini);
-          gap: var(--gap-mini);
+          padding: 15px;
+          gap: 15px;
           color: var(--color-gainsboro);
           justify-content: space-between;
 
@@ -130,7 +136,7 @@
             flex-direction: row;
             align-items: center;
             justify-content: flex-start;
-            gap: var(--gap-mini);
+            gap: 15px;
 
             .darkMode {
               width: 91.3px;
@@ -155,13 +161,19 @@
 
     .logout {
       align-self: stretch;
-      border-radius: var(--br-smi-5);
+      border-radius: 12.5px;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
-      padding: 20px var(--padding-mini) 5px;
-      gap: var(--gap-mini);
+      margin-top: 10px;
+      padding: 10px 15px 10px;
+      gap: 15px;
+
+      &:hover {
+        background-color: #202227;
+        outline: 1px solid #383e4b;
+      }
 
       .icon {
         width: 30px;

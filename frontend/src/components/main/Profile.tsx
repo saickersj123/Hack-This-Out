@@ -1,4 +1,4 @@
-import React, { useContext} from 'react';
+import React, { useContext } from 'react';
 import { logoutUser } from '../../api/axiosUser';
 import { useNavigate } from 'react-router-dom';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
@@ -59,9 +59,9 @@ const Profile: React.FC = () => {
                             <div className={styles.userName}>{currentUser?.username || 'Guest'}</div>
                             <div className={styles.userEmail}>{currentUser?.email || 'Guest'}</div>
                         </div>
-                        <div onClick={toggleProfile}>
-                            <img className={styles.userinfoButtonIcon} alt="" src={isProfileCollapsed ? down_arrow : up_arrow} />
-                        </div>
+                    </div>
+                    <div onClick={toggleProfile}>
+                        <img className={styles.userinfoButtonIcon} alt="" src={isProfileCollapsed ? down_arrow : up_arrow} />
                     </div>
                 </div>
                 <div className={`${styles.userMenu} ${isProfileCollapsed ? styles.collapsed : ''}`}>

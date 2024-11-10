@@ -1,7 +1,9 @@
-// SidebarContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface SidebarContextProps {
+  selectedItem: string;
+  setSelectedItem: (item: string) => void;
+
   isCollapsed: boolean;
   toggleSidebar: () => void;
 }
@@ -15,6 +17,12 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return storedState === 'true';
   });
 
+  // selectedItem 상태 추가
+  const [selectedItem, setSelectedItem] = useState<string>(() => {
+    const storedItem = localStorage.getItem('selectedItem');
+    return storedItem || ''; // selectedItem을 localStorage에서 가져옴
+  });
+
   const toggleSidebar = () => {
     setIsCollapsed((prev) => {
       const newCollapsed = !prev;
@@ -23,16 +31,15 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     });
   };
 
-  // 페이지 첫 로드 시 localStorage에서 저장된 값을 불러오기
+  // selectedItem 상태를 localStorage에 저장
   useEffect(() => {
-    const storedState = localStorage.getItem('isSidebarCollapsed');
-    if (storedState !== null) {
-      setIsCollapsed(storedState === 'true');
+    if (selectedItem) {
+      localStorage.setItem('selectedItem', selectedItem);
     }
-  }, []);
+  }, [selectedItem]);
 
   return (
-    <SidebarContext.Provider value={{ isCollapsed, toggleSidebar }}>
+    <SidebarContext.Provider value={{ selectedItem, setSelectedItem, isCollapsed, toggleSidebar }}>
       {children}
     </SidebarContext.Provider>
   );
@@ -41,6 +48,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
 // SidebarContext를 사용하는 커스텀 훅
 export const useSidebar = () => {
   const context = useContext(SidebarContext);
+
   if (!context) {
     throw new Error('useSidebar must be used within a SidebarProvider');
   }
