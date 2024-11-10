@@ -1,13 +1,24 @@
 import React from 'react';
-import Main from '../../components/main/Main';
+import { useNavigate } from 'react-router-dom';
+import Modal from '../../components/modal/Modal';
 
 const ContestCompletePage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleGoToMain = () => {
+    navigate('/');
+  };
+
   return (
-    <Main title="Contest Complete" description="Contest Complete 화면입니다.">
-      <div className="contest-complete-page">
-        Congratulations! You have completed the contest.
-      </div>
-    </Main>
+      <Modal isOpen={true} onClose={handleGoToMain}>
+        <div className="contest-complete-modal">
+          <h2>Congratulations!</h2>
+          <p>You have completed the contest.</p>
+          <button onClick={handleGoToMain} className="redirect-button">
+            Go to Main Page
+          </button>
+        </div>
+      </Modal>
   );
 };
 

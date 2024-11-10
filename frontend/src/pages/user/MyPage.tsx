@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { checkPassword } from '../../api/axiosInstance';
+import { checkPassword } from '../../api/axiosUser';
 import PasswordCheckForm from '../../components/mypage/PasswordCheckForm';
 import PersonalInfoForm from '../../components/mypage/PersonalInfoForm';
 import ToAdmin from '../../components/mypage/toAdmin';

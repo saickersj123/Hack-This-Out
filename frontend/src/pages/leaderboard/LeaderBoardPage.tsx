@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getLeaderboard } from '../../api/axiosInstance';
+import { getLeaderboard } from '../../api/axiosUser';
 import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
 import Main from '../../components/main/Main';
 
@@ -9,7 +9,7 @@ import Main from '../../components/main/Main';
 interface User {
   _id: string;
   level: number;
-  name: string;
+  username: string;
   exp: number;
 }
 

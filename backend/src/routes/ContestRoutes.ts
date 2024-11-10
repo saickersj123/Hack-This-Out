@@ -17,7 +17,9 @@ import {
     getActiveContests,
     getInactiveContests,
     getActiveContestDetails,
-    getInactiveContestDetails
+    getInactiveContestDetails,
+    giveUpContest,
+    getUsedHintsInContest
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
@@ -57,10 +59,14 @@ ContestRoutes.post('/:contestId/:machineId/submit-flag',
 // Route to get contest hints
 ContestRoutes.get('/:contestId/:machineId/hints', verifyToken, getHintInContest);
 
+// Route to get used hints
+ContestRoutes.get('/:contestId/:machineId/used-hints', verifyToken, getUsedHintsInContest);
+
 // Route to get leaderboard by contest
 ContestRoutes.get('/:contestId/leaderboard', verifyToken, getLeaderboardByContest);
 
-
+// Route to give up a contest
+ContestRoutes.post('/:contestId/give-up', verifyToken, giveUpContest);
 
 // Admin Routes
 // Route to get all contests(Admin only)

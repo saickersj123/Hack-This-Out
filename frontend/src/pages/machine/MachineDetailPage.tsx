@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import MachineDetail from '../../components/machine/MachineDetail';
 import Main from '../../components/main/Main';
-import { getMachineDetails } from '../../api/axiosInstance';
+import { getActiveMachineDetails, startPlayingMachine } from '../../api/axiosMachine';
 import { MachineDetail as MachineDetailType } from '../../types/Machine';
 //import '../../assets/scss/machine/MachineDetailPage.scss';
 import MachineReviewList from '../../components/machine/MachineReviewList';
@@ -32,7 +32,7 @@ const MachineDetailPage: React.FC = () => {
       }
 
       try {
-        const response = await getMachineDetails(machineId);
+        const response = await getActiveMachineDetails(machineId);
         setMachineDetail(response.machine);
       } catch (error: any) {
         console.error('Error fetching machine details:', error.message || error);
@@ -48,8 +48,9 @@ const MachineDetailPage: React.FC = () => {
   /**
    * Handles navigation to the play page.
    */
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (machineDetail && machineDetail._id) {
+      await startPlayingMachine(machineDetail._id);
       navigate(`/machine/${machineDetail._id}/play`);
     } else {
       alert('Invalid machine details.');

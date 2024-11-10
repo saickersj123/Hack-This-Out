@@ -1,0 +1,39 @@
+.leaderboard {
+    margin: 20px 0;
+    
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+  
+      th, td {
+        padding: 12px;
+        border: 1px solid var(--border-primary);
+        text-align: center;
+      }
+  
+      th {
+        background-color: var(--background-alt);
+      }
+  
+      tr:nth-child(even) {
+        background-color: var(--background-alt);
+      }
+    }
+  
+    .loading,
+    .error {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+  
+    .error-message {
+      color: var(--error);
+    }
+  }

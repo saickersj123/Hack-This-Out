@@ -56,11 +56,11 @@ export const startInstance = async (req: Request, res: Response) => {
       });
       return;
     }
-    const instance = await Instance.findOne({ user: user.id });
+    const instance = await Instance.findOne({ user: user.id, machineType: machine.id });
     if (instance) {
-      res.status(400).json({ 
-        message: "ERROR", 
-        msg: 'Instance for this machine already exists' 
+      res.status(200).json({ 
+        message: "OK", 
+        instance: instance
       });
       return;
     }
@@ -105,7 +105,7 @@ export const startInstance = async (req: Request, res: Response) => {
     const newInstance = new Instance({
       user: user.id,
       instanceId,
-      machineType: machine.name,
+      machineType: machine.id,
     });
     await newInstance.save();
 
@@ -173,7 +173,7 @@ export const submitFlag = async (req: Request, res: Response) => {
     if (!isValidFlag) {
       res.status(400).json({ 
         message: "ERROR", 
-        msg: 'Invalid flag' 
+        msg: 'Incorrect flag' 
       });
       return;
     }
@@ -188,7 +188,7 @@ export const submitFlag = async (req: Request, res: Response) => {
     }
 
     // Find the instance
-    const instance = await Instance.findOne({ machineType: machine.name, user: user.id });
+    const instance = await Instance.findOne({ machineType: machine.id, user: user.id });
     if (!instance) {
       res.status(404).json({ 
         message: "ERROR", 
@@ -243,11 +243,22 @@ export const getInstanceByMachine = async (req: Request, res: Response) => {
       });
       return;
     }
-    const instance = await Instance.find({ user: user.id, machineType: machine.name });
-    res.json({ instance });
+    const instance = await Instance.findOne({ user: user.id, machineType: machine.id })
+    .select('-__v -activeContests -createdAt -runningTime -__v ');
+    if (instance) {
+      res.status(200).json({ 
+        message: "OK", 
+        instance: instance
+      });
+    } else {
+      res.status(200).json({ 
+        message: "OK", 
+        instance: null
+      });
+    }
   } catch (error) {
     console.error('Error fetching all instances:', error);  
-    res.status(500).send('Server error');
+    res.status(500).send('Failed to fetch instance status');
   }
 };
 
@@ -303,7 +314,7 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
 /**
  * Delete a specific instance.
  */
-export const deleteInstance = async (req: Request, res: Response) => {
+export const terminateInstanceByInstanceId = async (req: Request, res: Response) => {
   try {
     const { instanceId } = req.params;
     const userId = res.locals.jwtData.id;
@@ -435,8 +446,8 @@ export const terminateInstance = async (req: Request, res: Response) => {
   try {
     const { machineId } = req.params;
     const userId = res.locals.jwtData.id;
-
-    if (!userId) {
+    const user = await User.findById(userId);
+    if (!user) {
       return res.status(401).json({ 
         message: "ERROR", 
         msg: "User not registered / token malfunctioned" 
@@ -450,15 +461,14 @@ export const terminateInstance = async (req: Request, res: Response) => {
       });
       return;
     }
-    const instance = await Instance.findOne({ machineType: machine.name, user: userId });
+    const instance = await Instance.findOne({user: user.id, machineType: machine.id});
     if (!instance) {
-      res.status(404).json({ 
-        message: "ERROR", 
-        msg: 'Instance not found' 
+      res.status(200).json({ 
+        message: "OK", 
+        instance: null
       });
       return;
     }
-
     const terminateParams = {
       InstanceIds: [instance.instanceId],
     };  
@@ -467,6 +477,8 @@ export const terminateInstance = async (req: Request, res: Response) => {
 
     instance.status = 'terminated';
     await instance.save();
+
+    await Instance.deleteOne({ instanceId: instance.instanceId });
 
     res.status(200).json({ 
       message: "OK", 

@@ -1,0 +1,37 @@
+.admin-dashboard {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+
+    /* Admin Content Area */
+    .admin-content {
+        flex: 1;
+        margin-left: var(--sidebar-width);
+        padding: 20px;
+        overflow-y: auto;
+        background-color: var(--background-alt);
+        color: var(--text-primary);
+        align-items: center;
+    }
+
+    /* Header or Profile Section */
+    .profile-container {
+        display: flex;
+        align-items: center;
+        height: 80px;
+        padding: 0 20px;
+        border-bottom: 1px solid var(--black300);
+        background-color: var(--background);
+        color: var(--text-primary);
+    }
+
+    /* Footer Section */
+    #footer {
+        text-align: center;
+        background-color: var(--black200);
+        padding: 20px;
+        color: var(--white200);
+    }
+}
+
