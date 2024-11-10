@@ -317,7 +317,6 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
         }
 
         // Verify the flag
-
         const isMatch = await bcrypt.compare(flag, machine.flag);
         if (!isMatch) {
             res.status(400).json({ 
@@ -327,18 +326,28 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
             return;
         }
 
-        // Calculate EXP based on time taken and hints used
+        // Calculate Expenses based on time taken and hints used
         const timeTaken = (currentTime.getTime() - participation.participationStartTime.getTime()) / 1000; // in seconds
-        const hintsUsed = participation.hintsUsed;
+        const timeSinceContestStart = (currentTime.getTime() - contest.startTime.getTime()) / 1000; // in seconds
+        const contestDuration = (contest.endTime.getTime() - contest.startTime.getTime()) / 1000; // in seconds
 
-        // EXP calculation
-        // EXP calculation with better scaling
+        // Ensure timeSinceContestStart does not exceed contestDuration
+        const effectiveTimeSinceStart = Math.min(timeSinceContestStart, contestDuration);
+
+        // EXP calculation with combined time penalties
         let expEarned = contest.contestExp;
-        const timePercentage = timeTaken / (contest.endTime.getTime() - contest.startTime.getTime());
-        const timeMultiplier = Math.max(0.3, 1 - timePercentage); // Minimum 30% of base EXP
-        expEarned = Math.floor(expEarned * timeMultiplier);
-        expEarned -= hintsUsed * 20; // 20 EXP penalty per hint
-        expEarned = Math.max(Math.floor(contest.contestExp * 0.1), expEarned); // minimum 10% of base EXP
+
+        // Calculate the percentage of time taken relative to contest duration
+        const timeTakenPercentage = timeTaken / contestDuration;
+        // Calculate the percentage of time elapsed since contest start relative to contest duration
+        const timeSinceStartPercentage = effectiveTimeSinceStart / contestDuration;
+
+        // Calculate a combined multiplier based on both time taken and time since start
+        const combinedMultiplier = Math.max(0.1, 1 - timeTakenPercentage - timeSinceStartPercentage);
+
+        expEarned = Math.floor(contest.contestExp * combinedMultiplier);
+        expEarned -= participation.hintsUsed * 20; // 20 EXP penalty per hint
+        expEarned = Math.max(Math.floor(contest.contestExp * 0.05), expEarned); // minimum 5% of base EXP
 
         if (expEarned < 1) expEarned = 1; // Minimum 1 EXP
 
@@ -361,7 +370,6 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
             });
             return;
         }
-
 
         res.status(200).json({ 
             message: "OK", 

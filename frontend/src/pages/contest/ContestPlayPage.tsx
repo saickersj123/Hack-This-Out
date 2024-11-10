@@ -202,7 +202,7 @@ const ContestPlayPage: React.FC = () => {
               machineId={selectedMachine._id}
               machineName={selectedMachine.name}
               mode="contest"
-              disabled={!isRunning} // Disable based on instance status
+              //disabled={!isRunning} // Disable based on instance status
             />
           </>
         ) : (

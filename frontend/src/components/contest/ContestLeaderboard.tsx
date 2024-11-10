@@ -95,7 +95,7 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ contestId, cont
             </thead>
             <tbody>
               {leaderboard.map((entry, index) => (
-                <tr key={entry.userId}>
+                <tr key={`${entry.userId}-${index}`}>
                   <td>{index + 1}</td>
                   <td>{entry.username}</td>
                   <td>{entry.expEarned}</td>
