@@ -16,15 +16,50 @@ const ContestParticipationSchema = new mongoose.Schema({
         type: Date,
         default: null // Will be set when the instance becomes "running"
     },
-    participationEndTime: Date,
+    participationEndTime: {
+        type: Date,
+        default: null
+    },
     hintsUsed: {
+        type: Number,
+        default: 0
+    },
+    usedHints: [{
+        machine: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Machine',
+            required: true
+        },
+        hints: {
+            type: [String],
+            default: []
+        }
+    }],
+    remainingHints: {
         type: Number,
         default: 0
     },
     expEarned: {
         type: Number,
         default: 0
+    },
+    machineCompleted: [{
+        machine: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Machine',
+            required: true
+        },
+        completed: {
+            type: Boolean,
+            default: false
+        }
+    }],
+    contestCompleted: {
+        type: Boolean,
+        default: false
     }
+}, {
+    timestamps: true
 });
 
 const ContestParticipation = mongoose.model('ContestParticipation', ContestParticipationSchema);

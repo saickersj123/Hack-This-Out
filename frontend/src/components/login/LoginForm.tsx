@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { loginUser, getUserStatus } from '../../api/axiosInstance';
+import { loginUser, getUserStatus } from '../../api/axiosUser';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
 import '../../assets/scss/login/LoginForm.scss';
@@ -18,7 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
 
   const { setCurrentUser, setIsLoggedIn } = authUserContext;
 
-  const [formData, setFormData] = useState({ user_id: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
   const navigate: NavigateFunction = useNavigate();
 
@@ -46,7 +46,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
       
       // Since LoginPage handles navigation based on isLoggedIn, no need to navigate here
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      setError(err.msg || 'Login failed');
     }
   };
 
@@ -56,9 +56,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
       <div className="input-box">
         <input 
           type="text" 
-          name="user_id" 
-          placeholder="아이디" 
-          value={formData.user_id} 
+          name="email" 
+          placeholder="이메일" 
+          value={formData.email} 
           onChange={handleChange}
           required
         />

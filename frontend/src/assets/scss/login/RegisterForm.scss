@@ -1,7 +1,7 @@
 .back{
     display: flex;
     background-color: #000;
-    align-items: center;
+    align-items: right;
     justify-content: center;
     min-height: 100vh;
     margin: 0;
@@ -21,6 +21,12 @@
     & h1 {
       margin-bottom: 30px;  
       color: #000;
+    }
+
+    .error-message {
+        color: red;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     .register-form {
@@ -79,3 +85,4 @@
         }
     }
 }
+

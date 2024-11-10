@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { participateInContest, getContestDetails } from '../../api/axiosInstance';
+import { participateInContest, getContestDetails } from '../../api/axiosContest';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface Machine {
@@ -65,7 +65,7 @@ const ParticipateInContest: React.FC = () => {
     }
 
     try {
-      const data: ParticipateResponse = await participateInContest(contestId, selectedMachine);
+      const data: ParticipateResponse = await participateInContest(contestId);
       setMessage(data.msg);
       navigate(`/contests/${contestId}`);
     } catch (error: any) {

@@ -21,7 +21,8 @@ const InstanceSchema = new mongoose.Schema({
     },
   },
   machineType: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Machine',
     required: true,
   },
   status: {
@@ -34,7 +35,7 @@ const InstanceSchema = new mongoose.Schema({
     default: Date.now,
     },
   runningTime: {
-    type: Date,
+    type: Number,
     default: null,
   },
   activeContests: {

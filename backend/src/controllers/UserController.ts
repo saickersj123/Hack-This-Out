@@ -4,8 +4,10 @@ import gravatar from 'gravatar';
 import bcrypt from 'bcrypt';
 import User from '../models/User';
 import UserProgress from '../models/UserProgress';
+import ContestParticipation from '../models/ContestParticipation';
 import { createToken } from '../middlewares/Token';
 import { COOKIE_NAME } from '../middlewares/Constants';
+import Machine from '../models/Machine';
 
 const isProduction = process.env.MODE === 'production';
 
@@ -49,25 +51,25 @@ export const getUserDetail = async (req: Request, res: Response) => {
     }
 };
 
-// GET user Detail by user_id(Admin Only)
+// GET user Detail by userId(Admin Only)
 export const getUserDetailByUserId = async (req: Request, res: Response) => {
-    const { user_id } = req.params;
-    const user = await User.findOne({ user_id });
+    const { userId } = req.params;
+    const user = await User.findOne({ id: userId });
     return res.status(200).json({ message: "OK", user: user });
 };
 
 // POST user signup
 export const postSignUp = async (req: Request, res: Response) => {
-    const { name, user_id, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     try {
         // Check if user exists
-        let user = await User.findOne({ email, user_id, name });
-        if (user) {
+        const isEmailExist = await User.findOne({ email: email});
+		const isUsernameExist = await User.findOne({ username: username});
+        if (isEmailExist || isUsernameExist) {
             res.status(400).json({
-                errors: [{
-                    msg: 'User already exists'
-                }]
+				message: 'ERROR',
+                msg: 'User already exists'
             });
             return;
         }
@@ -77,17 +79,16 @@ export const postSignUp = async (req: Request, res: Response) => {
             r: 'pg',
             d: 'mm'
         });
-        user = new User({
-            name,
-            user_id,
+        const newUser = new User({
+            username,
             email,
             avatar,
             password
         });
         // Encrypt password
         const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
-        await user.save();
+        newUser.password = await bcrypt.hash(password, salt);
+        await newUser.save();
 
 		// Clear any existing token
         res.clearCookie(COOKIE_NAME, {
@@ -100,7 +101,7 @@ export const postSignUp = async (req: Request, res: Response) => {
 		});
 
 		// create token
-		const token = createToken(user._id.toString(), user.email, "7d");
+		const token = createToken(newUser._id.toString(), newUser.email, "7d");
 
 		const expires = new Date();
 		expires.setDate(expires.getDate() + 7);
@@ -109,7 +110,7 @@ export const postSignUp = async (req: Request, res: Response) => {
 
 		return res
 			.status(201)
-			.json({ message: "OK", name: user.name, email: user.email });
+			.json({ message: "OK", username: newUser.username, email: newUser.email });
     } catch(err: any) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -125,23 +126,21 @@ export const postLoginUser = async (req: Request, res: Response) => {
         });
         return;
     }
-    const { user_id, password } = req.body;
+    const { email, password } = req.body;
     try {
-        let user = await User.findOne({ user_id });
+        const user = await User.findOne({ email });
         if (!user) {
             res.status(400).json({
-                errors: [{
-                    msg: 'User does not exist'
-                }]
+                message: 'ERROR',
+                msg: 'User does not exist'
             });
             return;
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             res.status(400).json({
-                errors: [{
-                    msg: 'Passwords do not match'
-                }]
+                message: 'ERROR',
+                msg: 'Passwords do not match'
             });
             return;
         }
@@ -165,10 +164,10 @@ export const postLoginUser = async (req: Request, res: Response) => {
 
 		return res
 			.status(200)
-			.json({ message: "OK", name: user.name, email: user.email });
+			.json({ message: "OK", username: user.username, email: user.email });
     } catch (err: any) {
         console.error(err.message);
-        res.status(500).send('Server error');
+        res.status(500).send({ message: "ERROR", cause: err.message });
     }
 };
 
@@ -205,7 +204,7 @@ export const logoutUser = async (
 
 		return res
 			.status(200)
-			.json({ message: "OK", name: user.name, email: user.email });
+			.json({ message: "OK", username: user.username, email: user.email });
 	} catch (err) {
 		console.log(err);
 		return res
@@ -279,7 +278,7 @@ export const changePassword = async (
 
 		return res
 			.status(200)
-			.json({ message: "OK", name: user.name, email: user.email });
+			.json({ message: "OK", username: user.username, email: user.email });
 	} catch (err) {
 		console.log(err);
 		return res
@@ -291,9 +290,9 @@ export const changePassword = async (
 // Change user name
 export const changeName = async (req: Request, res: Response) => {
 	try {
-		const { name } = req.body;
+		const { username } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
-		const isNameExist = await User.findOne({ name });
+		const isNameExist = await User.findOne({ username });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -301,24 +300,35 @@ export const changeName = async (req: Request, res: Response) => {
 		if (user._id.toString() !== res.locals.jwtData.id) {
 			return res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
 		}
-		if (name === user.name) {
+		if (username === user.username) {
 			return res.status(401).json({ message: "ERROR", cause: "Name is the same as before" });
 		}
-		if (name.length > 10) {
+		if (username.length > 10) {
 			return res.status(401).json({ message: "ERROR", cause: "Name is too long" });
 		}
-		if (name.length < 3) {
+		if (username.length < 3) {
 			return res.status(401).json({ message: "ERROR", cause: "Name is too short" });
 		}
-		if (name.includes(' ')) {
+		if (username.includes(' ')) {
 			return res.status(401).json({ message: "ERROR", cause: "Name cannot contain spaces" });
 		}
 		if (isNameExist) {
 			return res.status(401).json({ message: "ERROR", cause: "Name already taken" });
 		}
-		user.name = name;
+		// Update username
+		user.username = username;
 		await user.save();
-		return res.status(200).json({ message: "OK", name: user.name, email: user.email });
+		// Update username in machine reviews
+		const machines = await Machine.find({});
+		await machines.forEach(async (machine) => {
+			await machine.reviews.forEach(async (review) => {
+				if (review.reviewerId.toString() === user._id.toString()) {
+					review.reviewerName = username;
+				}
+			});
+			await machine.save();
+		});
+		return res.status(200).json({ message: "OK", username: user.username, email: user.email });
 	} catch (error: any) {
 		console.error('Error changing name:', error);
 		res.status(500).send('Server error');
@@ -355,7 +365,7 @@ export const checkPassword = async (
 
 		return res
 			.status(200)
-			.json({ message: "OK", name: user.name, email: user.email });
+			.json({ message: "OK", username: user.username, email: user.email });
 	} catch (err) {
 		console.log(err);
 		return res
@@ -367,9 +377,9 @@ export const checkPassword = async (
 //reset user password
 export const resetPassword = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
+		const { userId } = req.params;
 		const { password } = req.body;
-		const user = await User.findOne({ user_id });
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -377,7 +387,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		user.password = hashedPassword;
 		await user.save();
-		return res.status(200).json({ message: "OK", name: user.name, email: user.email });
+		return res.status(200).json({ message: "OK", username: user.username, email: user.email });
 	} catch (error: any) {
 		console.error('Error resetting password:', error);
 		res.status(500).send('Server error');
@@ -387,9 +397,9 @@ export const resetPassword = async (req: Request, res: Response) => {
 // Delete user
 export const deleteUser = async (req: Request, res: Response) => {
 	try {
-		const user_id = res.locals.jwtData.id;
+		const userId = res.locals.jwtData.id;
 		const { password } = req.body;
-		const user = await User.findOne({ user_id });
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -398,7 +408,24 @@ export const deleteUser = async (req: Request, res: Response) => {
 		if (!isPasswordCorrect) {
 			return res.status(401).json({ message: "ERROR", cause: "Incorrect Password" });
 		}
-		await user.deleteOne();
+		// Delete user progress
+		await UserProgress.deleteMany({ user: userId });
+		// Delete contest participation
+		await ContestParticipation.deleteMany({ user: userId });
+		// Delete machine reviews
+		const machines = await Machine.find({});
+		await machines.forEach(async (machine) => {
+			await machine.reviews.forEach(async (review) => {
+				if (review.reviewerId.toString() === userId) {
+					await machine.reviews.pull(review._id);
+				}
+			});
+			await (machine as any).updateRating();
+			await machine.save();
+		});
+
+		// Delete user
+		await user.deleteOne({ id: userId });
 		return res.status(200).json({ message: "OK" });
 	} catch (error: any) {
 		console.error('Error deleting user:', error);
@@ -406,20 +433,32 @@ export const deleteUser = async (req: Request, res: Response) => {
 	}
 };
 
-// Delete user by user_id(Admin Only)
+// Delete user by userId(Admin Only)
 export const deleteUserByUserId = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
-		const { AdminPassword } = req.body;
-		if (AdminPassword !== process.env.ADMIN_PASSWORD) {
-			return res.status(401).json({ message: "ERROR", cause: "Incorrect Admin Password" });
-		}
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findById(userId);
 		if (!user) {
-			res.status(404).json({ msg: 'User not found.' });
+			res.status(404).json({ message: "ERROR", msg: 'User not found.' });
 			return;
 		}
-		await user.deleteOne();
+		// Delete user progress
+		await UserProgress.deleteMany({ user: userId });
+		// Delete contest participation
+		await ContestParticipation.deleteMany({ user: userId });
+		// Delete machine reviews
+		const machines = await Machine.find({});
+		await machines.forEach(async (machine) => {
+			await machine.reviews.forEach(async (review) => {
+				if (review.reviewerId.toString() === userId) {
+					await machine.reviews.pull(review._id);
+				}
+			});
+			await (machine as any).updateRating();
+			await machine.save();
+		});
+		// Delete user
+		await user.deleteOne({ id: userId });
 		return res.status(200).json({ message: "OK" });
 	} catch (error: any) {
 		console.error('Error deleting user:', error);
@@ -427,31 +466,11 @@ export const deleteUserByUserId = async (req: Request, res: Response) => {
 	}
 };
 
-// Get user progress
-export const getUserProgress = async (req: Request, res: Response): Promise<void> => {
-	try {
-		const user = await User.findById(res.locals.jwtData.id);
-		if (!user) {
-			res.status(404).json({ msg: 'User not found.' });
-			return;
-		}
-		const userProgress = await UserProgress.find({ user: user._id });
-		if (!userProgress) {
-			res.status(404).json({ msg: 'User progress not found.' });
-			return;
-		}
-		res.json({ userProgress, level: user.level, exp: user.exp });
-	} catch (error: any) {
-		console.error('Error getting user progress:', error);
-		res.status(500).send('Server error');
-	}
-};
-
-// Get user progress by user_id(Admin Only)
+// Get user progress by userId(Admin Only)
 export const getUserProgressByUserId = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -472,8 +491,8 @@ export const getUserProgressByUserId = async (req: Request, res: Response) => {
 export const updateUserLevel = async (req: Request, res: Response) => {
 	try {
 		const { level } = req.body;
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -491,8 +510,8 @@ export const updateUserLevel = async (req: Request, res: Response) => {
 export const addUserExp = async (req: Request, res: Response) => {
 	try {
 		const { exp } = req.body;
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -578,8 +597,8 @@ export const resetUserProgress = async (req: Request, res: Response) => {
 // Reset User Progress(Admin Only)
 export const resetUserProgressByUserId = async (req: Request, res: Response) => {
 	try {
-		const { user_id } = req.params;
-		const user = await User.findOne({ user_id });
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
 		if (!user) {
 			res.status(404).json({ msg: 'User not found.' });
 			return;
@@ -609,5 +628,81 @@ export const getLeaderboard = async (req: Request, res: Response) => {
 	}
 };
 
+// Make User Admin by User ID(Admin Only)
+export const makeUserAdmin = async (req: Request, res: Response) => {
+	try {
+		const { userId } = req.params;
+		const user = await User.findById(userId);
+		if (!user) {
+			res.status(404).json({ 
+				message: "ERROR", 
+				msg: "User not found." 
+			});
+			return;
+		}
+		user.isAdmin = true;
+		await user.save();
+		return res.status(200).json({ 
+			message: "OK",
+			username: user.username,
+			isAdmin: user.isAdmin 
+		});
+	} catch (error: any) {
+		console.error('Error promoting user to admin:', error);
+		res.status(500).send('Server error');
+	}
+};
 
+// Make Admin to User by User ID(Admin Only)
+export const makeAdminToUser = async (req: Request, res: Response) => {
+	try {
+		const { userId } = req.params;
+		const user = await User.findOne({ id: userId });
+		if (!user) {
+			res.status(404).json({ 
+				message: "ERROR", 
+				msg: "User not found." 
+			});
+			return;
+		}
+		user.isAdmin = false;
+		await user.save();
+		return res.status(200).json({ 
+			message: "OK",
+			username: user.username,
+			isAdmin: user.isAdmin 
+		});
+	} catch (error: any) {
+		console.error('Error demoting user from admin:', error);
+		res.status(500).send('Server error');
+	}
+};
+
+// Check Admin Password(Admin Only)
+export const checkAdminPassword = async (req: Request, res: Response) => {
+	try {
+		const { adminPassword } = req.body;
+		const user = await User.findById(res.locals.jwtData.id);
+		if (!user) {
+			res.status(404).json({ 
+				message: "ERROR", 
+				msg: "User not found." 
+			});
+			return;
+		}
+		if (adminPassword !== process.env.ADMIN_PASSWORD) {
+			return res.status(401).json({ 
+				message: "ERROR", 
+				msg: "Incorrect Admin Password" 
+			});
+		}
+		return res.status(200).json({ 
+			message: "OK", 
+			isAdmin: user.isAdmin 
+		});
+	} catch (error: any) {
+		console.error('Error verifying user admin:', error);
+		res.status(500).send('Server error');
+	}
+};
 

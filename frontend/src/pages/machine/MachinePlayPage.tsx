@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMachineDetails } from '../../api/axiosInstance';
+import { getActiveMachineDetails } from '../../api/axiosMachine';
+import { getInstanceByMachine } from '../../api/axiosInstance';
 import DisplayReward from '../../components/play/DisplayReward';
 import GetHints from '../../components/play/GetHints';
 import StartInstanceButton from '../../components/play/StartInstanceButton';
 import DownloadVPNProfile from '../../components/play/DownloadVPNProfile';
 import InstanceInfo from '../../components/play/InstanceInfo';
 import SubmitFlagForm from '../../components/play/SubmitFlagForm';
+import GiveUpButton from '../../components/play/GiveUpButton';
 import Main from '../../components/main/Main';
-//import '../../assets/scss/machine/machinePlayPage.scss';
+import { Instance } from '../../types/Instance';
 
 /**
  * Interface representing the Machine details.
  */
 interface Machine {
-  id: string;
+  _id: string; // Assuming MongoDB-style IDs
   name: string;
   exp: number;
+  amiId: string;
   // Add other machine properties as needed
 }
 
@@ -35,23 +38,62 @@ const MachinePlayPage: React.FC = () => {
   const { machineId } = useParams<{ machineId: string }>();
   const [machine, setMachine] = useState<Machine | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [instanceStatus, setInstanceStatus] = useState<Instance['status']>(null);
+  const [instanceStarted, setInstanceStarted] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Fetch machine details
+  // Fetch machine details and check for existing instance when component mounts
   useEffect(() => {
-    const fetchMachineDetails = async () => {
+    const fetchData = async () => {
+      if (!machineId) {
+        setError('Machine ID is missing.');
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        if (!machineId) {
-          throw new Error('Machine ID is missing');
+        // Fetch machine details
+        const machineResponse: GetMachineDetailsResponse = await getActiveMachineDetails(machineId);
+        console.log('Machine Details:', machineResponse.machine); // Debugging
+        setMachine(machineResponse.machine);
+
+        // Fetch existing instances for the machine
+        const instanceResponse = await getInstanceByMachine(machineId);
+        console.log('Instance Response:', instanceResponse); // Debugging
+
+        if (instanceResponse.instances && instanceResponse.instances.length > 0) {
+          setInstanceStarted(true);
+          // Set initial instance status
+          const currentInstance = instanceResponse.instances[0];
+          setInstanceStatus(currentInstance.status);
+          console.log('Existing Instance Found:', currentInstance); // Debugging
+        } else {
+          setInstanceStarted(false);
+          setInstanceStatus(null);
+          console.log('No Existing Instance Found'); // Debugging
         }
-        const response: GetMachineDetailsResponse = await getMachineDetails(machineId);
-        setMachine(response.machine);
       } catch (error: any) {
-        console.error('Error fetching machine details:', error.message || error);
-        setError('Failed to fetch machine details.');
+        console.error('Error fetching machine details or instances:', error);
+        setError('Failed to fetch machine details or instances.');
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchMachineDetails();
+
+    fetchData();
   }, [machineId]);
+
+  // Callback to receive instance status from InstanceInfo
+  const handleInstanceStatusChange = (status: Instance['status']) => {
+    console.log('Instance status changed to:', status); // Debugging
+    setInstanceStatus(status);
+  };
+
+  // Callback to set instance as started
+  const handleInstanceStarted = () => {
+    console.log('Instance has been started.'); // Debugging
+    setInstanceStarted(true);
+  };
 
   if (error) {
     return (
@@ -64,7 +106,7 @@ const MachinePlayPage: React.FC = () => {
     );
   }
 
-  if (!machine) {
+  if (!machine || isLoading) {
     return (
       <Main>
         <div className="machine-play-container">
@@ -74,6 +116,9 @@ const MachinePlayPage: React.FC = () => {
       </Main>
     );
   }
+
+  // Determine if controls should be disabled based on instance status
+  const isRunning = instanceStatus === 'running';
 
   return (
     <Main>
@@ -86,10 +131,36 @@ const MachinePlayPage: React.FC = () => {
         </div>
         <DisplayReward reward={machine.exp} />
         <DownloadVPNProfile />
-        <InstanceInfo machineId={machineId || ''} />
-        <StartInstanceButton machineId={machineId || ''} />
-        <GetHints machineId={machineId || ''} playType="machine" />
-        <SubmitFlagForm machineId={machineId || ''} playType="machine" />
+
+        {/* Conditionally render StartInstanceButton or InstanceInfo */}
+        {!instanceStarted ? (
+          <StartInstanceButton
+            machineId={machineId || ''}
+            onInstanceStarted={handleInstanceStarted} // Pass the callback
+          />
+        ) : (
+          <InstanceInfo
+            machineId={machineId || ''}
+            onStatusChange={handleInstanceStatusChange}
+          />
+        )}
+
+        <GetHints
+          machineId={machineId || ''}
+          playType="machine"
+          disabled={!isRunning} // Disable based on instance status
+        />
+        <SubmitFlagForm
+          machineId={machineId || ''}
+          playType="machine"
+          disabled={!isRunning} // Disable based on instance status
+        />
+        <GiveUpButton
+          machineId={machineId || ''}
+          machineName={machine.name}
+          mode="machine"
+          disabled={!isRunning} // Disable based on instance status
+        />
       </div>
     </Main>
   );
