@@ -4,8 +4,8 @@ import LoginPage from './pages/public/LoginPage';
 import MainPage from './pages/public/MainPage';
 import LoadingPage from './pages/public/LoadingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import AdminProtectedRoute from './components/auth/AdminProtectedRoute';
-import './assets/scss/admin/AdminDashboard.scss';
+import PreContestPage from './pages/contest/PreContestPage';
+import NewMachineReview from './pages/machine/NewMachineReview';
 
 // Lazy-loaded components
 const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage'));
@@ -14,23 +14,13 @@ const ContestDetailPage = lazy(() => import('./pages/contest/ContestDetailPage')
 const ContestRegisterPage = lazy(() => import('./pages/contest/ContestRegisterPage'));
 const ContestCompletePage = lazy(() => import('./pages/contest/ContestCompletePage'));
 const ContestPendingPage = lazy(() => import('./pages/contest/ContestPendingPage'));
-const PreContestPage = lazy(() => import('./pages/contest/PreContestPage'));
 const ContestPlayPage = lazy(() => import('./pages/contest/ContestPlayPage'));
 const MachineListPage = lazy(() => import('./pages/machine/MachineListPage'));
 const MachineDetailPage = lazy(() => import('./pages/machine/MachineDetailPage'));
-const NewMachineReview = lazy(() => import('./pages/machine/NewMachineReview'));
 const MachineRegisterPage = lazy(() => import('./pages/machine/MachineRegisterPage'));
 const MachinePlayPage = lazy(() => import('./pages/machine/MachinePlayPage'));
 const MachineCompletePage = lazy(() => import('./pages/machine/MachineCompletePage'));
 const MyPage = lazy(() => import('./pages/user/MyPage'));
-
-// Admin components
-const DashboardHome = lazy(() => import('./pages/admin/DashboardHome'));
-const UsersManagement = lazy(() => import('./pages/admin/UsersManagement'));
-const MachinesManagement = lazy(() => import('./pages/admin/MachinesManagement'));
-const ContestsManagement = lazy(() => import('./pages/admin/ContestsManagement'));
-const InstancesManagement = lazy(() => import('./pages/admin/InstancesManagement'));
-const Unauthorized = lazy(() => import('./pages/Unauthorized'));
 
 const App: React.FC = () => {
   return (
@@ -169,55 +159,6 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
-            <Route path="/unauthorized" element={<Unauthorized />} />
-
-            {/* Admin Routes */}
-
-              <Route path="/admin" element={
-              <AdminProtectedRoute>
-              <div className="admin-dashboard">
-                <div className="admin-content">
-                  <DashboardHome />
-                </div>
-                </div>
-              </AdminProtectedRoute>
-              }/>
-              <Route path="/admin/users" element={
-                <AdminProtectedRoute>
-                <div className="admin-dashboard">
-                  <div className="admin-content">
-                    <UsersManagement />
-                  </div>
-                </div>
-              </AdminProtectedRoute>
-              } />
-            <Route path="/admin/machines" element={
-              <AdminProtectedRoute>
-              <div className="admin-dashboard">
-                <div className="admin-content">
-                  <MachinesManagement />
-                </div>
-              </div>
-            </AdminProtectedRoute>
-            } />
-            <Route path="/admin/contests" element={
-              <AdminProtectedRoute>
-              <div className="admin-dashboard">
-                <div className="admin-content">
-                  <ContestsManagement />
-                </div>
-              </div>
-              </AdminProtectedRoute>
-            } />
-            <Route path="/admin/instances" element={
-              <AdminProtectedRoute>
-              <div className="admin-dashboard">
-                <div className="admin-content">
-                  <InstancesManagement />
-                  </div>
-                </div>
-              </AdminProtectedRoute>
-              } />
           </Routes>
         </Suspense>
       </Router>

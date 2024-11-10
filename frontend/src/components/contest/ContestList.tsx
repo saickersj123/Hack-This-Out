@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getActiveContests } from '../../api/axiosContest';
+import { getContests } from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import formatDate from '../../utils/dateUtils';
 
@@ -24,7 +24,8 @@ const ContestList: React.FC = () => {
 
   const fetchContests = async () => {
     try {
-      const data: ContestsResponse = await getActiveContests();
+      // Assuming getContests returns a response matching ContestsResponse
+      const data: ContestsResponse = await getContests();
       setContests(data.contests);
     } catch (error) {
       console.error('Error fetching contests:', error);

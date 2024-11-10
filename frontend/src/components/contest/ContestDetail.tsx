@@ -1,7 +1,7 @@
 import React from 'react';
 import formatDate from '../../utils/dateUtils';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
-import '../../assets/scss/contest/ContestDetail.scss';
+import '../../assets/scss/contest/ContestDetail.scss'; // Ensure correct styling
 
 /**
  * Props interface for ContestDetail component.

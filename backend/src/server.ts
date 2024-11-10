@@ -1,13 +1,13 @@
 import express from 'express';
-import connectDB from './config/db';
+import connectDB from './config/db.js';
 import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import mongoSanitize from 'express-mongo-sanitize';
-import userRoutes from "./routes/UserRoutes";
-import InstRoutes from "./routes/InstRoutes";
-import MachineRoutes from './routes/MachineRoutes';
-import ContestRoutes from './routes/ContestRoutes';
+import userRoutes from "./routes/UserRoutes.js";
+import InstRoutes from "./routes/InstRoutes.js";
+import MachineRoutes from './routes/MachineRoutes.js';
+import ContestRoutes from './routes/ContestRoutes.js';
 
 const app = express();
 

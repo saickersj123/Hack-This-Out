@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { postMachineReview } from '../../api/axiosMachine';
+import { postMachineReview } from '../../api/axiosInstance';
 import { Review } from '../../types/Machine';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
 

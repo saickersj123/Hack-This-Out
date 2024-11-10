@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { createMachine } from '../../api/axiosMachine';
+import { createMachine } from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 interface MachineFormData {

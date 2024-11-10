@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getContestDetails } from '../../api/axiosContest';
-import { getInstanceByMachine } from '../../api/axiosInstance';
+import { getContestDetails } from '../../api/axiosInstance';
 import DisplayReward from '../../components/play/DisplayReward';
 import GetHints from '../../components/play/GetHints';
 import StartInstanceButton from '../../components/play/StartInstanceButton';
@@ -9,11 +8,9 @@ import DownloadVPNProfile from '../../components/play/DownloadVPNProfile';
 import InstanceInfo from '../../components/play/InstanceInfo';
 import SubmitFlagForm from '../../components/play/SubmitFlagForm';
 import Timer from '../../components/play/Timer';
-import GiveUpButton from '../../components/play/GiveUpButton';
 import Main from '../../components/main/Main';
 import { ContestDetail, Machine } from '../../types/Contest';
-import { Instance } from '../../types/Instance';
-import '../../assets/scss/contest/ContestPlayPage.scss';
+// import '../../assets/scss/machine/machinePlayPage.scss';
 
 /**
  * Interface for API response when fetching contest details.
@@ -31,74 +28,27 @@ const ContestPlayPage: React.FC = () => {
   const [contest, setContest] = useState<ContestDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedMachine, setSelectedMachine] = useState<Machine | null>(null);
-  const [instanceStatus, setInstanceStatus] = useState<Instance['status']>(null);
-  const [instanceStarted, setInstanceStarted] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Fetch contest details and check for existing instance when component mounts
+  // Fetch contest details
   useEffect(() => {
-    const fetchData = async () => {
-      if (!contestId) {
-        setError('Contest ID is missing.');
-        setIsLoading(false);
-        return;
-      }
-
+    const fetchContestDetails = async () => {
       try {
-        // Fetch contest details
-        const contestResponse: GetContestDetailsResponse = await getContestDetails(contestId);
-        console.log('Contest Details:', contestResponse.contest); // Debugging
-        setContest(contestResponse.contest);
-
-        setIsLoading(false);
-      } catch (err: any) {
-        console.error('Error fetching contest details:', err);
-        setError(err.msg || 'Failed to fetch contest details.');
-        setIsLoading(false);
+        if (!contestId) {
+          throw new Error('Contest ID is missing');
+        }
+        const response: GetContestDetailsResponse = await getContestDetails(contestId);
+        setContest(response.contest);
+      } catch (error: any) {
+        console.error('Error fetching contest details:', error.message || error);
+        setError('Failed to fetch contest details.');
       }
     };
-
-    fetchData();
+    fetchContestDetails();
   }, [contestId]);
 
   // Handle machine selection
-  const handleMachineSelect = async (machine: Machine) => {
+  const handleMachineSelect = (machine: Machine) => {
     setSelectedMachine(machine);
-    setInstanceStarted(false); // Reset instanceStarted when selecting a new machine
-    setInstanceStatus(null); // Reset instance status
-
-    // Check for existing instance for the selected machine within the contest
-    try {
-      const instanceResponse = await getInstanceByMachine(machine._id);
-      console.log('Instance Response:', instanceResponse); // Debugging
-
-      if (instanceResponse.instances && instanceResponse.instances.length > 0) {
-        setInstanceStarted(true);
-        // Set initial instance status
-        const currentInstance = instanceResponse.instances[0];
-        setInstanceStatus(currentInstance.status);
-        console.log('Existing Instance Found:', currentInstance); // Debugging
-      } else {
-        setInstanceStarted(false);
-        setInstanceStatus(null);
-        console.log('No Existing Instance Found'); // Debugging
-      }
-    } catch (error: any) {
-      console.error('Error fetching instances:', error);
-      setError('Failed to fetch instance details.');
-    }
-  };
-
-  // Callback to receive instance status from InstanceInfo
-  const handleInstanceStatusChange = (status: Instance['status']) => {
-    console.log('Instance status changed to:', status); // Debugging
-    setInstanceStatus(status);
-  };
-
-  // Callback to set instance as started
-  const handleInstanceStarted = () => {
-    console.log('Instance has been started.'); // Debugging
-    setInstanceStarted(true);
   };
 
   if (error) {
@@ -112,7 +62,7 @@ const ContestPlayPage: React.FC = () => {
     );
   }
 
-  if (!contest || isLoading) {
+  if (!contest) {
     return (
       <Main>
         <div className="contest-play-container">
@@ -123,47 +73,42 @@ const ContestPlayPage: React.FC = () => {
     );
   }
 
-  // Determine if controls should be disabled based on instance status
-  const isRunning = instanceStatus === 'running';
-
   return (
     <Main>
       <div className="contest-play-container">
         <div className="contest-play-title">
           <h2>Contest Play</h2>
         </div>
-        <div className="contest-play-name">
-          <h3>Contest: {contest.name}</h3>
-        </div>
         <div className="contest-play-timer">
-          <Timer endTime={contest.endTime} />
+          <Timer endTime={contest.endTime.toISOString()} />
         </div>
-
-        {/* List of Machines */}
-        <div className="select-machines">
-          <h3>Select a Machine:</h3>
-          <ul className="select-machine-list">
-            {contest.machines.map((machine) => (
-              <li
-                key={machine._id}
-                className={`select-machine-item ${
-                  selectedMachine?._id === machine._id ? 'selected' : ''
-                }`}
-                onClick={() => handleMachineSelect(machine)}
-                style={{
-                  cursor: 'pointer',
-                  padding: '10px',
-                  border: selectedMachine?._id === machine._id ? '2px solid blue' : '1px solid #ccc',
-                  marginBottom: '5px',
-                  borderRadius: '4px',
-                }}
-              >
-                {machine.name}
-              </li>
-            ))}
-          </ul>
+        <div className="contest-play-description">
+          <div className="contest-play-warning">
+            <h3>Warning: do not switch other machine while playing a machine</h3>
+          </div>
+          <div className="select-machines">
+            <h3>Select a Machine:</h3>
+            <ul>
+              {contest.machines.map((machine) => (
+                <li
+                  key={machine._id}
+                  className={`select-machine-list ${selectedMachine?._id === machine._id ? 'selected' : ''}`}
+                  onClick={() => handleMachineSelect(machine)}
+                  style={{
+                    cursor: 'pointer',
+                    padding: '8px',
+                    border: '1px solid #ccc',
+                    marginBottom: '4px',
+                    backgroundColor: selectedMachine?._id === machine._id ? '#f0f0f0' : 'transparent',
+                    fontWeight: selectedMachine?._id === machine._id ? 'bold' : 'normal',
+                  }}
+                >
+                  {machine.name}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-
         {selectedMachine ? (
           <>
             <div className="contest-play-name">
@@ -171,39 +116,10 @@ const ContestPlayPage: React.FC = () => {
             </div>
             <DisplayReward reward={contest.contestExp} />
             <DownloadVPNProfile />
-
-            {/* Conditionally render StartInstanceButton or InstanceInfo */}
-            {!instanceStarted ? (
-              <StartInstanceButton
-                machineId={selectedMachine._id}
-                onInstanceStarted={handleInstanceStarted} // Pass the callback
-              />
-            ) : (
-              <InstanceInfo
-                machineId={selectedMachine._id}
-                onStatusChange={handleInstanceStatusChange}
-              />
-            )}
-
-            <GetHints
-              machineId={selectedMachine._id}
-              playType="contest"
-              contestId={contestId}
-              disabled={!isRunning} // Disable based on instance status
-            />
-            <SubmitFlagForm
-              contestId={contestId}
-              machineId={selectedMachine._id}
-              playType="contest"
-              disabled={!isRunning} // Disable based on instance status
-            />
-            <GiveUpButton
-              contestId={contestId}
-              machineId={selectedMachine._id}
-              machineName={selectedMachine.name}
-              mode="contest"
-              disabled={!isRunning} // Disable based on instance status
-            />
+            <InstanceInfo machineId={selectedMachine._id} />
+            <StartInstanceButton machineId={selectedMachine._id} />
+            <GetHints machineId={selectedMachine._id} playType="contest" contestId={contestId} />
+            <SubmitFlagForm machineId={selectedMachine._id} playType="contest" />
           </>
         ) : (
           <div>Please select a machine to start playing.</div>

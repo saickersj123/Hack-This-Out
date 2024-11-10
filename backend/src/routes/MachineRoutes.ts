@@ -31,11 +31,9 @@ import {
   getMachineDetailsById,
   getInactiveMachineDetailsById,
   getActiveMachineDetailsById,
+  updateAllMachineRatings,
+  updateMachineRating,
   deleteMyMachineReview,
-  getUsedHints,
-  getUserProgress,
-  giveUpMachine,
-  startPlayingMachine,
 } from '../controllers/MachineController.js';
 
 const MachineRoutes = express.Router();
@@ -52,12 +50,6 @@ MachineRoutes.get('/active/:machineId', verifyToken, getActiveMachineDetails);
 
 // Route to get machine hints
 MachineRoutes.get('/:machineId/hints', verifyToken, getMachineHints);
-
-// Route to get user progress
-MachineRoutes.get('/:machineId/progress', verifyToken, getUserProgress);
-
-// Route to get used hints in machine
-MachineRoutes.get('/:machineId/used-hints', verifyToken, getUsedHints);
 
 // Route to submit flag for a machine
 MachineRoutes.post('/:machineId/submit-flag', verifyToken, flagSubmissionLimiter, submitFlagMachine);
@@ -92,11 +84,6 @@ MachineRoutes.get('/:machineId/reviews/count', verifyToken, verifyAdmin, getMach
 // Route to get machine reviews by user
 MachineRoutes.get('/reviews/by/:userId', verifyToken, verifyAdmin, getMachineReviewsbyUser);
 
-// Route to give up a machine
-MachineRoutes.post('/:machineId/give-up', verifyToken, giveUpMachine);
-
-// Route to start playing a machine
-MachineRoutes.post('/:machineId/start-play', verifyToken, startPlayingMachine);
 
 // Admin Routes
 // Route to get all machines(Admin only)

@@ -110,7 +110,7 @@ export const getMachineDetails = async (req: Request, res: Response): Promise<vo
 export const getActiveMachineDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
-    const machine = await Machine.findOne({ _id: machineId, isActive: true }).select('-hints -flag -__v -reviews');
+    const machine = await Machine.findById(machineId, { isActive: true }).select('-hints -flag -__v -reviews');
     res.status(200).json({ 
       message: "OK", 
       msg: 'Active machine fetched successfully.', 
@@ -181,8 +181,7 @@ export const getActiveMachineDetailsById = async (req: Request, res: Response): 
  */
 export const getActiveMachines = async (req: Request, res: Response): Promise<void> => {
   try {
-    const machines = await Machine.find({ isActive: true })
-    .select('-hints -flag -__v -reviews -createdAt -updatedAt -isActive -description -exp -amiId');
+    const machines = await Machine.find({ isActive: true }).select('-hints -flag');
     if (machines.length === 0) {
       res.status(404).json({ 
         message: "ERROR", 
@@ -190,11 +189,6 @@ export const getActiveMachines = async (req: Request, res: Response): Promise<vo
       });
       return;
     };
-    // Update average rating for each machine
-    const machineReviews = await Machine.find({ isActive: true }).select('reviews');
-    await machineReviews.forEach(async (machine) => {
-      await (machine as any).updateRating();
-    });
     res.status(200).json({ 
       message: "OK", 
       msg: 'Active machines fetched successfully.', 
@@ -358,73 +352,6 @@ export const deleteMachine = async (req: Request, res: Response): Promise<void> 
     res.status(500).send('Failed to delete machine.');
   }
 };
-
-// Get user progress
-export const getUserProgress = async (req: Request, res: Response): Promise<void> => {
-	try {
-		const { machineId } = req.params;
-		const user = await User.findById(res.locals.jwtData.id);
-		if (!user) {
-			res.status(404).json({ message: "ERROR", cause: "User not found." });
-			return;
-		}
-		const machine = await Machine.findById(machineId);
-		if (!machine) {
-			res.status(404).json({ message: "ERROR", cause: "Machine not found." });
-			return;
-		}
-		let userProgress = await UserProgress.findOne({ user: user._id, machine: machineId, completed: false });
-		if (!userProgress) {
-			userProgress = new UserProgress({
-				user: user._id,
-				machine: machineId,
-				remainingHints: machine.hints.length,
-			});
-			await userProgress.save();
-		}
-		res.json({ message: "OK", userProgress: userProgress });
-	} catch (error: any) {
-		console.error('Error getting user progress:', error);
-		res.status(500).send('Server error');
-	}
-};
-
-/**
- * Start playing a machine.
- */
-export const startPlayingMachine = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { machineId } = req.params;
-    const userId = res.locals.jwtData.id;
-    if (!userId) {
-      res.status(400).json({ message: "ERROR", cause: "User not found." });
-      return;
-    }
-    const machine = await Machine.findById(machineId);
-    if (!machine) {
-      res.status(404).json({ message: "ERROR", cause: "Machine not found." });
-      return;
-    }
-    const existingProgress = await UserProgress.findOne({ user: userId, machine: machineId, completed: false });
-    if (!existingProgress) {
-      const newProgress = new UserProgress({
-        user: userId,
-        machine: machineId,
-        remainingHints: machine.hints.length,
-      });
-      await newProgress.save();
-    }
-
-    res.status(200).json({ 
-      message: "OK", 
-      msg: 'Started playing machine.', 
-    });
-  } catch (error: any) {
-    console.error('Error starting playing machine:', error);
-    res.status(500).send('Failed to start playing machine.');
-  }
-};
-
 /**
  * Get machine hints.
  */
@@ -434,102 +361,50 @@ export const getMachineHints = async (req: Request, res: Response): Promise<void
     const userId = res.locals.jwtData.id;
 
     // Find or create user progress
-    const progress = await UserProgress.findOne({ 
-      user: userId, 
-      machine: machineId,
-      completed: false
+    let progress = await UserProgress.findOne({ 
+        user: userId, 
+        machine: machineId,
+        expEarned: 0
     });
 
-    const hintsUsed = progress ? progress.hintsUsed : 0;
-
+    if (!progress) {
+        progress = new UserProgress({
+            user: userId,
+            machine: machineId,
+        });
+    }
+    // Get the hint content
     const machine = await Machine.findById(machineId);
     if (!machine || !machine.hints || machine.hints.length === 0) {
-      res.status(404).json({ msg: 'No hints available for this machine.' });
-      return;
+        res.status(404).json({ msg: 'No hints available for this machine.' });
+        return;
     }
-
-    if (hintsUsed >= machine.hints.length) {
+    // Limit hintsUsed to the number of hints available
+    if (progress.hintsUsed > machine.hints.length-1) {
       res.status(400).json({ msg: 'No more hints available.' });
       return;
-    }
-
-    // Get the next hint
-    const hintIndex = hintsUsed;
+  } else {
+      // Increment hints used
+      progress.hintsUsed += 1;
+      await progress.save();
+  }
+    // Get the next hint based on hintsUsed count
+    const hintIndex = Math.min(progress.hintsUsed - 1, machine.hints.length - 1);
     const hint = machine.hints[hintIndex];
 
-    // Update user progress
-    if (progress) {
-      progress.hintsUsed += 1;
-      progress.usedHints.push(hint.content); // Store the used hint
-      await progress.save();
-    } else {
-      res.status(404).json({ msg: 'User progress not found.' });
-      return;
-    }
-
-    res.status(200).json({
-      message: "OK",
-      msg: 'Hint revealed.',
-      hint: hint.content,
-      hintsUsed: hintsUsed + 1,
-      remainingHints: Math.max(0, machine.hints.length - (hintsUsed + 1)),
-      usedHints: progress ? progress.usedHints : [hint.content], // Include used hints in response
+    res.status(200).json({ 
+        message: "OK",
+        msg: 'Hint revealed.',
+        hint: hint.content,
+        hintsUsed: progress.hintsUsed,
+        remainingHints: Math.max(0, machine.hints.length - progress.hintsUsed)
     });
-  } catch (error: any) {
+} catch (error: any) {
     console.error('Error using hint:', error);
     res.status(500).send('Failed to get hint.');
-  }
+}
 };
 
-/**
- * Fetch all used hints for a machine and user.
- */
-export const getUsedHints = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { machineId } = req.params;
-    const userId = res.locals.jwtData.id;
-    if (!userId) {
-      res.status(400).json({ 
-        message: "ERROR", 
-        msg: 'User not found.' 
-      });
-      return;
-    }
-
-    const progress = await UserProgress.findOne(
-      { user: userId, machine: machineId, completed: false, hintsUsed: { $gt: 0 } }
-    );
-    if (!progress) {
-      res.status(200).json({
-        message: "OK",
-        msg: 'No hints used yet.',
-        usedHints: [],
-        hintsUsed: 0,
-        remainingHints: (await Machine.findById(machineId))?.hints.length || 0,
-      });
-      return;
-    }
-
-    const machine = await Machine.findById(machineId);
-    const totalHints = machine?.hints.length || 0;
-
-    res.status(200).json({
-      message: "OK",
-      msg: 'Used hints fetched successfully.',
-      usedHints: progress.usedHints,
-      hintsUsed: progress.hintsUsed,
-      remainingHints: Math.max(0, totalHints - progress.hintsUsed),
-    });
-  } catch (error: any) {
-    console.error('Error fetching used hints:', error);
-    res.status(500).send('Failed to fetch used hints.');
-  }
-};
-
-
-/**
- * Submit a flag for a machine.
- */
 export const submitFlagMachine = async (req: Request, res: Response): Promise<void> => {
     try {
         const { machineId } = req.params;
@@ -558,7 +433,7 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
   
         // Update user progress
         await UserProgress.findOneAndUpdate(
-            { user: userId, machine: machineId, completedAt: { $exists: false } },
+            { user: userId, machine: machineId, completedAt: null },
             { 
                 completed: true,
                 completedAt: new Date(),
@@ -580,7 +455,6 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
         await machine.save();
   
         res.status(200).json({ 
-            message: "OK",
             msg: 'Flag accepted.',
             expEarned: expEarned,
             totalExp: user?.exp
@@ -637,7 +511,7 @@ export const postMachineReview = async (req: Request, res: Response): Promise<vo
 
         machine.reviews.push({
             reviewerId: userId,
-            reviewerName: user.username,
+            reviewerName: user.name,
             content: review,
             rating,
         });
@@ -717,21 +591,12 @@ export const getMachineReviewsbyUser = async (req: Request, res: Response): Prom
 export const getMachineReview = async (req: Request, res: Response): Promise<void> => {
     try {
         const { machineId, reviewId } = req.params;
-        const userId = res.locals.jwtData.id;
-        const user = await User.findById(userId);
-        if (!user) {
-            res.status(404).json({ 
-                message: "ERROR", 
-                msg: 'User not found.' 
-            });
-            return;
-        }
         const machine = await Machine.findById(machineId);
         const review = machine?.reviews.find((r) => r._id.toString() === reviewId);
         res.status(200).json({ 
             message: "OK", 
             msg: 'Machine review fetched successfully.', 
-            review: review,
+            review: review 
         });
     } catch (error) {
         console.error('Error fetching machine review:', error);
@@ -942,10 +807,6 @@ export const deleteMachineReviewForce = async (req: Request, res: Response): Pro
     }
 };
 
-/**
- * Update machine rating.
- * Admin only.
- */
 export const updateMachineRating = async (req: Request, res: Response): Promise<void> => {
     try {
         const { machineId } = req.params;
@@ -968,11 +829,7 @@ export const updateMachineRating = async (req: Request, res: Response): Promise<
     }
 };
 
-/**
- * Get all machine ratings.
- * Admin only.
- */
-export const getAllMachineRatings = async (req: Request, res: Response): Promise<void> => {
+export const updateAllMachineRatings = async (req: Request, res: Response): Promise<void> => {
     try {
         const machines = await Machine.find();
         for (const machine of machines) {
@@ -988,47 +845,3 @@ export const getAllMachineRatings = async (req: Request, res: Response): Promise
         res.status(500).send('Failed to update all machine ratings.');
     }
 };
-
-/**
- * Give up a machine.
- */
-export const giveUpMachine = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { machineId } = req.params;
-        const userId = res.locals.jwtData.id;
-        if (!userId) {
-            res.status(404).json({ 
-                message: "ERROR", 
-                msg: 'User not found.' 
-            });
-            return;
-        }
-        const machine = await Machine.findById(machineId);
-        if (!machine) {
-            res.status(404).json({ 
-                message: "ERROR", 
-                msg: 'Machine not found.' 
-            });
-            return;
-        }
-        const userProgress = await UserProgress.findOne({ user: userId, machine: machineId, completed: false });
-        if (!userProgress) {
-            res.status(404).json({ 
-                message: "ERROR", 
-                msg: 'User progress not found.' 
-            });
-            return;
-        }
-        userProgress.completed = true;
-        userProgress.completedAt = new Date();
-        await userProgress.save();
-        res.status(200).json({ 
-            message: "OK", 
-            msg: 'You have given up.' 
-        });
-    } catch (error) {
-        console.error('Error giving up:', error);
-        res.status(500).send('Failed to give up.');
-    }
-};
-

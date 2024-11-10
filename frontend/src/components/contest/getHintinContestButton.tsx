@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getHintInContest } from '../../api/axiosContest';
+import { getHintInContest } from '../../api/axiosInstance';
 import { useParams } from 'react-router-dom';
 
 type HintResponse = {

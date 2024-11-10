@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from 'react';
-import { updateUsertoAdmin } from '../../api/axiosUser';
+import { updateUsertoAdmin } from '../../api/axiosInstance';
 import '../../assets/scss/mypage/toAdmin.scss';
 
 /**
@@ -18,8 +18,6 @@ const ToAdmin: React.FC = () => {
       const response = await updateUsertoAdmin(password);
       alert(response.message);
       setPassword('');
-      //refresh
-      window.location.reload();
     } catch (error) {
       console.error('Error updating user permissions:', error);
       alert('관리자 권한 업데이트에 실패했습니다. 다시 시도해주세요.');

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate, NavigateFunction } from 'react-router-dom';
-import { getContestStatus } from '../../api/axiosContest';
+import { Link, useParams } from 'react-router-dom';
+import Main from '../../components/main/Main';
+import { getContestStatus } from '../../api/axiosInstance';
 import { formatDate } from '../../utils/dateUtils';
-import Modal from '../../components/modal/Modal';
 interface GetContestStatusResponse {
   contestName: string;
   isActive: boolean;
@@ -12,7 +12,6 @@ interface GetContestStatusResponse {
 
 const ContestPendingPage: React.FC = () => {
   const { contestId } = useParams<{ contestId: string }>();
-  const navigate: NavigateFunction = useNavigate();
   const [contestStatus, setContestStatus] = useState<GetContestStatusResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,12 +31,8 @@ const ContestPendingPage: React.FC = () => {
     fetchContestStatus();
   }, [contestId]);
 
-  const handleClose = () => {
-    navigate(`/contest/${contestId}`);
-  };
-
   return (
-    <Modal isOpen={true} onClose={handleClose}>
+    <Main>
       {contestStatus && (
         <>
           <h2>Contest Pending</h2>
@@ -45,12 +40,12 @@ const ContestPendingPage: React.FC = () => {
           <p>Status: {contestStatus.isActive ? 'Active' : 'Inactive'}</p>
           <p>Start Time: {formatDate(contestStatus.startTime)}</p>
           <p>End Time: {formatDate(contestStatus.endTime)}</p>
-          <p>Contest is not started yet. Please wait for the contest to start.</p>
+          <p>Contest is not active yet. Please wait for the contest to start.</p>
           <button><Link to={`/contest/${contestId}`}>View Contest</Link></button>
         </>
       )}
       {error && <div className="error-message">{error}</div>}
-    </Modal>
+    </Main>
   );
 };
 

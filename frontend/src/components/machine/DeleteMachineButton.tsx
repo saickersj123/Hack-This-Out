@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { deleteMachine } from '../../api/axiosMachine';
+import { deleteMachine } from '../../api/axiosInstance';
 
 interface DeleteMachineButtonProps {
   machineId: string;

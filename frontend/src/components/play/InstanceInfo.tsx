@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { getInstanceByMachine } from '../../api/axiosInstance';
-import { Instance } from '../../types/Instance';
 
 /**
  * Props interface for InstanceInfo component.
  */
-export interface InstanceInfoProps {
+interface InstanceInfoProps {
   machineId: string;
-  onStatusChange?: (status: Instance['status']) => void; // Callback prop
+}
+
+/**
+ * Interface representing the Instance details.
+ */
+interface Instance {
+  status: 'stopped' | 'pending' | 'running' | null;
+  vpnIp: string;
+  // Add other instance properties as needed
 }
 
 /**
  * Component to display instance information.
  */
-const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }) => {
+const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId }) => {
   const [instance, setInstance] = useState<Instance | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isFetching, setIsFetching] = useState<boolean>(false); // To track fetching state
 
   useEffect(() => {
     if (!machineId) {
@@ -27,37 +33,17 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
     let isMounted = true; // To prevent setting state on unmounted component
 
     const fetchInstanceInfo = async () => {
-      setIsFetching(false);
       try {
         console.log('Fetching instance info for machineId:', machineId);
         const response = await getInstanceByMachine(machineId);
         console.log('Fetched instance data:', response);
-
         if (isMounted) {
-          if (response.instance) {
-            const currentInstance = response.instance;
-            setInstance(currentInstance);
-            if (onStatusChange) {
-              onStatusChange(currentInstance.status);
-            }
-          } else {
-            setInstance(null);
-            if (onStatusChange) {
-              onStatusChange(null);
-            }
-          }
+          setInstance(response.instance[0]);
         }
       } catch (error: any) {
         console.error('Error fetching instance info:', error.message || error);
         if (isMounted) {
           setError('Failed to fetch instance information.');
-          if (onStatusChange) {
-            onStatusChange(null);
-          }
-        }
-      } finally {
-        if (isMounted) {
-          setIsFetching(false);
         }
       }
     };
@@ -73,18 +59,14 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
       isMounted = false;
       clearInterval(intervalId);
     };
-  }, [machineId, onStatusChange]);
-
-  if (isFetching) {
-    return <div className="instance-info-container">Fetching instance information...</div>;
-  }
+  }, [machineId]);
 
   if (error) {
     return <div className="instance-error">Error: {error}</div>;
   }
 
   if (!instance) {
-    return <div className="instance-status">Instance is pending</div>;
+    return <div className="instance-status">Start your instance</div>;
   }
 
   /**
@@ -107,7 +89,7 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
   };
 
   return (
-    <div className="instance-info-container" style={{ border: '1px solid #ccc', padding: '10px', marginTop: '20px' }}>
+    <div className="instance-info-container">
       <h4
         style={{
           color: getStatusColor(instance.status),

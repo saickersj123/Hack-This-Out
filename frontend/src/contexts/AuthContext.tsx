@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { getUserStatus } from '../api/axiosUser';
+import { getUserStatus } from '../api/axiosInstance';
 
 interface AuthContextType {
   isLoggedIn: boolean;

@@ -1,24 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Modal from '../../components/modal/Modal';
+import Main from '../../components/main/Main';
 
 const MachineCompletePage: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleGoToMain = () => {
-    navigate('/');
-  };
-
   return (
-    <Modal isOpen={true} onClose={handleGoToMain}>
-      <div className="machine-complete-modal">
-        <h2>Congratulations!</h2>
-        <p>You have completed the machine.</p>
-        <button onClick={handleGoToMain} className="redirect-button">
-          Go to Main Page
-        </button>
+    <Main title="Machine Complete" description="Machine Complete 화면입니다.">
+      <div className="machine-complete-page">
+        Congratulations! You have completed the machine.
       </div>
-    </Modal>
+    </Main>
   );
 };
 

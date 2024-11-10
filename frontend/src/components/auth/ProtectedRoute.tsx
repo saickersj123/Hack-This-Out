@@ -11,7 +11,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const authUserContext = useContext(AuthUserContext);
 
   if (!authUserContext) {
-    return <Navigate to="/unauthorized" />;
+    throw new Error('ProtectedRoute must be used within an AuthUserProvider');
   }
 
   const { isLoggedIn, isLoading } = authUserContext;

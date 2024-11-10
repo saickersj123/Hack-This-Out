@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { logoutUser } from '../../api/axiosUser';
+import { logoutUser } from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import styles from '../../assets/scss/section/_profile.module.scss';
@@ -121,7 +121,7 @@ export default Profile;
                     <span className="profile_first">
                     </span>
                     <span className="userNametext">
-                        <p>{currentUser?.username || 'Guest'}</p>
+                        <p>{currentUser?.name || 'Guest'}</p>
                     </span>
                 </button>
                 {isMenuOpen && (

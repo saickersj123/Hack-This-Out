@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getActiveMachines } from '../../api/axiosMachine';
+import { getAllMachines } from '../../api/axiosInstance';
 import '../../assets/scss/machine/MachineList.scss';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +25,7 @@ const MachineList: React.FC = () => {
   useEffect(() => {
     const fetchMachines = async (): Promise<void> => {
       try {
-        const data: MachinesResponse = await getActiveMachines();
+        const data: MachinesResponse = await getAllMachines();
         setMachines(data.machines);
         setLoading(false);
       } catch (error: any) {

@@ -18,14 +18,6 @@ const UserProgressSchema = new mongoose.Schema({
     completedAt: {
         type: Date
     },
-    usedHints: {
-        type: [String],
-        default: []
-    },
-    remainingHints: {
-        type: Number,
-        default: 0
-    },
     hintsUsed: {
         type: Number,
         default: 0

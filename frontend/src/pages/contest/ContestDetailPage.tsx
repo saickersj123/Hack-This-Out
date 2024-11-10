@@ -2,18 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import ContestDetail from '../../components/contest/ContestDetail';
 import Main from '../../components/main/Main';
-import { getContestDetails } from '../../api/axiosContest';
+import { getContestDetails } from '../../api/axiosInstance';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
-import ContestLeaderboard from '../../components/contest/ContestLeaderboard';
 //import '../../assets/scss/contest/ContestDetailPage.scss';
-
-/**
- * Interface to represent the contest's status.
- */
-interface ContestStatus {
-  isActive: boolean;
-  isStarted: boolean;
-}
 
 /**
  * Component representing the Contest Detail Page.
@@ -40,16 +31,7 @@ const ContestDetailPage: React.FC = () => {
 
       try {
         const response = await getContestDetails(contestId);
-        const fetchedContest = response.contest;
-
-        // **Parse `startTime` and `endTime` as Date objects**
-        const parsedContest: ContestDetailType = {
-          ...fetchedContest,
-          startTime: new Date(fetchedContest.startTime),
-          endTime: new Date(fetchedContest.endTime),
-        };
-
-        setContestDetail(parsedContest);
+        setContestDetail(response.contest);
       } catch (error: any) {
         console.error('Error fetching contest details:', error.message || error);
         setError('Failed to fetch contest details.');
@@ -65,41 +47,13 @@ const ContestDetailPage: React.FC = () => {
    * Handles navigation to the participate page.
    */
   const handlePlay = () => {
-    if (!contestDetail) return;
-
-    const { isActive, startTime, endTime, _id } = contestDetail;
-
-    const now = Date.now();
-
-    const isContestActive =
-      isActive &&
-      new Date(startTime).getTime() <= now &&
-      new Date(endTime).getTime() >= now;
-
+    const isContestActive = contestDetail && contestDetail._id && contestDetail.isActive 
+      && contestDetail.startTime.getTime() > Date.now() && contestDetail.endTime.getTime() > Date.now();
     if (isContestActive) {
-      navigate(`/contest/${_id}/pre`);
+      navigate(`/contest/${contestDetail?._id}/pre`);
     } else {
-      navigate(`/contest/${_id}/pending`);
+      navigate(`/contest/${contestDetail?._id}/pending`);
     }
-  };
-
-  /**
-   * Determines the contest status based on current time and active state.
-   * 
-   * @returns {ContestStatus} The status of the contest.
-   */
-  const getContestStatus = (): ContestStatus => {
-    if (!contestDetail) {
-      return { isActive: false, isStarted: false };
-    }
-
-    const { isActive, startTime } = contestDetail;
-    const now = Date.now();
-
-    return {
-      isActive,
-      isStarted: new Date(startTime).getTime() <= now,
-    };
   };
 
   if (isLoading) {
@@ -122,8 +76,6 @@ const ContestDetailPage: React.FC = () => {
     );
   }
 
-  const contestStatus = getContestStatus();
-
   return (
     <Main title="Contest Detail" description="Contest Detail 화면입니다.">
       <div className="contest-detail-page">
@@ -132,11 +84,6 @@ const ContestDetailPage: React.FC = () => {
           Play
         </button>
       </div>
-      {/* Pass contestId and contestStatus as props to ContestLeaderboard */}
-      <ContestLeaderboard 
-        contestId={contestId || ''} 
-        contestStatus={contestStatus} 
-      />
     </Main>
   );
 };

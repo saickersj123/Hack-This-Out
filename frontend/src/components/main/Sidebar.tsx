@@ -1,6 +1,5 @@
 // Sidebar.tsx
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styles from '../../assets/scss/section/_sidebar.module.scss';
 import logo from "../../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
 import menu_open from "../../assets/img/icon/menu_open.png";
@@ -31,22 +30,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         <div className={styles.headerParent}>
           <div className={styles.topMenu}>
             <li className={styles.verticalMenuList}>
-              <Link to="/tutorial" className={styles.verticalMenuItem}>
+              <div className={styles.verticalMenuItem}>
                 <img className={styles.menuIcon} alt="" src={tutorial} />
                 <div className={styles.label}>Tutorial</div>
-              </Link>
-              <Link to="/leaderboard" className={styles.verticalMenuItem}>
+              </div>
+              <div className={styles.verticalMenuItem}>
                 <img className={styles.menuIcon} alt="" src={leaderboard} />
                 <div className={styles.label}>LeaderBoard</div>
-              </Link>
-              <Link to="/contest" className={styles.verticalMenuItem}>
+              </div>
+              <div className={styles.verticalMenuItem}>
                 <img className={styles.menuIcon} alt="" src={contest} />
                 <div className={styles.label}>Contest</div>
-              </Link>
-              <Link to="/machines" className={styles.verticalMenuItem}>
+              </div>
+              <div className={styles.verticalMenuItem}>
                 <img className={styles.menuIcon} alt="" src={machines} />
                 <div className={styles.label}>Machines</div>
-              </Link>
+              </div>
             </li>
           </div>
         </div>

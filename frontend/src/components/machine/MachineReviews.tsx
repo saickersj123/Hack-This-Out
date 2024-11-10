@@ -1,9 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import {
-  getMachineReviews,
-  deleteMyMachineReview,
-  deleteMachineReviewForce,
-} from '../../api/axiosMachine';
+import { getMachineReviews, deleteMyMachineReview, deleteMachineReviewForce } from '../../api/axiosInstance';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import '../../assets/scss/machine/MachineReviews.scss';
 

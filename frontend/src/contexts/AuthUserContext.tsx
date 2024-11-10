@@ -1,9 +1,9 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { getUserStatus } from '../api/axiosUser';
+import { getUserStatus } from '../api/axiosInstance';
 
 interface User {
   id: string;
-  username: string;
+  name: string;
   email: string;
   isAdmin: boolean;
   // Add other user properties as needed

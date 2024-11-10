@@ -58,6 +58,11 @@ const MachineSchema = new mongoose.Schema({
         required: true,
         default: 50
     },
+    contestExp: { // New field for Contest EXP
+        type: Number,
+        required: true,
+        default: 100
+    },
     amiId: { 
         type: String,
         required: true,
@@ -75,14 +80,8 @@ const MachineSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    reviews: {
-        type: [ReviewSchema],
-        default: []
-    },
-    hints: {
-        type: [HintSchema],
-        default: []
-    },
+    reviews: [ReviewSchema],
+    hints: [HintSchema],
     isActive: {
         type: Boolean,
         required: true,
@@ -94,7 +93,7 @@ const MachineSchema = new mongoose.Schema({
 
 // Function to update average rating after adding/updating/deleting a review
 MachineSchema.methods.updateRating = async function() {
-    if (!this.reviews || this.reviews.length === 0) { // Added check for reviews undefined
+    if (this.reviews.length === 0) {
         this.rating = 1.0;
     } else {
         const totalRating = this.reviews.reduce((sum: number, review: any) => sum + review.rating, 0);
