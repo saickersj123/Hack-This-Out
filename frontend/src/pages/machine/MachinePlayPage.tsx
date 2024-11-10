@@ -159,7 +159,7 @@ const MachinePlayPage: React.FC = () => {
           machineId={machineId || ''}
           machineName={machine.name}
           mode="machine"
-          disabled={!isRunning} // Disable based on instance status
+          //disabled={!isRunning} // Disable based on instance status
         />
       </div>
     </Main>

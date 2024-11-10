@@ -79,7 +79,7 @@ ContestRoutes.get('/',
 // Route to get contest details(Admin only)
 ContestRoutes.get('/:contestId',
     verifyToken,
-    verifyAdmin,
+    //verifyAdmin,
     getContestDetails
 );
 
@@ -131,7 +131,7 @@ ContestRoutes.post('/:contestId/deactive',
 // Route to get contest status(Admin only)
 ContestRoutes.get('/:contestId/status',
     verifyToken,
-    verifyAdmin,
+    //verifyAdmin,
     getContestStatus
 );
 
