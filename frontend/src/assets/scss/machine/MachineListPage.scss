@@ -1,9 +1,11 @@
 .rank-machine{
-    width: 1149px;
-    height: 213px; 
+    margin-top: 30px;
+    margin-left:70px;
+    width: 70%;
+    height: 213px;
     display: inline-block;
     .rank-machine-background{
-        width: 1149px;
+        width: 100%;
         height: 213px; 
     }
 }
@@ -11,9 +13,10 @@
 .register-machine {
     width: 233px;
     height: 213px;
+    margin-top: 30px;
     position: relative;
     display: inline-block;
-    left: 30px;
+    left: 70px;
     
     .background-svg {
         width: 229px;
