@@ -1,0 +1,173 @@
+.userinfoDark {
+  width: 360px;
+  position: relative;
+  border-radius: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: var(--font-size-mid-5);
+  color: var(--color-white);
+  font-family: var(--font-inter);
+
+  .userinfoDark_container {
+    width: 360px;
+    box-shadow: 0px 25px 30px -5px rgba(45, 54, 67, 0.04), 0px 10px 13.75px -5px rgba(45, 54, 67, 0.04);
+    backdrop-filter: blur(22px);
+    border-radius: 0px 0px 16.25px 16.25px;
+    background-color: #13151a;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px 0;
+    gap: 29px;
+
+    .userinfo {
+      align-self: stretch;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .rectangleParent {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: var(--gap-mini);
+
+        .userIcon {
+          width: 55px;
+          height: 55px;
+          position: relative;
+          border-radius: 123.75px;
+          object-fit: cover;
+        }
+
+        .userinfoContainer {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          gap: var(--gap-8xs);
+
+          .userName {
+            position: relative;
+            font-weight: 500;
+          }
+
+          .userEmail {
+            position: relative;
+            font-size: 15px;
+            color: var(--colors-others-color-gray-400);
+          }
+        }
+      }
+
+      .userinfoButtonIcon {
+        width: 48px;
+        height: 48px;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+    }
+
+    .userinfoDarkChild {
+      width: 340px;
+      position: relative;
+      background-color: var(--color-dimgray);
+      height: 0.6px;
+    }
+
+    .userMenu {
+      &.collapsed {
+        display: none;
+      }
+
+      .settings {
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: var(--gap-8xs);
+
+        .settingsInner,
+        .settingsChild {
+          align-self: stretch;
+          border-radius: var(--br-smi-5);
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          padding: var(--padding-mini);
+          gap: var(--gap-mini);
+          color: var(--color-gainsboro);
+          justify-content: space-between;
+
+          &:hover {
+            background-color: #202227;
+            outline: 1px solid #383e4b;
+          }
+
+          .icon {
+            width: 30px;
+            height: 30px;
+            position: relative;
+          }
+
+          .dashboard {
+            position: relative;
+          }
+
+          .rectangleParent {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: var(--gap-mini);
+
+            .darkMode {
+              width: 91.3px;
+              position: relative;
+              display: flex;
+              align-items: center;
+              flex-shrink: 0;
+            }
+          }
+
+          .switchIcon {
+            width: 55px;
+            height: 30px;
+            position: relative;
+            border-radius: 25px;
+            overflow: hidden;
+            flex-shrink: 0;
+          }
+        }
+      }
+    }
+
+    .logout {
+      align-self: stretch;
+      border-radius: var(--br-smi-5);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px var(--padding-mini);
+      gap: var(--gap-mini);
+
+      .icon {
+        width: 30px;
+        height: 30px;
+        position: relative;
+      }
+    }
+  }
+}

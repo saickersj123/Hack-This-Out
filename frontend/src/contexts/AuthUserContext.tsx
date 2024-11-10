@@ -4,6 +4,7 @@ import { getUserStatus } from '../api/axiosInstance';
 interface User {
   id: string;
   name: string;
+  email: string;
   isAdmin: boolean;
   // Add other user properties as needed
 }

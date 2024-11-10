@@ -7,7 +7,7 @@
 @use "setting/common";
 
 // section
-@use "section/layout";
-@use "section/sidebar";
+@use "section/layout.module.scss";
+@use "section/sidebar.module.scss";
 @use "section/banner";
-@use "section/profile";
+@use "section/profile.module.scss";
