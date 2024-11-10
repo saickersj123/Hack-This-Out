@@ -1,28 +1,57 @@
 // Sidebar.tsx
 import React from 'react';
-import { headerMenus, HeaderMenu } from '../../data/header';
-import { Link, useLocation } from 'react-router-dom';
-import Logo from './content/Logo';
+import { Link } from 'react-router-dom';
+import styles from '../../assets/scss/section/_sidebar.module.scss';
+import logo from "../../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
+import menu_open from "../../assets/img/icon/menu_open.png";
+import tutorial from "../../assets/img/icon/tutorial.svg";
+import leaderboard from "../../assets/img/icon/leaderboard.svg";
+import contest from "../../assets/img/icon/contest.svg";
+import machines from "../../assets/img/icon/machines.svg";
 
-const Sidebar: React.FC = () => {
-  const location = useLocation();
+interface SidebarProps {
+  isCollapsed: boolean;
+  toggleSidebar: () => void;
+}
 
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   return (
-    <nav className='logo-sidebar-container'>
-      <Logo />
-      <div className="sidebar">
-        <ul className="sidebar-menu">
-          {headerMenus.map((menu: HeaderMenu, index: number) => (
-            <li key={index} className={location.pathname === menu.src ? 'active' : ''}>
-              <Link to={menu.src}>
-                {menu.icon}{menu.title}
+    <div className={`${styles.sidebarMenu} ${isCollapsed ? styles.collapsed : ''}`}>
+      <div className={styles.headerParent}>
+        <div className={styles.header}>
+          <div className={styles.logoimage}>
+            <img className={styles.logoContainerIcon} alt="" src={logo} />
+          </div>
+          <div className={styles.sidebarMenuButton}>
+            <button onClick={toggleSidebar}>
+              <img className={styles.menuIcon} alt="" src={menu_open} />
+            </button>
+          </div>
+        </div>
+        <div className={styles.headerParent}>
+          <div className={styles.topMenu}>
+            <li className={styles.verticalMenuList}>
+              <Link to="/tutorial" className={styles.verticalMenuItem}>
+                <img className={styles.menuIcon} alt="" src={tutorial} />
+                <div className={styles.label}>Tutorial</div>
+              </Link>
+              <Link to="/leaderboard" className={styles.verticalMenuItem}>
+                <img className={styles.menuIcon} alt="" src={leaderboard} />
+                <div className={styles.label}>LeaderBoard</div>
+              </Link>
+              <Link to="/contest" className={styles.verticalMenuItem}>
+                <img className={styles.menuIcon} alt="" src={contest} />
+                <div className={styles.label}>Contest</div>
+              </Link>
+              <Link to="/machines" className={styles.verticalMenuItem}>
+                <img className={styles.menuIcon} alt="" src={machines} />
+                <div className={styles.label}>Machines</div>
               </Link>
             </li>
-          ))}
-        </ul>
+          </div>
+        </div>
       </div>
-    </nav>
+    </div>
   );
-};
-
+}
 export default Sidebar;

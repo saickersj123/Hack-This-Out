@@ -1,5 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
 body {
-    background-color: var(--background);
-    color: var(--text-primary);
-    font-family: var(--mainfont-noto), var(--mainfont-roboto);
+	margin: 0;
+	line-height: normal;
+}
+
+:root {
+	--sidebar-width: 350px;
+	--sidebar-collpased: 70px;
+
+	/* fonts */
+	--body-regular-regular-16: Roboto;
+	--font-inter: Inter;
+
+	/* font sizes */
+	--font-size-mid-5: 17.5px;
+	--body-regular-regular-16-size: 16px;
+
+	/* Colors */
+	--colors-neutral-grey-900: #3a383f;
+	--colors-violet-50: #f7f3fd;
+	--color-dimgray: #63666e;
+	--color-white: #fff;
+	--colors-others-color-blue-gray-200: #8ea6bf;
+	--color-gainsboro: #e3e3e4;
+	--colors-others-color-gray-400: #88909f;
+
+	/* Gaps */
+	--gap-mini: 15px;
+	--gap-8xs: 5px;
+
+	/* Paddings */
+	--padding-mini: 15px;
+	/* Border radiuses */
+	--br-base-3: 16.3px;
+	--br-smi-5: 12.5px;
 }

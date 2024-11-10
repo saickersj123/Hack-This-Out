@@ -1,0 +1,51 @@
+.background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.main_container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    transition: padding-left 1s ease;
+
+    .sidebar_container {
+        position: fixed;
+        height: 100vh;
+        z-index: 3;  // 사이드바가 배경 위에 오도록 설정
+    }
+
+    .upper_bar {
+        position: fixed;
+        top: 0;
+        width: calc(100% - var(--sidebar-width));
+        height: 105px;
+        background-color: #13151a;
+        z-index: 2;  // props-container 위에 오도록 설정
+    }
+
+    .props_container {
+        flex: 1;
+        position: relative;
+        padding-top: 105px;  // upper-bar만큼의 여백 확보
+        padding-left:  var(--sidebar-width);
+        height: 100vh;
+        z-index: 1;  // upper-bar 및 profile-container 아래 배치
+        overflow-y: auto;
+
+        &.collapsed {
+            padding-left: var(--sidebar-collpased);
+        }
+    }
+
+    .profile_container {
+        position: fixed;
+        right: 0;
+        z-index: 3;  // 가장 앞쪽에 배치
+    }
+}

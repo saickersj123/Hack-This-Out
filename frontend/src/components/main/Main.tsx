@@ -1,9 +1,11 @@
 // Main.tsx
-import React from "react";
+import React, { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+
+import styles from '../../assets/scss/section/_layout.module.scss';
 import Sidebar from './Sidebar';
-import Footer from './Footer';
 import Profile from './Profile';
+import background from '../../assets/img/icon/Main_Background.png';
 
 interface MainProps {
   title?: string;
@@ -12,6 +14,13 @@ interface MainProps {
 }
 
 const Main: React.FC<MainProps> = ({ title, description, children }) => {
+
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsCollapsed((prev) => !prev);
+  };
+
   return (
     <HelmetProvider>
       <Helmet
@@ -23,18 +32,19 @@ const Main: React.FC<MainProps> = ({ title, description, children }) => {
         <meta name="description" content={description} />
       </Helmet>
 
-      <div className="main-container">
-        <div className="logo-sidebar-container">
-          <Sidebar />
+      <img className={styles.background} src={background} />
+      <div className={styles.main_container}>
+
+        <div className={styles.sidebar_container}>
+          <Sidebar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />
         </div>
-        <div className="content-container">
-          <div className="profile-container">
-            <Profile />
-          </div>
-          <div className="props-container">
-            {children}
-          </div>
-          <Footer />
+
+        <div className={styles.upper_bar} />
+        <div className={`${styles.props_container} ${isCollapsed ? styles.collapsed : ''}`}>
+          {children}
+        </div>
+        <div className={styles.profile_container}>
+          <Profile />
         </div>
       </div>
     </HelmetProvider>
