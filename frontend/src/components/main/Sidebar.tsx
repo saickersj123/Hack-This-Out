@@ -1,7 +1,6 @@
 // Sidebar.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSidebar } from '../../contexts/SidebarContext.tsx';
 
 import styles from '../../assets/scss/section/_sidebar.module.scss';
 import logo from "../../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
