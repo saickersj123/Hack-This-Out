@@ -1,8 +1,9 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useContext} from 'react';
 import { logoutUser } from '../../api/axiosUser';
 import { useNavigate } from 'react-router-dom';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import styles from '../../assets/scss/section/_profile.module.scss';
+import { useProfileContext } from '../../contexts/ProfileContext';
 
 import user_default from '../../assets/img/icon/profile_default.png';
 import down_arrow from '../../assets/img/icon/down_arrow.svg';
@@ -14,8 +15,6 @@ import darkmode_icon from '../../assets/img/icon/darkmode_icon.svg';
 import darkmode_switch from '../../assets/img/icon/darkmode_switch.svg';
 import arrow_left from '../../assets/img/icon/Arrow-Left.svg';
 
-
-
 interface MenuItemProps {
     onClick?: () => void;
     children: React.ReactNode;
@@ -26,7 +25,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ onClick, children }) => (
 );
 
 const Profile: React.FC = () => {
-    const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
+    const { isProfileCollapsed, toggleProfile } = useProfileContext();
+
     const navigate = useNavigate();
     const authUserContext = useContext(AuthUserContext);
 
@@ -35,10 +35,6 @@ const Profile: React.FC = () => {
     }
 
     const { currentUser, logout } = authUserContext;
-
-    const toggleMenu = useCallback(() => {
-        setMenuOpen(prev => !prev);
-    }, []);
 
     const handleLogout = async () => {
         try {
@@ -63,12 +59,12 @@ const Profile: React.FC = () => {
                             <div className={styles.userName}>{currentUser?.username || 'Guest'}</div>
                             <div className={styles.userEmail}>{currentUser?.email || 'Guest'}</div>
                         </div>
-                        <div onClick={toggleMenu}>
-                            <img className={styles.userinfoButtonIcon} alt="" src={isMenuOpen ? down_arrow : up_arrow} />
+                        <div onClick={toggleProfile}>
+                            <img className={styles.userinfoButtonIcon} alt="" src={isProfileCollapsed ? down_arrow : up_arrow} />
                         </div>
                     </div>
                 </div>
-                <div className={`${styles.userMenu} ${isMenuOpen ? styles.collapsed : ''}`}>
+                <div className={`${styles.userMenu} ${isProfileCollapsed ? styles.collapsed : ''}`}>
                     <li className={styles.settings}>
                         <div className={styles.settingsInner}>
                             <div className={styles.rectangleParent}>
@@ -110,35 +106,3 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
-/*
-        <div className="profile">
-            <div className="notification-wrapper">
-                <button id="notification" type="button" className="bell">
-                </button>
-            </div>
-            <div className="profile-wrapper">
-                <button id="profileButton" type="button" className="menuButton" onClick={toggleMenu}>
-                    <span className="profile_first">
-                    </span>
-                    <span className="userNametext">
-                        <p>{currentUser?.username || 'Guest'}</p>
-                    </span>
-                </button>
-                {isMenuOpen && (
-                    <div className="profile-menu">
-                        <ul>
-                            <MenuItem onClick={() => navigate('/mypage')}>개인정보 수정</MenuItem>
-                            <hr />
-                            <MenuItem>언어: 한국어</MenuItem>
-                            <MenuItem>설정</MenuItem>
-                            <MenuItem>고객센터</MenuItem>
-                            <hr />
-                            <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
-                        </ul>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
-*/

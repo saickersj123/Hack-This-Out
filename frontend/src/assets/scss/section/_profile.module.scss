@@ -24,7 +24,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 20px 0;
+    padding: 20px 20px 30px;
     gap: 29px;
 
     .userinfo {
@@ -160,7 +160,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
-      padding: 20px var(--padding-mini);
+      padding: 20px var(--padding-mini) 5px;
       gap: var(--gap-mini);
 
       .icon {

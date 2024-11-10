@@ -1,11 +1,9 @@
+// MainPage.tsx
 import React from 'react';
-import Main from '../../components/main/Main'
-
+import Main from '../../components/main/Main';
 
 const MainPage: React.FC = () => {
-    return (
-      <Main />
-    );
+  return <Main />;
 };
 
 export default MainPage;
