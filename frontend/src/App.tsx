@@ -7,6 +7,10 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminProtectedRoute from './components/auth/AdminProtectedRoute';
 import './assets/scss/admin/AdminDashboard.scss';
 
+import { SidebarProvider } from './contexts/SidebarContext.tsx';
+import { ProfileProvider } from './contexts/ProfileContext.tsx';
+
+
 // Lazy-loaded components
 const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage'));
 const ContestListPage = lazy(() => import('./pages/contest/ContestListPage'));
@@ -34,193 +38,197 @@ const Unauthorized = lazy(() => import('./pages/Unauthorized'));
 
 const App: React.FC = () => {
   return (
-      <Router>
-        <Suspense fallback={<LoadingPage />}>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<LoginPage />} />
+    <SidebarProvider>
+      <ProfileProvider>
+        <Router>
+          <Suspense fallback={<LoadingPage />}>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/login" element={<LoginPage />} />
 
-            {/* Protected Routes */}
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <MainPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/leaderboard"
-              element={
-                <ProtectedRoute>
-                  <LeaderBoardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contest"
-              element={
-                <ProtectedRoute>
-                  <ContestListPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contest/register"
-              element={
-                <ProtectedRoute>
-                  <ContestRegisterPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contest/:contestId"
-              element={
-                <ProtectedRoute>
-                  <ContestDetailPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contest/:contestId/pre"
-              element={
-                <ProtectedRoute>
-                  <PreContestPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contest/:contestId/play"
-              element={
-                <ProtectedRoute>
-                  <ContestPlayPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contest/:contestId/complete"
-              element={
-                <ProtectedRoute>
-                  <ContestCompletePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contest/:contestId/pending"
-              element={
-                <ProtectedRoute>
-                  <ContestPendingPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/machines"
-              element={
-                <ProtectedRoute>
-                  <MachineListPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/machine/register"
-              element={
-                <ProtectedRoute>
-                  <MachineRegisterPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/machine/:machineId"
-              element={
-                <ProtectedRoute>
-                  <MachineDetailPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/machine/:machineId/review/new"
-              element={
-                <ProtectedRoute>
-                  <NewMachineReview />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/machine/:machineId/complete"
-              element={
-                <ProtectedRoute>
-                  <MachineCompletePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/machine/:machineId/play"
-              element={
-                <ProtectedRoute>
-                  <MachinePlayPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/mypage"
-              element={
-                <ProtectedRoute>
-                  <MyPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/unauthorized" element={<Unauthorized />} />
+              {/* Protected Routes */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <MainPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <LeaderBoardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contest"
+                element={
+                  <ProtectedRoute>
+                    <ContestListPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contest/register"
+                element={
+                  <ProtectedRoute>
+                    <ContestRegisterPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contest/:contestId"
+                element={
+                  <ProtectedRoute>
+                    <ContestDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contest/:contestId/pre"
+                element={
+                  <ProtectedRoute>
+                    <PreContestPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contest/:contestId/play"
+                element={
+                  <ProtectedRoute>
+                    <ContestPlayPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contest/:contestId/complete"
+                element={
+                  <ProtectedRoute>
+                    <ContestCompletePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contest/:contestId/pending"
+                element={
+                  <ProtectedRoute>
+                    <ContestPendingPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/machines"
+                element={
+                  <ProtectedRoute>
+                    <MachineListPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/machine/register"
+                element={
+                  <ProtectedRoute>
+                    <MachineRegisterPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/machine/:machineId"
+                element={
+                  <ProtectedRoute>
+                    <MachineDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/machine/:machineId/review/new"
+                element={
+                  <ProtectedRoute>
+                    <NewMachineReview />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/machine/:machineId/complete"
+                element={
+                  <ProtectedRoute>
+                    <MachineCompletePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/machine/:machineId/play"
+                element={
+                  <ProtectedRoute>
+                    <MachinePlayPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/mypage"
+                element={
+                  <ProtectedRoute>
+                    <MyPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/unauthorized" element={<Unauthorized />} />
 
-            {/* Admin Routes */}
+              {/* Admin Routes */}
 
               <Route path="/admin" element={
-              <AdminProtectedRoute>
-              <div className="admin-dashboard">
-                <div className="admin-content">
-                  <DashboardHome />
-                </div>
-                </div>
-              </AdminProtectedRoute>
-              }/>
+                <AdminProtectedRoute>
+                  <div className="admin-dashboard">
+                    <div className="admin-content">
+                      <DashboardHome />
+                    </div>
+                  </div>
+                </AdminProtectedRoute>
+              } />
               <Route path="/admin/users" element={
                 <AdminProtectedRoute>
-                <div className="admin-dashboard">
-                  <div className="admin-content">
-                    <UsersManagement />
+                  <div className="admin-dashboard">
+                    <div className="admin-content">
+                      <UsersManagement />
+                    </div>
                   </div>
-                </div>
-              </AdminProtectedRoute>
+                </AdminProtectedRoute>
               } />
-            <Route path="/admin/machines" element={
-              <AdminProtectedRoute>
-              <div className="admin-dashboard">
-                <div className="admin-content">
-                  <MachinesManagement />
-                </div>
-              </div>
-            </AdminProtectedRoute>
-            } />
-            <Route path="/admin/contests" element={
-              <AdminProtectedRoute>
-              <div className="admin-dashboard">
-                <div className="admin-content">
-                  <ContestsManagement />
-                </div>
-              </div>
-              </AdminProtectedRoute>
-            } />
-            <Route path="/admin/instances" element={
-              <AdminProtectedRoute>
-              <div className="admin-dashboard">
-                <div className="admin-content">
-                  <InstancesManagement />
+              <Route path="/admin/machines" element={
+                <AdminProtectedRoute>
+                  <div className="admin-dashboard">
+                    <div className="admin-content">
+                      <MachinesManagement />
+                    </div>
                   </div>
-                </div>
-              </AdminProtectedRoute>
+                </AdminProtectedRoute>
               } />
-          </Routes>
-        </Suspense>
-      </Router>
+              <Route path="/admin/contests" element={
+                <AdminProtectedRoute>
+                  <div className="admin-dashboard">
+                    <div className="admin-content">
+                      <ContestsManagement />
+                    </div>
+                  </div>
+                </AdminProtectedRoute>
+              } />
+              <Route path="/admin/instances" element={
+                <AdminProtectedRoute>
+                  <div className="admin-dashboard">
+                    <div className="admin-content">
+                      <InstancesManagement />
+                    </div>
+                  </div>
+                </AdminProtectedRoute>
+              } />
+            </Routes>
+          </Suspense>
+        </Router>
+      </ProfileProvider>
+    </SidebarProvider>
   );
 };
 

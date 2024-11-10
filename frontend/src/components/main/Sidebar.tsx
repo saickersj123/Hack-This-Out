@@ -1,6 +1,8 @@
 // Sidebar.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSidebar } from '../../contexts/SidebarContext.tsx';
+
 import styles from '../../assets/scss/section/_sidebar.module.scss';
 import logo from "../../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
 import menu_open from "../../assets/img/icon/menu_open.png";
@@ -9,12 +11,14 @@ import leaderboard from "../../assets/img/icon/leaderboard.svg";
 import contest from "../../assets/img/icon/contest.svg";
 import machines from "../../assets/img/icon/machines.svg";
 
+// SidebarProps 타입을 명시
 interface SidebarProps {
   isCollapsed: boolean;
   toggleSidebar: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
+  
   return (
     <div className={`${styles.sidebarMenu} ${isCollapsed ? styles.collapsed : ''}`}>
       <div className={styles.headerParent}>
