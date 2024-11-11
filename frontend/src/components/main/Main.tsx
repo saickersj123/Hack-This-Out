@@ -29,7 +29,7 @@ const Main: React.FC<MainProps> = ({ title, description, children }) => {
 
       <img className={styles.background} src={background} />
       <div className={styles.main_container}>
-        <div className={styles.sidebar_container}>
+        <div className={`${styles.sidebar_container} ${isCollapsed ? styles.collapsed : ''}`}>
           <Sidebar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />
         </div>
 

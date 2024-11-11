@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap');
+
 
 body {
 	margin: 0;
@@ -8,12 +10,13 @@ body {
 
 :root {
 	--sidebar-width: 350px;
-	--sidebar-collpased: 64px;
+	--sidebar-collpased: 80px;
 
 	/* fonts */
 	--font-roboto: Roboto;
 	--font-inter: Inter;
-
+	--font-ibm-plex-sans: 'IBM Plex Sans';
+  	
 	/* font sizes */
 	--font-size-mid-5: 17.5px;
 	--font-roboto-size: 16px;

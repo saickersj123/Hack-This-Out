@@ -18,6 +18,10 @@
         position: fixed;
         height: 100vh;
         z-index: 3;  // 사이드바가 배경 위에 오도록 설정
+
+        &.collpased {
+            width: var(--sidebar-collpased);
+        }
     }
 
     .upper_bar {

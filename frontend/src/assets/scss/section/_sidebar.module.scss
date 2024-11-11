@@ -5,16 +5,14 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   box-sizing: border-box;
-  transition: width 5s linear;
+  transition: width 0.2s ease;
   font-size: var(--font-roboto-size);
   color: var(--color-gainsboro);
   font-family: var(--font-roboto);
 
   .headerParent {
-    flex: 1;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -26,6 +24,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-left: 15px;
+      margin-right: 5px;
       padding-bottom: 9px;
       box-sizing: border-box;
 
@@ -79,7 +79,6 @@
       flex-direction: column;
       gap: 8px;
 
-
       .verticalMenuItem {
         height: 60px;
         border-radius: 4px;
@@ -112,7 +111,7 @@
   }
 
   &.collapsed {
-    width: var(--sidebar-width-collpased); // 접힘 상태에서의 너비 조정
+    width: var(--sidebar-collpased); // 접힘 상태에서의 너비 조정
     align-items: center;
 
     .header {

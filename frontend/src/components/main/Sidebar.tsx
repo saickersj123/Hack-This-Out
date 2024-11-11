@@ -1,16 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSidebar } from '../../contexts/SidebarContext.tsx';
 
-import { MdOutlineLeaderboard } from "react-icons/md";
-import { MdLeaderboard } from "react-icons/md";
-import { FaQuestionCircle } from "react-icons/fa";
-import { FaRegQuestionCircle } from "react-icons/fa";
-import { MdOutlineTimer } from "react-icons/md";
-import { MdTimer } from "react-icons/md";
-import { PiComputerTowerLight } from "react-icons/pi";
-import { PiComputerTowerFill } from "react-icons/pi";
-import { RiArrowLeftDoubleFill } from "react-icons/ri";
+import { MdOutlineLeaderboard, MdLeaderboard, MdOutlineTimer, MdTimer } from "react-icons/md";
+import { FaQuestionCircle, FaRegQuestionCircle } from "react-icons/fa";
+import { PiComputerTowerLight, PiComputerTowerFill } from "react-icons/pi";
+import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from "react-icons/ri";
 
 
 import styles from '../../assets/scss/section/_sidebar.module.scss';
@@ -25,6 +20,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   const { selectedItem, setSelectedItem } = useSidebar();
+  const [isHovered, setIsHovered] = useState(false);
 
   // 클릭된 항목을 선택된 상태로 설정하는 함수
   const handleMenuItemClick = (item: string) => {
@@ -39,11 +35,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
             <img className={styles.logoContainerIcon} alt="" src={logo} />
           </div>
           <div className={styles.sidebarMenuButton}>
-            <button className={styles.collapse_button} onClick={toggleSidebar}>
+            <button className={styles.collapse_button}
+              onClick={toggleSidebar}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
               {isCollapsed ? (
-                <img className={styles.icon_logo} src={collapsed_logo} />
+                isHovered ? (
+                  <RiArrowRightDoubleFill size={40} />
+                ) : (
+                  <img className={styles.icon_logo} src={collapsed_logo} alt="collapsed logo" />
+                )
               ) : (
-                <RiArrowLeftDoubleFill size={40}/>
+                <RiArrowLeftDoubleFill size={40} />
               )}
             </button>
           </div>
