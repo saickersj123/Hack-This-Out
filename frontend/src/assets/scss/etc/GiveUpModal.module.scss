@@ -1,0 +1,69 @@
+.give_up_modal {
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px;
+  text-align: left;
+  z-index: 1000;
+  gap: 10px;
+
+  font-family: var(--font-ibm-plex-sans);
+
+  .textbox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 10px;
+
+    .text {
+      font-size: 28px;
+      font-weight: 600;
+      color: #2c2738;
+    }
+
+    .warning_text {
+      color: #e74c3c;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+  }
+
+  .button_group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    button {
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+
+      &.give_up_button {
+        position: relative;
+        height: 48px;
+        text-align: center;
+        border: 2px solid #7c9cbf;
+
+        color: #7c9cbf;
+        font-size: 16px;
+        font-family: var(--font-ibm-plex-sans);
+
+        &:hover {
+          background-color: #BDBDBD;
+        }
+      }
+
+      &.cancel_button {
+        background-color: #0880ae;
+        color: #ebf4f8;
+
+        &:hover {
+          background-color: #7f8c8d;
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect } from 'react';
-import '../../assets/scss/etc/Modal.scss';
+import styles from '../../assets/scss/etc/Modal.module.scss';
 import { AiOutlineClose } from 'react-icons/ai';
 
 interface ModalProps {
@@ -40,12 +40,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className={styles.modal_overlay} onClick={onClose}>
       <div
-        className="modal-content"
+        className={styles.modal_content}
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
-        <button className="modal-close" onClick={onClose} aria-label="Close Modal">
+        <button className={styles.modal_close} onClick={onClose} aria-label="Close Modal">
           <AiOutlineClose />
         </button>
         {children}

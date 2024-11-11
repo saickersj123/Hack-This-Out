@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import { giveUpMachine } from '../../api/axiosMachine';
 import { TerminateInstance } from '../../api/axiosInstance';
-import '../../assets/scss/etc/GiveUpModal.scss';
+import styles from '../../assets/scss/etc/GiveUpModal.module.scss';
 import { giveUpContest } from '../../api/axiosContest';
 
 interface GiveUpModalProps {
@@ -55,21 +55,22 @@ const GiveUpModal: React.FC<GiveUpModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="give-up-modal">
-        <h2>Give Up Confirmation</h2>
+      <div className={styles.give_up_modal}>
+        <div className={styles.textbox}>
+        <div className={styles.text}>Give Up Confirmation</div>
         <p>Are you sure you want to give up on <strong>{machineName}</strong>?</p>
-        <p className="warning-text">Warning: All your progress will be lost!</p>
-        
-        <div className="button-group">
+        <p className={styles.warning_text}>Warning: All your progress will be lost!</p>
+        </div>
+        <div className={styles.button_group}>
           <button 
             onClick={handleGiveUp}
-            className="give-up-button"
+            className={styles.give_up_button}
           >
             Yes, Give Up
           </button>
           <button 
             onClick={onClose}
-            className="cancel-button"
+            className={styles.cancel_button}
           >
             No, Continue Playing
           </button>
