@@ -24,7 +24,7 @@
         position: fixed;
         top: 0;
         width: calc(100% - var(--sidebar-width));
-        height: 105px;
+        height: 85px;
         background-color: #13151a;
         z-index: 2;  // props-container 위에 오도록 설정
     }
@@ -32,11 +32,15 @@
     .props_container {
         flex: 1;
         position: relative;
-        padding-top: 105px;  // upper-bar만큼의 여백 확보
+        padding-top: 85px;  // upper-bar만큼의 여백 확보
         padding-left:  var(--sidebar-width);
         height: 100vh;
         z-index: 1;  // upper-bar 및 profile-container 아래 배치
         overflow-y: auto;
+
+        display: flex;
+        align-items: center; 
+        justify-content: center;
 
         &.collapsed {
             padding-left: var(--sidebar-collpased);

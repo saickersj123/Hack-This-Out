@@ -54,7 +54,7 @@ const Profile: React.FC = () => {
             <div className={styles.userinfoDark_container}>
                 <div className={styles.userinfo}>
                     <div className={styles.rectangleParent}>
-                        <img className={styles.userIcon} alt="" src={user_default} />
+                        <img className={styles.userIcon} alt="" src={currentUser?.avatar || user_default} />
                         <div className={styles.userinfoContainer}>
                             <div className={styles.userName}>{currentUser?.username || 'Guest'}</div>
                             <div className={styles.userEmail}>{currentUser?.email || 'Guest'}</div>

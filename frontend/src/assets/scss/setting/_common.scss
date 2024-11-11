@@ -8,15 +8,18 @@ body {
 
 :root {
 	--sidebar-width: 350px;
-	--sidebar-collpased: 70px;
+	--sidebar-collpased: 64px;
 
 	/* fonts */
-	--body-regular-regular-16: Roboto;
+	--font-roboto: Roboto;
 	--font-inter: Inter;
 
 	/* font sizes */
 	--font-size-mid-5: 17.5px;
-	--body-regular-regular-16-size: 16px;
+	--font-roboto-size: 16px;
+	--font-size-21xl: 40px;
+	--font-size-5xl: 24px;
+
 
 	/* Colors */
 	--colors-neutral-grey-900: #3a383f;

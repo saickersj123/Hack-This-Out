@@ -2,13 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSidebar } from '../../contexts/SidebarContext.tsx';
 
+import { MdOutlineLeaderboard } from "react-icons/md";
+import { MdLeaderboard } from "react-icons/md";
+import { FaQuestionCircle } from "react-icons/fa";
+import { FaRegQuestionCircle } from "react-icons/fa";
+import { MdOutlineTimer } from "react-icons/md";
+import { MdTimer } from "react-icons/md";
+import { PiComputerTowerLight } from "react-icons/pi";
+import { PiComputerTowerFill } from "react-icons/pi";
+import { RiArrowLeftDoubleFill } from "react-icons/ri";
+
+
 import styles from '../../assets/scss/section/_sidebar.module.scss';
 import logo from "../../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
-import menu_open from "../../assets/img/icon/menu_open.png";
-import tutorial from "../../assets/img/icon/tutorial.svg";
-import leaderboard from "../../assets/img/icon/leaderboard.svg";
-import contest from "../../assets/img/icon/contest.svg";
-import machines from "../../assets/img/icon/machines.svg";
+import collapsed_logo from '../../assets/img/icon/HTO ICON DARK RECOLORED_crop_fill.png';
 
 // SidebarProps 타입을 명시
 interface SidebarProps {
@@ -32,8 +39,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
             <img className={styles.logoContainerIcon} alt="" src={logo} />
           </div>
           <div className={styles.sidebarMenuButton}>
-            <button onClick={toggleSidebar}>
-              <img className={styles.menuIcon} alt="" src={menu_open} />
+            <button className={styles.collapse_button} onClick={toggleSidebar}>
+              {isCollapsed ? (
+                <img className={styles.icon_logo} src={collapsed_logo} />
+              ) : (
+                <RiArrowLeftDoubleFill size={40}/>
+              )}
             </button>
           </div>
         </div>
@@ -45,7 +56,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 className={`${styles.verticalMenuItem} ${selectedItem === 'tutorial' ? styles.selected : ''}`}
                 onClick={() => handleMenuItemClick('tutorial')}
               >
-                <img className={styles.menuIcon} alt="" src={tutorial} />
+                {selectedItem === 'tutorial' ? (
+                  <FaQuestionCircle className={styles.menuIcon} />
+                ) : (
+                  <FaRegQuestionCircle className={styles.menuIcon} />
+                )}
                 <div className={styles.label}>Tutorial</div>
               </Link>
               <Link
@@ -53,7 +68,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 className={`${styles.verticalMenuItem} ${selectedItem === 'leaderboard' ? styles.selected : ''}`}
                 onClick={() => handleMenuItemClick('leaderboard')}
               >
-                <img className={styles.menuIcon} alt="" src={leaderboard} />
+                {selectedItem === 'leaderboard' ? (
+                  <MdLeaderboard className={styles.menuIcon} />  // 선택되었을 때
+                ) : (
+                  <MdOutlineLeaderboard className={styles.menuIcon} />  // 선택되지 않았을 때
+                )}
                 <div className={styles.label}>LeaderBoard</div>
               </Link>
               <Link
@@ -61,7 +80,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 className={`${styles.verticalMenuItem} ${selectedItem === 'contest' ? styles.selected : ''}`}
                 onClick={() => handleMenuItemClick('contest')}
               >
-                <img className={styles.menuIcon} alt="" src={contest} />
+                {selectedItem === 'contest' ? (
+                  <MdTimer className={styles.menuIcon} />  // 선택되었을 때
+                ) : (
+                  <MdOutlineTimer className={styles.menuIcon} />  // 선택되지 않았을 때
+                )}
                 <div className={styles.label}>Contest</div>
               </Link>
               <Link
@@ -69,7 +92,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 className={`${styles.verticalMenuItem} ${selectedItem === 'machines' ? styles.selected : ''}`}
                 onClick={() => handleMenuItemClick('machines')}
               >
-                <img className={styles.menuIcon} alt="" src={machines} />
+                {selectedItem === 'machines' ? (
+                  <PiComputerTowerFill className={styles.menuIcon} />  // 선택되었을 때
+                ) : (
+                  <PiComputerTowerLight className={styles.menuIcon} />  // 선택되지 않았을 때
+                )}
                 <div className={styles.label}>Machines</div>
               </Link>
             </li>
