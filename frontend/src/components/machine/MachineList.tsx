@@ -84,58 +84,66 @@ const MachineList: React.FC = () => {
       <div className='machine-list-title'>
         <h2>Machine List</h2>
       </div>
-      <table className='machine-list-table'>
-        <thead>
-          <tr>
-            <th className='machine-name'>Name</th>
-            <th className='machine-category'>Category
-              <ClickAwayListener onClickAway={handleClickAway}>
-                <div className='category-filter-toggle' style={{ display: 'inline-flex', alignItems: 'center', position: 'relative', marginLeft: '10px' }}>
-                  <FilterAltIcon onClick={toggleFilterVisibility} />
-                  {filterVisible && (
-                    <div className='category-filter' style={{ position: 'absolute', top: '30px', left: '0', zIndex: 10, width: '240px', backgroundColor: 'white' }}>
-                      <label htmlFor='category-select' style={{ color: "black" }}>Filter by Category: </label>
-                      <select
-                        id='category-select'
-                        value={categoryFilter}
-                        onChange={(e) => setCategoryFilter(e.target.value)}
-                        style={{ border: "solid" }}
-                      >
-                        <option value=''>All</option>
-                        {categories.map((category) => (
-                          <option key={category} value={category}>{category}</option>
-                        ))}
-                      </select>
+      <div className="table-form">
+        <div className="thead-container">
+          <table className='machine-list-table'>
+            <thead>
+              <tr>
+                <th className='machine-name'>Machine name</th>
+                <th className='machine-category'>Category
+                  <ClickAwayListener onClickAway={handleClickAway}>
+                    <div className='category-filter-toggle'>
+                      <FilterAltIcon onClick={toggleFilterVisibility} />
+                      {filterVisible && (
+                        <div className='category-filter'>
+                          <label htmlFor='category-select' style={{ color: "black" }}>Filter by Category: </label>
+                          <select
+                            id='category-select'
+                            value={categoryFilter}
+                            onChange={(e) => setCategoryFilter(e.target.value)}
+                            style={{ border: "solid" }}
+                          >
+                            <option value=''>All</option>
+                            {categories.map((category) => (
+                              <option key={category} value={category}>{category}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </ClickAwayListener>
-            </th>
-            <th className='machine-rating'>Rating</th>
-            <th className='machine-playCount'>Played</th>
-            <th className='machine-details'></th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredMachines.length === 0 ? (
-            <tr>
-              <td colSpan={5} className="no-data">No machines available.</td>
-            </tr>
-          ) : (
-            filteredMachines.map((machine) => (
-              <tr key={machine._id}>
-                <td>{machine.name}</td>
-                <td>{machine.category}</td>
-                <td>{machine.rating.toFixed(1)}</td>
-                <td>{machine.playerCount}</td>
-                <td>
-                  <button onClick={() => handleMachineClick(machine)}>Details</button>
-                </td>
+                  </ClickAwayListener>
+                </th>
+                <th className='machine-rating'>Rating</th>
+                <th className='machine-playCount'>Played</th>
+                <th className='machine-details'>Detail</th>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            </thead>
+          </table>
+        </div>
+        <div className="tbody-container">
+          <table className='machine-list-table'>
+            <tbody>
+              {filteredMachines.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="no-data">No machines available.</td>
+                </tr>
+              ) : (
+                filteredMachines.map((machine) => (
+                  <tr key={machine._id}>
+                    <td className='body-name'>{machine.name}</td>
+                    <td className='body-category'>{machine.category}</td>
+                    <td className='body-rating'>{machine.rating.toFixed(1)}</td>
+                    <td className='body-playCound'>{machine.playerCount}</td>
+                    <td>
+                      <button onClick={() => handleMachineClick(machine)}>Details</button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
