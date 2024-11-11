@@ -3,6 +3,10 @@ import { getActiveContests } from '../../api/axiosContest';
 import { useNavigate } from 'react-router-dom';
 import formatDate from '../../utils/dateUtils';
 
+import styles from '../../assets/scss/contest/ContestList.module.scss';
+import { FaArrowRightToBracket } from "react-icons/fa6";
+
+
 interface Contest {
   _id: string;
   name: string;
@@ -40,17 +44,14 @@ const ContestList: React.FC = () => {
   const handleContestClick = (contestId: string) => {
     navigate(`/contest/${contestId}`);
   };
-
   if (loading) {
     return <p>Loading contests...</p>;
   }
 
   return (
-    <div className='contest-list-container'>
-      <div className='contest-list-title'>
-        <h2>Contest List</h2>
-      </div>
-      <table className='contest-list-table'>
+    <div className={styles.contest_list_container}>
+      <div className={styles.contest_list_title}>Contest List</div>
+      <table className={styles.contest_list_table}>
         {contests.length === 0 ? (
           <tbody>
             <tr>
@@ -60,27 +61,29 @@ const ContestList: React.FC = () => {
         ) : (
           <>
             <thead>
-              <tr>
-                <th className='contest-name'>Name</th>
-                <th className='contest-description'>Description</th>
-                <th className='contest-startTime'>Start Time</th>
-                <th className='contest-endTime'>End Time</th>
-                <th className='contest-contestExp'>Reward</th>
-                <th className='contest-isActive'>Active</th>
-                <th className='contest-details'>Details</th>
+              <tr className={styles.table_text_box}>
+                <th className={styles.table_name}>Name</th>
+                <th className={styles.table_description}>Description</th>
+                <th className={styles.table_start_time}>Start Time</th>
+                <th className={styles.table_end_time}>End Time</th>
+                <th className={styles.table_reward}>Reward</th>
+                <th className={styles.table_active}>Active</th>
+                <th className={styles.table_details}>Details</th>
               </tr>
             </thead>
             <tbody>
               {contests.map((contest) => (
-                <tr key={contest._id}>
-                  <td>{contest.name || 'N/A'}</td>
-                  <td>{contest.description || 'N/A'}</td>
-                  <td>{contest.startTime ? formatDate(contest.startTime) : 'N/A'}</td>
-                  <td>{contest.endTime ? formatDate(contest.endTime) : 'N/A'}</td>
-                  <td>{contest.contestExp}</td>
-                  <td>{contest.isActive ? 'Yes' : 'No'}</td>
-                  <td>
-                    <button onClick={() => handleContestClick(contest._id)}>Details</button>
+                <tr className={styles.contest_box} key={contest._id}>
+                  <td className={styles.contest_name}>{contest.name || 'N/A'}</td>
+                  <td className={styles.contest_description}>{contest.description || 'N/A'}</td>
+                  <td className={styles.contest_start_time}>{contest.startTime ? formatDate(contest.startTime) : 'N/A'}</td>
+                  <td className={styles.contest_end_time}>{contest.endTime ? formatDate(contest.endTime) : 'N/A'}</td>
+                  <td className={styles.contest_reward}>{contest.contestExp}</td>
+                  <td className={`${styles.contest_active} ${contest.isActive ? styles.active : styles.inactive}`}>
+                    {contest.isActive ? 'Active' : ''}
+                  </td>
+                  <td className={styles.contest_details}>
+                    <button className={styles.details_button} onClick={() => handleContestClick(contest._id)}><FaArrowRightToBracket size={24} /></button>
                   </td>
                 </tr>
               ))}
