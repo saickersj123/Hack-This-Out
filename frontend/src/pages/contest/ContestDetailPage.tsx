@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import ContestDetail from '../../components/contest/ContestDetail';
 import Main from '../../components/main/Main';
-import { getContestDetails } from '../../api/axiosContest';
+import { getContestDetails, getMyRankinContest } from '../../api/axiosContest';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
 import ContestLeaderboard from '../../components/contest/ContestLeaderboard';
+import { CurrentUser } from '../../types/CurrentUser';
+import CurrentUserInfo from '../../components/leaderboard/CurrentUserInfo';
 //import '../../assets/scss/contest/ContestDetailPage.scss';
 
 /**
@@ -22,6 +24,13 @@ interface ContestStatus {
  */
 const ContestDetailPage: React.FC = () => {
   const [contestDetail, setContestDetail] = useState<ContestDetailType | null>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({
+    myRank: null,
+    myLevel: null,
+    myExp: null,
+    myUsername: null,
+    myAvatar: null,
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { contestId } = useParams<{ contestId: string }>();
@@ -59,6 +68,28 @@ const ContestDetailPage: React.FC = () => {
     };
 
     fetchContestDetail();
+  }, [contestId]);
+
+  useEffect(() => {
+    const fetchMyRank = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getMyRankinContest(contestId || '');
+        setCurrentUser({
+          myRank: response.rank,
+          myLevel: response.level,
+          myExp: response.exp,
+          myUsername: response.username,
+          myAvatar: response.avatar,
+        });
+      } catch (error: any) {
+        console.error('Error fetching current user:', error.message || error);
+        setError('Failed to fetch current user.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMyRank();
   }, [contestId]);
 
   /**
@@ -133,6 +164,7 @@ const ContestDetailPage: React.FC = () => {
         </button>
       </div>
       {/* Pass contestId and contestStatus as props to ContestLeaderboard */}
+      <CurrentUserInfo currentUser={currentUser} />
       <ContestLeaderboard 
         contestId={contestId || ''} 
         contestStatus={contestStatus} 

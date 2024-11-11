@@ -315,3 +315,16 @@ export const getAllUser = async () => {
       throw new Error('Failed to make user to user');
     }
   };
+
+  /**
+   * Get my rank.
+   * @returns {Promise<Object>} - The response data containing my rank.
+   */
+  export const getMyRank = async () => {
+    try {
+      const response = await axiosInstance.get('/user/my-rank');
+      return response.data;
+    } catch (error: any) {
+      throw new Error('Failed to fetch my rank');
+    }
+  };

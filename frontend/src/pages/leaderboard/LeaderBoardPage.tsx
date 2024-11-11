@@ -1,19 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { getLeaderboard } from '../../api/axiosUser';
+// frontend/src/pages/leaderboard/LeaderBoardPage.tsx
+
+import React, { useState, useEffect } from 'react';
+import { getLeaderboard, getMyRank } from '../../api/axiosUser';
 import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
 import Main from '../../components/main/Main';
-import { AuthUserContext } from '../../contexts/AuthUserContext';
+import { User } from '../../types/User';
+import { CurrentUser } from '../../types/CurrentUser';
 
-/**
- * Interface representing a user in the leaderboard.
- */
-interface User {
-  _id: string;
-  level: number;
-  username: string;
-  exp: number;
-  avatar: string;
-}
+
 
 /**
  * Component representing the LeaderBoard Page.
@@ -22,15 +16,14 @@ const LeaderBoardPage: React.FC = () => {
   const [leaderboard, setLeaderboard] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({
+    myRank: null,
+    myLevel: null,
+    myExp: null,
+    myUsername: null,
+    myAvatar: null,
+  });
 
-  const authUserContext = useContext(AuthUserContext);
-
-  if (!authUserContext) {
-      throw new Error('AuthUserContext must be used within an AuthUserProvider');
-  }
-
-  const { currentUser } = authUserContext;
-  
   /**
    * Fetches the leaderboard data from the API.
    */
@@ -39,7 +32,20 @@ const LeaderBoardPage: React.FC = () => {
       setLoading(true);
       try {
         const response = await getLeaderboard();
-        setLeaderboard(response.users); // Assumes response.users is of type User[]
+        console.log('Leaderboard API Response:', response); // Debugging log
+
+        // Adjust based on actual response structure
+        // Example: If response.users is the array
+        if (response && Array.isArray(response.users)) {
+          setLeaderboard(response.users);
+        } else if (response && Array.isArray(response.data)) {
+          setLeaderboard(response.data);
+        } else if (Array.isArray(response)) {
+          setLeaderboard(response);
+        } else {
+          console.error('Unexpected leaderboard data structure:', response);
+          setLeaderboard([]); // Fallback to empty array
+        }
       } catch (error: any) {
         console.error('Error fetching leaderboard:', error.message || error);
         setError('Failed to fetch leaderboard data.');
@@ -51,12 +57,48 @@ const LeaderBoardPage: React.FC = () => {
     fetchLeaderboard(); // Invoke the data fetching
   }, []);
 
+  /**
+   * Fetches the current user's rank and information from the API.
+   */
+  useEffect(() => {
+    const fetchMyRank = async () => {
+      try {
+        const response = await getMyRank();
+        console.log('My Rank API Response:', response); // Debugging log
+
+        // Adjust based on actual response structure
+        // Example:
+        if (response && response.myRank !== undefined && response.user) {
+          setCurrentUser({
+            myRank: response.myRank,
+            myLevel: response.user.level,
+            myExp: response.user.exp,
+            myUsername: response.user.username,
+            myAvatar: response.user.avatar,
+          });
+        } else {
+          console.error('Unexpected myRank data structure:', response);
+          setError('Failed to fetch my rank data.');
+        }
+      } catch (error: any) {
+        console.error('Error fetching my rank:', error.message || error);
+        setError('Failed to fetch my rank data.');
+      }
+    };
+    fetchMyRank();
+  }, []);
+
   return (
     <Main title="LeaderBoard" description="LeaderBoard 화면입니다.">
       <div className="leaderboard-page">
         {loading && <p>Loading leaderboard...</p>}
         {error && <p className="error">{error}</p>}
-        {!loading && !error && <LeaderboardTable leaderboard={leaderboard} current_user={currentUser} />}
+        {!loading && !error && (
+          <LeaderboardTable 
+            leaderboard={leaderboard} 
+            currentUser={currentUser} 
+          />
+        )}
       </div>
     </Main>
   );

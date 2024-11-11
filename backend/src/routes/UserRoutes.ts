@@ -27,6 +27,7 @@ import {
     makeUserAdmin,
     checkAdminPassword,
     makeAdminToUser,
+    getMyRank,
 } from '../controllers/UserController.js';
 
 const UserRoutes = express.Router();
@@ -113,6 +114,9 @@ UserRoutes.delete("/:userId/delete",
 
 // Get Leaderboard
 UserRoutes.get("/leaderboard", verifyToken, getLeaderboard);
+
+// Get My Rank
+UserRoutes.get("/my-rank", verifyToken, getMyRank);
 
 // Check Admin Password(Admin Only)
 UserRoutes.post("/verify-admin", verifyToken, verifyAdmin, checkAdminPassword);

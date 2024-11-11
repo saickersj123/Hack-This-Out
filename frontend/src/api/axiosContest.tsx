@@ -277,3 +277,12 @@ export const getContests = async () => {
       throw error.response ? error.response.data : new Error('Failed to give up contest');
     }
   };
+
+  export const getMyRankinContest = async (contestId: string) => {
+    try {
+      const response = await axiosInstance.get(`/contest/${contestId}/my-rank`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response ? error.response.data : new Error('Failed to fetch my rank in contest');
+    }
+  };

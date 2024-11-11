@@ -220,7 +220,7 @@ export const verifyUserStatus = async (
 	next: NextFunction
 ) => {
 	try {
-		const user = await User.findById(res.locals.jwtData.id).select('-password -date -updatedAt -__v');
+		const user = await User.findById(res.locals.jwtData.id).select('-password -date -createdAt -updatedAt -__v -level -exp');
 
 		if (!user)
 			return res.status(401).json({
@@ -627,6 +627,32 @@ export const getLeaderboard = async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 };
+
+// Get My Rank
+export const getMyRank = async (req: Request, res: Response) => {
+    try {
+        const userId = res.locals.jwtData.id;
+        const user = await User.findById(userId).select('exp level username avatar');
+        if (!user) {
+            return res.status(404).json({ message: "ERROR", msg: 'User not found.' });
+        }
+
+        const higherExpCount = await User.countDocuments({ exp: { $gt: user.exp } });
+        const myRank = higherExpCount + 1;
+
+        return res.status(200).json({ 
+			message: "OK", 
+			myRank: myRank, 
+			user: user
+		});
+    } catch (error: any) {
+        console.error('Error getting my rank:', error);
+        return res.status(500).json({ 
+			message: "ERROR", 
+			cause: 'Server error' 
+		});
+    }
+}
 
 // Make User Admin by User ID(Admin Only)
 export const makeUserAdmin = async (req: Request, res: Response) => {

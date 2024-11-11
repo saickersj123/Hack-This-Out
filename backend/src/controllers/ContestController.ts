@@ -823,3 +823,50 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
     }
 };
 
+export const getMyRankInContest = async (req: Request, res: Response) => {
+    try {
+        const { contestId } = req.params;
+        const userId = res.locals.jwtData.id;
+        const user = await User.findById(userId).select('exp level username avatar');
+        if (!userId || !user) {
+            res.status(400).json({
+                message: "ERROR",
+                msg: 'User not found.'
+            });
+            return;
+        }
+
+        const participation = await ContestParticipation.findOne({
+            user: userId,
+            contest: contestId,
+        });
+        if (!participation) {
+            res.status(200).json({
+                message: "OK",
+                msg: 'You are not participating in this contest.',
+                rank: null
+            });
+            return;
+        }
+
+        const higherExpCount = await ContestParticipation.countDocuments({
+            contest: contestId,
+            expEarned: { $gt: participation.expEarned }
+        });
+        const myRank = higherExpCount + 1;
+
+        return res.status(200).json({
+            message: "OK",
+            msg: 'My rank fetched successfully.',
+            rank: myRank,
+            user: user
+        }); 
+    } catch (error: any) {
+        console.error('Error getting my rank in contest:', error);
+        res.status(500).json({
+            message: "ERROR",
+            msg: 'Failed to get my rank in contest.',
+            error: error.message
+        });
+    }
+}
