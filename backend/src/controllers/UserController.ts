@@ -220,7 +220,7 @@ export const verifyUserStatus = async (
 	next: NextFunction
 ) => {
 	try {
-		const user = await User.findById(res.locals.jwtData.id).select('-password -date -updatedAt -__v -level -exp');
+		const user = await User.findById(res.locals.jwtData.id).select('-password -date -updatedAt -__v');
 
 		if (!user)
 			return res.status(401).json({

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getLeaderboard } from '../../api/axiosUser';
 import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
 import Main from '../../components/main/Main';
+import { AuthUserContext } from '../../contexts/AuthUserContext';
 
 /**
  * Interface representing a user in the leaderboard.
@@ -11,6 +12,7 @@ interface User {
   level: number;
   username: string;
   exp: number;
+  avatar: string;
 }
 
 /**
@@ -21,6 +23,14 @@ const LeaderBoardPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const authUserContext = useContext(AuthUserContext);
+
+  if (!authUserContext) {
+      throw new Error('AuthUserContext must be used within an AuthUserProvider');
+  }
+
+  const { currentUser } = authUserContext;
+  
   /**
    * Fetches the leaderboard data from the API.
    */
@@ -46,7 +56,7 @@ const LeaderBoardPage: React.FC = () => {
       <div className="leaderboard-page">
         {loading && <p>Loading leaderboard...</p>}
         {error && <p className="error">{error}</p>}
-        {!loading && !error && <LeaderboardTable leaderboard={leaderboard} />}
+        {!loading && !error && <LeaderboardTable leaderboard={leaderboard} current_user={currentUser} />}
       </div>
     </Main>
   );
