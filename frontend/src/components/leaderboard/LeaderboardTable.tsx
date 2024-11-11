@@ -59,33 +59,33 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                             <div className="no-data">No users found</div>
                         </div>
                     )}
+                </div>
 
-                    {/* Pagination Buttons */}
-                    <div className={styles.pagination}>
+                {/* Pagination Buttons */}
+                <div className={styles.pagination}>
+                    <button
+                        className={styles.page_button}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        <IoIosArrowBack />
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => (
                         <button
-                            className={styles.page_button}
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            disabled={currentPage === 1}
+                            key={i}
+                            className={`${styles.number_button} ${currentPage === i + 1 ? styles.active : ''}`}
+                            onClick={() => handlePageChange(i + 1)}
                         >
-                            <IoIosArrowBack />
+                            {i + 1}
                         </button>
-                        {Array.from({ length: totalPages }, (_, i) => (
-                            <button
-                                key={i}
-                                className={`page_number ${currentPage === i + 1 ? 'active' : ''}`}
-                                onClick={() => handlePageChange(i + 1)}
-                            >
-                                {i + 1}
-                            </button>
-                        ))}
-                        <button
-                            className={styles.page_button}
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                        >
-                            <IoIosArrowForward />
-                        </button>
-                    </div>
+                    ))}
+                    <button
+                        className={styles.page_button}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        <IoIosArrowForward />
+                    </button>
                 </div>
             </div>
         </div>

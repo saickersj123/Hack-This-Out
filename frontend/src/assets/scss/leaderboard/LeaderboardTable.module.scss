@@ -67,7 +67,6 @@
 
   .leaderboard_table {
     width: 1100px;
-    height: 600px;
     padding: 20px 10px;
     display: flex;
     flex-direction: column;
@@ -122,26 +121,30 @@
         justify-content: flex-end;
       }
     }
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .pagination {
+    .page_number,
+    .page_button {
       display: flex;
       align-items: center;
       justify-content: center;
 
-      .page_number,
-      .page_button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      width: 30px;
+      height: 30px;
+    }
 
-        width: 30px;
-        height: 30px;
-      }
-
-      .page_button {
-        margin-left: 20px;
-        margin-right: 20px;
-      }
+    .number_button {
+      background: none;
+      width: 20px;
+      height: 30px;
+    }
+    .page_button {
+      margin-left: 20px;
+      margin-right: 20px;
     }
   }
 }
