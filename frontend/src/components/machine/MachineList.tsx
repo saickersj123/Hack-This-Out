@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import StarRatings from 'react-star-ratings';  // 추가한 부분
 
 interface Machine {
   _id: string;
@@ -132,7 +133,18 @@ const MachineList: React.FC = () => {
                   <tr key={machine._id}>
                     <td className='body-name'>{machine.name}</td>
                     <td className='body-category'>{machine.category}</td>
-                    <td className='body-rating'>{machine.rating.toFixed(1)}</td>
+                    <td className='body-rating'>
+                      <div title={`Rating: ${machine.rating.toFixed(1)}`}>
+                        <StarRatings
+                          rating={machine.rating}
+                          starRatedColor="orange"
+                          numberOfStars={5}
+                          name='rating'
+                          starDimension="20px"
+                          starSpacing="3px"
+                        />
+                      </div>
+                    </td>
                     <td className='body-playCound'>{machine.playerCount}</td>
                     <td>
                       <button onClick={() => handleMachineClick(machine)}>Details</button>
