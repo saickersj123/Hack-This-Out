@@ -11,11 +11,12 @@ import { User } from '../../types/User'; // Import the User interface
 interface LeaderboardTableProps {
     leaderboard: User[];
     currentUser: CurrentUser; // Grouped current user information
+    isContest: boolean;
 }
 
 const ITEMS_PER_PAGE = 8; // Number of users to display per page
 
-const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, currentUser }) => {
+const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, currentUser, isContest }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
     // Calculate total number of pages
@@ -55,9 +56,15 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                             </div>
                         ))
                     ) : (
-                        <div key="no-users-found">
-                            <div className="no-data">No users found</div>
-                        </div>
+                        isContest ? (
+                            <div key="no-users-found">
+                                <div className="no-data">No one participated in this contest yet.</div>
+                            </div>
+                        ) : (
+                            <div key="no-users-found">
+                                <div className="no-data">No users found</div>
+                            </div>
+                        )
                     )}
                 </div>
 

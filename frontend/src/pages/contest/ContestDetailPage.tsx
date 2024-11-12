@@ -2,20 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import ContestDetail from '../../components/contest/ContestDetail';
 import Main from '../../components/main/Main';
-import { getContestDetails, getLeaderboardByContest, getMyRankinContest } from '../../api/axiosContest';
+import { getContestDetails, getContestStatus, getLeaderboardByContest, getMyRankinContest } from '../../api/axiosContest';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
 import { CurrentUser } from '../../types/CurrentUser';
 import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
 import { User } from '../../types/User';
+import { ContestStatus } from '../../types/Contest';
 //import '../../assets/scss/contest/ContestDetailPage.scss';
-
-/**
- * Interface to represent the contest's status.
- */
-interface ContestStatus {
-  isActive: boolean;
-  isStarted: boolean;
-}
 
 /**
  * Component representing the Contest Detail Page.
@@ -25,7 +18,11 @@ interface ContestStatus {
 const ContestDetailPage: React.FC = () => {
   const [contestDetail, setContestDetail] = useState<ContestDetailType | null>(null);
   const [leaderboard, setLeaderboard] = useState<User[]>([]);
-  const [contestStatus, setContestStatus] = useState<ContestStatus>({ isActive: false, isStarted: false });
+  const [contestStatus, setContestStatus] = useState<ContestStatus>({
+    isActive: false,
+    isStarted: false,
+    isEnded: false,
+  });
   const [currentUser, setCurrentUser] = useState<CurrentUser>({
     myRank: null,
     myLevel: null,
@@ -110,6 +107,19 @@ const ContestDetailPage: React.FC = () => {
     fetchMyRank();
   }, [contestId]);
 
+  useEffect(() => {
+    const fetchContestStatus = async () => {
+      try {
+        const contestStatus = await getContestStatus(contestId || '');
+        setContestStatus(contestStatus);
+      } catch (error: any) {
+        console.error('Error fetching contest status:', error.message || error);
+      setError('Failed to fetch contest status.');
+      }
+    };
+    fetchContestStatus();
+  }, [contestId]);
+
   /**
    * Handles navigation to the participate page.
    */
@@ -131,29 +141,6 @@ const ContestDetailPage: React.FC = () => {
       navigate(`/contest/${_id}/pending`);
     }
   };
-
-  /**
-   * Determines the contest status based on current time and active state.
-   * 
-   * @returns {ContestStatus} The status of the contest.
-   */
-  useEffect(() => {
-    const getContestStatus = (): ContestStatus => {
-      if (!contestDetail) {
-      return { isActive: false, isStarted: false };
-    }
-
-    const { isActive, startTime } = contestDetail;
-    const now = Date.now();
-
-    return {
-      isActive,
-      isStarted: new Date(startTime).getTime() <= now,
-      };
-    };
-    const contestStatus = getContestStatus();
-    setContestStatus(contestStatus);
-  }, [contestDetail]);
 
   if (isLoading) {
     return (
@@ -186,7 +173,8 @@ const ContestDetailPage: React.FC = () => {
       {contestStatus.isActive && contestStatus.isStarted && (
         <LeaderboardTable
           leaderboard={leaderboard}
-        currentUser={currentUser}
+          currentUser={currentUser}
+          isContest={true}
         />
       )}
     </Main>

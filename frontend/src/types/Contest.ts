@@ -18,4 +18,13 @@ export interface ContestDetail {
   startTime: string;
   endTime: string;
   isActive: boolean;
-} 
+}
+
+/**
+ * Interface representing the status of a contest.
+ */
+export interface ContestStatus {
+  isActive: boolean;
+  isStarted: boolean;
+  isEnded: boolean;
+}

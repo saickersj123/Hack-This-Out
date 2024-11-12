@@ -109,11 +109,22 @@ export const deactivateContest = async (req: Request, res: Response): Promise<vo
  */
 export const getActiveContests = async (req: Request, res: Response): Promise<void> => {
     try {
-        const contests = await Contest.find({ isActive: true });
+        const contests = await Contest.find({ isActive: true }).sort({ startTime: -1 }).select('-__v -createdAt -updatedAt -description');
+        if (contests.length === 0) {
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'No active contests found.' 
+            });
+            return;
+        }
+        const currentTime = new Date();
+        const activeContests = contests.filter(
+            (contest) => currentTime >= contest.startTime && currentTime <= contest.endTime
+        );
         res.status(200).json({ 
             message: "OK", 
             msg: 'Active contests fetched successfully.', 
-            contests: contests 
+            contests: activeContests 
         });
     } catch (error: any) {
         console.error('Error fetching active contests:', error);
@@ -146,11 +157,23 @@ export const getContestStatus = async (req: Request, res: Response): Promise<voi
     try {
         const { contestId } = req.params;
         const contest = await Contest.findById(contestId);
+        if (!contest) {
+            res.status(404).json({ 
+                message: "ERROR", 
+                msg: 'Contest not found.' 
+            });
+            return;
+        }
+        const currentTime = new Date();
+        const isStarted: boolean = currentTime >= contest.startTime;
+        const isEnded: boolean = currentTime >= contest.endTime;
         res.status(200).json({ 
             message: "OK", 
             msg: 'Contest status fetched successfully.', 
             contestName: contest?.name, 
             isActive: contest?.isActive, 
+            isStarted: isStarted,
+            isEnded: isEnded,
             startTime: contest?.startTime, 
             endTime: contest?.endTime 
         });
