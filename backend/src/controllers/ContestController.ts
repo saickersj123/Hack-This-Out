@@ -797,7 +797,7 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
         const participations = await ContestParticipation.find({ contest: contestId })
             .populate({
                 path: 'user',
-                select: 'username',
+                select: 'username level avatar',
                 model: User  // Explicitly specify the User model
             })
             .sort({ expEarned: -1 });
@@ -805,7 +805,9 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
         // Map participations to include username and expEarned
         const leaderboard = participations.map(participation => ({
             username: participation.user ? (participation.user as any).username : 'Unknown User',
-            expEarned: participation.expEarned || 0
+            level: participation.user ? (participation.user as any).level : 0,
+            avatar: participation.user ? (participation.user as any).avatar : null,
+            exp: participation.expEarned || 0
         }));
 
         return res.status(200).json({ 
@@ -827,7 +829,7 @@ export const getMyRankInContest = async (req: Request, res: Response) => {
     try {
         const { contestId } = req.params;
         const userId = res.locals.jwtData.id;
-        const user = await User.findById(userId).select('exp level username avatar');
+        const user = await User.findById(userId).select('level username avatar');
         if (!userId || !user) {
             res.status(400).json({
                 message: "ERROR",
@@ -844,7 +846,8 @@ export const getMyRankInContest = async (req: Request, res: Response) => {
             res.status(200).json({
                 message: "OK",
                 msg: 'You are not participating in this contest.',
-                rank: null
+                myRank: null,
+                user: user
             });
             return;
         }
@@ -854,12 +857,13 @@ export const getMyRankInContest = async (req: Request, res: Response) => {
             expEarned: { $gt: participation.expEarned }
         });
         const myRank = higherExpCount + 1;
-
+        
         return res.status(200).json({
             message: "OK",
             msg: 'My rank fetched successfully.',
-            rank: myRank,
-            user: user
+            myRank: myRank,
+            user: user,
+            expEarned: participation.expEarned
         }); 
     } catch (error: any) {
         console.error('Error getting my rank in contest:', error);

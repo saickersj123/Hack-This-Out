@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import ContestDetail from '../../components/contest/ContestDetail';
 import Main from '../../components/main/Main';
-import { getContestDetails, getMyRankinContest } from '../../api/axiosContest';
+import { getContestDetails, getLeaderboardByContest, getMyRankinContest } from '../../api/axiosContest';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
-import ContestLeaderboard from '../../components/contest/ContestLeaderboard';
 import { CurrentUser } from '../../types/CurrentUser';
-import CurrentUserInfo from '../../components/leaderboard/CurrentUserInfo';
+import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
+import { User } from '../../types/User';
 //import '../../assets/scss/contest/ContestDetailPage.scss';
 
 /**
@@ -24,6 +24,8 @@ interface ContestStatus {
  */
 const ContestDetailPage: React.FC = () => {
   const [contestDetail, setContestDetail] = useState<ContestDetailType | null>(null);
+  const [leaderboard, setLeaderboard] = useState<User[]>([]);
+  const [contestStatus, setContestStatus] = useState<ContestStatus>({ isActive: false, isStarted: false });
   const [currentUser, setCurrentUser] = useState<CurrentUser>({
     myRank: null,
     myLevel: null,
@@ -71,16 +73,32 @@ const ContestDetailPage: React.FC = () => {
   }, [contestId]);
 
   useEffect(() => {
+    const fetchLeaderboard = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getLeaderboardByContest(contestId || '');
+        setLeaderboard(response.users);
+      } catch (error: any) {
+        console.error('Error fetching leaderboard:', error.message || error);
+        setError('Failed to fetch leaderboard.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchLeaderboard();
+  }, [contestId]);
+
+  useEffect(() => {
     const fetchMyRank = async () => {
       setIsLoading(true);
       try {
         const response = await getMyRankinContest(contestId || '');
         setCurrentUser({
-          myRank: response.rank,
-          myLevel: response.level,
-          myExp: response.exp,
-          myUsername: response.username,
-          myAvatar: response.avatar,
+          myRank: response.myRank,
+          myLevel: response.user.level,
+          myExp: response.expEarned,
+          myUsername: response.user.username,
+          myAvatar: response.user.avatar,
         });
       } catch (error: any) {
         console.error('Error fetching current user:', error.message || error);
@@ -119,8 +137,9 @@ const ContestDetailPage: React.FC = () => {
    * 
    * @returns {ContestStatus} The status of the contest.
    */
-  const getContestStatus = (): ContestStatus => {
-    if (!contestDetail) {
+  useEffect(() => {
+    const getContestStatus = (): ContestStatus => {
+      if (!contestDetail) {
       return { isActive: false, isStarted: false };
     }
 
@@ -130,8 +149,11 @@ const ContestDetailPage: React.FC = () => {
     return {
       isActive,
       isStarted: new Date(startTime).getTime() <= now,
+      };
     };
-  };
+    const contestStatus = getContestStatus();
+    setContestStatus(contestStatus);
+  }, [contestDetail]);
 
   if (isLoading) {
     return (
@@ -153,8 +175,6 @@ const ContestDetailPage: React.FC = () => {
     );
   }
 
-  const contestStatus = getContestStatus();
-
   return (
     <Main title="Contest Detail" description="Contest Detail 화면입니다.">
       <div className="contest-detail-page">
@@ -163,12 +183,12 @@ const ContestDetailPage: React.FC = () => {
           Play
         </button>
       </div>
-      {/* Pass contestId and contestStatus as props to ContestLeaderboard */}
-      <CurrentUserInfo currentUser={currentUser} />
-      <ContestLeaderboard 
-        contestId={contestId || ''} 
-        contestStatus={contestStatus} 
-      />
+      {contestStatus.isActive && contestStatus.isStarted && (
+        <LeaderboardTable
+          leaderboard={leaderboard}
+        currentUser={currentUser}
+        />
+      )}
     </Main>
   );
 };
