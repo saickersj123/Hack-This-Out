@@ -1,0 +1,161 @@
+.machine-list-container {
+    width: 89%;
+    height: 504px;
+    margin-top: 30px;
+    margin-left: 70px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    display: inline-block;
+    position: relative; /* z-index를 사용하기 위해 position 추가 */
+
+    .machine-list-title {
+        font-size: 20px;
+        margin-left: 40px;
+        margin-top: 20px;
+        
+        h2{
+            font-weight: bold;
+        }
+    }
+
+    .table-form {
+        width: 100%;
+        height: 80%;
+        position: relative; /* z-index를 적용하기 위해 position 추가 */
+
+        .thead-container {
+            width: 100%;  /* 헤더는 전체 테이블 너비 */
+            overflow: visible; /* 헤더의 내용이 잘리지 않도록 설정 */
+            position: relative; /* 필터가 나올 수 있도록 설정 */
+            z-index: 200; /* 필터보다 낮게 설정 */
+
+            thead {
+                display: table;
+                width: 100%;  /* thead는 전체 테이블 너비 */
+                tr {
+                    border-bottom: 2px solid #ffffff; /* 헤더 부분 밑줄 두껍게 설정 */
+                }
+                th {
+                    padding-top: 20px;
+                    padding-bottom: 5px;
+                    text-align: left;
+                    vertical-align: middle;
+                }
+
+
+
+                
+            }
+            .machine-list-table {
+
+    
+                .machine-name {
+                    width: 30%;
+                    padding-left: 5.2%;
+                }
+    
+                .machine-category {
+                    width: 20%;
+                    .category-filter-toggle {
+                        display: inline-flex;
+                        align-items: center; /* 수직 가운데 정렬 */
+                        position: relative;
+                        margin-left: 10px;
+                        vertical-align: middle; /* 주변 텍스트와의 수직 정렬 일치 */
+                        
+                        .category-filter {
+                            position: absolute;
+                            top: 30px;
+                            left: 0;
+                            z-index: 1000; /* 높은 z-index 설정 */
+                            width: 280px;
+                            height: 60px;
+                            background-color: white;
+                        }
+                    }
+                }
+                .machine-rating{
+                    width: 20%;
+                    padding-left: 5%;
+                }
+                .machine-playCount{
+                    width: 20%;
+                    padding-left: 5%;
+                }
+                .machine-detail{
+                    width: 10%;
+                    padding-left: 10%;
+                }
+            }
+        }
+
+        .tbody-container {
+            width: 95%; /* 본문 부분은 thead보다 작은 너비 */
+            margin: 0 auto; /* 가운데 정렬 */
+            overflow: hidden;
+            display: block; /* tbody를 블록처럼 취급 */
+            position: relative; /* tbody에 대해서도 position을 명확히 설정 */
+            z-index: 100; /* 필터보다 낮게 설정 */
+
+            tbody {
+                display: table;
+                width: 100%;
+                tr {
+                    border-bottom: 1px solid #ffffff; /* 본문 부분 밑줄 얇게 설정 */
+                }
+                td {
+                    padding: 10px;
+                    text-align: left;
+                    vertical-align: middle;
+                    height: 60px;
+                }
+
+                .machine-list-table{
+                    .body-name{
+                        width: 300px;
+                        padding-left: 5.2%;
+                    }
+                    .body-category{
+                        width: 20%;
+                    }
+
+                    .body-rating{
+                        width: 20%;
+                        padding-left: 5%;
+                    }
+                    .body-playCount{
+                        width: 20%;
+                        padding-left: 5%;
+                    }
+                    
+                }
+
+
+            }
+        }
+
+        .machine-list-table {
+            width: 100%;
+            border-collapse: collapse; /* 테이블 간격 제거 */
+
+        }
+
+    }
+}
+
+
+.body-name{
+    width: 27%;
+}
+.body-category{
+    width: 26%;
+
+}
+
+.body-rating{
+    width: 20%;
+    padding-left: 5%;
+}
+.body-playCound{
+    width: 18.5%;
+}
