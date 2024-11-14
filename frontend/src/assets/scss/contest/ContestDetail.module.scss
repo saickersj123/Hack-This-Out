@@ -27,7 +27,12 @@
                 padding-left: 10px;
             }
         }
-
+        .contest_description {
+            padding-left: 60px;
+            font-weight: 600;
+            font-family: var(--font-ibm-plex-sans);
+            color: var(--color-white);
+        }
         .contest_reward_box {
             display: flex;
             flex-direction: column;

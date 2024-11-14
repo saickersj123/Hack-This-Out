@@ -8,7 +8,7 @@ import { CurrentUser } from '../../types/CurrentUser';
 import ContestLeaderboard from '../../components/leaderboard/ContestLeaderboard';
 import { User } from '../../types/User';
 import { ContestStatus } from '../../types/Contest';
-import styles from '../../assets/scss/contest/ContestDetailPage.module.scss';
+//import styles from '../../assets/scss/contest/ContestDetailPage.module.scss';
 
 /**
  * Component representing the Contest Detail Page.

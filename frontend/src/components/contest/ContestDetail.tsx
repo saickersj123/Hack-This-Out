@@ -35,6 +35,9 @@ const ContestDetail: React.FC<ContestDetailProps> = ({ contestDetail }) => {
             <p>N/A</p>
           )}
           </div>
+          <div className={styles.contest_description}>
+            <p>Description: {description}</p>
+          </div>
           <div className={styles.contest_reward_box}>
             <p className={styles.text}>Reward:</p>
             <p className={styles.reward_text}>EXP {contestExp || 0}</p>
