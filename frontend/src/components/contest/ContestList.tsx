@@ -63,11 +63,9 @@ const ContestList: React.FC = () => {
             <thead>
               <tr className={styles.table_text_box}>
                 <th className={styles.table_name}>Name</th>
-                <th className={styles.table_description}>Description</th>
                 <th className={styles.table_start_time}>Start Time</th>
                 <th className={styles.table_end_time}>End Time</th>
                 <th className={styles.table_reward}>Reward</th>
-                <th className={styles.table_active}>Active</th>
                 <th className={styles.table_details}>Details</th>
               </tr>
             </thead>
@@ -75,15 +73,11 @@ const ContestList: React.FC = () => {
               {contests.map((contest) => (
                 <tr className={styles.contest_box} key={contest._id}>
                   <td className={styles.contest_name}>{contest.name || 'N/A'}</td>
-                  <td className={styles.contest_description}>{contest.description || 'N/A'}</td>
                   <td className={styles.contest_start_time}>{contest.startTime ? formatDate(contest.startTime) : 'N/A'}</td>
                   <td className={styles.contest_end_time}>{contest.endTime ? formatDate(contest.endTime) : 'N/A'}</td>
                   <td className={styles.contest_reward}>{contest.contestExp}</td>
-                  <td className={`${styles.contest_active} ${contest.isActive ? styles.active : styles.inactive}`}>
-                    {contest.isActive ? 'Active' : ''}
-                  </td>
                   <td className={styles.contest_details}>
-                    <button className={styles.details_button} onClick={() => handleContestClick(contest._id)}><FaArrowRightToBracket size={24} /></button>
+                    <button className={styles.details_button} onClick={() => handleContestClick(contest._id)}><FaArrowRightToBracket size={24} color="white" /></button>
                   </td>
                 </tr>
               ))}
