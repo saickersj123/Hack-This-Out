@@ -1,0 +1,23 @@
+.machine-review-container {
+    .machine-review-title {
+        margin-bottom: 20px;
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    }
+
+    .machine-review-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid white; // 여기에 하얀색 밑줄 추가
+        }
+
+    }
+}

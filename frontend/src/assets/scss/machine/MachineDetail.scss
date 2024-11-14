@@ -1,75 +1,101 @@
-.machine-main {
-    margin: 0;
-    padding: 30px;
+.machine-detail {
 
-    .machine-info-upper{
-        width: 100%;
-        height: 220px;
 
-        padding-right: 30px;
-        position: relative;
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: var(--white200);
+    }
 
-        .back-btn-container {
-            width: 100%;
-            height: 70px;
-            padding-bottom: 20px;
+    .machine-info {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 30px;
+
+        .info-item {
             display: flex;
-            align-items: center;
-        
-            .back-button {
-                position: relative;
-                background-size: cover;
-                border: none;
-                margin: 0px;
-                background-color: transparent;
-                width: 30px;
-                min-width: 10px;
-                height: 36px;
-                display: flex;
-        
-                filter: brightness(0) invert(1);
-                cursor: pointer;
-            }
-        }
+            flex-direction: column;
 
-        .info-container{
-            width: 100%;
-            display: flex;
-            align-items: center;
-
-            .machine-image{
-                background-size: cover;
-                background-color: transparent;
-                width: 120px;
-                min-width: 120px;
-                height: 120px;
-                margin-right: 20px;
+            label {
+                font-weight: bold;
+                margin-bottom: 5px;
+                color: var(--text-primary);
             }
 
-            .name-category {
-                width: 30%;
-                height: 70px;
-                min-width: 400px;
-
-                .machine-name {
-                    width: 100px;
-                    font-size: 30px;
-                }
-                .machine-category{
-                    width: 100px;
-                }
-            }
-
-            .exp-repute {
-                width: 70%;
-                height: 70px;
-
+            span {
+                color: var(--text-secondary);
+                font-size: 1rem;
             }
         }
     }
-    .machine-info-lower {
-        width: 100%;
+
+    .machine-description {
+        margin-bottom: 30px;
+
+        h2 {
+            margin-bottom: 10px;
+            color: var(--white200);
+        }
+
+        p {
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
     }
-    
+
+    .machine-actions {
+        display: flex;
+        gap: 10px;
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--white);
+            font-size: 1rem;
+            transition: background-color 0.3s;
+
+            &.edit-button {
+                background-color: var(--primary);
+
+                &:hover {
+                    background-color: var(--primary-hover);
+                }
+            }
+
+            &.delete-button {
+                background-color: var(--danger);
+
+                &:hover {
+                    background-color: var(--danger-hover);
+                }
+            }
+
+            &.view-button {
+                background-color: var(--secondary);
+
+                &:hover {
+                    background-color: var(--secondary-hover);
+                }
+            }
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        .machine-info {
+            flex-direction: column;
+        }
+
+        .machine-actions {
+            flex-direction: column;
+            width: 100%;
+
+            button {
+                width: 100%;
+            }
+        }
+    }
 }
-

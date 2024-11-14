@@ -4,7 +4,7 @@ import MachineDetail from '../../components/machine/MachineDetail';
 import Main from '../../components/main/Main';
 import { getActiveMachineDetails, startPlayingMachine } from '../../api/axiosMachine';
 import { MachineDetail as MachineDetailType } from '../../types/Machine';
-//import '../../assets/scss/machine/MachineDetailPage.scss';
+import '../../assets/scss/machine/MachineDetailPage.scss';
 import MachineReviewList from '../../components/machine/MachineReviewList';
 
 /**
@@ -87,19 +87,21 @@ const MachineDetailPage: React.FC = () => {
 
   return (
     <Main title="Machine Detail" description="Machine Detail 화면입니다.">
-      <div className="machine-detail-page">
-        <MachineDetail machineDetail={machineDetail} />
-        <button onClick={handlePlay} className="play-button">
-          Play
-        </button>
-      </div>
-      <div className='machine-detail-page-new-review'>
-        <button onClick={handleRegisterReview} className='machine-detail-page-new-review-button'>
-          Add New Review
-        </button>
-      </div>
-      <div className='machine-detail-page-review'>
-        <MachineReviewList machineId={machineId || ''} />
+      <div className='machine-detail-page-container'>
+        <div className="machine-detail-page">
+          <MachineDetail machineDetail={machineDetail} />
+          <button onClick={handlePlay} className="play-button">
+            Play
+          </button>
+        </div>
+        <div className='machine-detail-page-review'>
+          <MachineReviewList machineId={machineId || ''} />
+        </div>
+        <div className='machine-detail-page-new-review'>
+          <button onClick={handleRegisterReview} className='machine-detail-page-new-review-button'>
+            Add New Review
+          </button>
+        </div>
       </div>
     </Main>
   );

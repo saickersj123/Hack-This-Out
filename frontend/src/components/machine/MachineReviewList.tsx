@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getMachineReviews } from '../../api/axiosMachine';
 import { Review } from '../../types/Machine';
+import '../../assets/scss/machine/MachineReviewList.scss';
 
 interface MachineReviewListProps {
   machineId: string;
@@ -54,19 +55,19 @@ const MachineReviewList: React.FC<MachineReviewListProps> = ({ machineId }) => {
           <>
             <thead>
               <tr>
-            <th className='machine-review-username'>Username</th>
-            <th className='machine-review-rating'>Rating</th>
-            <th className='machine-review-comment'>Comment</th>
-          </tr>
-        </thead>
-        <tbody>
-          {reviews.map((review) => (
-              <tr key={review.reviewerId}>
-                <td>{review.reviewerName}</td>
-                <td>{review.rating}</td>
-                <td>{review.content}</td>
+                <th className='machine-review-username'>Username</th>
+                <th className='machine-review-rating'>Rating</th>
+                <th className='machine-review-comment'>Comment</th>
               </tr>
-            ))}
+            </thead>
+            <tbody>
+              {reviews.map((review) => (
+                <tr key={review.reviewerId}>
+                  <td>{review.reviewerName}</td>
+                  <td>{review.rating}</td>
+                  <td>{review.content}</td>
+                </tr>
+              ))}
             </tbody>
           </>
         )}
