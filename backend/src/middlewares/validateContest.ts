@@ -58,7 +58,7 @@ export const createContestValidation: ValidationChain[] = [
     body('contestExp')
         .notEmpty()
         .withMessage('Contest EXP is required.')
-        .isInt({ min: 0 })
+        .isInt({ min: 100 })
         .withMessage('Contest EXP must be a non-negative integer.')
 ];
 
