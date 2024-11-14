@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
-import styles from '../../assets/scss/leaderboard/LeaderboardTable.module.scss';
-import contest_styles from '../../assets/scss/contest/ContestLeaderboard.module.scss';
+import styles from '../../assets/scss/leaderboard/ContestLeaderboard.module.scss';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 import user_default from '../../assets/img/icon/profile_default.png';
 import CurrentUserInfo from './CurrentUserInfo'; // Import the new component
 import { CurrentUser } from '../../types/CurrentUser'; // Import the CurrentUser interface
 import { User } from '../../types/User'; // Import the User interface
-import { FaMedal } from "react-icons/fa";
 
 
-interface LeaderboardTableProps {
+interface ContestLeaderboardProps {
     leaderboard: User[];
     currentUser: CurrentUser; // Grouped current user information
 }
 
 const ITEMS_PER_PAGE = 8; // Number of users to display per page
 
-const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, currentUser }) => {
+const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, currentUser }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
     // Calculate total number of pages
@@ -34,10 +32,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
         }
     };
 
-    console.log(styles.contestLeaderboardTable)
-
     return (
-        <div className={`${isContest ? contest_styles.contestLeaderboardTable : styles.board} ${className || ''}`}>
+        <div className={styles.board}>
             <div className={styles.leaderboard_container}>
                 {/* Current user information */}
                 <CurrentUserInfo
@@ -49,27 +45,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                     {currentLeaderboard.length > 0 ? (
                         currentLeaderboard.map((user, index) => (
                             <div className={styles.leaderboard_data} key={`${user._id}-${index}`}>
-                                <div className={styles.leaderboard_rank}>
-                                    {/* 메달 아이콘과 순위 번호 함께 표시 */}
-                                    {index === 0 ? (
-                                        <>
-                                            <FaMedal className={styles.goldMedal} size={32}/>
-                                            <span className={styles.high_rank}>{startIdx + index + 1}</span>
-                                        </>
-                                    ) : index === 1 ? (
-                                        <>
-                                            <FaMedal className={styles.silverMedal} size={32}/>
-                                            <span className={styles.high_rank}>{startIdx + index + 1}</span>
-                                        </>
-                                    ) : index === 2 ? (
-                                        <>
-                                            <FaMedal className={styles.bronzeMedal} size={32}/>
-                                            <span className={styles.high_rank}>{startIdx + index + 1}</span>
-                                        </>
-                                    ) : (
-                                        `${startIdx + index + 1}` // 4위 이후는 순위만 표시
-                                    )}
-                                </div>
+                                <div className={styles.leaderboard_rank}>#{startIdx + index + 1}</div>
                                 <div className={styles.leaderboard_level}>LV. {user.level}</div>
                                 <div className={styles.leaderboard_userinfo}>
                                     <img className={styles.leaderboard_avatar} alt="User Avatar" src={user.avatar || user_default} />
@@ -79,8 +55,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                             </div>
                         ))
                     ) : (
-                        <div key="no-users-found">
-                            <div className="no-data">No users found</div>
+                        <div key="no-contestants-found">
+                            <div className="no-data">No contestants found</div>
                         </div>
                     )}
                 </div>
@@ -116,4 +92,4 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
     );
 };
 
-export default LeaderboardTable;
+export default ContestLeaderboard;

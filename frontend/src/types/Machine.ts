@@ -18,3 +18,14 @@ export interface Review {
   rating: number;
   content: string;
 }
+
+export interface MachineforBanner {
+  _id: string;
+  name: string;
+  category: string;
+  exp: number;
+  rating: number;
+  playerCount: number;
+  isActive: boolean;
+  createdAt: string;
+}

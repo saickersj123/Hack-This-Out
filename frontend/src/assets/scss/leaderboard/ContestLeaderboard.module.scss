@@ -1,0 +1,150 @@
+.board {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    .leaderboard_container {
+      min-width: 1200px;
+      position: relative;
+      backdrop-filter: blur(40px);
+      border-radius: 24px;
+      background: linear-gradient(111.03deg, rgba(239, 238, 238, 0.32), rgba(255, 255, 255, 0.8));
+      height: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+  
+      .current_user_container {
+        width: 100%;
+        position: relative;
+        display: flex;
+        backdrop-filter: blur(4px);
+        border-radius: 24px;
+        background: linear-gradient(111.03deg, rgba(239, 238, 238, 0.32), rgba(239, 238, 238, 0.06));
+        height: 164px;
+        justify-content: space-around;
+        align-items: center;
+  
+        font-size: var(--font-size-21xl);
+        color: var(--color-white);
+        font-family: var(--font-roboto);
+  
+  
+        .user_rank {
+          font-size: var(--font-size-5xl);
+        }
+  
+        .user_level {
+          font-size: var(--font-size-5xl);
+        }
+  
+        .info_container {
+          width: 350px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+  
+          .user_avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+          }
+  
+          .user_name {
+            padding-left: 40px;
+            padding-right: 5px;
+          }
+        }
+  
+        .user_exp {
+          font-size: 32px;
+        }
+      }
+    }
+  
+    .leaderboard_table {
+      width: 1100px;
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+  
+      border-top: 1px solid #cccccc;
+  
+      color: var(--color-white);
+      font-family: var(--font-roboto);
+  
+      .leaderboard_data {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+  
+        .leaderboard_rank,
+        .leaderboard_level,
+        .leaderboard_exp {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+  
+        .leaderboard_rank {
+          width: 50px;
+        }
+  
+        .leaderboard_level {
+          width: 50px;
+        }
+  
+        .leaderboard_userinfo {
+          width: 300px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+  
+          .leaderboard_avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+          }
+  
+          .leaderboard_username {
+            padding-left: 20px;
+            padding-right: 5px;
+          }
+        }
+  
+        .leaderboard_exp {
+          width: 200px;
+          justify-content: flex-end;
+        }
+      }
+    }
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      .page_number,
+      .page_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+  
+        width: 30px;
+        height: 30px;
+      }
+  
+      .number_button {
+        background: none;
+        width: 20px;
+        height: 30px;
+      }
+      .page_button {
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+    }
+  }
