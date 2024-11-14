@@ -6,6 +6,8 @@ import '../../assets/scss/machine/MachineBanner.scss';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useNavigate } from 'react-router-dom';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
 
 const MachineBanner: React.FC = () => {
   const [latestMachine, setLatestMachine] = useState<MachineforBanner | null>(null);
@@ -18,12 +20,10 @@ const MachineBanner: React.FC = () => {
     const fetchMachines = async () => {
       try {
         setLoading(true);
-        const [latest, mostPlayed] = await Promise.all([
-          getLatestMachine(),
-          getMostPlayedMachine(),
-        ]);
-        setLatestMachine(latest);
-        setMostPlayedMachine(mostPlayed);
+        const latest = await getLatestMachine();
+        const mostPlayed = await getMostPlayedMachine();
+        setLatestMachine(latest.machine);
+        setMostPlayedMachine(mostPlayed.machine);
       } catch (err: any) {
         console.error('Error fetching machines for banner:', err);
         setError('Failed to load machine banners.');
@@ -61,7 +61,15 @@ const MachineBanner: React.FC = () => {
         <h4>{machine.name}</h4>
         <p>Category: {machine.category}</p>
         <p>Rewards: {machine.exp}</p>
-        <p>Rating: {machine.rating}</p>
+        <Box component="fieldset" mb={3} borderColor="transparent">
+          <p>Rating</p>
+          <Rating
+            name="read-only-rating"
+            value={Number(machine.rating)}
+            precision={0.5}
+            readOnly
+          />
+        </Box>
         <p>Played: {machine.playerCount}</p>
         <button onClick={() => navigate(`/machine/${machine._id}`)}>View Details</button>
       </div>

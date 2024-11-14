@@ -1,0 +1,47 @@
+.machine-review-list {
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+
+  h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .machine-review-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f8f8f8;
+      color: #555;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #777;
+      padding: 20px 0;
+    }
+  }
+
+  .MuiRating-root {
+    color: #ffd700; /* Gold color for filled stars */
+  }
+
+  .MuiRating-iconEmpty {
+    color: #ccc; /* Grey color for empty stars */
+  }
+}

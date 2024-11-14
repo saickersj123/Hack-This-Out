@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getActiveMachines } from '../../api/axiosMachine';
 import '../../assets/scss/machine/MachineList.scss';
 import { useNavigate } from 'react-router-dom';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
 
 interface Machine {
   _id: string;
@@ -78,7 +80,21 @@ const MachineList: React.FC = () => {
                   <tr key={machine._id}>
                     <td>{machine.name}</td>
                     <td>{machine.category}</td>
-                    <td>{machine.rating.toFixed(1)}</td>
+                    <td>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Rating
+                          name={`read-only-rating-${machine._id}`}
+                          value={Number(machine.rating)}
+                          precision={0.5}
+                          readOnly
+                        />
+                      </Box>
+                    </td>
                     <td>{machine.playerCount}</td>
                     <td>
                       <button onClick={() => handleMachineClick(machine)}>Details</button>

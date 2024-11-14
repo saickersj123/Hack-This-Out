@@ -7,16 +7,18 @@ export interface MachineDetail {
   category: string;
   description?: string;
   exp: number;
-  amiId: string;
+  amiId?: string;
   rating: number;
   // Add other relevant fields as necessary
 }
 
 export interface Review {
+  _id: string;
   reviewerId: string;
   reviewerName: string;
   rating: number;
   content: string;
+  createdAt: string;
 }
 
 export interface MachineforBanner {

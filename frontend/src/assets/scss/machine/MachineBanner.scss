@@ -28,6 +28,21 @@
         color: #666;
       }
 
+      .machine-rating {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px 0;
+
+        .MuiRating-root {
+          color: #ffd700; /* Gold color for filled stars */
+        }
+
+        .MuiRating-iconEmpty {
+          color: #ccc; /* Grey color for empty stars */
+        }
+      }
+
       button {
         margin-top: 15px;
         padding: 8px 16px;
