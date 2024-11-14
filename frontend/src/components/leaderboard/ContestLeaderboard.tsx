@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../../assets/scss/leaderboard/LeaderboardTable.module.scss';
+import styles from '../../assets/scss/leaderboard/ContestLeaderboard.module.scss';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 import user_default from '../../assets/img/icon/profile_default.png';
@@ -8,14 +8,14 @@ import { CurrentUser } from '../../types/CurrentUser'; // Import the CurrentUser
 import { User } from '../../types/User'; // Import the User interface
 
 
-interface LeaderboardTableProps {
+interface ContestLeaderboardProps {
     leaderboard: User[];
     currentUser: CurrentUser; // Grouped current user information
 }
 
 const ITEMS_PER_PAGE = 8; // Number of users to display per page
 
-const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, currentUser }) => {
+const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, currentUser }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
     // Calculate total number of pages
@@ -55,8 +55,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                             </div>
                         ))
                     ) : (
-                        <div key="no-users-found">
-                            <div className="no-data">No users found</div>
+                        <div key="no-contestants-found">
+                            <div className="no-data">No contestants found</div>
                         </div>
                     )}
                 </div>
@@ -92,4 +92,4 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
     );
 };
 
-export default LeaderboardTable;
+export default ContestLeaderboard;

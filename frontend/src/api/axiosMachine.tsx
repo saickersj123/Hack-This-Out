@@ -362,6 +362,8 @@ export const createMachine = async (machineData: any) => {
 
   /**
    * Start playing a machine.
+   * @param {string} machineId - The ID of the machine.
+   * @returns {Promise<Object>} - The response data confirming starting.
    */
   export const startPlayingMachine = async (machineId: string) => {
     try {
@@ -369,5 +371,31 @@ export const createMachine = async (machineData: any) => {
       return response.data;
     } catch (error: any) {
       throw error.response ? error.response.data : new Error('Failed to start playing machine');
+    }
+  };
+
+  /**
+   * Get latest machine.
+   * @returns {Promise<Object>} - The response data containing the latest machine.
+   */
+  export const getLatestMachine = async () => {
+    try {
+      const response = await axiosInstance.get('/machines/latest');
+      return response.data;
+    } catch (error: any) {
+      throw error.response ? error.response.data : new Error('Failed to fetch latest machine');
+    }
+  };
+
+  /**
+   * Get most played machine.
+   * @returns {Promise<Object>} - The response data containing the most played machine.
+   */
+  export const getMostPlayedMachine = async () => {
+    try {
+      const response = await axiosInstance.get('/machines/most-played');
+      return response.data;
+    } catch (error: any) {
+      throw error.response ? error.response.data : new Error('Failed to fetch most played machine');
     }
   };

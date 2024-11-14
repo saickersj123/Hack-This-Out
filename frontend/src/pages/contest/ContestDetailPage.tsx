@@ -5,7 +5,7 @@ import Main from '../../components/main/Main';
 import { getContestDetails, getContestStatus, getLeaderboardByContest, getMyRankinContest } from '../../api/axiosContest';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
 import { CurrentUser } from '../../types/CurrentUser';
-import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
+import ContestLeaderboard from '../../components/leaderboard/ContestLeaderboard';
 import { User } from '../../types/User';
 import { ContestStatus } from '../../types/Contest';
 //import '../../assets/scss/contest/ContestDetailPage.scss';
@@ -171,10 +171,9 @@ const ContestDetailPage: React.FC = () => {
         </button>
       </div>
       {contestStatus.isActive && contestStatus.isStarted && (
-        <LeaderboardTable
+        <ContestLeaderboard
           leaderboard={leaderboard}
           currentUser={currentUser}
-          isContest={true}
         />
       )}
     </Main>
