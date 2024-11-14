@@ -3,8 +3,6 @@
 .mypage-container {
     min-width: 1200px;  
     position: relative;
-    backdrop-filter: blur(40px);
-    border-radius: 24px;
     background-color: var(--color-list-background);
     min-height: 37.5rem;
     height: auto;
@@ -12,12 +10,23 @@
     flex-direction: column;
     align-items: center; 
     color: var(--color-white);
+    border-radius: 24px;
     box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.2);
     padding: 2rem;
-    margin: 3rem auto;
+    margin: 1rem auto;
     border: 0.0625rem solid rgba(255, 255, 255, 0.1);
-    max-height: calc(100vh - 6rem);
-    overflow-y: hidden;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    z-index: 1;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    scrollbar-width: none;
+
+    -ms-overflow-style: none;
 
     .upper-container {
         width: 100%;
@@ -114,7 +123,6 @@
             color: var(--color-white);
             font-size: 1rem;
             transition: all 0.2s ease-in-out;
-            backdrop-filter: blur(0.625rem);
 
             &::placeholder {
                 color: rgba(255, 255, 255, 0.4);
@@ -123,8 +131,7 @@
             &:focus {
                 outline: none;
                 border-color: var(--color-primary);
-                background: rgba(255, 255, 255, 0.08);
-                box-shadow: 0 0 0 0.125rem rgba(var(--color-primary-rgb), 0.2);
+                background: rgba(255, 255, 255, 0.08); 
             }
         }
 
@@ -141,7 +148,6 @@
             font-size: 1rem;
             letter-spacing: -0.019rem;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(0.625rem);
 
             &:hover {
                 background: var(--color-primary-dark);
@@ -151,9 +157,9 @@
 
             &:active {
                 transform: translateY(0.0625rem);
-                box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.1);
+                box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.1); 
             }
         }
     }
 }
-
+ 
