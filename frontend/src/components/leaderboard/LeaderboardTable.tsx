@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from '../../assets/scss/leaderboard/LeaderboardTable.module.scss';
-import contest_styles from '../../assets/scss/contest/ContestLeaderboard.module.scss';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 import user_default from '../../assets/img/icon/profile_default.png';
@@ -37,7 +36,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
     console.log(styles.contestLeaderboardTable)
 
     return (
-        <div className={`${isContest ? contest_styles.contestLeaderboardTable : styles.board} ${className || ''}`}>
+        <div className={styles.board}>
             <div className={styles.leaderboard_container}>
                 {/* Current user information */}
                 <CurrentUserInfo
