@@ -39,7 +39,7 @@ const MyPage: React.FC = () => {
               aria-label="Back to Home"
             ></button>
           </div>
-          <h1>My Page</h1>
+          <h1>마이페이지</h1>
         </div>
         {!isPasswordVerified ? (
           <PasswordCheckForm onSubmit={handlePasswordCheck} />
