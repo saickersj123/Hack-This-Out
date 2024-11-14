@@ -8,7 +8,7 @@ import { CurrentUser } from '../../types/CurrentUser';
 import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
 import { User } from '../../types/User';
 import { ContestStatus } from '../../types/Contest';
-//import '../../assets/scss/contest/ContestDetailPage.scss';
+import styles from '../../assets/scss/contest/ContestDetailPage.module.scss';
 
 /**
  * Component representing the Contest Detail Page.
@@ -114,7 +114,7 @@ const ContestDetailPage: React.FC = () => {
         setContestStatus(contestStatus);
       } catch (error: any) {
         console.error('Error fetching contest status:', error.message || error);
-      setError('Failed to fetch contest status.');
+        setError('Failed to fetch contest status.');
       }
     };
     fetchContestStatus();
@@ -164,19 +164,22 @@ const ContestDetailPage: React.FC = () => {
 
   return (
     <Main title="Contest Detail" description="Contest Detail 화면입니다.">
-      <div className="contest-detail-page">
-        <ContestDetail contestDetail={contestDetail} />
-        <button onClick={handlePlay} className="participate-button">
-          Play
-        </button>
+      <div className={styles.contest_detail_container}>
+        <div className={styles.contest_detail_page}>
+          <ContestDetail contestDetail={contestDetail} />
+          <button onClick={handlePlay} className={styles.participate_button}>
+            Play
+          </button>
+        </div>
+        {contestStatus.isActive && contestStatus.isStarted && (
+          <LeaderboardTable
+            leaderboard={leaderboard}
+            currentUser={currentUser}
+            isContest={true}
+            className={styles.contestLeaderboardTable}
+          />
+        )}
       </div>
-      {contestStatus.isActive && contestStatus.isStarted && (
-        <LeaderboardTable
-          leaderboard={leaderboard}
-          currentUser={currentUser}
-          isContest={true}
-        />
-      )}
     </Main>
   );
 };
