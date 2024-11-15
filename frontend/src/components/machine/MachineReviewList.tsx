@@ -4,13 +4,6 @@ import '../../assets/scss/machine/MachineReviewList.scss';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 
-interface Review {
-  _id: string;
-  reviewerName: string;
-  rating: number;
-  content: string;
-  // Add other review properties as needed
-}
 import { Review } from '../../types/Machine';
 import '../../assets/scss/machine/MachineReviewList.scss';
 

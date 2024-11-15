@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import StarRatings from 'react-star-ratings';
 import { FaArrowRightToBracket } from "react-icons/fa6";
 
 interface Machine {
