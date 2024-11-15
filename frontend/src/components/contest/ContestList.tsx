@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import formatDate from '../../utils/dateUtils';
 
 import styles from '../../assets/scss/contest/ContestList.module.scss';
-import { FaArrowRightToBracket } from "react-icons/fa6";
-
+import { BsArrowRightCircle } from "react-icons/bs";
 
 interface Contest {
   _id: string;
@@ -77,7 +76,7 @@ const ContestList: React.FC = () => {
                   <td className={styles.contest_end_time}>{contest.endTime ? formatDate(contest.endTime) : 'N/A'}</td>
                   <td className={styles.contest_reward}>{contest.contestExp}</td>
                   <td className={styles.contest_details}>
-                    <button className={styles.details_button} onClick={() => handleContestClick(contest._id)}><FaArrowRightToBracket size={24} color="white" /></button>
+                    <button className={styles.details_button} onClick={() => handleContestClick(contest._id)}><BsArrowRightCircle size={24} color="white" /></button>
                   </td>
                 </tr>
               ))}

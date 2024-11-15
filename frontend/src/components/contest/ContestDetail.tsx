@@ -17,7 +17,7 @@ interface ContestDetailProps {
  * @returns {JSX.Element} The rendered ContestDetail component.
  */
 const ContestDetail: React.FC<ContestDetailProps> = ({ contestDetail }) => {
-  const { name, description, contestExp, machines, startTime, endTime} = contestDetail;
+  const { name, contestExp, machines, startTime, endTime} = contestDetail;
 
   return (
     <div className={styles.contest_detail_container}>
@@ -34,9 +34,6 @@ const ContestDetail: React.FC<ContestDetailProps> = ({ contestDetail }) => {
           ) : (
             <p>N/A</p>
           )}
-          </div>
-          <div className={styles.contest_description}>
-            <p>Description: {description}</p>
           </div>
           <div className={styles.contest_reward_box}>
             <p className={styles.text}>Reward:</p>

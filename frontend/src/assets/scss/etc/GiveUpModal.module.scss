@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
 
-  padding: 20px;
+  padding: 0 24px 24px;
   text-align: left;
   z-index: 1000;
   gap: 10px;
@@ -31,7 +31,7 @@
   .button_group {
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
+    gap: 8px;
 
     button {
       padding: 10px 20px;
@@ -52,7 +52,9 @@
         font-family: var(--font-ibm-plex-sans);
 
         &:hover {
-          background-color: #BDBDBD;
+          background-color: var(--color-red-rosso);
+          border: 2px solid var(--color-black);
+          color: var(--color-white);
         }
       }
 
@@ -61,7 +63,7 @@
         color: #ebf4f8;
 
         &:hover {
-          background-color: #7f8c8d;
+          background-color: #008000;
         }
       }
     }

@@ -32,14 +32,14 @@ const Main: React.FC<MainProps> = ({ title, description, children }) => {
         <div className={`${styles.sidebar_container} ${isCollapsed ? styles.collapsed : ''}`}>
           <Sidebar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />
         </div>
-
-        <div className={styles.upper_bar} />
+        <div className={styles.upper_container}>
+          <div className={styles.upper_bar} />
+          <div className={styles.profile_container}>
+            <Profile />
+          </div>
+        </div>
         <div className={`${styles.props_container} ${isCollapsed ? styles.collapsed : ''}`}>
           {children}
-        </div>
-
-        <div className={styles.profile_container}>
-          <Profile />
         </div>
       </div>
     </HelmetProvider>

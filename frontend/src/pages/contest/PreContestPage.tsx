@@ -5,6 +5,8 @@ import { ContestDetail as ContestDetailType } from '../../types/Contest';
 import { getContestDetails, participateInContest } from '../../api/axiosContest';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
 import Modal from '../../components/modal/Modal'; // Importing the Modal component
+import styles from '../../assets/scss/contest/PreContestPage.module.scss';
+
 
 const PreContestPage: React.FC = () => {
   const { contestId } = useParams<{ contestId: string }>();
@@ -96,17 +98,11 @@ const PreContestPage: React.FC = () => {
 
   return (
     <Main title="Pre Contest" description="Pre Contest 화면입니다.">
-      <div className="pre-contest-page">
-        <div className="contest-name">
-          <h2>You are about to play {contestDetail.name}</h2>
-        </div>
-        <div className="contest-description">
-          <p>{contestDetail.description}</p>
-        </div>
-        <div className="contest-exp">
-          <p>Reward(EXP): {contestDetail.contestExp}</p>
-        </div>
-        <div className="contest-rules">
+      <div className={styles.pre_contest_page}>
+        <div className={styles.contest_name}> You are about to play {contestDetail.name}</div>
+        <div className={styles.contest_description}>{contestDetail.description}</div>
+        <div className={styles.contest_exp}> Reward(EXP): {contestDetail.contestExp}</div>
+        <div className={styles.contest_rules}>
           <p>Rules:</p>
           <ul>
             <li>1. You can only play one machine at a time.</li>
@@ -119,14 +115,14 @@ const PreContestPage: React.FC = () => {
             <li>8. Good luck!</li>
           </ul>
         </div>
-        <div className="contest-warning">
+        <div className={styles.contest_warning}>
           <p>
             Warning: Once you start the contest, the game will be recorded.
             <br />
             If you leave the contest, you will be disqualified.
           </p>
         </div>
-        <div className="contest-start">
+        <div className={styles.contest_start}>
           <button onClick={handleStartContest}>Start Contest</button>
         </div>
       </div>

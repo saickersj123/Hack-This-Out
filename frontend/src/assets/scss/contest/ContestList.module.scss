@@ -1,11 +1,9 @@
+@use "../style" as *;
+
 .contest_list_container {
-    width: 75%;
-    min-width: 1200px;
-    height: 750px;
-    border-radius: 30px;
+    @include background_set;
     overflow: hidden;
-    background-color: var(--color-list-background);
-    padding: 30px 50px;
+    padding: 32px 48px;
     gap: 25px;
 
     .contest_list_title {
