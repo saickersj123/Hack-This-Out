@@ -22,8 +22,8 @@ const CurrentUserInfo: React.FC<CurrentUserInfoProps> = ({ currentUser }) => {
                 <div className={styles.info_container}>
                     <Avatar alt={myUsername || ''} sx={{ 
                         backgroundColor: avatarBgColor,
-                        width: 100, 
-                        height: 100, 
+                        width: 64, 
+                        height: 64, 
                         fontSize: '3rem' 
                     }}>
                         {myUsername?.charAt(0).toUpperCase() || ''}

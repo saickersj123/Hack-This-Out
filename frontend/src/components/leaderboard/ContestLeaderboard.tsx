@@ -33,6 +33,7 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
         }
     };
 
+    console.log(currentLeaderboard);
     return (
         <div className={styles.board}>
             <div className={styles.leaderboard_container}>
@@ -49,17 +50,17 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
                             <div className={styles.leaderboard_data} key={`${user._id}-${index}`}>
                                 <div className={styles.leaderboard_rank}>
                                     {/* 메달 아이콘과 순위 번호 함께 표시 */}
-                                    {index === 0 ? (
+                                    {startIdx + index + 1 === 1 ? (
                                         <>
                                             <FaMedal className={styles.goldMedal} size={32} />
                                             <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                         </>
-                                    ) : index === 1 ? (
+                                    ) : startIdx + index + 1 === 2 ? (
                                         <>
                                             <FaMedal className={styles.silverMedal} size={32} />
                                             <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                         </>
-                                    ) : index === 2 ? (
+                                    ) : startIdx + index + 1 === 3 ? (
                                         <>
                                             <FaMedal className={styles.bronzeMedal} size={32} />
                                             <span className={styles.high_rank}>{startIdx + index + 1}</span>

@@ -1,6 +1,6 @@
 @mixin background_set {
     width: var(--container-width);
-    height: var(--container-height);
+    min-height: var(--container-height);
     background: var(--color-background-transparent);
     border-radius: 24px;
 }
