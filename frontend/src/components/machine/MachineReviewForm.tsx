@@ -104,7 +104,7 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
       {error && <p className='error-message'>{error}</p>}
       
       <div className='machine-review-form-rating'>
-        <label htmlFor='rating'>Rating</label>
+        <label htmlFor='rating' className='rating'>Rating</label>
         <Box
           sx={{
             '& > legend': { mt: 2 },
@@ -112,6 +112,7 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
         >
           <Rating
             name="rating"
+            className="test"
             value={rating}
             precision={0.5}
             onChange={handleRatingChange}

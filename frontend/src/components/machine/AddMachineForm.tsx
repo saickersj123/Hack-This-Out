@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createMachine } from '../../api/axiosMachine';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/scss/machine/AddMachineForm.scss';
+import ArrowLeftOutlinedIcon from '@mui/icons-material/ArrowLeftOutlined';
 
 interface MachineFormData {
   name: string;
@@ -115,7 +116,7 @@ const AddMachineForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className='add-machine-form'>
       <div className='back-button'>
-        <button type='button' onClick={() => navigate(-1)}>back</button>
+        <button className="IconButton" type='button' onClick={() => navigate(-1)}><ArrowLeftOutlinedIcon style={{ color: 'white', fontSize: "34px" }} /></button>
       </div>
       <h2>Add New Machine</h2>
 
@@ -158,49 +159,6 @@ const AddMachineForm: React.FC = () => {
           </select>
         </div>
 
-        <div className='Description-container'>
-          <label htmlFor='description'>Machine Description : </label>
-          <textarea
-            ref={descriptionRef}
-            id='description'
-            name='description'
-            value={formData.description}
-            placeholder='Description of the machine here'
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className='hint-container'>
-          <label>Hints : </label>
-          {formData.hints.map((hint, index) => (
-            <div className='key-container' key={index}>
-              <input
-                className=''
-                type='text'
-                value={hint}
-                onChange={(e) => handleHintChange(index, e.target.value)}
-                placeholder='Hint'
-              />
-              <input
-                type='number'
-                value={formData.hintCosts[index]}
-                onChange={(e) =>
-                  handleHintCostChange(index, Number(e.target.value))
-                }
-                placeholder='Cost'
-                min={0}
-              />
-              {formData.hints.length > 1 && (
-                <button className='remove-hint' type='button' onClick={() => removeHint(index)}>
-                  Remove
-                </button>
-              )}
-              <button className='add-hint' type='button' onClick={addHint}>
-                Add Hint
-              </button>
-            </div>
-          ))}
-        </div>
 
         <div className='amiId-container'>
           <label htmlFor='amiId'>AMI ID<span style={{ color: 'red' }}>*</span> :
@@ -231,10 +189,20 @@ const AddMachineForm: React.FC = () => {
           />
         </div>
 
-
+        <div className='Description-container'>
+          <label htmlFor='description'>Machine Description <span style={{ color: 'red' }}>*</span> : </label>
+          <textarea
+            ref={descriptionRef}
+            id='description'
+            name='description'
+            value={formData.description}
+            placeholder='Description of the machine here'
+            onChange={handleChange}
+          />
+        </div>
 
         <div className='exp-container'>
-          <label htmlFor='exp'>EXP :
+          <label htmlFor='exp'>EXP <span style={{ color: 'red' }}>*</span> :
           </label>
           <input
             type='number'
@@ -245,6 +213,39 @@ const AddMachineForm: React.FC = () => {
             min={0}
           />
         </div>
+
+        <div className='hint-container'>
+          <label>Hints <span style={{ color: 'red' }}>*</span> : </label>
+          {formData.hints.map((hint, index) => (
+            <div className='key-container' key={index}>
+              <input
+                className=''
+                type='text'
+                value={hint}
+                onChange={(e) => handleHintChange(index, e.target.value)}
+                placeholder='Hint'
+              />
+              <input
+                type='number'
+                value={formData.hintCosts[index]}
+                onChange={(e) =>
+                  handleHintCostChange(index, Number(e.target.value))
+                }
+                placeholder='Cost'
+                min={0}
+              />
+              {formData.hints.length > 1 && (
+                <button className='remove-hint' type='button' onClick={() => removeHint(index)}>
+                  Remove
+                </button>
+              )}
+              <button className='add-hint' type='button' onClick={addHint}>
+                Add Hint
+              </button>
+            </div>
+          ))}
+        </div>
+
 
         <div className='add-machine-form-button'>
           <button type='submit'>Create Machine</button>
