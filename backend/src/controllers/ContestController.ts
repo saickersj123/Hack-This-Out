@@ -11,27 +11,6 @@ import User from '../models/User';
 export const createContest = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, description, startTime, endTime, machines, contestExp } = req.body;
-        
-        // Parse startTime and endTime as UTC dates
-        const parsedStartTime = new Date(startTime);
-        const parsedEndTime = new Date(endTime);
-
-        if (isNaN(parsedStartTime.getTime()) || isNaN(parsedEndTime.getTime())) {
-            res.status(400).json({ 
-                message: "ERROR", 
-                msg: 'Invalid startTime or endTime.' 
-            });
-            return;
-        }
-
-        // Validate startTime and endTime
-        if (parsedStartTime >= parsedEndTime) {
-            res.status(400).json({ 
-                message: "ERROR", 
-                msg: 'Start time must be before end time.' 
-            });
-            return;
-        }
 
         // Validate machines
         const machineDocs = await Machine.find({ _id: { $in: machines } });

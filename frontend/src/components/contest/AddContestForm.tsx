@@ -42,7 +42,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
         startTime: '',
         endTime: '',
         machines: [{ id: '', name: '' }],
-        contestExp: 100,
+        contestExp: 0,
     });
     const [loading, setLoading] = useState(false);
     const [allMachines, setAllMachines] = useState<Machine[]>([]);
@@ -231,15 +231,12 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
         }
         setLoading(true);
         try {
-            const utcStartTime = new Date(startTime).toISOString();
-            const utcEndTime = new Date(endTime).toISOString();
-
             const machineIds = machines.map(machine => machine.id);
             const data = await createContest({
                 name,
                 description,
-                startTime: utcStartTime,
-                endTime: utcEndTime,
+                startTime,
+                endTime,
                 machines: machineIds,
                 contestExp,
             });
@@ -314,7 +311,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                     value={contestExp}
                     onChange={(e) => handleChange(e)}
                     placeholder="Enter the EXP"
-                    min="100"
+                    min="50"
                     required
                 />
             </div>

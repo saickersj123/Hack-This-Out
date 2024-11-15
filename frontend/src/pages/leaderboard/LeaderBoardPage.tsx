@@ -97,6 +97,7 @@ const LeaderBoardPage: React.FC = () => {
           <LeaderboardTable 
             leaderboard={leaderboard} 
             currentUser={currentUser} 
+            isContest={false}
           />
         )}
       </div>

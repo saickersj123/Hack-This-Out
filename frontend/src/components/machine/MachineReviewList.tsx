@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getMachineReviews } from '../../api/axiosMachine';
+<<<<<<< HEAD
 import '../../assets/scss/machine/MachineReviewList.scss';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
@@ -11,8 +12,10 @@ interface Review {
   content: string;
   // Add other review properties as needed
 }
+=======
 import { Review } from '../../types/Machine';
 import '../../assets/scss/machine/MachineReviewList.scss';
+>>>>>>> parent of cd598be1 (Merge branch 'jiwoo' of  into jiwoo)
 
 interface MachineReviewListProps {
   machineId: string;
@@ -51,8 +54,10 @@ const MachineReviewList: React.FC<MachineReviewListProps> = ({ machineId }) => {
   }
 
   return (
-    <div className='machine-review-list'>
-      <h3>Reviews</h3>
+    <div className='machine-review-container'>
+      <div className='machine-review-title'>
+        <h2>Reviews</h2>
+      </div>
       <table className='machine-review-table'>
         {reviews.length === 0 ? (
           <tbody>
@@ -71,22 +76,9 @@ const MachineReviewList: React.FC<MachineReviewListProps> = ({ machineId }) => {
             </thead>
             <tbody>
               {reviews.map((review) => (
-                <tr key={review._id}>
+                <tr key={review.reviewerId}>
                   <td>{review.reviewerName}</td>
-                  <td>
-                    <Box
-                      sx={{
-                        '& > legend': { mt: 2 },
-                      }}
-                    >
-                      <Rating
-                        name={`read-only-rating-${review._id}`}
-                        value={Number(review.rating)}
-                        precision={0.5}
-                        readOnly
-                      />
-                    </Box>
-                  </td>
+                  <td>{review.rating}</td>
                   <td>{review.content}</td>
                 </tr>
               ))}

@@ -5,10 +5,10 @@ import Main from '../../components/main/Main';
 import { getContestDetails, getContestStatus, getLeaderboardByContest, getMyRankinContest } from '../../api/axiosContest';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
 import { CurrentUser } from '../../types/CurrentUser';
-import ContestLeaderboard from '../../components/leaderboard/ContestLeaderboard';
+import LeaderboardTable from '../../components/leaderboard/LeaderboardTable';
 import { User } from '../../types/User';
 import { ContestStatus } from '../../types/Contest';
-//import styles from '../../assets/scss/contest/ContestDetailPage.module.scss';
+//import '../../assets/scss/contest/ContestDetailPage.scss';
 
 /**
  * Component representing the Contest Detail Page.
@@ -114,7 +114,7 @@ const ContestDetailPage: React.FC = () => {
         setContestStatus(contestStatus);
       } catch (error: any) {
         console.error('Error fetching contest status:', error.message || error);
-        setError('Failed to fetch contest status.');
+      setError('Failed to fetch contest status.');
       }
     };
     fetchContestStatus();
@@ -171,9 +171,10 @@ const ContestDetailPage: React.FC = () => {
         </button>
       </div>
       {contestStatus.isActive && contestStatus.isStarted && (
-        <ContestLeaderboard
+        <LeaderboardTable
           leaderboard={leaderboard}
           currentUser={currentUser}
+          isContest={true}
         />
       )}
     </Main>

@@ -36,8 +36,6 @@ import {
   getUserProgress,
   giveUpMachine,
   startPlayingMachine,
-  getLatestMachine,
-  getMostPlayedMachine,
 } from '../controllers/MachineController.js';
 
 const MachineRoutes = express.Router();
@@ -99,12 +97,6 @@ MachineRoutes.post('/:machineId/give-up', verifyToken, giveUpMachine);
 
 // Route to start playing a machine
 MachineRoutes.post('/:machineId/start-play', verifyToken, startPlayingMachine);
-
-// Route to get latest machine
-MachineRoutes.get('/latest', verifyToken, getLatestMachine);
-
-// Route to get most played machine
-MachineRoutes.get('/most-played', verifyToken, getMostPlayedMachine);
 
 // Admin Routes
 // Route to get all machines(Admin only)

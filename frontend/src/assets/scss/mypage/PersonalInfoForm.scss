@@ -1,257 +1,145 @@
 @use '../setting/mixin.scss';
 
 .personalInfo-container {
-    width: clamp(85%, 90%, 95%);
-    height: auto;
+    width: 80%;
+    height: 80%;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    margin-bottom: 1.875rem;
 
     .info-container {
         width: 100%;
-        height: auto;
+        height: 320px;
         display: flex;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 1.25rem;
-        padding: 2rem;
-        border: 0.0625rem solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(0.625rem);
 
         .avatar-container {
-            width: clamp(25%, 30%, 35%);
-            min-width: clamp(200px, 12.5rem, 250px);
-            padding: 0.9375rem;
+            width: 30%;
+            min-width: 200px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; // 가로 중앙 정렬
 
             .avatar-img {
-                width: clamp(160px, 180px, 200px);
-                height: clamp(160px, 180px, 200px);
-                border-radius: 50%;
-                border: 3px solid rgba(255, 255, 255, 0.1);
-                object-fit: cover;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-
-                &:hover {
-                    border-color: var(--color-primary);
-                    transform: scale(1.02);
-                }
+                width: 200px;
+                height: 200px;
+                border-radius: 100px;
             }
 
             .avatar-form {
                 width: 200px;
-                margin-top: 24px;
+                height: 50px;
                 display: flex;
                 justify-content: center;
-                align-items: center;
-                gap: 8px;
+                align-items: stretch;
+                margin-top: 15px;
 
                 .avatar-input {
-                    width: 120px;
-                    padding: 10px 16px;
-                    background: rgba(255, 255, 255, 0.08);
-                    border-radius: 10px;
-                    color: var(--color-white);
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    font-weight: 500;
-                    white-space: nowrap;
-                    text-align: center;
-                    line-height: 1.2;
+                    margin-top: 5px;
+                    margin-right: 15px;
+                    width: 100px;
+                    height: 32px;
 
+                    color: black;
+                    background: var(--white100);
+                    border-radius: 12px;
+
+                    font-size: 16px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     &:hover {
-                        background: rgba(255, 255, 255, 0.12);
-                        transform: translateY(-1px);
+                      background: rgb(77,77,77);
+                      color: #fff;
                     }
                 }
 
                 .avatar-button {
-                    width: 60px;
-                    height: 36px;
-                    padding: 0;
-                    border-radius: 10px;
-                    background: var(--color-primary);
-                    color: var(--color-white);
-                    border: none;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    font-weight: 500;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    width: 50px;
+                    height: 32px;
+                    border-radius: 12px;
+                    margin-top: 5px;
+                    margin-left: 10px;
 
                     &:hover {
-                        background: var(--color-primary-dark);
-                        transform: translateY(-1px);
-                    }
+                        background: rgb(77,77,77);
+                        color: #fff;
+                      }
                 }
             }
         }
 
         .user-container {
-            flex: 1;
-            padding: 0 32px;
+            width: 70%;
             display: flex;
             flex-direction: column;
-            gap: 20px;
 
-            .name-container,
-            .email-container,
-            .username-container,
+            .name-container {
+                font-size: 24px;
+                padding: 20px 15px 10px;
+            }
+
+            .email-container {
+                text-align: end;
+                padding: 20px 15px 10px;
+            }
+
+            .username-container {
+                padding-left: 15px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid var(--black300);
+            }
+
             .exp-container {
-                padding: 16px;
-                background: rgba(255, 255, 255, 0.02);
-                border-radius: 12px;
-                transition: all 0.2s ease;
-                border: 1px solid rgba(255, 255, 255, 0.05);
-
-                &:hover {
-                    background: rgba(255, 255, 255, 0.04);
-                    transform: translateX(2px);
-                }
-
-                label {
-                    font-size: 16px;
-                    color: var(--color-gray);
-                    font-weight: 500;
-                }
+                text-align: end;
+                padding: 10px 15px 10px;
             }
         }
     }
 
     .modify-container {
+        width: 100%;
+        height: 350px;
+        flex-grow: 1;
         display: flex;
-        gap: 32px;
-        padding: 32px;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        flex-wrap: wrap;
-        backdrop-filter: blur(10px);
+        padding-top: 20px;
+        
+        border-top: 2px solid var(--black300);
 
         input {
-            width: 100%;
-            height: 48px;
-            padding: 0 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 250px;
+            height: 40px;
+            padding-left: 10px;
+            margin: 10px 5px;
             border-radius: 12px;
-            color: var(--color-white);
-            font-size: 16px;
-            transition: all 0.2s ease;
-
-            &::placeholder {
-                color: rgba(255, 255, 255, 0.4);
-            }
-
-            &:focus {
-                outline: none;
-                border-color: var(--color-primary);
-                background: rgba(255, 255, 255, 0.08);
-                box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
-            }
         }
 
         button {
-            width: clamp(70px, 80px, 90px);
-            height: clamp(36px, 40px, 44px);
-            padding: 0;
-            background: transparent;
-            color: var(--color-white);
-            border: 1px solid rgba(252, 252, 233, 0.12) !important;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 14px;
-            font-weight: 600;
-            margin-left: auto;
-            margin-right: 5px;
-
-            &:hover {
-                background: var(--color-primary);
-                transform: translateY(-1px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
+            width: 60px;
+            height: 40px;
+            padding: 5px;
+            margin: 10px 5px;
+            border-radius: 12px;
         }
 
-        .name-form,
-        .password-form {
-            flex: 1;
+        .name-form {
+            width: 50%;
             min-width: 300px;
-            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            position: relative;
-            
-            h3 {
-                font-size: 22px;
-                margin-bottom: 16px;
-                color: var(--color-white);
-                font-weight: 600;
-                letter-spacing: -0.5px;
-            }
-
-            .input-wrapper {
-                position: relative;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
-
-                input {
-                    width: calc(100% - 90px);
-                }
-
-                button {
-                    position: absolute;
-                    right: 0;
-                    top: 50%;
-                    transform: translateY(-50%);
-                }
-            }
-
-            .button-container {
-                width: 100%;
-                display: flex;
-                justify-content: flex-end; 
-            }
-
-            button {
-                width: clamp(70px, 80px, 90px);
-                height: clamp(36px, 40px, 44px);
-                padding: 0;
-                background: transparent;
-                color: var(--color-white);
-                border: 2px solid var(--color-primary);
-                border-radius: 8px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                font-size: 14px;
-                font-weight: 600;
-
-                &:hover {
-                    background: var(--color-primary);
-                    transform: translateY(-1px);
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                }
-            }
+            padding-left: 20px;
         }
-
-        .password-form button {
-            background: transparent;
-            border: 2px solid var(--color-primary);
-            
-            &:hover {
-                background: var(--color-primary);
-            }
+        
+        .password-form {
+            width: 50%;
+            min-width: 450px;
+            display: flex;
+            flex-direction: column;
+            padding-left: 40px;
         }
     }
 }
 
 #file {
     display: none;
-}
+  }

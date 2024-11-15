@@ -4,7 +4,7 @@
     height: 750px;
     border-radius: 30px;
     overflow: hidden;
-    background-color: var(--color-list-background);
+    background-color: #FFFFFFCC;
     padding: 30px 50px;
     gap: 25px;
 
@@ -16,7 +16,7 @@
         letter-spacing: -0.01em;
         font-weight: 600;
         font-family: var(--font-ibm-plex-sans);
-        color: var(--color-white);
+        color: #000;
         text-align: left;
         height: 62px;
     }
@@ -29,7 +29,7 @@
             display: flex;
             justify-content: space-around;
             padding: 20px 0;
-            border-bottom: 1px solid var(--color-list-border);
+            border-bottom: 1px solid #EEEEEE;
 
             .table_name,
             .table_description,
@@ -70,7 +70,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-bottom: 1px solid var(--color-list-border);
+            border-bottom: 1px solid #EEEEEE;
 
             .contest_name,
             .contest_description,
@@ -87,7 +87,7 @@
                 font-size: 18px;
                 letter-spacing: -0.01em;
                 font-weight: 600;
-                color: var(--color-white-200);
+                color: #292D32;
             }
 
             .contest_name,
@@ -114,7 +114,6 @@
 
             .contest_details {
                 justify-content: center;
-
                 .details_button {
                     width: 24px;
                     height: 24px;
@@ -129,14 +128,14 @@
     background-color: rgba(22, 192, 152, 0.38);
     border: 1px solid #00b087;
     box-sizing: border-box;
-    color: #008767 !important;
+    color: #008767 !important; 
     border-radius: 4px;
     font-size: 14px;
     padding: 4px 12px;
 }
 
 .inactive {
-    background-color: #ffc5c5;
+    background-color:#ffc5c5;
     border: 1px solid #DF0404;
     box-sizing: border-box;
     color: #DF0404 !important;
