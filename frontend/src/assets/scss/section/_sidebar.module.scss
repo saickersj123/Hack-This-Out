@@ -1,6 +1,6 @@
 .sidebarMenu {
   position: relative;
-  background-color: #13151a;
+  background-color: var(--color-list-background);
   width: var(--sidebar-width);
   height: 100%;
   display: flex;
@@ -104,7 +104,6 @@
           padding-left: 10px;
           line-height: 160%;
           opacity: 1;
-          transition-delay: 1s;
         }
       }
     }
@@ -142,7 +141,6 @@
   background-color: #D1D1D1;
   /* 선택된 항목의 배경 색상 */
   border-radius: 5px;
-  pointer-events: none;
 
   .label {
     color: #393939;
@@ -150,5 +148,11 @@
 
   .menuIcon {
     color: #000000;
+  }
+
+  &:hover {
+    .label {
+      color: var(--color-white);
+    }
   }
 }

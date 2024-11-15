@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getActiveMachines } from '../../api/axiosMachine';
 import '../../assets/scss/machine/MachineList.scss';
 import { useNavigate } from 'react-router-dom';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -132,16 +134,19 @@ const MachineList: React.FC = () => {
                   <td className='machine-name'>{machine.name}</td>
                   <td className='machine-category'>{machine.category}</td>
                   <td className='machine-rating'>
-                    <div title={`Rating: ${machine.rating.toFixed(1)}`}>
-                      <StarRatings
-                        rating={machine.rating}
-                        starRatedColor="orange"
-                        numberOfStars={5}
-                        name='rating'
-                        starDimension="20px"
-                        starSpacing="3px"
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Rating
+                        name={`read-only-rating-${machine._id}`}
+                        value={Number(machine.rating)}
+                        precision={0.5}
+                        readOnly
                       />
-                    </div>
+                    </Box>
                   </td>
                   <td className='machine-playCount'>{machine.playerCount}</td>
                   <td className='machine-details'>
@@ -151,9 +156,9 @@ const MachineList: React.FC = () => {
               ))
             )}
           </tbody>
-        </table>
-      </div>
+      </table>
     </div>
+    </div >
   );
 };
 

@@ -1,5 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getMachineReviews } from '../../api/axiosMachine';
+import '../../assets/scss/machine/MachineReviewList.scss';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
+
+interface Review {
+  _id: string;
+  reviewerName: string;
+  rating: number;
+  content: string;
+  // Add other review properties as needed
+}
 import { Review } from '../../types/Machine';
 import '../../assets/scss/machine/MachineReviewList.scss';
 
@@ -40,10 +51,8 @@ const MachineReviewList: React.FC<MachineReviewListProps> = ({ machineId }) => {
   }
 
   return (
-    <div className='machine-review-container'>
-      <div className='machine-review-title'>
-        <h2>Reviews</h2>
-      </div>
+    <div className='machine-review-list'>
+      <h3>Reviews</h3>
       <table className='machine-review-table'>
         {reviews.length === 0 ? (
           <tbody>
@@ -62,9 +71,22 @@ const MachineReviewList: React.FC<MachineReviewListProps> = ({ machineId }) => {
             </thead>
             <tbody>
               {reviews.map((review) => (
-                <tr key={review.reviewerId}>
+                <tr key={review._id}>
                   <td>{review.reviewerName}</td>
-                  <td>{review.rating}</td>
+                  <td>
+                    <Box
+                      sx={{
+                        '& > legend': { mt: 2 },
+                      }}
+                    >
+                      <Rating
+                        name={`read-only-rating-${review._id}`}
+                        value={Number(review.rating)}
+                        precision={0.5}
+                        readOnly
+                      />
+                    </Box>
+                  </td>
                   <td>{review.content}</td>
                 </tr>
               ))}

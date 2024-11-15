@@ -6,6 +6,8 @@ import {
 } from '../../api/axiosMachine';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import '../../assets/scss/machine/MachineReviews.scss';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
 
 interface Review {
   _id: string;
@@ -84,8 +86,19 @@ const MachineReviews: React.FC<MachineReviewsProps> = ({ machineId }) => {
                 <span> - {new Date(review.createdAt).toLocaleDateString()}</span>
               </div>
               <div className='review-body'>
+                <Box
+                  sx={{
+                    '& > legend': { mt: 2 },
+                  }}
+                >
+                  <Rating
+                    name={`read-only-rating-${review._id}`}
+                    value={Number(review.rating)}
+                    precision={0.5}
+                    readOnly
+                  />
+                </Box>
                 <p>{review.content}</p>
-                <p>Rating: {review.rating.toFixed(1)}</p>
               </div>
               {/* Conditionally render the delete button */}
               {(currentUser?.id === review.reviewerId || currentUser?.isAdmin) && (

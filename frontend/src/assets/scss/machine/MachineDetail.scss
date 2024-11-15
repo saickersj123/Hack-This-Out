@@ -99,3 +99,41 @@
         }
     }
 }
+
+.machine-detail-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  .machine-detail-content {
+    h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    p {
+      margin: 10px 0;
+      font-size: 1rem;
+      color: #555;
+
+      strong {
+        color: #333;
+      }
+    }
+
+    /* Adjust Rating component */
+    .MuiRating-root {
+      color: #ffd700; /* Gold color for filled stars */
+    }
+
+    .MuiRating-iconEmpty {
+      color: #ccc; /* Grey color for empty stars */
+    }
+  }
+}
+
