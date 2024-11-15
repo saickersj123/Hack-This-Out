@@ -4,10 +4,12 @@ import '../../assets/scss/machine/MachineList.scss';
 import { useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
 
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { FaArrowRightToBracket } from "react-icons/fa6";
+import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
 
 interface Machine {
   _id: string;
@@ -92,7 +94,7 @@ const MachineList: React.FC = () => {
           <thead>
             <tr className='table-head'>
               <th className='table-image'></th>
-              <th className='table-name'>Machine name</th>
+              <th className='table-name'>Machine Name</th>
               <th className='table-category'>Category
                 <ClickAwayListener onClickAway={handleClickAway}>
                   <div className='category-filter-toggle'>
@@ -124,39 +126,49 @@ const MachineList: React.FC = () => {
           <tbody>
             {filteredMachines.length === 0 ? (
               <tr>
-                <td colSpan={5} className="no-data">No machines available.</td>
+                <td colSpan={6} className="no-data">No machines available.</td>
               </tr>
             ) : (
-              filteredMachines.map((machine) => (
-                <tr key={machine._id}>
-                  <td className='machine-img'></td>
-                  <td className='machine-name'>{machine.name}</td>
-                  <td className='machine-category'>{machine.category}</td>
-                  <td className='machine-rating'>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Rating
-                        name={`read-only-rating-${machine._id}`}
-                        value={Number(machine.rating)}
-                        precision={0.5}
-                        readOnly
-                      />
-                    </Box>
-                  </td>
-                  <td className='machine-playCount'>{machine.playerCount}</td>
-                  <td className='machine-details'>
-                    <button className='details-button' onClick={() => handleMachineClick(machine)}><FaArrowRightToBracket size={24} /></button>
-                  </td>
-                </tr>
-              ))
+              filteredMachines.map((machine) => {
+                const avatarColorIndex = getAvatarColorIndex(machine.name);
+                const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
+                return (
+                  <tr key={machine._id}>
+                    <td className='machine-img'>
+                      <Avatar
+                        sx={{ backgroundColor: avatarBgColor, width: 50, height: 50 }}
+                      >
+                        {machine.name.charAt(0).toUpperCase()}
+                      </Avatar>
+                    </td>
+                    <td className='machine-name'>{machine.name}</td>
+                    <td className='machine-category'>{machine.category}</td>
+                    <td className='machine-rating'>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Rating
+                          name={`read-only-rating-${machine._id}`}
+                          value={Number(machine.rating)}
+                          precision={0.5}
+                          readOnly
+                        />
+                      </Box>
+                    </td>
+                    <td className='machine-playCount'>{machine.playerCount}</td>
+                    <td className='machine-details'>
+                      <button className='details-button' onClick={() => handleMachineClick(machine)}><FaArrowRightToBracket size={24} /></button>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
-      </table>
-    </div>
+        </table>
+      </div>
     </div >
   );
 };

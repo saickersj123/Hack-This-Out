@@ -1,5 +1,5 @@
 .machine-banner-container {
-  width: 80%;
+  width: 60%;
   max-width: 1200px;
   margin: 40px auto;
   
@@ -16,11 +16,16 @@
       color: #333;
     }
     
+    .machine-avatar {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px auto;
+    }
+    
     .machine-details {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       
       h4 {
         margin-bottom: 10px;

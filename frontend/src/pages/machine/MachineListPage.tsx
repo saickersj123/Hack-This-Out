@@ -12,22 +12,6 @@ const MachineListPage: React.FC = () => {
         <Main>
             <MachineBanner />
             <div>
-                <div className="rank-machine">
-                    <svg className="rank-machine-background" viewBox="0 0 1149 213" fill="none"
-                        xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                        <rect width="1149" height="213" rx="30" fill="url(#paint0_linear_3_354)"></rect>
-                        <line x1="575.25" y1="-0.000305176" x2="575.25" y2="213" stroke="#A5A5A5"></line>
-                        <defs>
-                            <linearGradient id="paint0_linear_3_354" x1="0" y1="106.5" x2="1149" y2="106.5"
-                                gradientUnits="userSpaceOnUse">
-                                <stop stop-color="white"></stop>
-                                <stop offset="0.635" stop-color="#C7DCF5"></stop>
-                                <stop offset="1" stop-color="#8EB9EA"></stop>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
-
                 <div className="register-machine">
                     <svg className="background-svg" viewBox="0 0 229 213" fill="none" xmlns="http://www.w3.org/2000/svg"
                         preserveAspectRatio="none">
@@ -42,7 +26,6 @@ const MachineListPage: React.FC = () => {
                             </linearGradient>
                         </defs>
                     </svg>
-
                     <svg className="camera-svg" width="59" height="58" viewBox="0 0 59 58" fill="none"
                         xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
                         <path
@@ -73,7 +56,6 @@ const MachineListPage: React.FC = () => {
                         </button>
                     </Link>
                 </div>
-
                 <div>
                     <MachineList />
                 </div>

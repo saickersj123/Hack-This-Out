@@ -5,7 +5,6 @@ import { AuthUserContext } from '../../contexts/AuthUserContext';
 import styles from '../../assets/scss/section/_profile.module.scss';
 import { useProfileContext } from '../../contexts/ProfileContext';
 
-import user_default from '../../assets/img/icon/profile_default.png';
 import down_arrow from '../../assets/img/icon/down_arrow.svg';
 import up_arrow from '../../assets/img/icon/up_arrow.svg';
 import chat from '../../assets/img/icon/chat_icon.svg';
@@ -14,6 +13,8 @@ import personal_info from '../../assets/img/icon/personal_info.svg';
 import darkmode_icon from '../../assets/img/icon/darkmode_icon.svg';
 import darkmode_switch from '../../assets/img/icon/darkmode_switch.svg';
 import arrow_left from '../../assets/img/icon/Arrow-Left.svg';
+import { Avatar } from '@mui/material';
+import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
 
 interface MenuItemProps {
     onClick?: () => void;
@@ -48,13 +49,21 @@ const Profile: React.FC = () => {
             }
         }
     };
+    const avatarColorIndex = getAvatarColorIndex(currentUser?.username || '');
+    const avatarBgColor = avatarBackgroundColors[avatarColorIndex]; 
 
     return (
         <div className={styles.userinfoDark}>
             <div className={styles.userinfoDark_container}>
                 <div className={styles.userinfo}>
                     <div className={styles.rectangleParent}>
-                        <img className={styles.userIcon} alt="" src={currentUser?.avatar || user_default} />
+                        <Avatar
+                            sx={{
+                                backgroundColor: avatarBgColor, width: 50, height: 50
+                            }}
+                        >
+                            {currentUser?.username?.charAt(0).toUpperCase() || ''}
+                        </Avatar>
                         <div className={styles.userinfoContainer}>
                             <div className={styles.userName}>{currentUser?.username || 'Guest'}</div>
                             <div className={styles.userEmail}>{currentUser?.email || 'Guest'}</div>

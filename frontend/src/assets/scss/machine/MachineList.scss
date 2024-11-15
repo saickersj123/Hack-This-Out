@@ -15,56 +15,74 @@
     }
   }
 
-  .machine-list-table {
+  .table-form {
     width: 100%;
-    border-collapse: collapse;
+    overflow-x: auto;
 
-    th,
-    td {
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
+    .machine-list-table {
+      width: 100%;
+      border-collapse: collapse;
 
-    th {
-      background-color: #f4f4f4;
-      color: #555;
-    }
+      thead {
+        background-color: #007bff;
+        color: #fff;
 
-    .no-data {
-      text-align: center;
-      color: #777;
-      padding: 20px 0;
-    }
+        tr {
+          th {
+            padding: 12px;
+            text-align: left;
+            position: relative;
 
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    tr:hover {
-      background-color: #f1f1f1;
-    }
-
-    button {
-      padding: 6px 12px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #0056b3;
+            &.table-image {
+              width: 60px;
+            }
+          }
+        }
       }
-    }
 
-    /* Adjust Rating component */
-    .MuiRating-root {
-      color: #ffd700; /* Gold color for filled stars */
-    }
+      tbody {
+        tr {
+          &:nth-child(even) {
+            background-color: #f2f2f2;
+          }
 
-    .MuiRating-iconEmpty {
-      color: #ccc; /* Grey color for empty stars */
+          td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+
+            &.machine-img {
+              text-align: center;
+            }
+
+            &.machine-name,
+            &.machine-category,
+            &.machine-playCount {
+              font-weight: 500;
+            }
+
+            &.machine-details {
+              text-align: center;
+
+              .details-button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #007bff;
+
+                &:hover {
+                  color: #0056b3;
+                }
+              }
+            }
+
+            &.no-data {
+              text-align: center;
+              padding: 20px;
+              color: #888;
+            }
+          }
+        }
+      }
     }
   }
 }

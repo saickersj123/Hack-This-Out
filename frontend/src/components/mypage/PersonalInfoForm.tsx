@@ -6,8 +6,11 @@ import {
 } from '../../api/axiosUser';
 import { updateUserAvatar } from '../../api/axiosMulti';
 import '../../assets/scss/mypage/PersonalInfoForm.scss';
-
+import { Avatar } from '@mui/material';
+import { getAvatarColorIndex } from '../../utils/avatars';
+import { avatarBackgroundColors } from '../../utils/avatars';
 interface UserData {
+  id: string;
   email: string;
   username: string;
   avatar: string;
@@ -17,6 +20,7 @@ interface UserData {
 
 const PersonalInfoForm: React.FC = () => {
   const [userData, setUserData] = useState<UserData>({
+    id: '',
     email: '',
     username: '',
     avatar: '',
@@ -124,11 +128,20 @@ const PersonalInfoForm: React.FC = () => {
     }
   };
 
+  const avatarColorIndex = getAvatarColorIndex(userData.username);
+  const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
+
   return (
     <div className="personalInfo-container">
       <div className="info-container">
         <div className="avatar-container">
-          <img className="avatar-img" src={userData.avatar} alt="avatar" />
+          <Avatar
+            sx={{
+              backgroundColor: avatarBgColor, width: 200, height: 200, fontSize: '5rem'
+            }}
+          >
+            {userData.username?.charAt(0).toUpperCase() || ''}
+          </Avatar>
           <form className="avatar-form" onSubmit={handleAvatarChange}>
             <label htmlFor="file">
               <div className="avatar-input">파일 업로드</div>
