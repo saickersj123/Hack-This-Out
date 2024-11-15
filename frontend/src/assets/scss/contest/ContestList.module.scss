@@ -142,3 +142,27 @@
     font-size: 14px;
     padding: 4px 12px;
 }
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab_button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.tab_button:hover {
+    background-color: #e0e0e0;
+}
+
+.active {
+    background-color: #007bff;
+    color: white;
+}

@@ -139,13 +139,15 @@ export const getActiveContests = async (req: Request, res: Response): Promise<vo
             return;
         }
         const currentTime = new Date();
-        const activeContests = contests.filter(
-            (contest) => currentTime >= contest.startTime && currentTime <= contest.endTime
-        );
+        const notStartedContests = contests.filter(contest => currentTime < contest.startTime);
+        const ongoingContests = contests.filter(contest => currentTime >= contest.startTime && currentTime <= contest.endTime);
+        const endedContests = contests.filter(contest => currentTime > contest.endTime);
         res.status(200).json({ 
             message: "OK", 
             msg: 'Active contests fetched successfully.', 
-            contests: activeContests 
+            notStartedContests: notStartedContests,
+            ongoingContests: ongoingContests,
+            endedContests: endedContests,
         });
     } catch (error: any) {
         console.error('Error fetching active contests:', error);
@@ -236,15 +238,27 @@ export const participateInContest = async (req: Request, res: Response): Promise
             });
             return;
         }
-
+        // Check if already completed
+        const alreadyCompleted = await ContestParticipation.findOne(
+            { user: userId, contest: contestId, contestCompleted: true }
+        );
+        if (alreadyCompleted) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'You have already completed this contest.', 
+                participation: alreadyCompleted
+            });
+            return;
+        }
         // Check if already participated
         const existingParticipation = await ContestParticipation.findOne(
-            { user: userId, contest: contestId, contestCompleted: true }
+            { user: userId, contest: contestId }
         );
         if (existingParticipation) {
             res.status(302).json({ 
                 message: "FOUND", 
-                msg: 'You have already completed this contest.' 
+                msg: 'You are already participating in this contest.', 
+                participation: existingParticipation
             });
             return;
         }
@@ -257,7 +271,6 @@ export const participateInContest = async (req: Request, res: Response): Promise
             });
             await newParticipation.save();
         }
-
         res.status(201).json({ 
             message: "OK", 
             msg: 'Participation successful.', 
