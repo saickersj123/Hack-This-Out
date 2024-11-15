@@ -17,7 +17,7 @@ const LeaderBoardPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>({
-    id: '',
+    _id: '',
     myRank: null,
     myLevel: null,
     myExp: null,
@@ -71,7 +71,7 @@ const LeaderBoardPage: React.FC = () => {
         // Example:
         if (response && response.myRank !== undefined && response.user) {
           setCurrentUser({
-            id: response.user._id,
+            _id: response.user._id,
             myRank: response.myRank,
             myLevel: response.user.level,
             myExp: response.user.exp,
