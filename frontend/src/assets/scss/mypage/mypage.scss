@@ -1,7 +1,6 @@
 @use '../setting/mixin' as *;
 
 .mypage-container {
-<<<<<<< HEAD
     min-width: 1200px;  
     position: relative;
     background-color: var(--color-list-background);
@@ -28,64 +27,93 @@
     scrollbar-width: none;
 
     -ms-overflow-style: none;
-=======
-    width: 100%;
-    min-width: 700px;
-    background: linear-gradient(to bottom, var(--black500), var(--black300));
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
->>>>>>> parent of cd598be1 (Merge branch 'jiwoo' of  into jiwoo)
 
     .upper-container {
-        width: 80%;
-        height: 20%;
+        width: 100%;
+        display: flex;
         align-items: center;
-        text-align: center;
-        margin-bottom: 10px;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid var(--black300);
+        justify-content: center;
+        position: relative;
+        margin-bottom: 1.25rem;
+        padding: 1rem 0;
+        border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.1);
+        font-size: 21px;  
+        font-weight: 600;
     
         .back-btn-container {
-            width: 100%;
-            height: 70px;
-            padding-bottom: 20px;
+            position: absolute;
+            left: 0;
+            height: 2.5rem;
             display: flex;
             align-items: center;
+            padding-left: 1rem;
     
             .back-button {
                 position: relative;
                 background-size: cover;
-                border: none;
-                margin: 0px;
                 background-color: transparent;
-                width: 30px;
-                min-width: 10px;
-                height: 36px;
+                border: none;
+                margin: 0;
+                width: 1.875rem;
+                min-width: 0.625rem;
+                height: 2.25rem;
                 display: flex;
-                border-radius: 4px;
-    
-                filter: brightness(0) invert(1);
+                align-items: center;
+                justify-content: center;
+                border-radius: 0.5rem;
+                color: var(--color-white);
                 cursor: pointer;
+                transition: all 0.2s ease-in-out;
     
                 &:hover {
-                    background-color: rgba(128, 128, 128, 0.4);
+                    background-color: rgba(255, 255, 255, 0.1);
+                    transform: translateX(-0.125rem);
+                }
+
+                &::before {
+                    content: "←";
+                    font-size: 1.5rem;
+                    color: var(--color-white);
                 }
             }
         }
     }
     
-    .lower-container{
+    .lower-container {
         @include flex-container;
         justify-content: center;
         flex-direction: column;
         text-align: center;
         box-sizing: border-box;
+        width: 90%;
+        padding: 1.25rem;
+        margin-top: 0.625rem;
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-white);
+            letter-spacing: -0.03125rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: var(--color-gray);
+            margin-bottom: 2.5rem;
+            opacity: 0.8;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 22.5rem;
+        }
 
         .pw-input {
-<<<<<<< HEAD
             width: 100%;
             height: 3rem;
             border-radius: 0.75rem;
@@ -131,19 +159,6 @@
                 transform: translateY(0.0625rem);
                 box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.1); 
             }
-=======
-            width: 300px;
-            height: 40px;
-            border-radius: 4px;
-            padding: 10px;
-            margin: 10px;
-        }
-
-        .pw-submit {
-            width: 70px;
-            height: 40px;
-            border-radius: 4px;
->>>>>>> parent of cd598be1 (Merge branch 'jiwoo' of  into jiwoo)
         }
     }
 }

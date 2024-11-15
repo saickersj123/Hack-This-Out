@@ -1,0 +1,44 @@
+.machine-detail-page-container {
+    padding: 2rem;
+    margin: 2rem auto;
+    width: 80%;
+    min-height: 700px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    .machine-detail-page {
+        background-color: var(--background-alt);
+        color: var(--text-primary);
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 800px;
+        margin: 20px auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .machine-detail-page-review{
+        height: 300px;
+    }
+
+    .machine-detail-page-new-review {
+        float: right;
+        margin-right:30px;
+        
+        
+        button {
+            background-color: #5b9bd5;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: #4a8ac5;
+            }
+        }
+    }
+}

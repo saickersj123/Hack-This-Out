@@ -32,7 +32,7 @@ const ContestSchema = new mongoose.Schema({
     contestExp: {
         type: Number,
         required: true,
-        default: 0
+        default: 100
     },
 }, {
     timestamps: true

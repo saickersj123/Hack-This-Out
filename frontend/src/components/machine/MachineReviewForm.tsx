@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { postMachineReview } from '../../api/axiosMachine';
 import { Review } from '../../types/Machine';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
+import '../../assets/scss/machine/MachineReviewForm.scss';
 
 interface MachineReviewFormProps {
   onReviewAdded: (review: Review) => void;
@@ -28,7 +31,7 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
   const adjustTextareaHeight = () => {
     if (reviewContentRef.current) {
       reviewContentRef.current.style.height = 'auto';
-      reviewContentRef.current.style.width = '50%';
+      reviewContentRef.current.style.width = '100%';
       reviewContentRef.current.style.height = `${reviewContentRef.current.scrollHeight}px`;
     }
   };
@@ -44,6 +47,13 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
     setFormData((prevData) => ({
       ...prevData,
       [name]: name === 'rating' ? parseFloat(value) : value,
+    }));
+  };
+
+  const handleRatingChange = (_event: React.SyntheticEvent, newValue: number | null) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      rating: newValue || 0,
     }));
   };
 
@@ -64,7 +74,7 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
     }
 
     if (!review.trim()) {
-      setError('Please write a review.');
+      setError('Please write your review.');
       return;
     }
 
@@ -89,24 +99,25 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
 
   return (
     <form className='machine-review-form' onSubmit={handleSubmit}>
-      <h2>Leave a Review</h2>
+      <h2>New Review</h2>
       
       {error && <p className='error-message'>{error}</p>}
       
       <div className='machine-review-form-rating'>
-        <label htmlFor='rating'>Rating</label>
-        <input 
-          type='number' 
-          id='rating' 
-          name='rating' 
-          value={rating === 0 ? '' : rating}
-          onChange={handleChange}
-          min={1.0}
-          max={5.0}
-          step={0.1}
-          required 
-          placeholder='1.0 - 5.0'
-        />
+        <label htmlFor='rating' className='rating'>Rating</label>
+        <Box
+          sx={{
+            '& > legend': { mt: 2 },
+          }}
+        >
+          <Rating
+            name="rating"
+            className="test"
+            value={rating}
+            precision={0.5}
+            onChange={handleRatingChange}
+          />
+        </Box>
       </div>
       
       <div className='machine-review-form-content'>

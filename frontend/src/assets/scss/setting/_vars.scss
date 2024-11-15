@@ -3,7 +3,18 @@
     --mainfont-noto: 'Noto Sans KR Variable', sans-serif;
     --mainfont-roboto: 'Roboto', sans-serif;
 
-    /* Color Variables for Dark Theme */
+    /* Font Settings */
+    font-family: var(--mainfont-noto), var(--mainfont-roboto);
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 500;
+
+    /* Font Optimization */
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
 
     /* Primary Colors */
     --primary: #3498db; /* Blue */
@@ -49,19 +60,6 @@
     --border-color: #7f8c8d;
     --suggestion-text-color: #ecf0f1;
     --suggestion-hover-background: #34495e;
-
-    /* Font Settings */
-    font-family: var(--mainfont-noto), var(--mainfont-roboto);
-    font-size: 18px;
-    line-height: 1.5;
-    font-weight: 500;
-
-    /* Font Optimization */
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-text-size-adjust: 100%;
 }
 
 /* Media Queries */
@@ -71,3 +69,4 @@
         line-height: 1.4;
     }
 }
+

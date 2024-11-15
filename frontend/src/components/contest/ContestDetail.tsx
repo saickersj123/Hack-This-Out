@@ -1,7 +1,7 @@
 import React from 'react';
 import formatDate from '../../utils/dateUtils';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
-import '../../assets/scss/contest/ContestDetail.scss';
+import styles from '../../assets/scss/contest/ContestDetail.module.scss';
 
 /**
  * Props interface for ContestDetail component.
@@ -17,19 +17,16 @@ interface ContestDetailProps {
  * @returns {JSX.Element} The rendered ContestDetail component.
  */
 const ContestDetail: React.FC<ContestDetailProps> = ({ contestDetail }) => {
-  const { name, description, contestExp, machines, startTime, endTime, isActive } = contestDetail;
+  const { name, description, contestExp, machines, startTime, endTime} = contestDetail;
 
   return (
-    <div className="contest-detail-container">
-      <div className="contest-detail-content">
-        <h3>Contest Details</h3>
-        <p><strong>Name:</strong> {name || 'N/A'}</p>
-        <p><strong>Description:</strong> {description || 'N/A'}</p>
-        <p><strong>Experience Points (EXP):</strong> {contestExp || 0}</p>
-        <div>
-          <strong>Machines:</strong>
-          {machines.length > 0 ? (
-            <ul>
+    <div className={styles.contest_detail_container}>
+      <div className={styles.contest_detail_content}>
+        <div className={styles.box_upper_content}>
+          <div className={styles.contest_textbox}>
+            <div className={styles.contest_name}>{name || 'N/A'}</div>
+            {machines.length > 0 ? (
+            <ul className={styles.contest_machines}>
               {machines.map((machine) => (
                 <li key={machine._id}>{machine.name}</li>
               ))}
@@ -37,11 +34,16 @@ const ContestDetail: React.FC<ContestDetailProps> = ({ contestDetail }) => {
           ) : (
             <p>N/A</p>
           )}
+          </div>
+          <div className={styles.contest_description}>
+            <p>Description: {description}</p>
+          </div>
+          <div className={styles.contest_reward_box}>
+            <p className={styles.text}>Reward:</p>
+            <p className={styles.reward_text}>EXP {contestExp || 0}</p>
+          </div>
         </div>
-        <p><strong>Start Time:</strong> {startTime ? formatDate(startTime) : 'N/A'}</p>
-        <p><strong>End Time:</strong> {endTime ? formatDate(endTime) : 'N/A'}</p>
-        <p><strong>Status:</strong> {isActive ? 'Active' : 'Inactive'}</p>
-        {/* Add more fields as necessary */}
+        <div className={styles.time_text}>{startTime ? formatDate(startTime) : 'N/A'} ~ {endTime ? formatDate(endTime) : 'N/A'}</div>
       </div>
     </div>
   );
