@@ -5,6 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import StarRatings from 'react-star-ratings';
+import { FaArrowRightToBracket } from "react-icons/fa6";
+
 interface Machine {
   _id: string;
   name: string;
@@ -24,11 +29,20 @@ const MachineList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const [filteredMachines, setFilteredMachines] = useState<Machine[]>([]);
+  const [categoryFilter, setCategoryFilter] = useState<string>('');
+  const [filterVisible, setFilterVisible] = useState<boolean>(false);
+
+  const categories = [
+    'Web', 'Network', 'Database', 'Crypto', 'Cloud', 'AI', 'OS', 'Other'
+  ];
+
   useEffect(() => {
     const fetchMachines = async (): Promise<void> => {
       try {
         const data: MachinesResponse = await getActiveMachines();
         setMachines(data.machines);
+        setFilteredMachines(data.machines);
         setLoading(false);
       } catch (error: any) {
         console.error('Error fetching machines:', error);
@@ -44,6 +58,23 @@ const MachineList: React.FC = () => {
     navigate(`/machine/${machine._id}`);
   };
 
+  useEffect(() => {
+    if (categoryFilter === '') {
+      setFilteredMachines(machines);
+    } else {
+      setFilteredMachines(machines.filter(machine => machine.category === categoryFilter));
+    }
+  }, [categoryFilter, machines]);
+
+  const toggleFilterVisibility = (e: React.MouseEvent): void => {
+    e.stopPropagation();
+    setFilterVisible((prev) => !prev);
+  };
+
+  const handleClickAway = (): void => {
+    setFilterVisible(false);
+  };
+
   if (loading) {
     return <p>Loading machines...</p>;
   }
@@ -57,55 +88,77 @@ const MachineList: React.FC = () => {
       <div className='machine-list-title'>
         <h2>Machine List</h2>
       </div>
+      <div className="table-form">
         <table className='machine-list-table'>
-          {machines.length === 0 ? (
-            <tbody>
+          <thead>
+            <tr className='table-head'>
+              <th className='table-image'></th>
+              <th className='table-name'>Machine name</th>
+              <th className='table-category'>Category
+                <ClickAwayListener onClickAway={handleClickAway}>
+                  <div className='category-filter-toggle'>
+                    <FilterAltIcon onClick={toggleFilterVisibility} />
+                    {filterVisible && (
+                      <div className='category-filter'>
+                        <label htmlFor='category-select' style={{ color: "black" }}>Filter by Category: </label>
+                        <select
+                          id='category-select'
+                          value={categoryFilter}
+                          onChange={(e) => setCategoryFilter(e.target.value)}
+                          style={{ border: "solid" }}
+                        >
+                          <option value=''>All</option>
+                          {categories.map((category) => (
+                            <option key={category} value={category}>{category}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                </ClickAwayListener>
+              </th>
+              <th className='table-rating'>Rating</th>
+              <th className='table-playCount'>Played</th>
+              <th className='table-details'>Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredMachines.length === 0 ? (
               <tr>
                 <td colSpan={5} className="no-data">No machines available.</td>
               </tr>
-            </tbody>
-          ) : (
-            <>
-              <thead>
-                <tr>
-                  <th className='machine-name'>Name</th>
-                  <th className='machine-category'>Category</th>
-                  <th className='machine-rating'>Rating</th>
-                  <th className='machine-playCount'>Played</th>
-                  <th className='machine-details'></th>
+            ) : (
+              filteredMachines.map((machine) => (
+                <tr key={machine._id}>
+                  <td className='machine-img'></td>
+                  <td className='machine-name'>{machine.name}</td>
+                  <td className='machine-category'>{machine.category}</td>
+                  <td className='machine-rating'>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Rating
+                        name={`read-only-rating-${machine._id}`}
+                        value={Number(machine.rating)}
+                        precision={0.5}
+                        readOnly
+                      />
+                    </Box>
+                  </td>
+                  <td className='machine-playCount'>{machine.playerCount}</td>
+                  <td className='machine-details'>
+                    <button className='details-button' onClick={() => handleMachineClick(machine)}><FaArrowRightToBracket size={24} /></button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {machines.map((machine) => (
-                  <tr key={machine._id}>
-                    <td>{machine.name}</td>
-                    <td>{machine.category}</td>
-                    <td>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Rating
-                          name={`read-only-rating-${machine._id}`}
-                          value={Number(machine.rating)}
-                          precision={0.5}
-                          readOnly
-                        />
-                      </Box>
-                    </td>
-                    <td>{machine.playerCount}</td>
-                    <td>
-                      <button onClick={() => handleMachineClick(machine)}>Details</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </>
-          )}
-        </table>
+              ))
+            )}
+          </tbody>
+      </table>
     </div>
+    </div >
   );
 };
 

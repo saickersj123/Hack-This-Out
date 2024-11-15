@@ -22,9 +22,11 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
 
   return (
     <div className="machine-detail-container">
-      <div className="machine-detail-content">
+      <div className="machine-detail">
         <h3>Machine Details</h3>
-        <p><strong>Name:</strong> {name || 'N/A'}</p>
+        <p className="machine-name"><strong>Name:</strong>{name}</p>
+        <p><strong>Description: </strong>{description || 'N/A'}</p>
+        <p><strong>Experience Points (EXP):</strong>{exp || 0}</p>
         <p><strong>Category:</strong> {category || 'N/A'}</p>
         <p><strong>Rating:</strong> 
           <Box
