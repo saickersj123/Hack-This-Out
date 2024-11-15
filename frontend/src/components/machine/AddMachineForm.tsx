@@ -125,8 +125,7 @@ const AddMachineForm: React.FC = () => {
 
 
         <div className='name-container'>
-          <label htmlFor='name'>Machine name<span style={{ color: 'red' }}>*</span> :
-          </label>
+          <label htmlFor='name'>Machine name <span style={{ color: 'red' }}>*</span></label>
           <input
             type='text'
             id='name'
@@ -138,8 +137,7 @@ const AddMachineForm: React.FC = () => {
         </div>
 
         <div className='category-container'>
-          <label htmlFor='category'>Category<span style={{ color: 'red' }}>*</span> :
-          </label>
+          <label htmlFor='category'>Category <span style={{ color: 'red' }}>*</span></label>
           <select
             id="category"
             name="category"
@@ -161,8 +159,7 @@ const AddMachineForm: React.FC = () => {
 
 
         <div className='amiId-container'>
-          <label htmlFor='amiId'>AMI ID<span style={{ color: 'red' }}>*</span> :
-          </label>
+          <label htmlFor='amiId'>AMI ID <span style={{ color: 'red' }}>*</span></label>
           <input
             type='text'
             id='amiId'
@@ -175,9 +172,7 @@ const AddMachineForm: React.FC = () => {
         </div>
 
         <div className='flag-container'>
-          <label htmlFor='flag'>Flag <span style={{ color: 'red' }}>*</span> :
-
-          </label>
+          <label htmlFor='flag'>Flag <span style={{ color: 'red' }}>*</span></label>
           <input
             type='text'
             id='flag'
@@ -190,7 +185,7 @@ const AddMachineForm: React.FC = () => {
         </div>
 
         <div className='Description-container'>
-          <label htmlFor='description'>Machine Description <span style={{ color: 'red' }}>*</span> : </label>
+          <label htmlFor='description'>Machine Description <span style={{ color: 'red' }}>*</span></label>
           <textarea
             ref={descriptionRef}
             id='description'
@@ -202,8 +197,7 @@ const AddMachineForm: React.FC = () => {
         </div>
 
         <div className='exp-container'>
-          <label htmlFor='exp'>EXP <span style={{ color: 'red' }}>*</span> :
-          </label>
+          <label htmlFor='exp'>EXP <span style={{ color: 'red' }}>*</span></label>
           <input
             type='number'
             id='exp'
@@ -215,7 +209,7 @@ const AddMachineForm: React.FC = () => {
         </div>
 
         <div className='hint-container'>
-          <label>Hints <span style={{ color: 'red' }}>*</span> : </label>
+          <label>Hints <span style={{ color: 'red' }}>*</span></label>
           {formData.hints.map((hint, index) => (
             <div className='key-container' key={index}>
               <input
