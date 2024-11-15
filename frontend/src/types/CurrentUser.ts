@@ -1,5 +1,5 @@
 export interface CurrentUser {
-    id: string;
+    _id: string | null;
     myRank: number | null;
     myLevel: number | null;
     myExp: number | null;

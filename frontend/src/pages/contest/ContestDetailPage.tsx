@@ -24,6 +24,7 @@ const ContestDetailPage: React.FC = () => {
     isEnded: false,
   });
   const [currentUser, setCurrentUser] = useState<CurrentUser>({
+    _id: null,
     myRank: null,
     myLevel: null,
     myExp: null,
@@ -91,6 +92,7 @@ const ContestDetailPage: React.FC = () => {
       try {
         const response = await getMyRankinContest(contestId || '');
         setCurrentUser({
+          _id: response.user._id,
           myRank: response.myRank,
           myLevel: response.user.level,
           myExp: response.expEarned,
