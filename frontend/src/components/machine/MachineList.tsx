@@ -9,7 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { FaArrowRightToBracket } from "react-icons/fa6";
-import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
+import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
 
 interface Machine {
   _id: string;

@@ -5,7 +5,6 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
-
 /**
  * Props interface for MachineDetail component.
  */

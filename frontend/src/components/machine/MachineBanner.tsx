@@ -8,7 +8,7 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import { Paper, Button, Avatar } from '@mui/material';
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
-import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
+import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
 
 const MachineBanner: React.FC = () => {
   const [latestMachine, setLatestMachine] = useState<MachineforBanner | null>(null);
