@@ -80,8 +80,7 @@
     }
     
     .lower-container {
-        @include flex-container;
-        justify-content: center;
+        @include flex_center;
         flex-direction: column;
         text-align: center;
         box-sizing: border-box;
