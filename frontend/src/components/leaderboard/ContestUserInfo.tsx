@@ -1,13 +1,13 @@
 import React from 'react';
-import styles from '../../assets/scss/leaderboard/CurrentUserInfo.module.scss';
+import styles from '../../assets/scss/leaderboard/ContestUserInfo.module.scss';
 import { CurrentUser } from '../../types/CurrentUser';
 import { Avatar } from '@mui/material';
 import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
-interface CurrentUserInfoProps {
+interface ContestUserInfoProps {
     currentUser: CurrentUser;
 }
 
-const CurrentUserInfo: React.FC<CurrentUserInfoProps> = ({ currentUser }) => {
+const ContestUserInfo: React.FC<ContestUserInfoProps> = ({ currentUser }) => {
     const { myRank, myLevel, myExp, myUsername } = currentUser;
 
     if (myRank === null) return null;
@@ -36,4 +36,4 @@ const CurrentUserInfo: React.FC<CurrentUserInfoProps> = ({ currentUser }) => {
     );
 };
 
-export default CurrentUserInfo;
+export default ContestUserInfo;

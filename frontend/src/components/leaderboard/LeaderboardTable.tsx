@@ -49,7 +49,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                             const avatarColorIndex = getAvatarColorIndex(user.username);
                             const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
                             return (
-                                <div className={styles.leaderboard_data} key={`${user.id}-${index}`}>
+                                <div className={styles.leaderboard_data} key={`${user._id}-${index}`}>
                                     <div className={styles.leaderboard_rank}>
                                         {/* 메달 아이콘과 순위 번호 함께 표시 */}
                                         {index === 0 ? (
