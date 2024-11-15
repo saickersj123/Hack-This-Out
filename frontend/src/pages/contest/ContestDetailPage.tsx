@@ -164,19 +164,23 @@ const ContestDetailPage: React.FC = () => {
 
   return (
     <Main title="Contest Detail" description="Contest Detail 화면입니다.">
-      <div className="contest-detail-page">
-        <ContestDetail contestDetail={contestDetail} />
-        <button onClick={handlePlay} className="participate-button">
-          Play
-        </button>
+      <div className={styles.contest_detail_container}>
+        <div className={styles.contest_detail_page}>
+          <div className={styles.detail}>
+            <ContestDetail contestDetail={contestDetail} />
+          </div>
+          <button onClick={handlePlay} className={styles.participate_button}>
+            Play
+          </button>
+        </div>
+        {contestStatus.isActive && contestStatus.isStarted && (
+          <ContestLeaderboard
+            leaderboard={leaderboard}
+            currentUser={currentUser}
+          />
+        )}
       </div>
-      {contestStatus.isActive && contestStatus.isStarted && (
-        <ContestLeaderboard
-          leaderboard={leaderboard}
-          currentUser={currentUser}
-        />
-      )}
-    </Main>
+    </Main >
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from '../../assets/scss/leaderboard/LeaderboardTable.module.scss';
-import contest_styles from '../../assets/scss/contest/ContestLeaderboard.module.scss';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 import user_default from '../../assets/img/icon/profile_default.png';
@@ -34,16 +33,15 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
         }
     };
 
-    console.log(styles.contestLeaderboardTable)
-
     return (
-        <div className={`${isContest ? contest_styles.contestLeaderboardTable : styles.board} ${className || ''}`}>
+        <div className={styles.board}>
             <div className={styles.leaderboard_container}>
                 {/* Current user information */}
-                <CurrentUserInfo
-                    currentUser={currentUser}
-                />
-
+                <div className={styles.current_user}>
+                    <CurrentUserInfo
+                        currentUser={currentUser}
+                    />
+                </div>
                 {/* Leaderboard Table */}
                 <div className={styles.leaderboard_table}>
                     {currentLeaderboard.length > 0 ? (
@@ -53,17 +51,17 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                                     {/* 메달 아이콘과 순위 번호 함께 표시 */}
                                     {index === 0 ? (
                                         <>
-                                            <FaMedal className={styles.goldMedal} size={32}/>
+                                            <FaMedal className={styles.goldMedal} size={32} />
                                             <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                         </>
                                     ) : index === 1 ? (
                                         <>
-                                            <FaMedal className={styles.silverMedal} size={32}/>
+                                            <FaMedal className={styles.silverMedal} size={32} />
                                             <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                         </>
                                     ) : index === 2 ? (
                                         <>
-                                            <FaMedal className={styles.bronzeMedal} size={32}/>
+                                            <FaMedal className={styles.bronzeMedal} size={32} />
                                             <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                         </>
                                     ) : (

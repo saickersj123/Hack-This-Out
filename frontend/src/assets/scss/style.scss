@@ -1,10 +1,9 @@
-
 // setting
-@use "setting/fonts";
-@use "setting/vars";
-@use "setting/reset";
-@use "setting/mixin";
-@use "setting/common";
+@forward "setting/fonts";
+@forward "setting/vars";
+@forward "setting/reset";
+@forward "setting/mixin";
+@forward "setting/common";
 
 // section
 @use "section/layout.module.scss";

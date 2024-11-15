@@ -1,87 +1,40 @@
+@use "../style" as *;
+
 .board {
-  width: 100%;
-  height: 100%;
-  min-height: 800px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex_center;
 
   .leaderboard_container {
-    min-width: 1200px;
-    height: 800px;
+    @include background_set;
     position: relative;
     backdrop-filter: blur(40px);
-    border-radius: 24px;
-    background: var(--color-list-background);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
+
+    .current_user {
+      width: 100%;
+      height: 24%;
+    }
 
     .user_box {
-      width: 100%;
+      width: 95%;
       height: 164px;
+      margin: 10px;
       padding: 10px;
-
-      .current_user_container {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        display: flex;
-        backdrop-filter: blur(4px);
-        border-radius: 24px;
-        background: linear-gradient(100.87deg, #222222, #0A9FDF);
-
-        justify-content: space-around;
-        align-items: center;
-
-        font-size: var(--font-size-21xl);
-        color: var(--color-white);
-        font-family: var(--font-ibm-plex-sans);
-
-
-        .user_rank {
-          font-size: var(--font-size-5xl);
-        }
-
-        .user_level {
-          font-size: var(--font-size-5xl);
-        }
-
-        .info_container {
-          width: 350px;
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-
-          .user_avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 40px;
-          }
-
-          .user_name {
-            padding-left: 40px;
-            padding-right: 5px;
-          }
-        }
-
-        .user_exp {
-          font-size: 32px;
-        }
-      }
     }
   }
 
   .leaderboard_table {
     width: 100%;
-    padding: 20px 5%;
+    padding: 24px 48px;
     display: flex;
     flex-direction: column;
 
-    gap: 25px;
+    gap: 32px;
 
     border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
 
     color: var(--color-white);
     font-family: var(--font-ibm-plex-sans);
@@ -133,19 +86,18 @@
   }
 
   .pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex_center;
 
-    
-    .page_number,
+
     .page_button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      @include flex_center;
+
       color: var(--color-white);
       width: 30px;
       height: 30px;
+      margin-left: 16px;
+      margin-right: 16px;
+      border-radius: 5px;
     }
 
     .number_button {
@@ -153,13 +105,6 @@
       width: 20px;
       height: 30px;
       color: var(--color-white);
-    }
-
-    .page_button {
-      margin-left: 20px;
-      margin-right: 20px;
-
-      border-radius: 5px;
     }
   }
 }
