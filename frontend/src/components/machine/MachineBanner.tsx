@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import Slider from 'react-slick';
+import Carousel from 'react-material-ui-carousel';
 import { getLatestMachine, getMostPlayedMachine } from '../../api/axiosMachine';
 import { MachineforBanner } from '../../types/Machine';
 import '../../assets/scss/machine/MachineBanner.scss';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import { useNavigate } from 'react-router-dom';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
+import { Paper, Button } from '@mui/material';
+import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 
 const MachineBanner: React.FC = () => {
   const [latestMachine, setLatestMachine] = useState<MachineforBanner | null>(null);
@@ -18,12 +20,10 @@ const MachineBanner: React.FC = () => {
     const fetchMachines = async () => {
       try {
         setLoading(true);
-        const [latest, mostPlayed] = await Promise.all([
-          getLatestMachine(),
-          getMostPlayedMachine(),
-        ]);
-        setLatestMachine(latest);
-        setMostPlayedMachine(mostPlayed);
+        const latest = await getLatestMachine();
+        const mostPlayed = await getMostPlayedMachine();
+        setLatestMachine(latest.machine);
+        setMostPlayedMachine(mostPlayed.machine);
       } catch (err: any) {
         console.error('Error fetching machines for banner:', err);
         setError('Failed to load machine banners.');
@@ -35,17 +35,6 @@ const MachineBanner: React.FC = () => {
     fetchMachines();
   }, []);
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 10000,
-    arrows: true,
-  };
-
   if (loading) {
     return <p>Loading machine banners...</p>;
   }
@@ -54,26 +43,75 @@ const MachineBanner: React.FC = () => {
     return <p>{error}</p>;
   }
 
-  const renderMachineSlide = (machine: MachineforBanner, title: string) => (
-    <div className="banner-slide" key={machine._id}>
-      <h3>{title}</h3>
-      <div className="machine-details">
-        <h4>{machine.name}</h4>
-        <p>Category: {machine.category}</p>
-        <p>Rewards: {machine.exp}</p>
-        <p>Rating: {machine.rating}</p>
-        <p>Played: {machine.playerCount}</p>
-        <button onClick={() => navigate(`/machine/${machine._id}`)}>View Details</button>
-      </div>
-    </div>
-  );
+  const machines = [
+    { ...latestMachine!, title: 'Latest Machine' },
+    { ...mostPlayedMachine!, title: 'Most Played Machine' },
+  ];
 
   return (
     <div className="machine-banner-container">
-      <Slider {...settings}>
-        {latestMachine && renderMachineSlide(latestMachine, 'Latest Machine')}
-        {mostPlayedMachine && renderMachineSlide(mostPlayedMachine, 'Most Played Machine')}
-      </Slider>
+      <Carousel
+        navButtonsAlwaysVisible
+        indicators={true}
+        autoPlay
+        interval={10000}
+        animation="slide"
+        swipe
+        navButtonsProps={{
+          style: {
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            color: '#fff',
+          },
+        }}
+        IndicatorIcon={<Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#ccc' }} />}
+        indicatorContainerProps={{
+          style: {
+            marginTop: '10px',
+          },
+        }}
+        navButtonsWrapperProps={{
+          style: {
+            bottom: '0',
+          },
+        }}
+        NextIcon={<ArrowForwardIos />}
+        PrevIcon={<ArrowBackIos />}
+      >
+        {machines.map((machine) => (
+          <Paper key={machine._id} className="banner-slide">
+            <h3>{machine.title}</h3>
+            <div className="machine-details">
+              <h4>{machine.name}</h4>
+              <p>Category: {machine.category}</p>
+              <p>Rewards: {machine.exp} EXP</p>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '8px',
+                }}
+              >
+                <Rating
+                  name={`read-only-rating-${machine._id}`}
+                  value={Number(machine.rating)}
+                  precision={0.5}
+                  readOnly
+                />
+                <span style={{ marginLeft: '8px', color: '#555' }}>{machine.rating.toFixed(1)}</span>
+              </Box>
+              <p>Played: {machine.playerCount}</p>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate(`/machine/${machine._id}`)}
+              >
+                View Details
+              </Button>
+            </div>
+          </Paper>
+        ))}
+      </Carousel>
     </div>
   );
 };
