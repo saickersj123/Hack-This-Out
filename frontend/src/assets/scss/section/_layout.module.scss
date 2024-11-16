@@ -22,8 +22,8 @@
         height: 100vh;
         z-index: 3;  // 사이드바가 배경 위에 오도록 설정
 
-        &.collpased {
-            width: var(--sidebar-collpased);
+        &.collapsed {
+            width: var(--sidebar-collapsed);
         }
     }
 
@@ -46,9 +46,9 @@
     .props_container {
         position: relative;
         flex-grow: 1;
-        flex-shrink: 0;  // 크기가 줄어들지 않도록 설정
-        height: 100vh;   // 고정된 높이
-        padding-left: var(--sidebar-width);  // 사이드바의 너비만큼 여백
+        flex-shrink: 0;
+        height: 100vh;
+        padding-left: var(--sidebar-width);
         box-sizing: border-box;
         overflow-y: auto;  // 내부 스크롤 허용
         display: flex;
@@ -59,7 +59,7 @@
         z-index: 1;
 
         &.collapsed {
-            padding-left: var(--sidebar-collapsed);  // 사이드바가 collapsed되면 padding-left 줄어듬
+            padding-left: var(--sidebar-collapsed);
         }
     }
 }

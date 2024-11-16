@@ -28,6 +28,7 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
     <div className="machine-detail-container">
       <div className="machine-detail">
         <Avatar
+          variant="rounded"
           sx={{
             backgroundColor: avatarBgColor,
             width: 150,

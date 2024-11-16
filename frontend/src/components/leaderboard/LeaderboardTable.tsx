@@ -37,11 +37,11 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
     return (
         <div className={styles.board}>
             <div className={styles.leaderboard_container}>
-                {/* Current user information */}
-                <CurrentUserInfo
-                    currentUser={currentUser}
-                />
-
+                <div className={styles.leader_current_user}>
+                    <CurrentUserInfo
+                        currentUser={currentUser}
+                    />
+                </div>
                 {/* Leaderboard Table */}
                 <div className={styles.leaderboard_table}>
                     {currentLeaderboard.length > 0 ? (
@@ -52,19 +52,19 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                                 <div className={styles.leaderboard_data} key={`${user._id}-${index}`}>
                                     <div className={styles.leaderboard_rank}>
                                         {/* 메달 아이콘과 순위 번호 함께 표시 */}
-                                        {index === 0 ? (
+                                        {startIdx + index + 1 === 1 ? (
                                             <>
-                                                <FaMedal className={styles.goldMedal} size={32}/>
+                                                <FaMedal className={styles.goldMedal} size={32} />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
-                                        ) : index === 1 ? (
+                                        ) : startIdx + index + 1 === 2 ? (
                                             <>
-                                                <FaMedal className={styles.silverMedal} size={32}/>
+                                                <FaMedal className={styles.silverMedal} size={32} />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
-                                        ) : index === 2 ? (
+                                        ) : startIdx + index + 1 === 3 ? (
                                             <>
-                                                <FaMedal className={styles.bronzeMedal} size={32}/>
+                                                <FaMedal className={styles.bronzeMedal} size={32} />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
                                         ) : (
@@ -73,7 +73,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                                     </div>
                                     <div className={styles.leaderboard_level}>LV. {user.level}</div>
                                     <div className={styles.leaderboard_userinfo}>
-                                        <Avatar alt={user.username} sx={{ width: 50, height: 50, backgroundColor: avatarBgColor }}>
+                                        <Avatar alt={user.username} sx={{ width: 40, height: 40, backgroundColor: avatarBgColor }}>
                                             {user.username.charAt(0).toUpperCase()}
                                         </Avatar>
                                         <div className={styles.leaderboard_username}>{user.username}</div>

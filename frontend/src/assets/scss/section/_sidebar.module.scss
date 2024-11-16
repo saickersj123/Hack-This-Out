@@ -110,7 +110,7 @@
   }
 
   &.collapsed {
-    width: var(--sidebar-collpased); // 접힘 상태에서의 너비 조정
+    width: var(--sidebar-collapsed); // 접힘 상태에서의 너비 조정
     align-items: center;
 
     .header {

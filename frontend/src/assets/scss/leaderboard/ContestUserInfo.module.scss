@@ -1,4 +1,5 @@
-.current_user_container {
+.user_box{
+  .current_user_container {
     width: 100%;
     height: 100%;
     position: relative;
@@ -28,13 +29,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-  
-      .user_avatar {
-        width: 24%;
-        height: 24%;
-        border-radius: 40px;
-      }
-  
+
       .user_name {
         padding-left: 32px;
         padding-right: 8px;
@@ -45,3 +40,4 @@
       font-size: 32px;
     }
   }
+}

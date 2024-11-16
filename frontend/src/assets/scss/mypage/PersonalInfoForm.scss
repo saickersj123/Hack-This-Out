@@ -12,23 +12,23 @@
         width: 100%;
         height: auto;
         display: flex;
+        flex-wrap: wrap;
         background: rgba(255, 255, 255, 0.03);
         border-radius: 1.25rem;
-        padding: 2rem;
+        padding: clamp(1rem, 2rem, 2.5rem);
         border: 0.0625rem solid rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(0.625rem);
 
         .avatar-container {
-            width: clamp(25%, 30%, 35%);
-            min-width: clamp(200px, 12.5rem, 250px);
+            width: clamp(200px, 30%, 250px);
             padding: 0.9375rem;
             display: flex;
             flex-direction: column;
             align-items: center;
 
             .avatar-img {
-                width: clamp(160px, 180px, 200px);
-                height: clamp(160px, 180px, 200px);
+                width: clamp(140px, 180px, 200px);
+                height: clamp(140px, 180px, 200px);
                 border-radius: 50%;
                 border: 3px solid rgba(255, 255, 255, 0.1);
                 object-fit: cover;
@@ -93,7 +93,8 @@
 
         .user-container {
             flex: 1;
-            padding: 0 32px;
+            min-width: 280px;
+            padding: clamp(1rem, 2rem, 3rem);
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -123,18 +124,19 @@
     }
 
     .modify-container {
+        width: 100%;
         display: flex;
-        gap: 32px;
-        padding: 32px;
+        gap: clamp(1rem, 2rem, 3rem);
+        padding: clamp(1.5rem, 2rem, 2.5rem);
         background: rgba(255, 255, 255, 0.03);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1.25rem;
+        border: 0.0625rem solid rgba(255, 255, 255, 0.08);
         flex-wrap: wrap;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(0.625rem);
 
         input {
             width: 100%;
-            height: 48px;
+            height: clamp(40px, 48px, 56px);
             padding: 0 20px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -180,8 +182,8 @@
         .name-form,
         .password-form {
             flex: 1;
-            min-width: 300px;
-            padding: 24px;
+            min-width: 280px;
+            padding: clamp(1rem, 1.5rem, 2rem);
             display: flex;
             flex-direction: column;
             gap: 16px;
