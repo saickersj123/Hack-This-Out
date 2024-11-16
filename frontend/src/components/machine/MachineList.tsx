@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
-
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { FaArrowRightToBracket } from "react-icons/fa6";
+import { BsArrowRightCircle } from "react-icons/bs";
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
 
 interface Machine {
@@ -158,7 +157,7 @@ const MachineList: React.FC = () => {
                   </td>
                   <td className='machine-playCount'>{machine.playerCount}</td>
                   <td className='machine-details'>
-                    <button className='details-button' onClick={() => handleMachineClick(machine)}><FaArrowRightToBracket size={24} /></button>
+                    <button className='details-button' onClick={() => handleMachineClick(machine)}><BsArrowRightCircle size={24} color="white" /></button>
                   </td>
                 </tr>
               );

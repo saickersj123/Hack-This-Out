@@ -1,5 +1,3 @@
-@use "../style" as *;
-
 .machine-list-page {
     width: 70vw;
     height: 80%;
@@ -55,7 +53,7 @@
                 width: 140px;
                 height: 35px;
                 border-radius: 60px;
-                background-color: black;
+                background: linear-gradient(300deg, #0C2144, #16488F);
                 cursor: pointer;
                 display: flex;
                 align-items: center;
