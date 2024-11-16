@@ -5,7 +5,7 @@
     .gradient-wrapper {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 8px;
         /* 두 div 사이의 간격 추가 */
 
 
@@ -25,7 +25,6 @@
             height: 213px;
             border-radius: 30px;
             background: linear-gradient(115deg, #107DAC, #0A9FDF);
-            /* 독립적인 그라데이션 */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -68,7 +67,6 @@
         width: 100%;
         height: 500px;
         border-radius: 30px;
-        margin-top: 40px;
-        /* 위 요소와의 간격 추가 */
+        margin-top: 16px;
     }
 }
