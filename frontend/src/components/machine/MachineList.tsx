@@ -136,6 +136,7 @@ const MachineList: React.FC = () => {
                   <tr key={machine._id}>
                     <td className='machine-img'>
                       <Avatar
+                        variant="rounded"
                         sx={{ backgroundColor: avatarBgColor, width: 50, height: 50 }}
                       >
                         {machine.name.charAt(0).toUpperCase()}

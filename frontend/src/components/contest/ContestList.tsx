@@ -81,6 +81,7 @@ const ContestList: React.FC = () => {
           <tr className={styles.contest_box} key={contest._id}>
             <td className={styles.contest_avatar}>
               <Avatar
+                variant="rounded"
                 sx={{
                   backgroundColor: avatarUrls[getAvatarIndex(contest.name)] ? avatarBackgroundColors[getAvatarColorIndex(contest.name)] : 'transparent',
                   width: 40,
