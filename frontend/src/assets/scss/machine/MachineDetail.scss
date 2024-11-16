@@ -1,46 +1,89 @@
 .machine-detail-container {
-    width: 90%;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  
-    .machine-detail {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-  
-      .machine-avatar {
-        width: 120px;
-        height: 120px;
-        margin: 0 auto 20px auto;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 30px;
+
+  background: linear-gradient(100.87deg, #222222, #0A9FDF);
+
+  .machine-detail {
+    display: flex;
+    justify-content: space-between;
+    height: 400px;
+    padding: 48px 48px 16px;
+    flex-grow: 1;
+
+    .machine-textbox {
+      color: var(--color-white);
+      height: 200px;
+      .machine-name {
+        position: relative;
+        height: 56px;
+        text-align: left;
+        font-size: 44px;
+        font-family: var(--font-ibm-plex-sans);
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
       }
-  
-      h3 {
-        margin-bottom: 20px;
-        font-size: 2rem;
-        color: #333;
-      }
-  
-      p {
-        margin: 10px 0;
-        font-size: 1.1rem;
-        color: #555;
-  
-        strong {
-          color: #333;
-        }
-      }
-  
-      .MuiRating-root {
-        color: #ffd700; /* Gold color for filled stars */
-      }
-  
-      .MuiRating-iconEmpty {
-        color: #ccc; /* Grey color for empty stars */
+
+      .machine-categroy {
+        padding-left: 16px;
       }
     }
+
+    .machine-reward-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 210px;
+      border-radius: 16px;
+      background-color: rgba(255, 255, 255, 0.4);
+      height: 77px;
+      font-weight: 600;
+      font-family: var(--font-ibm-plex-sans);
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+      .text,
+      .reward-text {
+          padding-left: 30px;
+          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+      }
+
+      .reward-text {
+          font-size: 24px;
+          color: #fbff8f;
+      }
   }
+
+    // .machine-avatar {
+    //   width: 120px;
+    //   height: 120px;
+    //   margin: 0 auto 20px auto;
+    // }
+
+    // h3 {
+    //   margin-bottom: 20px;
+    //   font-size: 2rem;
+    //   color: #333;
+    // }
+
+    // p {
+    //   margin: 10px 0;
+    //   font-size: 1.1rem;
+    //   color: #555;
+
+    //   strong {
+    //     color: #333;
+    //   }
+    // }
+
+    .MuiRating-root {
+      color: #ffd700;
+      /* Gold color for filled stars */
+    }
+
+    .MuiRating-iconEmpty {
+      color: #ccc;
+      /* Grey color for empty stars */
+    }
+  }
+}

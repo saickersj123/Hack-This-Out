@@ -5,12 +5,10 @@
     .gradient-wrapper {
         display: flex;
         align-items: center;
-        gap: 8px;
-        /* 두 div 사이의 간격 추가 */
-
+        justify-content: space-between;
 
         .machine-banner {
-            width: calc(100% - 233px);
+            width: calc(100% - 221px);
             height: 213px;
             border-radius: 30px;
             background: linear-gradient(115deg, #222222, #1083B4);
@@ -23,6 +21,7 @@
         .register-machine {
             width: 213px;
             height: 213px;
+            margin-left: 8px;
             border-radius: 30px;
             background: linear-gradient(115deg, #107DAC, #0A9FDF);
             display: flex;
