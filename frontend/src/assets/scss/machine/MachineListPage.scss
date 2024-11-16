@@ -23,40 +23,47 @@
             height: 213px;
             margin-left: 8px;
             border-radius: 30px;
-            background: linear-gradient(115deg, #107DAC, #0A9FDF);
+            background: rgba(19, 21, 26, 0.7);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
 
-            .machine {
-                position: relative;
-                left: 15px
-            }
-
-            .plus {
-                position: relative;
-                left: 0px;
-                bottom: 35px;
-            }
-
-            .register-text {
-                font-size: 15px;
-                font-weight: 500;
-                color: white;
-            }
-
-            .button-background {
-                width: 140px;
-                height: 35px;
-                border-radius: 60px;
-                background: linear-gradient(300deg, #0C2144, #16488F);
+            
+            .register-button{
+                background-color: transparent;
                 cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
+                color:white;
+                
+                .machine {
+                    position: relative;
+                    left: 15px;
+                    color: white;
+                }
+    
+                .plus {
+                    position: relative;
+                    left: 0px;
+                    bottom: 35px;
+                    color: white;
+                }
+    
+                .register-text {
+                    font-size: 15px;
+                    font-weight: 500;
+                    color: white;
+                }
+
+                &:hover{
+                    color: gray;
+                    transition: all 0.3s;
+                    .machine,
+                    .plus{
+                        color: gray;
+                        transition: all 0.3s;
+                    }
+                }
             }
         }
     }

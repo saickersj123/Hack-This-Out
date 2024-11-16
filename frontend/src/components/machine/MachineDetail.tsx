@@ -40,17 +40,16 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
           {name.charAt(0).toUpperCase()}
         </Avatar> */}
         <div className='machine-textbox'>
-          <p className="machine-name">{name}</p>
-          <p>{category || 'N/A'}</p>
-          <p><strong>Description:</strong> {description || 'N/A'}</p>
-          <div><strong>Rating:</strong>
+          <p className="machine-name"><b>{name}</b></p>
+          <p className='machine-category'><strong>Category: </strong>{category || 'N/A'}</p>
+          <div className='description'><p><strong>Description:</strong> {description || 'N/A'}</p></div>
+          {/* <div className='description'><p><strong>Description:</strong> {description || 'N/A'}</p></div> */}
+        </div>
+        <div className='right-part'>
+          <div className='rating-box'>
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 marginTop: '8px',
-                marginBottom: '8px',
               }}
             >
               <Rating
@@ -59,16 +58,16 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
                 precision={0.5}
                 readOnly
               />
-              <span style={{ marginLeft: '8px', color: '#555' }}>{rating.toFixed(1)}</span>
             </Box>
+            <span style={{ marginLeft: '32px', color: '#fff' }}>{rating.toFixed(1)} / 5.0</span>
           </div>
+          <div className='machine-reward-box'>
+            <p className='text'>Rewards:</p>
+            <p className='reward-text'>EXP {exp || 0}</p>
+          </div>
+          {/* <p><strong>AMI ID:</strong> {amiId || 'N/A'}</p> */}
+          {/* Add more fields as necessary */}
         </div>
-        <div className='machine-reward-box'>
-          <p className='text'>Rewards:</p>
-          <p className='reward-text'>EXP {exp || 0}</p>
-        </div>
-        {/* <p><strong>AMI ID:</strong> {amiId || 'N/A'}</p> */}
-        {/* Add more fields as necessary */}
       </div>
     </div>
   );

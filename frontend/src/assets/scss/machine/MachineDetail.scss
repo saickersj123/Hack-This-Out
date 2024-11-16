@@ -9,50 +9,71 @@
   .machine-detail {
     display: flex;
     justify-content: space-between;
-    height: 400px;
     padding: 48px 48px 16px;
     flex-grow: 1;
 
     .machine-textbox {
       color: var(--color-white);
       height: 200px;
+
       .machine-name {
         position: relative;
         height: 56px;
         text-align: left;
         font-size: 44px;
         font-family: var(--font-ibm-plex-sans);
+        font-weight: 900;
         filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
       }
 
-      .machine-categroy {
+      .machine-category {
         padding-left: 16px;
+        padding-top: 16px;
       }
+
     }
 
-    .machine-reward-box {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      width: 210px;
-      border-radius: 16px;
-      background-color: rgba(255, 255, 255, 0.4);
-      height: 77px;
+    .description {
+      margin-top: 10px;
+      padding-left: 16px;
+      line-height: 8px;
       font-weight: 600;
-      font-family: var(--font-ibm-plex-sans);
-      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 
-      .text,
-      .reward-text {
+    }
+
+
+    .right-part {
+      display: flex;
+      justify-content: space-between;
+
+      .rating-box {
+        margin-right: 64px;
+      }
+
+      .machine-reward-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 210px;
+        border-radius: 16px;
+        background-color: rgba(255, 255, 255, 0.4);
+        height: 77px;
+        font-weight: 600;
+        font-family: var(--font-ibm-plex-sans);
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+        .text,
+        .reward-text {
           padding-left: 30px;
           filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-      }
+        }
 
-      .reward-text {
+        .reward-text {
           font-size: 24px;
           color: #fbff8f;
+        }
       }
-  }
+    }
 
     // .machine-avatar {
     //   width: 120px;

@@ -18,13 +18,15 @@ const MachineListPage: React.FC = () => {
                     </div>
                     {/* register-machine */}
                     <div className="register-machine">
-                        <div>
-                        <DnsRoundedIcon className='machine' style={{ fontSize: '60px' }} />
-                        <AddIcon className='plus' style={{fontSize: '40px'}}/>
-                        </div>
                         {/* <p className="register-text">register machine</p> */}
                         <Link to='/machine/register'>
-                            <button className="button-background">Register machine</button>
+                            <button className='register-button'>
+                                <div className='register-machine-icon'>
+                                    <DnsRoundedIcon className='machine' style={{ fontSize: '60px'}} />
+                                    <AddIcon className='plus' style={{ fontSize: '40px' }} />
+                                </div>
+                                Register machine
+                            </button>
                         </Link>
                     </div>
                 </div>

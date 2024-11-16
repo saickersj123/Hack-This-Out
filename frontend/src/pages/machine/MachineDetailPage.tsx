@@ -87,7 +87,7 @@ const MachineDetailPage: React.FC = () => {
 
   return (
     <Main title="Machine Detail" description="Machine Detail 화면입니다.">
-      <div className='machine-detail-container'>
+      <div className='machine-detail-container-page'>
         <div className="machine-detail-page">
           <div className="detail">
             <MachineDetail machineDetail={machineDetail} />
@@ -97,11 +97,14 @@ const MachineDetailPage: React.FC = () => {
           </button>
         </div>
         <div className='machine-detail-page-review'>
-          <MachineReviewList machineId={machineId || ''} />
-          <div className='machine-detail-page-new-review'>
-            <button onClick={handleRegisterReview} className='machine-detail-page-new-review-button'>
-              Add New Review
-            </button>
+          <div className='machine-review'>
+            <div className='machine-detail-page-new-review'>
+              <h3>Reviews</h3>
+              <button onClick={handleRegisterReview} className='machine-detail-page-new-review-button'>
+                Add New Review
+              </button>
+            </div>
+            <MachineReviewList machineId={machineId || ''} />
           </div>
         </div>
       </div>
