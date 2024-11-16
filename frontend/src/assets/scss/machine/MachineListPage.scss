@@ -1,67 +1,76 @@
-.rank-machine{
-    margin-top: 30px;
-    margin-left:70px;
-    width: 70%;
-    height: 213px;
-    display: inline-block;
-    .rank-machine-background{
-        width: 100%;
-        height: 213px; 
-    }
-}
+@use "../style" as *;
 
-.register-machine {
-    width: 233px;
-    height: 213px;
-    margin-top: 30px;
-    position: relative;
-    display: inline-block;
-    left: 70px;
-    
-    .background-svg {
-        width: 229px;
-        height: 213px;
-    }
-    
-    .camera-svg {
-        width: 52.33px;
-        height: 52.33px;
-        position: absolute;
-        top: 80px;
-        left: 5px;
-    }
+.machine-list-page {
+    width: 70vw;
+    height: auto;
 
-    .register-text {
-        width: 155px;
-        height: 41px;
-        position: absolute;
-        left: 70px;
-        top: 60px;
-        font-size: 15px;
-        font-weight: 500;
-        text-align: left;
-        color: white;
-    }
+    .gradient-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        /* 두 div 사이의 간격 추가 */
 
-    .button-background {
-        width: 125px;
-        height: 30px;
-        position: absolute;
-        left: 60px;
-        top: 110px;
-        border-radius: 60px;
-        background-color: black;
-        cursor: pointer;
-        .arrow-svg {
+
+        .machine-banner {
+            width: calc(100% - 233px);
+            height: 213px;
+            border-radius: 30px;
+            background: linear-gradient(115deg, #222222, #1083B4);
+            /* 독립적인 그라데이션 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-machine {
+            width: 213px;
+            height: 213px;
+            border-radius: 30px;
+            background: linear-gradient(115deg, #107DAC, #0A9FDF);
+            /* 독립적인 그라데이션 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            top: 2px;
+
+            .machine {
+                position: relative;
+                left: 15px
+            }
+
+            .plus {
+                position: relative;
+                left: 0px;
+                bottom: 35px;
+            }
+
+            .register-text {
+                font-size: 15px;
+                font-weight: 500;
+                color: white;
+            }
+
+            .button-background {
+                width: 140px;
+                height: 35px;
+                border-radius: 60px;
+                background-color: black;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+            }
         }
     }
 
+    .machine-list {
+        @include background_set;
+        width: 100%;
+        height: 500px;
+        border-radius: 30px;
+        margin-top: 40px;
+        /* 위 요소와의 간격 추가 */
+    }
 }
-
-
-
-
-
-

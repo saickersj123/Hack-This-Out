@@ -53,7 +53,7 @@ const MachineBanner: React.FC = () => {
     <div className="machine-banner-container">
       <Carousel
         navButtonsAlwaysVisible
-        indicators={true}
+        indicators={false}
         autoPlay
         interval={10000}
         animation="slide"
@@ -64,14 +64,9 @@ const MachineBanner: React.FC = () => {
             color: '#fff',
           },
         }}
-        IndicatorIcon={<Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#ccc' }} />}
-        indicatorContainerProps={{
-          style: {
-            marginTop: '10px',
-          },
-        }}
         navButtonsWrapperProps={{
           style: {
+            height: '213px',
             bottom: '0',
           },
         }}
@@ -83,28 +78,24 @@ const MachineBanner: React.FC = () => {
           const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
           return (
             <Paper key={machine._id} className="banner-slide">
-              <h3>{machine.title}</h3>
-              <Avatar
-                sx={{
-                  backgroundColor: avatarBgColor, 
-                  width: 100, 
-                  height: 100, 
-                  margin: '0 auto 20px auto', 
-                  fontSize: '3rem'
-                }}
-              >
-                {machine.name.charAt(0).toUpperCase()}
-              </Avatar>
-              <div className="machine-details">
+              <div className="banner-contents">
+                <h3>{machine.title}</h3>
+                <Avatar className='machine-avatar'
+                  variant="rounded"
+                  sx={{
+                    backgroundColor: avatarBgColor
+                  }}
+                >
+                  {machine.name.charAt(0).toUpperCase()}
+                </Avatar>
                 <h4>{machine.name}</h4>
-                <p>Category: {machine.category}</p>
-                <p>Rewards: {machine.exp} EXP</p>
+                <p className='banner-category'>Category: {machine.category}</p>
+                <p className='banner-exp'>Rewards: {machine.exp} EXP</p>
                 <Box
                   sx={{
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '8px',
+                    marginTop: '4px',
+                    width: '200px'
                   }}
                 >
                   <Rating
@@ -113,13 +104,17 @@ const MachineBanner: React.FC = () => {
                     precision={0.5}
                     readOnly
                   />
-                  <span style={{ marginLeft: '8px', color: '#555' }}>{machine.rating.toFixed(1)}</span>
+                  <span style={{ marginLeft: '8px', color: 'white' }}>{machine.rating.toFixed(1)}</span>
                 </Box>
                 <p>Played: {machine.playerCount}</p>
                 <Button
+                  sx={{
+                    width: '200px',
+                  }}
                   variant="contained"
                   color="primary"
                   onClick={() => navigate(`/machine/${machine._id}`)}
+
                 >
                   View Details
                 </Button>
