@@ -60,7 +60,7 @@ const Profile: React.FC = () => {
                     <div className={styles.rectangleParent}>
                         <Avatar
                             sx={{
-                                backgroundColor: avatarBgColor, width: 50, height: 50
+                                backgroundColor: avatarBgColor, width: 50, height: 50, fontSize: '1.5rem'
                             }}
                         >
                             {currentUser?.username?.charAt(0).toUpperCase() || ''}
