@@ -882,6 +882,9 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * Get my rank in contest.
+ */
 export const getMyRankInContest = async (req: Request, res: Response) => {
     try {
         const { contestId } = req.params;
@@ -927,6 +930,59 @@ export const getMyRankInContest = async (req: Request, res: Response) => {
         res.status(500).json({
             message: "ERROR",
             msg: 'Failed to get my rank in contest.',
+            error: error.message
+        });
+    }
+}
+
+/**
+ * Get started contests.
+ */
+export const getStartedContest = async (req: Request, res: Response) => {
+    try {
+        const contests = await Contest.find({ isActive: true });
+        const currentTime = new Date();
+        const startedContests = contests.filter(contest => contest.startTime <= currentTime);
+        if (!startedContests) {
+            res.status(200).json({
+                message: "OK",
+                msg: 'No started contests found.',
+                contests: []
+            });
+            return;
+        }
+        res.status(200).json({
+            message: "OK",
+            msg: 'Started contests fetched successfully.',
+            contests: startedContests
+        });
+    } catch (error: any) {
+        console.error('Error fetching started contests:', error);
+        res.status(500).json({
+            message: "ERROR",
+            msg: 'Failed to fetch started contests.',
+            error: error.message
+        });
+    }
+
+};
+
+/**
+ * Get latest contest.
+ */
+export const getLatestContest = async (req: Request, res: Response) => {
+    try {
+        const contests = await Contest.find({ isActive: true }).sort({ startTime: -1 }).limit(1);
+        res.status(200).json({
+            message: "OK",
+            msg: 'Latest contest fetched successfully.',
+            contest: contests[0]
+        });
+    } catch (error: any) {
+        console.error('Error fetching latest contest:', error);
+        res.status(500).json({
+            message: "ERROR",
+            msg: 'Failed to fetch latest contest.',
             error: error.message
         });
     }

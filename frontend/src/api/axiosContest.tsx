@@ -278,11 +278,43 @@ export const getContests = async () => {
     }
   };
 
+  /**
+   * Get my rank in contest.
+   * @param {string} contestId - The ID of the contest.
+   * @returns {Promise<Object>} - The response data containing my rank in contest.
+   */
   export const getMyRankinContest = async (contestId: string) => {
     try {
       const response = await axiosInstance.get(`/contest/${contestId}/my-rank`);
       return response.data;
     } catch (error: any) {
       throw error.response ? error.response.data : new Error('Failed to fetch my rank in contest');
+    }
+  };
+
+
+  /**
+   * Get started contests.
+   * @returns {Promise<Object>} - The response data containing started contests.
+   */
+  export const getStartedContest = async () => {
+    try {
+      const response = await axiosInstance.get('/contest/started');
+      return response.data;
+    } catch (error: any) {
+      throw error.response ? error.response.data : new Error('Failed to fetch started contests');
+    }
+  };
+
+  /**
+   * Get latest contest.
+   * @returns {Promise<Object>} - The response data containing latest contest.
+   */
+  export const getLatestContest = async () => {
+    try {
+      const response = await axiosInstance.get('/contest/latest');
+      return response.data;
+    } catch (error: any) {
+      throw error.response ? error.response.data : new Error('Failed to fetch latest contest');
     }
   };

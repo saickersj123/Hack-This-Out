@@ -28,3 +28,14 @@ export interface ContestStatus {
   isStarted: boolean;
   isEnded: boolean;
 }
+
+/**
+ * Interface representing the contest banner.
+ */
+export interface ContestBannerItem {
+  _id: string;
+  name: string;
+  contestExp: number;
+  startTime: string;
+  endTime: string;
+}

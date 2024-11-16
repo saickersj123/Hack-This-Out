@@ -20,7 +20,9 @@ import {
     getInactiveContestDetails,
     giveUpContest,
     getUsedHintsInContest,
-    getMyRankInContest
+    getMyRankInContest,
+    getStartedContest,
+    getLatestContest
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
@@ -71,6 +73,12 @@ ContestRoutes.get('/:contestId/my-rank', verifyToken, getMyRankInContest);
 
 // Route to give up a contest
 ContestRoutes.post('/:contestId/give-up', verifyToken, giveUpContest);
+
+// Route to get started contests
+ContestRoutes.get('/started', verifyToken, getStartedContest);
+
+// Route to get latest contest
+ContestRoutes.get('/latest', verifyToken, getLatestContest);
 
 // Admin Routes
 // Route to get all contests(Admin only)
