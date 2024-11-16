@@ -1,86 +1,175 @@
 .machine-list-container {
-  width: 90%;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
+  width: 100%;
+  padding: 32px 48px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   .machine-list-title {
-    text-align: center;
-    margin-bottom: 20px;
-
-    h2 {
-      color: #333;
-    }
+    width: 368px;
+    display: flex;
+    position: relative;
+    font-size: 40px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    font-family: var(--font-ibm-plex-sans);
+    color: var(--color-white);
+    text-align: left;
+    height: 62px;
   }
 
-  .table-form {
+  .machine-list-table {
     width: 100%;
-    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    border-collapse: collapse;
 
-    .machine-list-table {
+    thead {
       width: 100%;
-      border-collapse: collapse;
+      display: flex;
+      
+      
+      tr {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        padding: 20px 0;
+        white-space: nowrap;
+        border-bottom: 1px solid var(--color-list-border);
+        
+        th {
+          font-size: 18px;
+          color: #b5b7c0;
+          &.table-image {
+            width: 70px;
+          }
+        }
 
-      thead {
-        background-color: #007bff;
-        color: #fff;
+        .table-image,
+        .table-name,
+        .table-category,
+        .table-rating,
+        .table-playCount,
+        .table-details {
+          font-size: 18px;
+          letter-spacing: -0.01em;
+          font-weight: 600;
+          color: #b5b7c0;
+          text-align: left;
+        }
 
-        tr {
-          th {
-            padding: 12px;
-            text-align: left;
+        .table-name {
+          width: 150px;
+        }
+
+        .table-category {
+          width: 190px;
+          display: flex;
+          gap: 10px; 
+          position: relative; 
+
+          /* 텍스트와 아이콘을 양쪽 정렬 */
+          .category-filter-toggle {
+            align-items: center;
+            cursor: pointer;
             position: relative;
 
-            &.table-image {
-              width: 60px;
+            .category-filter {
+              position: absolute; /* 드롭다운을 절대 위치로 고정 */
+              top: 24px; /* 아이콘 아래쪽에 드롭다운 표시 */
+              left: 0;
+              background-color: white;
+              border: 1px solid #ccc;
+              padding: 8px;
+              border-radius: 4px;
+              z-index: 10;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
           }
         }
-      }
 
-      tbody {
-        tr {
-          &:nth-child(even) {
-            background-color: #f2f2f2;
+        .table-rating{
+          width: 190px;
+        }
+
+
+
+      }
+    }
+
+    tbody {
+      tr {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-bottom: 1px solid var(--color-list-border);
+        // &:nth-child(even) {
+        //   background-color: #f2f2f2;
+        // }
+        
+
+        td {
+          display: flex;
+          align-items: center;
+          text-align: left;
+
+          color: var(--color-white-200);
+          padding: 0 12px;
+          height: 70px;
+          font-size: 18px;
+          letter-spacing: -0.01em;
+          &.machine-img {
+            text-align: center;
           }
 
-          td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
+          &.machine-name,
+          &.machine-category,
+          &.machine-playCount {
+            font-weight: 600;
+          }
 
-            &.machine-img {
-              text-align: center;
-            }
+          &.machine-details {
+            text-align: center;
 
-            &.machine-name,
-            &.machine-category,
-            &.machine-playCount {
-              font-weight: 500;
-            }
+            .details-button {
+              background: none;
+              border: none;
+              cursor: pointer;
+              color: #007bff;
 
-            &.machine-details {
-              text-align: center;
-
-              .details-button {
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: #007bff;
-
-                &:hover {
-                  color: #0056b3;
-                }
+              &:hover {
+                color: #0056b3;
               }
             }
-
-            &.no-data {
-              text-align: center;
-              padding: 20px;
-              color: #888;
-            }
           }
+
+          &.no-data {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+          }
+
+          
+          
+        }
+        .machine-name{
+          width: 160px;
+          
+          justify-content: flex-start;
+        }
+        .machine-category{
+          width: 180px;
+          justify-content: flex-start;
+        }
+        .machine-rating{
+          width: 240px;
+          .MuiRating-iconEmpty {
+            color: #999999;
+            /* Grey color for empty stars */
+          }
+        }
+        .machine-playCount,
+        .machine-details{
+          width: 60px;
         }
       }
     }
