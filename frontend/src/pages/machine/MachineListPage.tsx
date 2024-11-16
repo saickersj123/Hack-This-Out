@@ -16,7 +16,6 @@ const MachineListPage: React.FC = () => {
                     <div className='machine-banner'>
                         <MachineBanner />
                     </div>
-
                     {/* register-machine */}
                     <div className="register-machine">
                         <div>
