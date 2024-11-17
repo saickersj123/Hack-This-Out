@@ -5,6 +5,8 @@ import LoginForm from '../../components/login/LoginForm';
 import Modal from '../../components/modal/Modal'; // Modal import
 import RegisterForm from '../../components/login/RegisterForm'; // RegisterForm import
 import { AuthUserContext } from '../../contexts/AuthUserContext'; // Import AuthUserContext
+import Main from '../../components/main/Main';
+import Loading from '../../components/public/Loading';
 
 const LoginPage: React.FC = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -44,7 +46,13 @@ const LoginPage: React.FC = () => {
 
   // While checking authentication status, you might want to show a loader
   if (isLoading) {
-    return <div className="loader">Loading...</div>; // You can style this as needed
+    return (
+      <Main title="Login" description="Loading login page.">
+        <div className="login-page loading">
+          <Loading />
+        </div>
+      </Main>
+    );
   }
 
   return (

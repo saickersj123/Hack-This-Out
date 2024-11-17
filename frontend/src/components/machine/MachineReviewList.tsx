@@ -5,6 +5,7 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import { Review } from '../../types/Machine';
 import '../../assets/scss/machine/MachineReviewList.scss';
+import Loading from '../public/Loading';
 
 interface MachineReviewListProps {
   machineId: string;
@@ -35,7 +36,7 @@ const MachineReviewList: React.FC<MachineReviewListProps> = ({ machineId }) => {
   }, [machineId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (error) {

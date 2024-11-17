@@ -6,6 +6,7 @@ import { getContestDetails, participateInContest } from '../../api/axiosContest'
 import { useNavigate, NavigateFunction } from 'react-router-dom';
 import Modal from '../../components/modal/Modal'; // Importing the Modal component
 import styles from '../../assets/scss/contest/PreContestPage.module.scss';
+import Loading from '../../components/public/Loading';
 
 
 const PreContestPage: React.FC = () => {
@@ -46,7 +47,7 @@ const PreContestPage: React.FC = () => {
     return (
       <Main title="Contest Detail" description="Loading contest details.">
         <div className="contest-detail-page loading">
-          <p>Loading...</p>
+          <Loading />
         </div>
       </Main>
     );
