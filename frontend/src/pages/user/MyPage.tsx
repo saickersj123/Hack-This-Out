@@ -41,13 +41,15 @@ const MyPage: React.FC = () => {
           </div>
           <h1>마이페이지</h1>
         </div>
-        {!isPasswordVerified ? (
-          <PasswordCheckForm onSubmit={handlePasswordCheck} />
+        {!isPasswordVerified ? ( 
+          <div className="password-check-wrapper">
+            <PasswordCheckForm onSubmit={handlePasswordCheck} /> 
+            </div>
         ) : (
-          <>
+          <div className="info-wrapper">
             <PersonalInfoForm />
             <ToAdmin />
-          </>
+          </div>
         )}
       </div>
     </Main>
