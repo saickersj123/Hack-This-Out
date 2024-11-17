@@ -4,13 +4,15 @@
     @include background_set;
     overflow: hidden;
     padding: 32px 48px;
-    gap: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
     .contest_list_title {
         width: 368px;
         display: flex;
         position: relative;
-        font-size: 40px;
+        font-size: var(--font-title);
         letter-spacing: -0.01em;
         font-weight: 600;
         font-family: var(--font-ibm-plex-sans);
@@ -37,7 +39,7 @@
             .table_reward,
             .table_active,
             .table_details {
-                font-size: 18px;
+                font-size: var(--font-size-small);
                 letter-spacing: -0.01em;
                 font-weight: 600;
                 color: #b5b7c0;
@@ -79,14 +81,13 @@
             .contest_start_time,
             .contest_end_time,
             .contest_reward,
-            .contest_active,
             .contest_details {
                 display: flex;
                 align-items: center;
                 text-align: left;
 
                 height: 70px;
-                font-size: 18px;
+                font-size: var(--font-size-small);
                 letter-spacing: -0.01em;
                 font-weight: 600;
                 color: var(--color-white-200);
@@ -108,12 +109,6 @@
                 width: 60px;
             }
 
-            .contest_active {
-                justify-content: center;
-                width: 120px;
-                height: 50px;
-            }
-
             .contest_details {
                 justify-content: center;
 
@@ -132,24 +127,26 @@
 
 .tabs {
     display: flex;
-    margin-bottom: 20px;
+    margin: 0 16px 0;
+    gap: 8px;
 
     .tab_button {
-        padding: 10px 20px;
+        min-width: 120px;
+        padding: 8px 24px;
         border: none;
         background: linear-gradient(96.7deg, var(--lightblue-200), var(--lightblue-100));
         cursor: pointer;
-        margin-right: 10px;
         border-radius: 4px;
         transition: background-color 0.3s;
-        color: white;
+        color: var(--color-white);
+        font-size: var(--font-size-small);
 
         &:hover {
-            background-color: var(--blue-200);
+            background: linear-gradient(96.7deg, var(--blue-300), var(--blue-200));
         }
     }
+    
     .active {
         background: linear-gradient(96.7deg, var(--blue-500), var(--blue-100));
-        color: white;
     }
 }

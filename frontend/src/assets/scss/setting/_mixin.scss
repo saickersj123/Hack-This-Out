@@ -1,6 +1,8 @@
 @mixin background_set {
     width: var(--container-width);
-    min-height: var(--container-height);
+    min-width: var(--container-min-width);
+    height: var(--container-height);
+    min-height: var(--container-min-height);
     background: var(--color-background-transparent);
     border-radius: 24px;
 }
@@ -12,7 +14,7 @@
 }
 
 @mixin button_color {
-    background: linear-gradient(96.7deg, var(--blue-500), var(--blue-100));
+    background: var(--gradient-button);
     color: var(--color-white);
 
     &:hover {

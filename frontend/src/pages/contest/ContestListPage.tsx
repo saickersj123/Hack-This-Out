@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
 import AddIcon from '@mui/icons-material/Add';
-import styles from '../../assets/scss/contest/ContestPage.module.scss';
+import styles from '../../assets/scss/contest/ContestListPage.module.scss';
 
 const ContestListPage: React.FC = () => {
     return (

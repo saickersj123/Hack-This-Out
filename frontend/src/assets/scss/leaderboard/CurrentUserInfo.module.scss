@@ -4,22 +4,20 @@
   position: relative;
   display: flex;
   border-radius: 24px 24px 0 0;
-  background: linear-gradient(to bottom right, var(--blue-500), #64AFD080);
+  background: var(--gradient-container);
 
   justify-content: space-around;
   align-items: center;
 
-  font-size: var(--font-size-21xl);
+  font-size: var(--font-size-large);
   color: var(--color-white);
   font-family: var(--font-ibm-plex-sans);
 
-
-  .user_rank {
-    font-size: var(--font-size-5xl);
-  }
-
+  .user_rank,
   .user_level {
-    font-size: var(--font-size-5xl);
+    min-width: 50px;
+    font-size: var(--font-size-mid);
+    text-align: center;
   }
 
   .info_container {
@@ -27,13 +25,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-
-    .user_avatar {
-      width: 24%;
-      height: 24%;
-      border-radius: 40px;
-    }
-
+    margin-left: 10px;
     .user_name {
       padding-left: 32px;
       padding-right: 8px;
@@ -41,6 +33,7 @@
   }
 
   .user_exp {
-    font-size: 32px;
+    text-align: center;
+    min-width: 120px;
   }
 }

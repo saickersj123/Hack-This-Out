@@ -1,21 +1,24 @@
 .contest_container {
     width: var(--container-width);
+    min-width: 500px;
     min-height: var(--container-height);
     display: flex;
     flex-direction: column;
-
+    gap: 16px;
+    
     .upper_box{
         width: 100%;
         display: flex;
         align-items: center;
-        margin-bottom: 16px;
+        justify-content:space-between;
         gap: 8px;
 
         .contest_banner {
-            width: calc(100% - 233px);
+            width: 100%;
+            min-width: calc(500px - 221px);
             height: 213px;
             border-radius: 24px;
-            background: linear-gradient(to bottom right, var(--blue-500), #64AFD080);
+            background: var(--gradient-container);
             /* 독립적인 그라데이션 */
             display: flex;
             align-items: center;
@@ -23,7 +26,7 @@
         }
 
         .contest_register {
-            width: 213px;
+            min-width: 213px;
             height: 213px;
             border-radius: 24px;
             display: flex;
@@ -31,34 +34,35 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            background: linear-gradient(to bottom right, var(--blue-500), #64AFD080);
+            background: var(--color-background-transparent);
+
+            &:hover {
+                background: linear-gradient(96.7deg, var(--blue-500), var(--blue-300));
+                opacity: 0.9;
+
+                .machine,
+                .plus,
+                .register_text {
+                    color: var(--color-dimgray);
+                }
+            }
 
             .machine {
                 position: relative;
-                left: 15px
+                left: 15px;
+                color: var(--color-white);
             }
 
             .plus {
                 position: relative;
                 left: 0px;
                 bottom: 35px;
+                color: var(--color-white);
             }
 
             .register_text {
                 font-size: 15px;
                 font-weight: 500;
-                color: white;
-            }
-
-            .button-background {
-                width: 140px;
-                height: 35px;
-                border-radius: 60px;
-                background: linear-gradient(300deg, #0C2144, #16488F);
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
                 color: white;
             }
         }

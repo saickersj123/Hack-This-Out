@@ -57,17 +57,17 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
                                         {/* 메달 아이콘과 순위 번호 함께 표시 */}
                                         {startIdx + index + 1 === 1 ? (
                                             <>
-                                                <FaMedal className={styles.goldMedal} size={32} />
+                                                <FaMedal className={styles.goldMedal} size='clamp(24px, 4vw, 32px)' />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
                                         ) : startIdx + index + 1 === 2 ? (
                                             <>
-                                                <FaMedal className={styles.silverMedal} size={32} />
+                                                <FaMedal className={styles.silverMedal} size='clamp(24px, 4vw, 32px)' />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
                                         ) : startIdx + index + 1 === 3 ? (
                                             <>
-                                                <FaMedal className={styles.bronzeMedal} size={32} />
+                                                <FaMedal className={styles.bronzeMedal} size='clamp(24px, 4vw, 32px)' />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
                                         ) : (
@@ -76,7 +76,7 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
                                     </div>
                                     <div className={styles.leaderboard_level}>LV. {user.level}</div>
                                     <div className={styles.leaderboard_userinfo}>
-                                        <Avatar alt={user.username} sx={{ width: 40, height: 40, backgroundColor: avatarBgColor }}>
+                                        <Avatar className={styles.leaderboard_avatar} alt={user.username} sx={{ backgroundColor: avatarBgColor }}>
                                             {user.username.charAt(0).toUpperCase()}
                                         </Avatar>
                                         <div className={styles.leaderboard_username}>{user.username}</div>

@@ -46,16 +46,15 @@
         justify-content: center;
       }
 
-      .leaderboard_rank {
-        width: 50px;
-      }
-
+      .leaderboard_rank,
       .leaderboard_level {
         width: 50px;
+        min-width: 30px;
       }
 
       .leaderboard_userinfo {
         width: 300px;
+        min-width: 200px;
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -63,6 +62,12 @@
         .leaderboard_username {
           padding-left: 20px;
           padding-right: 5px;
+        }
+
+        .leaderboard_avatar {
+          font-size: var(--font-size-mid);
+          width:clamp(28px, 3vw, 40px);
+          height: clamp(28px, 3vw, 40px);
         }
       }
 
@@ -118,5 +123,5 @@
 }
 
 .high_rank {
-  font-size: 24px;
+  font-size: var(--font-size-mid);
 }

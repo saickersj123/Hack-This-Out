@@ -49,12 +49,10 @@
           justify-content: center;
         }
 
-        .leaderboard_rank {
-          width: 50px;
-        }
-
+        .leaderboard_rank,
         .leaderboard_level {
           width: 50px;
+          min-width: 30px;
         }
 
         .leaderboard_userinfo {
@@ -64,9 +62,9 @@
           justify-content: flex-start;
 
           .leaderboard_avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 16px;
+            font-size: var(--font-size-mid);
+            width: clamp(24px, 3vw, 32px);
+            height: clamp(24px, 3vw, 32px);
           }
 
           .leaderboard_username {
@@ -132,5 +130,5 @@
 }
 
 .high_rank {
-  font-size: 24px;
+  font-size: var(--font-size-mid);
 }
