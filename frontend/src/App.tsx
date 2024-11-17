@@ -2,16 +2,12 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/public/LoginPage';
 import MainPage from './pages/public/MainPage';
-import LoadingPage from './pages/public/LoadingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminProtectedRoute from './components/auth/AdminProtectedRoute';
 import './assets/scss/admin/AdminDashboard.scss';
-
-import { SidebarProvider } from './contexts/SidebarContext.tsx';
-import { ProfileProvider } from './contexts/ProfileContext.tsx';
-
-
-// Lazy-loaded components
+import NotFound from './components/public/notfound';
+import Loading from './components/public/Loading';
+// Public pages lazy loading
 const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage'));
 const ContestListPage = lazy(() => import('./pages/contest/ContestListPage'));
 const ContestDetailPage = lazy(() => import('./pages/contest/ContestDetailPage'));
@@ -28,7 +24,7 @@ const MachinePlayPage = lazy(() => import('./pages/machine/MachinePlayPage'));
 const MachineCompletePage = lazy(() => import('./pages/machine/MachineCompletePage'));
 const MyPage = lazy(() => import('./pages/user/MyPage'));
 
-// Admin components
+// Admin pages lazy loading
 const DashboardHome = lazy(() => import('./pages/admin/DashboardHome'));
 const UsersManagement = lazy(() => import('./pages/admin/UsersManagement'));
 const MachinesManagement = lazy(() => import('./pages/admin/MachinesManagement'));
@@ -38,10 +34,9 @@ const Unauthorized = lazy(() => import('./pages/Unauthorized'));
 
 const App: React.FC = () => {
   return (
-    <SidebarProvider>
-      <ProfileProvider>
+    
         <Router>
-          <Suspense fallback={<LoadingPage />}>
+          <Suspense fallback={<Loading />}>
             <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<LoginPage />} />
@@ -176,6 +171,8 @@ const App: React.FC = () => {
                 }
               />
               <Route path="/unauthorized" element={<Unauthorized />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/loading" element={<Loading />} />
 
               {/* Admin Routes */}
 
@@ -227,8 +224,6 @@ const App: React.FC = () => {
             </Routes>
           </Suspense>
         </Router>
-      </ProfileProvider>
-    </SidebarProvider>
   );
 };
 

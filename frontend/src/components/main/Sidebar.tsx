@@ -32,19 +32,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
           </Link>
           <div className={styles.sidebarMenuButton}>
             <button className={styles.collapse_button}
-              onClick={toggleSidebar}
+              onClick={() => { toggleSidebar(); setIsHovered(false); }}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              {isCollapsed ? (
-                isHovered ? (
-                  <RiArrowRightDoubleFill size={40} />
-                ) : (
-                  <img className={styles.icon_logo} src={collapsed_logo} alt="collapsed logo" />
-                )
-              ) : (
-                <RiArrowLeftDoubleFill size={40} />
+              {isCollapsed && isHovered && <RiArrowRightDoubleFill size={40} />}
+              {isCollapsed && !isHovered && (
+                <img
+                  className={styles.icon_logo}
+                  src={collapsed_logo}
+                  alt="Collapsed Logo"
+                />
               )}
+              {!isCollapsed && <RiArrowLeftDoubleFill size={40} />}
             </button>
           </div>
         </div>

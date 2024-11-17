@@ -4,15 +4,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import "./assets/scss/style.scss";
 import { AuthUserProvider } from './contexts/AuthUserContext';
-
-
+import { SidebarProvider } from './contexts/SidebarContext';
+import { ProfileProvider } from './contexts/ProfileContext';
 const rootElement = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
     <AuthUserProvider>
-      <App />
+      <SidebarProvider>
+        <ProfileProvider>
+          <App />
+        </ProfileProvider>
+      </SidebarProvider>
     </AuthUserProvider>
   </React.StrictMode>
 );

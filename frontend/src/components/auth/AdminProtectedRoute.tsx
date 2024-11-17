@@ -1,7 +1,7 @@
 import React, { useContext, ReactNode } from 'react';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import { Navigate } from 'react-router-dom';
-import LoadingPage from '../../pages/public/LoadingPage';
+import Loading from '../public/Loading';
 
 interface AdminProtectedRouteProps {
   children: ReactNode;
@@ -16,7 +16,7 @@ const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ children }) =
   const { currentUser, isLoading } = authUserContext;
 
   if (isLoading) {
-    return <LoadingPage />;
+    return <Loading />;
   }
 
   return currentUser?.isAdmin ? <>{children}</> : <Navigate to="/unauthorized" />;

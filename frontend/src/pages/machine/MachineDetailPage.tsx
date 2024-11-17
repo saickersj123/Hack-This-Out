@@ -6,6 +6,7 @@ import { getActiveMachineDetails, startPlayingMachine } from '../../api/axiosMac
 import { MachineDetail as MachineDetailType } from '../../types/Machine';
 import '../../assets/scss/machine/MachineDetailPage.scss';
 import MachineReviewList from '../../components/machine/MachineReviewList';
+import Loading from '../../components/public/Loading';
 
 /**
  * Component representing the Machine Detail Page.
@@ -68,9 +69,7 @@ const MachineDetailPage: React.FC = () => {
   if (isLoading) {
     return (
       <Main title="Machine Detail" description="Loading machine details.">
-        <div className="machine-detail-page loading">
-          <p>Loading...</p>
-        </div>
+        <Loading />
       </Main>
     );
   }

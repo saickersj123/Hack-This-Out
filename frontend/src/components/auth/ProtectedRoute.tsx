@@ -1,7 +1,7 @@
 import React, { useContext, ReactNode } from 'react';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import { Navigate } from 'react-router-dom';
-import LoadingPage from '../../pages/public/LoadingPage'; // Ensure you have a LoadingPage component
+import Loading from '../public/Loading';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isLoggedIn, isLoading } = authUserContext;
 
   if (isLoading) {
-    return <LoadingPage />; // Show a loading indicator while checking auth status
+    return <Loading />; // Show a loading indicator while checking auth status
   }
 
   return isLoggedIn ? <>{children}</> : <Navigate to="/login" />;

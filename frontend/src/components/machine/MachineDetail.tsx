@@ -5,6 +5,7 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 // import Avatar from '@mui/material/Avatar';
 import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
+import { Avatar } from '@mui/material';
 /**
  * Props interface for MachineDetail component.
  */
@@ -27,23 +28,22 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
   return (
     <div className="machine-detail-container">
       <div className="machine-detail">
-        {/* <Avatar
+        {<Avatar
           variant="rounded"
           sx={{
             backgroundColor: avatarBgColor,
             width: 150,
             height: 150,
-            margin: '0 auto 20px auto',
-            fontSize: '3rem'
+            fontSize: '5rem',
+            margin: '0 -250px 0 8px',
           }}
         >
           {name.charAt(0).toUpperCase()}
-        </Avatar> */}
+        </Avatar>}
         <div className='machine-textbox'>
           <p className="machine-name"><b>{name}</b></p>
-          <p className='machine-category'><strong>Category: </strong>{category || 'N/A'}</p>
-          <div className='description'><p><strong>Description:</strong> {description || 'N/A'}</p></div>
-          {/* <div className='description'><p><strong>Description:</strong> {description || 'N/A'}</p></div> */}
+          <p className='machine-category'><b>Category: </b>{category || 'N/A'}</p>
+          <div className='description'><p><b>Description:</b> {description || 'N/A'}</p></div>
         </div>
         <div className='right-part'>
           <div className='rating-box'>

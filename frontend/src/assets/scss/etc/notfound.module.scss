@@ -1,0 +1,34 @@
+.notfound_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #13151a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  
+    .notfound_content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0px 16px 32px rgba(44, 39, 56, 0.04), 0px 32px 64px rgba(44, 39, 56, 0.08);
+      border-radius: 16px;
+      background-color: #13151a;
+      width: clamp(200px, 100%, 500px);
+      height: clamp(200px, 100%, 500px);
+      position: relative;
+      box-shadow: 0 5px 15px var(--black200);
+      .notfound_title {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-size: 50px;
+        font-weight: 700;
+        color: #fff;
+        text-align: center;
+      }
+    }
+  }
