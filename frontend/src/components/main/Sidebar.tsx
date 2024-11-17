@@ -11,20 +11,23 @@ import collapsed_logo from '../../assets/img/icon/HTO ICON DARK RECOLORED_crop_f
 
 interface SidebarProps {
   isCollapsed: boolean;
-  toggleSidebar: () => void;
+  toggleSidebar: (forceCollapse?: boolean) => void; // toggleSidebar가 강제 설정을 허용하도록 변경
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   const location = useLocation();
   const [isHovered, setIsHovered] = useState(false);
+  const [isAutoCollapsed, setIsAutoCollapsed] = useState(false); // 자동 collapse 여부 추적
 
   // 화면 크기 감지 및 isCollapsed 상태 변경
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 1200 && !isCollapsed) {
-        toggleSidebar(); // 1200px 이하일 때 접힘 상태로 변경
-      } else if (window.innerWidth > 1200 && isCollapsed) {
-        toggleSidebar(); // 1200px 초과일 때 확장 상태로 변경
+        toggleSidebar(true); // 강제로 collapse 상태로 변경
+        setIsAutoCollapsed(true); // 자동 collapse 상태 기록
+      } else if (window.innerWidth > 1200 && isAutoCollapsed) {
+        toggleSidebar(false); // 강제로 확장 상태로 변경
+        setIsAutoCollapsed(false); // 자동 collapse 상태 해제
       }
     };
 
@@ -36,7 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
 
     // 리스너 정리
     return () => window.removeEventListener('resize', handleResize);
-  }, [isCollapsed, toggleSidebar]);
+  }, [isCollapsed, toggleSidebar, isAutoCollapsed]);
 
   // URL을 기반으로 현재 선택된 메뉴 확인
   const getMenuIcon = (path: string, iconActive: JSX.Element, iconInactive: JSX.Element) => {
@@ -52,7 +55,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
           </Link>
           <div className={styles.sidebarMenuButton}>
             <button className={styles.collapse_button}
-              onClick={() => { toggleSidebar(); setIsHovered(false); }}
+              onClick={() => {
+                toggleSidebar();
+                setIsAutoCollapsed(false); // 사용자가 수동으로 변경했음을 기록
+                setIsHovered(false);
+              }}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
@@ -105,6 +112,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
       </div>
     </div>
   );
-}
+};
 
 export default Sidebar;
