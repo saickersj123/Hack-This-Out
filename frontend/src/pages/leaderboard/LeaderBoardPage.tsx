@@ -8,8 +8,6 @@ import { User } from '../../types/User';
 import { CurrentUser } from '../../types/CurrentUser';
 import Loading from '../../components/public/Loading';
 
-
-
 /**
  * Component representing the LeaderBoard Page.
  */
@@ -92,7 +90,7 @@ const LeaderBoardPage: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <Loading />;
+    return <Main><Loading /></Main>;
   }
 
   return (
