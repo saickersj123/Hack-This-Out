@@ -20,7 +20,7 @@
     width: 90%;
     position: relative;
     box-shadow: 0 5px 15px var(--black200);
-
+    padding: 8px;
 
     .modal_close {
       display: flex;
@@ -28,7 +28,6 @@
       background: none;
       border: none;
       font-size: 1.5rem;
-      padding: 10px 10px 0;
 
       cursor: pointer;
       color: var(--text-secondary);
