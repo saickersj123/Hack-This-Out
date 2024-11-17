@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Paper, Button, Avatar } from '@mui/material';
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
+import { formatDate } from '../../utils/dateUtils';
 import { getLatestContest } from '../../api/axiosContest';
 import { getStartedContest } from '../../api/axiosContest';
 import LoadingIcon from '../public/LoadingIcon';
@@ -89,6 +90,7 @@ const ContestBanner: React.FC = () => {
                   {contest.name.charAt(0).toUpperCase()}
                 </Avatar>
                 <h4>{contest.name}</h4>
+                <p className='banner-time'>{formatDate(contest.startTime)} - {formatDate(contest.endTime)}</p>
                 <p className='banner-exp'>Rewards: {contest.contestExp} EXP</p>
                 <Button
                   sx={{
