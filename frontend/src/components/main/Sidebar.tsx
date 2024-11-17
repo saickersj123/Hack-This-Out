@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MdOutlineLeaderboard, MdLeaderboard, MdOutlineTimer, MdTimer } from "react-icons/md";
 import { FaQuestionCircle, FaRegQuestionCircle } from "react-icons/fa";
@@ -17,6 +17,26 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   const location = useLocation();
   const [isHovered, setIsHovered] = useState(false);
+
+  // 화면 크기 감지 및 isCollapsed 상태 변경
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1200 && !isCollapsed) {
+        toggleSidebar(); // 1200px 이하일 때 접힘 상태로 변경
+      } else if (window.innerWidth > 1200 && isCollapsed) {
+        toggleSidebar(); // 1200px 초과일 때 확장 상태로 변경
+      }
+    };
+
+    // 초기 실행 (마운트 시 한 번 적용)
+    handleResize();
+
+    // 리스너 등록
+    window.addEventListener('resize', handleResize);
+
+    // 리스너 정리
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isCollapsed, toggleSidebar]);
 
   // URL을 기반으로 현재 선택된 메뉴 확인
   const getMenuIcon = (path: string, iconActive: JSX.Element, iconInactive: JSX.Element) => {
