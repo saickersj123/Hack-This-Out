@@ -1,16 +1,18 @@
+@use "../style" as *;
+
 .add-machine-form {
-    width: 75%;
-    min-width: 1200px;
-    height: 750px;
-    border-radius: 30px;
-    overflow: hidden;
-    background-color: var(--color-list-background);
-    padding: 30px 50px;
-    gap: 25px;
+    @include background_set;
+    position: relative;
+    backdrop-filter: blur(40px);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 32px;
+    gap: 16px;
+    overflow-y: auto;
 
     h2 {
         font-size: 2rem;
-        margin-bottom: 1rem;
+        margin-bottom: 16px;
         color: white;
     }
 
@@ -21,6 +23,7 @@
         border-radius: 5px;
         transition: background-color 0.3s;
         cursor: pointer;
+
         &:hover {
             background-color: rgb(83, 83, 83);
         }
@@ -29,15 +32,16 @@
     label {
         font-weight: bold;
         color: rgb(202, 202, 202);
-        
+
     }
 
     input,
     select,
     textarea {
-        margin-left: 10px;
+        margin-left: 8px;
         background-color: rgb(58, 58, 58);
         color: white;
+
         &:focus {
             border-color: #5b9bd5;
             box-shadow: 0 0 5px rgba(91, 155, 213, 0.5);
@@ -46,12 +50,13 @@
 
     .create-container {
         display: grid;
-        grid-template-columns: 70% 30%;
-        gap: 1.0rem;
-        margin-left: 2rem;
+        grid-template-columns: 2.5fr 1fr;
+        gap: 16px;
+        margin-left: 24px;
 
         .name-container {
             grid-column-start: 1;
+
             input {
                 width: 50%;
                 padding: 0.5rem;
@@ -63,6 +68,7 @@
 
         .category-container {
             grid-column-start: 1;
+
             select {
                 width: 31%;
                 padding: 0.5rem;
@@ -168,8 +174,6 @@
                     }
                 }
             }
-
-
         }
 
         .amiId-container {
@@ -196,9 +200,6 @@
             }
         }
 
-
-
-
         .error-message {
             grid-column: 1 / -1;
             color: red;
@@ -208,8 +209,10 @@
 
         .add-machine-form-button {
             grid-column-start: 2;
-            grid-row-start: 8;
+            grid-row-start: 7;
             justify-self: end;
+            align-self: end;
+            height: 48px;
 
             button[type="submit"] {
 
