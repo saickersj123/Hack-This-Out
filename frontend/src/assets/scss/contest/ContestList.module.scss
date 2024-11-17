@@ -26,6 +26,7 @@
         .table_text_box {
             display: flex;
             justify-content: space-around;
+            align-items: center;
             padding: 20px 0;
             border-bottom: 1px solid var(--color-list-border);
 
@@ -43,7 +44,10 @@
                 text-align: left;
             }
 
-            .table_name,
+            .table_name {
+                width: 300px;
+            }
+
             .table_description,
             .table_active {
                 width: 120px;
@@ -88,10 +92,10 @@
                 color: var(--color-white-200);
             }
 
-            .contest_name,
-            .contest_description {
-                width: 120px;
+            .contest_name {
+                width: 300px;
                 justify-content: flex-start;
+                gap: 16px;
             }
 
             .contest_start_time,
@@ -126,46 +130,26 @@
     }
 }
 
-.active {
-    background-color: rgba(22, 192, 152, 0.38);
-    border: 1px solid #00b087;
-    box-sizing: border-box;
-    color: #008767 !important;
-    border-radius: 4px;
-    font-size: 14px;
-    padding: 4px 12px;
-}
-
-.inactive {
-    background-color: #ffc5c5;
-    border: 1px solid #DF0404;
-    box-sizing: border-box;
-    color: #DF0404 !important;
-    border-radius: 4px;
-    font-size: 14px;
-    padding: 4px 12px;
-}
-
 .tabs {
     display: flex;
     margin-bottom: 20px;
-}
 
-.tab_button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    margin-right: 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
+    .tab_button {
+        padding: 10px 20px;
+        border: none;
+        background: linear-gradient(96.7deg, var(--lightblue-200), var(--lightblue-100));
+        cursor: pointer;
+        margin-right: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        color: white;
 
-.tab_button:hover {
-    background-color: #e0e0e0;
-}
-
-.active {
-    background-color: #007bff;
-    color: white;
+        &:hover {
+            background-color: var(--blue-200);
+        }
+    }
+    .active {
+        background: linear-gradient(96.7deg, var(--blue-500), var(--blue-100));
+        color: white;
+    }
 }

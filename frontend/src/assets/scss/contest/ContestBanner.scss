@@ -1,111 +1,108 @@
+@use "../style" as *;
+
 .contest-banner-container {
-    width: 100%;
-    max-width: 1200px;
+  width: 100%;
+  max-width: 1200px;
+  height: 213px;
+
+  .banner-slide {
+    padding: 20px 40px 0;
     height: 213px;
-  
-    .banner-slide {
-      padding: 20px 40px 0 ;
-      height: 213px;
-      background: transparent;
-      // background-color: #f9f9f9;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
-  
-      .banner-contents {
-        display: grid;
-        width: 90%;
-        height: 173px;
-        grid-template-columns: 30% 30% 40%;
-        grid-template-rows: 1fr 1fr 1fr 1fr;
-  
-        h3 {
-          width: 100%;
-          grid-column: 1/-1;
-          margin-bottom: 10px;
-          font-size: 1.8rem;
-          color: white;
-        }
-  
-        .contest-avatar {
-          grid-row: 1 / -1;
-          grid-row-start: 2;
-          width: 80px;
-          height: 80px;
-          top: 0;
-          margin: 10px 40px;
-          font-size: 3rem;
-        }
-  
-  
-        h4 {
-          grid-column: 2/3;
-          margin-bottom: 10px;
-          font-size: 1.5rem;
-          color: white;
-        }
-  
-        p {
-          margin: 5px 0;
-          color: white;
-          font-size: 1rem;
-        }
-  
-        .banner-exp {
-          grid-template-columns: 3/4;
-          grid-template-rows: 3/4;
-        }
-  
-        .MuiRating-root {
-          color: #ffd700;
-          /* Gold color for filled stars */
-        }
-  
-        .MuiRating-iconEmpty {
-          color: #ccc;
-          /* Grey color for empty stars */
-        }
-  
-        button {
-          background-color: #007bff;
-          color: #fff;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 0.9rem;
-  
-          &:hover {
-            background-color: #0056b3;
-          }
-        }
+    background: transparent;
+    // background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    @include flex_center;
+
+    .banner-contents {
+      display: grid;
+      width: 90%;
+      height: 173px;
+      grid-template-columns: 30% 30% 40%;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+
+      h3 {
+        width: 100%;
+        grid-column: 1/-1;
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+        color: white;
       }
-  
-    }
-  
-    /* Customize Carousel Indicators */
-    .MuiCarousel-indicator {
-      background-color: #ccc;
-      /* Inactive indicator color */
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin: 0 4px;
-    }
-  
-    .MuiCarousel-indicator.Mui-selected {
-      background-color: #3f51b5;
-      /* Active indicator color */
-    }
-  
-    .MuiSvgIcon-root {
-      font-size: 1.2rem;
-    }
-  
-    .MuiCarousel-indicators {
-      bottom: 10px;
-    }
-  
-    .MuiCarousel-navButtons {
-      top: 45%;
+
+      .contest-avatar {
+        grid-row: 1 / -1;
+        grid-row-start: 2;
+        width: 80px;
+        height: 80px;
+        top: 0;
+        margin: 10px 40px;
+        font-size: 3rem;
+      }
+
+
+      h4 {
+        grid-column: 2/3;
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+        color: white;
+      }
+
+      p {
+        margin: 5px 0;
+        color: white;
+        font-size: 1rem;
+      }
+
+      .banner-exp {
+        grid-template-columns: 3/4;
+        grid-template-rows: 3/4;
+      }
+
+      .MuiRating-root {
+        color: #ffd700;
+        /* Gold color for filled stars */
+      }
+
+      .MuiRating-iconEmpty {
+        color: #ccc;
+        /* Grey color for empty stars */
+      }
+
+      button {
+        @include button_color;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
     }
   }
+
+  /* Customize Carousel Indicators */
+  .MuiCarousel-indicator {
+    background-color: #ccc;
+    /* Inactive indicator color */
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 4px;
+  }
+
+  .MuiCarousel-indicator.Mui-selected {
+    background-color: #3f51b5;
+    /* Active indicator color */
+  }
+
+  .MuiSvgIcon-root {
+    font-size: 1.2rem;
+  }
+
+  .MuiCarousel-indicators {
+    bottom: 10px;
+  }
+
+  .MuiCarousel-navButtons {
+    top: 45%;
+  }
+}

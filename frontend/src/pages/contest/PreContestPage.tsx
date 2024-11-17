@@ -87,7 +87,7 @@ const PreContestPage: React.FC = () => {
       setError(error.response.data.msg || 'Failed to start contest.');
       console.error('Error starting contest:', error.message || error);
       setError('Failed to start contest.');
-      
+
     }
   };
 
@@ -100,40 +100,41 @@ const PreContestPage: React.FC = () => {
   return (
     <Main title="Pre Contest" description="Pre Contest 화면입니다.">
       <div className={styles.pre_contest_page}>
-        <div className={styles.contest_name}> You are about to play {contestDetail.name}</div>
-        <div className={styles.contest_description}>{contestDetail.description}</div>
-        <div className={styles.contest_exp}> Reward(EXP): {contestDetail.contestExp}</div>
-        <div className={styles.contest_rules}>
-          <p>Rules:</p>
-          <ul>
-            <li>1. You can only play one machine at a time.</li>
-            <li>2. You can get hints from the machine you are playing.</li>
-            <li>3. You can submit flags to the machine you are playing.</li>
-            <li>4. You have to play all the machines to win the contest.</li>
-            <li>5. The reward reduces as the contest time goes.</li>
-            <li>6. The contest will be ended when the time is up.</li>
-            <li>7. You get your experience points (EXP) after completing the contest.</li>
-            <li>8. Good luck!</li>
-          </ul>
+        <div className={styles.contest_basic_info}>
+          <h1 className={styles.contest_name}>{contestDetail.name}</h1>
+          <h2 className={styles.contest_description}>{contestDetail.description}</h2>
+          <h3 className={styles.contest_exp}> 보상: EXP {contestDetail.contestExp}</h3>
         </div>
-        <div className={styles.contest_warning}>
-          <p>
-            Warning: Once you start the contest, the game will be recorded.
-            <br />
-            If you leave the contest, you will be disqualified.
-          </p>
-        </div>
-        <div className={styles.contest_start}>
-          <button onClick={handleStartContest}>Start Contest</button>
+        <div className={styles.under_box}>
+          <div className={styles.contest_rules}>
+            <p>규칙 설명</p>
+            <ul>
+              <li>1. 한 번에 하나의 머신만 플레이할 수 있습니다.</li>
+              <li>2. 플레이 중인 머신에는 힌트가 제공됩니다.</li>
+              <li>3. 플레이 중인 머신의 플래그를 제출해야 합니다.</li>
+              <li>4. 콘테스트 모드를 클리어 하려면 모든 머신을 진행해야 합니다.</li>
+              <li>5. 콘테스트 모드는 시간이 지남에 따라 보상이 감소합니다.</li>
+              <li>6. 콘테스트 모드는 시간이 끝나면 종료됩니다.</li>
+              <li>7. 콘테스트를 클리어 하면 경험치(EXP)를 얻을 수 있습니다.</li>
+              <li>8. Good luck!</li>
+            </ul>
+          </div>
+          <button className={styles.contest_start} onClick={handleStartContest}>Start Contest</button>
         </div>
       </div>
-
       {/* Modal Component */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <div className="modal-body">
-          <p>You have already completed this contest.</p>
-          <button onClick={handleCloseModal} className="modal-button">
-            Go to Contest
+        <div className={styles.modal_body}>
+          <div className={styles.contest_warning}>
+            <h3>* 경고 *</h3>
+            <p>
+              시작 버튼을 누를 시 즉시 기록이 시작 됩니다.
+              <br />
+              컨테스트 화면을 떠날 시, 실격 됩니다.
+            </p>
+          </div>
+          <button onClick={handleCloseModal} className={styles.modal_button}>
+            시작
           </button>
         </div>
       </Modal>

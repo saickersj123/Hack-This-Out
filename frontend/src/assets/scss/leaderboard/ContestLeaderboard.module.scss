@@ -1,9 +1,10 @@
 .board {
   width: 100%;
-  height: calc(100% - 290px);
   display: flex;
   flex-direction: column;
   padding: 16px 32px 16px;
+  background: var(--color-background-transparent);
+  border-radius: 24px;
 
   .leaderboard_container {
     width: 100%;

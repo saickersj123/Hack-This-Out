@@ -82,10 +82,10 @@ const ContestList: React.FC = () => {
 
     return (
       <tbody>
-        {contestsToDisplay.map((contest) => 
+        {contestsToDisplay.map((contest) =>
         (
           <tr className={styles.contest_box} key={contest._id}>
-            <td className={styles.contest_avatar}>
+            <td className={styles.contest_name}>
               <Avatar
                 variant="rounded"
                 sx={{
@@ -95,9 +95,7 @@ const ContestList: React.FC = () => {
                 }}
               >
                 {avatarUrls[getAvatarIndex(contest.name)] && contest.name.charAt(0).toUpperCase()}
-              </Avatar>
-            </td>
-            <td className={styles.contest_name}>{contest.name || 'N/A'}</td>
+              </Avatar>{contest.name || 'N/A'}</td>
             <td className={styles.contest_start_time}>{contest.startTime ? formatDate(contest.startTime) : 'N/A'}</td>
             <td className={styles.contest_end_time}>{contest.endTime ? formatDate(contest.endTime) : 'N/A'}</td>
             <td className={styles.contest_reward}>{contest.contestExp}</td>
@@ -145,7 +143,6 @@ const ContestList: React.FC = () => {
       <table className={styles.contest_list_table}>
         <thead>
           <tr className={styles.table_text_box}>
-            <th className={styles.table_avatar}>Avatar</th>
             <th className={styles.table_name}>Name</th>
             <th className={styles.table_start_time}>Start Time</th>
             <th className={styles.table_end_time}>End Time</th>

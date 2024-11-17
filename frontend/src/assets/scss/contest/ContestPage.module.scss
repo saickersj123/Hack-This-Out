@@ -1,0 +1,66 @@
+.contest_container {
+    width: var(--container-width);
+    min-height: var(--container-height);
+    display: flex;
+    flex-direction: column;
+
+    .upper_box{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+        gap: 8px;
+
+        .contest_banner {
+            width: calc(100% - 233px);
+            height: 213px;
+            border-radius: 24px;
+            background: linear-gradient(to bottom right, var(--blue-500), #64AFD080);
+            /* 독립적인 그라데이션 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contest_register {
+            width: 213px;
+            height: 213px;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(to bottom right, var(--blue-500), #64AFD080);
+
+            .machine {
+                position: relative;
+                left: 15px
+            }
+
+            .plus {
+                position: relative;
+                left: 0px;
+                bottom: 35px;
+            }
+
+            .register_text {
+                font-size: 15px;
+                font-weight: 500;
+                color: white;
+            }
+
+            .button-background {
+                width: 140px;
+                height: 35px;
+                border-radius: 60px;
+                background: linear-gradient(300deg, #0C2144, #16488F);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+            }
+        }
+    }
+}
