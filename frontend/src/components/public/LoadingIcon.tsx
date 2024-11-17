@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import React from 'react';
 import UseAnimation from "react-useanimations";
-import loading from "react-useanimations/lib/loading2";
+import loading from "react-useanimations/lib/loading";
 
 const LoadingIcon: React.FC = () => {
 
