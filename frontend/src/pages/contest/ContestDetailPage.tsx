@@ -147,11 +147,9 @@ const ContestDetailPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Main title="Contest Detail" description="Loading contest details.">
-        <div className="contest-detail-page loading">
-          <Loading />
-        </div>
-      </Main>
+      <div className="contest-detail-page loading">
+        <Loading />
+      </div>
     );
   }
 

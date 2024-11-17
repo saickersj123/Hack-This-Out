@@ -5,6 +5,7 @@ import { useNavigate, NavigateFunction } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import '../../assets/scss/machine/MachineReviewForm.scss';
+import LoadingIcon from '../public/LoadingIcon';
 
 interface MachineReviewFormProps {
   onReviewAdded: (review: Review) => void;
@@ -96,6 +97,10 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingIcon />;
+  }
 
   return (
     <form className='machine-review-form' onSubmit={handleSubmit}>

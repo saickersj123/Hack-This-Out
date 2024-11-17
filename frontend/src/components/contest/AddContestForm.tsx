@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createContest } from '../../api/axiosContest';
 import { getActiveMachines } from '../../api/axiosMachine';
 import '../../assets/scss/contest/AddContestForm.scss';
+import Loading from '../public/Loading';
 
 interface Contest {
     id: string;
@@ -278,6 +279,10 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <form className='add-contest-form' onSubmit={handleSubmit} ref={formRef}>

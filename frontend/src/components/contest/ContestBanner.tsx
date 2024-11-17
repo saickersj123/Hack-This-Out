@@ -8,7 +8,7 @@ import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
 import { getLatestContest } from '../../api/axiosContest';
 import { getStartedContest } from '../../api/axiosContest';
-import Loading from '../public/Loading';
+import LoadingIcon from '../public/LoadingIcon';
 
 const ContestBanner: React.FC = () => {
   const [latestContest, setLatestContest] = useState<ContestBannerItem | null>(null);
@@ -37,7 +37,7 @@ const ContestBanner: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <Loading />;
+    return <LoadingIcon />;
   }
 
   if (error) {

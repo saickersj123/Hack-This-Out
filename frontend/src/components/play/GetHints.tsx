@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getUsedHintsInContest, getHintInContest } from '../../api/axiosContest';
 import { getUsedHints, getMachineHints } from '../../api/axiosMachine';
+import LoadingIcon from '../public/LoadingIcon';
 
 /**
  * Props interface for GetHints component.
@@ -131,7 +132,7 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId, dis
   return (
     <div className="get-hints-container">
       <h3>Hints</h3>
-      {loading && <p>Loading hints...</p>}
+      {loading && <LoadingIcon />}
       {error && <div className="error-message">{error.msg}</div>}
       {!loading && !error && hintsUsed > 0 && (
         <div className="used-hints">
@@ -155,7 +156,7 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId, dis
         className="get-hints-button"
       >
         {loading
-          ? 'Loading...'
+          ? <LoadingIcon />
           : remainingHints === 0
           ? 'No More Hints'
           : disabled

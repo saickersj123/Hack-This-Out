@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getInstanceByMachine } from '../../api/axiosInstance';
 import { Instance } from '../../types/Instance';
+import LoadingIcon from '../public/LoadingIcon';
 
 /**
  * Props interface for InstanceInfo component.
@@ -76,7 +77,7 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
   }, [machineId, onStatusChange]);
 
   if (isFetching) {
-    return <div className="instance-info-container">Fetching instance information...</div>;
+    return <div className="instance-info-container"><LoadingIcon /></div>;
   }
 
   if (error) {
@@ -84,7 +85,7 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
   }
 
   if (!instance) {
-    return <div className="instance-status">Instance is pending</div>;
+    return <div className="instance-status"><LoadingIcon /></div>;
   }
 
   /**

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { startInstance } from '../../api/axiosInstance';
-
+import LoadingIcon from '../public/LoadingIcon';
 /**
  * Props interface for StartInstanceButton component.
  */
@@ -50,7 +50,7 @@ const StartInstanceButton: React.FC<StartInstanceButtonProps> = ({ machineId, on
         disabled={loading}
         className="start-instance-button"
       >
-        {loading ? 'Starting...' : 'Start Instance'}
+        {loading ? <LoadingIcon /> : 'Start Instance'}
       </button>
       {error && <div className="error-message">{error}</div>}
     </div>

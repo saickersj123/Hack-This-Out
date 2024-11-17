@@ -8,6 +8,7 @@ import { AuthUserContext } from '../../contexts/AuthUserContext';
 import '../../assets/scss/machine/MachineReviews.scss';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
+import LoadingIcon from '../public/LoadingIcon';
 
 interface Review {
   _id: string;
@@ -68,7 +69,7 @@ const MachineReviews: React.FC<MachineReviewsProps> = ({ machineId }) => {
     }
   };
 
-  if (loading || isLoading) return <p>Loading reviews...</p>;
+  if (loading || isLoading) return <LoadingIcon />;
   if (fetchError) return <p>{fetchError}</p>;
   if (userError) return <p>{userError}</p>;
 

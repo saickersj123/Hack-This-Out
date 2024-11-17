@@ -75,6 +75,11 @@ const ContestList: React.FC = () => {
         </tbody>
       );
     }
+
+    if (loading) {
+      return <Loading />;
+    }
+
     return (
       <tbody>
         {contestsToDisplay.map((contest) => 

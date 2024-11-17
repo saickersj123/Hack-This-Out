@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { getUserStatus } from '../api/axiosUser';
+import Loading from '../components/public/Loading';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -44,6 +45,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setIsLoggedIn(false);
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, loading, login, logout }}>

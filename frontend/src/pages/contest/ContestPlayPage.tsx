@@ -14,6 +14,7 @@ import Main from '../../components/main/Main';
 import { ContestDetail, Machine } from '../../types/Contest';
 import { Instance } from '../../types/Instance';
 import '../../assets/scss/contest/ContestPlayPage.scss';
+import Loading from '../../components/public/Loading';
 
 /**
  * Interface for API response when fetching contest details.
@@ -117,7 +118,7 @@ const ContestPlayPage: React.FC = () => {
       <Main>
         <div className="contest-play-container">
           <h2>Contest Play</h2>
-          <div>Loading contest details...</div>
+          <Loading />
         </div>
       </Main>
     );

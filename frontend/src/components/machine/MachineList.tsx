@@ -9,6 +9,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { BsArrowRightCircle } from "react-icons/bs";
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
+import LoadingIcon from '../public/LoadingIcon';
 
 interface Machine {
   _id: string;
@@ -76,7 +77,7 @@ const MachineList: React.FC = () => {
   };
 
   if (loading) {
-    return <p>Loading machines...</p>;
+    return <LoadingIcon />;
   }
 
   if (error) {
