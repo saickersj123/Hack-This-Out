@@ -19,7 +19,7 @@
       min-width: calc(500px - 221px);
       height: 173px;
       grid-template-columns: 30% 40% 30%;
-      grid-template-rows: repeat(4, 1fr);
+      grid-template-rows: 30% 20% 20% 30%;
 
       h3 {
         width: 100%;
@@ -36,24 +36,35 @@
         width: 80px;
         height: 80px;
         top: 0;
-        font-size: 3rem;
+        font-size: var(--font-title);
       }
 
 
       h4 {
         grid-column: 2 / -1;
-        font-size: 1.5rem;
-        color: white;
+        font-size: var(--font-size-large);
+        color: var(--color-white);
       }
 
-      p {
-        color: white;
-        font-size: 1rem;
+      .banner-time {
+        grid-column: 2 / 4;
+        grid-row: 3 / 4;
+        color: var(--color-white);
+        font-size: 14px;
+      }
+
+      .ramaining-time {
+        grid-column: 2 / 4;
+        grid-row: 4 / 4;
+        color: var(--color-white);
+        font-size: var(--font-size-small);
       }
 
       .banner-exp {
-        grid-template-columns: 3/4;
-        grid-template-rows: 3/4;
+        grid-column: 3 / 4;
+        grid-row: 3 / 4;
+        color: var(--color-white);
+        font-size: var(--font-size-small);
       }
 
       .MuiRating-root {
@@ -69,8 +80,8 @@
       button {
         @include button_color;
         width: 100%;
-        grid-column: 3; 
-        grid-row: 4;  
+        grid-column: 3;
+        grid-row: 4;
         border: none;
         border-radius: 4px;
         cursor: pointer;

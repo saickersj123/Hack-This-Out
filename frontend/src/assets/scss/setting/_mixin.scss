@@ -21,3 +21,12 @@
         background: linear-gradient(96.7deg, #222, #008000);
     }
 }
+
+@mixin scrollbar-none {
+    scrollbar-width: none;
+	scrollbar-color: var(--color-gray-400) transparent;
+	
+	&::-webkit-scrollbar {
+        display: none;
+    }
+}

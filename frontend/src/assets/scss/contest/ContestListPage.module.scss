@@ -1,3 +1,5 @@
+@use "../style" as *;
+
 .contest_container {
     width: var(--container-width);
     min-width: 500px;
@@ -5,7 +7,9 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    
+    overflow-y: auto;
+    @include scrollbar-none;
+
     .upper_box{
         width: 100%;
         display: flex;
@@ -61,9 +65,9 @@
             }
 
             .register_text {
-                font-size: 15px;
+                font-size: var(--font-size-small);
                 font-weight: 500;
-                color: white;
+                color: var(--color-white);
             }
         }
     }

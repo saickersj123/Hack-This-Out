@@ -1,5 +1,5 @@
 import React from 'react';
-import formatDate from '../../utils/dateUtils';
+import { formatDate } from '../../utils/dateUtils';
 import { ContestDetail as ContestDetailType } from '../../types/Contest';
 import styles from '../../assets/scss/contest/ContestDetail.module.scss';
 

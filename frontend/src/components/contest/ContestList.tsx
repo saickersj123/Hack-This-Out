@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getActiveContests } from '../../api/axiosContest';
 import { useNavigate } from 'react-router-dom';
-import formatDate from '../../utils/dateUtils';
+import { formatDate } from '../../utils/dateUtils';
 
 import styles from '../../assets/scss/contest/ContestList.module.scss';
 import { BsArrowRightCircle } from "react-icons/bs";
@@ -92,8 +92,7 @@ const ContestList: React.FC = () => {
                   backgroundColor: avatarUrls[getAvatarIndex(contest.name)] ? avatarBackgroundColors[getAvatarColorIndex(contest.name)] : 'transparent',
                   width: 40,
                   height: 40,
-                }}
-              >
+                }}>
                 {avatarUrls[getAvatarIndex(contest.name)] && contest.name.charAt(0).toUpperCase()}
               </Avatar>{contest.name || 'N/A'}</td>
             <td className={styles.contest_start_time}>{contest.startTime ? formatDate(contest.startTime) : 'N/A'}</td>
@@ -119,26 +118,28 @@ const ContestList: React.FC = () => {
 
   return (
     <div className={styles.contest_list_container}>
-      <div className={styles.contest_list_title}>Contest List</div>
-      <div className={styles.tabs}>
-        <button
-          className={`${styles.tab_button} ${activeTab === 'ongoing' ? styles.active : ''}`}
-          onClick={() => setActiveTab('ongoing')}
-        >
-          Ongoing Contests
-        </button>
-        <button
-          className={`${styles.tab_button} ${activeTab === 'notStarted' ? styles.active : ''}`}
-          onClick={() => setActiveTab('notStarted')}
-        >
-          Not Started Contests
-        </button>
-        <button
-          className={`${styles.tab_button} ${activeTab === 'ended' ? styles.active : ''}`}
-          onClick={() => setActiveTab('ended')}
-        >
-          Ended Contests
-        </button>
+      <div className={styles.contest_fixed_box}>
+        <div className={styles.contest_list_title}>Contest List</div>
+        <div className={styles.tabs}>
+          <button
+            className={`${styles.tab_button} ${activeTab === 'ongoing' ? styles.active : ''}`}
+            onClick={() => setActiveTab('ongoing')}
+          >
+            Ongoing Contests
+          </button>
+          <button
+            className={`${styles.tab_button} ${activeTab === 'notStarted' ? styles.active : ''}`}
+            onClick={() => setActiveTab('notStarted')}
+          >
+            Not Started Contests
+          </button>
+          <button
+            className={`${styles.tab_button} ${activeTab === 'ended' ? styles.active : ''}`}
+            onClick={() => setActiveTab('ended')}
+          >
+            Ended Contests
+          </button>
+        </div>
       </div>
       <table className={styles.contest_list_table}>
         <thead>

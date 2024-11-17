@@ -1,0 +1,178 @@
+@use "../style" as *;
+
+.machine_list_container {
+  @include background_set;
+  overflow: hidden;
+  padding: 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .machine_list_title {
+    width: 368px;
+    display: flex;
+    position: relative;
+    font-size: 40px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    font-family: var(--font-ibm-plex-sans);
+    color: var(--color-white);
+    text-align: left;
+    height: 62px;
+  }
+
+  .machine_list_table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-collapse: collapse;
+
+    .table_text_box {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 20px 0;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--color-list-border);
+
+      .table_image,
+      .table_name,
+      .table_category,
+      .table_rating,
+      .table_playCount,
+      .table_details {
+        font-size: var(--font-size-small);
+        letter-spacing: -0.01em;
+        font-weight: 600;
+        color: #b5b7c0;
+        text-align: left;
+      }
+
+      .table_name {
+        width: 300px;
+      }
+
+      .table_category {
+        width: 170px;
+        display: flex;
+        gap: 10px;
+        position: relative;
+        align-items: center;
+
+        .category_filter_toggle {
+          position: absolute;
+          left: 80px;
+          height: 100%;
+          cursor: pointer;
+          align-items: center;
+          justify-content: center;
+
+          .category_filter {
+            display: flex;
+            position: absolute;
+            align-items: center;
+            justify-content: center;
+  
+            top: 30px;
+            gap: 8px;
+            background: var(--gradient-button);
+            height: 50px;
+            padding: 8px;
+            border: 2px solid var(--blue-100);
+            border-radius: 8px;
+            z-index: 10;
+
+            .category_label {
+              color: var(--color-white);
+              font-size: var(--font-size-small);
+            }
+
+            .category_select {
+              border: 2px solid var(--color-white);
+              border-radius: 4px;
+              padding: 4px;
+              background: none;
+              color: var(--color-white);
+            }
+            
+            .category {
+              background: var(--blue-200);
+              border: none;
+            }
+          }
+        }
+      }
+
+      .table_rating {
+        width: 170px;
+      }
+
+      .table_playCount,
+      .table_details {
+        width: 60px;
+      }
+
+      .table_details {
+        text-align: center;
+      }
+
+    }
+
+    .machine_box {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-bottom: 1px solid var(--color-list-border);
+
+      .machine_name,
+      .machine_category,
+      .machine_playCount,
+      .machine_rating,
+      .machine_details,
+      .machine_playCount {
+        display: flex;
+        align-items: center;
+        text-align: left;
+
+        height: 70px;
+        font-size: var(--font-size-small);
+        letter-spacing: -0.01em;
+        font-weight: 600;
+        color: var(--color-white-200);
+      }
+
+      .machine_name {
+        width: 300px;
+        justify-content: flex-start;
+        gap: 16px;
+      }
+
+      .machine_details {
+        text-align: center;
+        justify-content: center;
+
+        .details_button {
+          background: none;
+          border: none;
+          cursor: pointer;
+        }
+      }
+
+      .machine_category,
+      .machine_rating {
+        width: 170px;
+      }
+
+      .machine_details,
+      .machine_playCount {
+        width: 60px;
+      }
+
+      &.no-data {
+        text-align: center;
+        padding: 20px;
+        color: #888;
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getActiveMachines } from '../../api/axiosMachine';
-import '../../assets/scss/machine/MachineList.scss';
+import styles from '../../assets/scss/machine/MachineList.module.scss';
 import { useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
@@ -85,29 +85,29 @@ const MachineList: React.FC = () => {
   }
 
   return (
-    <div className='machine-list-container'>
-      <div className='machine-list-title'>Machine List</div>
-      <table className='machine-list-table'>
+    <div className={styles.machine_list_container}>
+      <div className={styles.machine_list_title}>Machine List</div>
+      <table className={styles.machine_list_table}>
         <thead>
-          <tr className='table-head'>
-            <th className='table-image'></th>
-            <th className='table-name'>Name</th>
-            <th className='table-category'>
+          <tr className={styles.table_text_box}>
+            <th className={styles.table_name}>Name</th>
+            <th className={styles.table_category}>
               Category
               <ClickAwayListener onClickAway={handleClickAway}>
-                <div className='category-filter-toggle'>
+                <div className={styles.category_filter_toggle}>
                   <FilterAltIcon onClick={toggleFilterVisibility} />
                   {filterVisible && (
-                    <div className='category-filter'>
-                      <label htmlFor='category-select' style={{ color: "black" }}>Filter by Category:</label>
+                    <div className={styles.category_filter}>
+                      <label className={styles.category_label} htmlFor='category-select'>Filter by Category:</label>
                       <select
+                        className={styles.category_select}
                         id='category-select'
                         value={categoryFilter}
                         onChange={(e) => setCategoryFilter(e.target.value)}
                       >
-                        <option value=''>All</option>
+                        <option className={styles.category} value=''>All</option>
                         {categories.map((category) => (
-                          <option key={category} value={category}>{category}</option>
+                          <option className={styles.category} key={category} value={category}>{category}</option>
                         ))}
                       </select>
                     </div>
@@ -115,9 +115,9 @@ const MachineList: React.FC = () => {
                 </div>
               </ClickAwayListener>
             </th>
-            <th className='table-rating'>Rating</th>
-            <th className='table-playCount'>Played</th>
-            <th className='table-details'>Detail</th>
+            <th className={styles.table_rating}>Rating</th>
+            <th className={styles.table_playCount}>Played</th>
+            <th className={styles.table_details}>Detail</th>
           </tr>
         </thead>
         <tbody>
@@ -130,18 +130,18 @@ const MachineList: React.FC = () => {
               const avatarColorIndex = getAvatarColorIndex(machine.name);
               const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
               return (
-                <tr key={machine._id}>
-                  <td className='machine-img'>
+                <tr className={styles.machine_box} key={machine._id}>
+                  <td className={styles.machine_name}>
                     <Avatar
                       variant="rounded"
-                      sx={{ backgroundColor: avatarBgColor, width: 50, height: 50 }}
-                    >
+                      sx={{ backgroundColor: avatarBgColor, 
+                      width: 40, 
+                      height: 40 
+                    }}>
                       {machine.name.charAt(0).toUpperCase()}
-                    </Avatar>
-                  </td>
-                  <td className='machine-name'>{machine.name}</td>
-                  <td className='machine-category'>{machine.category}</td>
-                  <td className='machine-rating'>
+                    </Avatar>{machine.name}</td>
+                  <td className={styles.machine_category}>{machine.category}</td>
+                  <td className={styles.machine_rating}>
                     <Box
                       sx={{
                         display: 'flex',
@@ -156,9 +156,9 @@ const MachineList: React.FC = () => {
                       />
                     </Box>
                   </td>
-                  <td className='machine-playCount'>{machine.playerCount}</td>
-                  <td className='machine-details'>
-                    <button className='details-button' onClick={() => handleMachineClick(machine)}><BsArrowRightCircle size={24} color="white" /></button>
+                  <td className={styles.machine_playCount}>{machine.playerCount}</td>
+                  <td className={styles.machine_details}>
+                    <button className={styles.details_button} onClick={() => handleMachineClick(machine)}><BsArrowRightCircle size={24} color='white' /></button>
                   </td>
                 </tr>
               );

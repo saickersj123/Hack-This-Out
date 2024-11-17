@@ -89,28 +89,20 @@ const MachineBanner: React.FC = () => {
                 >
                   {machine.name.charAt(0).toUpperCase()}
                 </Avatar>
-                <h4><b>{machine.name}</b></h4>
+                <h4>{machine.name}</h4>
                 <p className='banner-category'>Category: {machine.category}</p>
                 <p className='banner-exp'>Rewards: {machine.exp} EXP</p>
                 <p className='banner-played'>Played: {machine.playerCount}</p>
-                <div className='banner-rating'>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      marginTop: '4px',
-                      width: '150px'
-                    }}
-                  >
-                    <Rating
-                      name={`read-only-rating-${machine._id}`}
+                <Box className='rating-box'>
+                  <Rating
+                    name={`read-only-rating-${machine._id}`}
                     value={Number(machine.rating)}
                     size='large'
                     precision={0.5}
                     readOnly
                   />
-                  <span style={{ marginLeft: '8px', color: 'white' }}>{machine.rating.toFixed(1)}</span>
-                  </Box>
-                </div>
+                  <span className='rating'>{machine.rating.toFixed(1)}</span>
+                </Box>
                 <Button
                   sx={{
                     width: '170px',

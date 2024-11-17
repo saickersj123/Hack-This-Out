@@ -75,4 +75,6 @@ body {
 	--gradient-container : linear-gradient(to bottom right, var(--blue-500), #64AFD080); // 컨테이너 배경. ex)CurrentUserInfo 배경 그라데이션
 	--gradient-button : linear-gradient(96.7deg, var(--blue-500), var(--blue-100));		// 버튼 배경. ex) GO TO CONTEST 버튼
 
+	/* Border */
+	--border-container: 24px;
 }

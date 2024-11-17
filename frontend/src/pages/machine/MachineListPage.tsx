@@ -19,21 +19,16 @@ const MachineListPage: React.FC = () => {
                     {/* register-machine */}
                     <div className="register-machine">
                         {/* <p className="register-text">register machine</p> */}
-                        <Link to='/machine/register'>
-                            <button className='register-button'>
-                                <div className='register-machine-icon'>
-                                    <DnsRoundedIcon className='machine' style={{ fontSize: '60px'}} />
-                                    <AddIcon className='plus' style={{ fontSize: '40px' }} />
-                                </div>
-                                Register machine
-                            </button>
+                        <Link to='/machine/register' className='register-machine'>
+                            <div>
+                                <DnsRoundedIcon className='machine' style={{ fontSize: '60px' }} />
+                                <AddIcon className='plus' style={{ fontSize: '40px' }} />
+                            </div>
+                            <div className='register_text'>Register machine</div>
                         </Link>
                     </div>
                 </div>
-                {/* machine-list는 다음 줄에 배치됨 */}
-                <div className='machine-list'>
-                    <MachineList />
-                </div>
+                <MachineList />
             </div>
         </Main>
     );
