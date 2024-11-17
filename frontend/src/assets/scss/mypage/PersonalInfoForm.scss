@@ -1,4 +1,4 @@
-@use '../setting/mixin.scss';
+@use '../setting/mixin' as *;
 
 .personalInfo-container {
     width: clamp(85%, 90%, 95%);
@@ -68,7 +68,8 @@
                     }
                 }
 
-                .avatar-button {
+                .avatar-button { 
+                    //@include button_color;
                     width: 60px;
                     height: 36px;
                     padding: 0;
@@ -115,7 +116,7 @@
                 }
 
                 label {
-                    font-size: 16px;
+                    font-size: var(--font-size-small);
                     color: var(--color-gray);
                     font-weight: 500;
                 }
@@ -142,7 +143,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             color: var(--color-white);
-            font-size: 16px;
+            font-size: var(--font-size-small);
             transition: all 0.2s ease;
 
             &::placeholder {
@@ -167,7 +168,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-size: 14px;
+            font-size: var(--font-size-small);
             font-weight: 600;
             margin-left: auto;
             margin-right: 5px;
@@ -190,7 +191,7 @@
             position: relative;
             
             h3 {
-                font-size: 22px;
+                font-size: var(--font-size-mid);
                 margin-bottom: 16px;
                 color: var(--color-white);
                 font-weight: 600;
@@ -232,7 +233,7 @@
                 border-radius: 8px;
                 cursor: pointer;
                 transition: all 0.2s ease;
-                font-size: 14px;
+                font-size: var(--font-size-small);
                 font-weight: 600;
 
                 &:hover {
