@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import { Paper, Button, Avatar } from '@mui/material';
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
+import Loading from '../public/Loading';
 
 const MachineBanner: React.FC = () => {
   const [latestMachine, setLatestMachine] = useState<MachineforBanner | null>(null);
@@ -37,7 +38,7 @@ const MachineBanner: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading machine banners...</p>;
+    return <Loading />;
   }
 
   if (error) {
