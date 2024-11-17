@@ -5,7 +5,6 @@ import { useSidebar } from '../../contexts/SidebarContext.tsx';
 import Sidebar from './Sidebar';
 import Profile from './Profile';
 import styles from '../../assets/scss/section/_layout.module.scss';
-import background from '../../assets/img/icon/Main_Background.png';
 
 interface MainProps {
   title?: string;
@@ -27,7 +26,7 @@ const Main: React.FC<MainProps> = ({ title, description, children }) => {
         <meta name="description" content={description} />
       </Helmet>
 
-      <img className={styles.background} src={background} />
+      <div className={styles.background}/>
       <div className={styles.main_container}>
         <div className={`${styles.sidebar_container} ${isCollapsed ? styles.collapsed : ''}`}>
           <Sidebar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />

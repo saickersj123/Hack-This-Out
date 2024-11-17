@@ -10,3 +10,12 @@
     align-items: center;
     justify-content: center;
 }
+
+@mixin button_color {
+    background: linear-gradient(96.7deg, var(--blue-500), var(--blue-100));
+    color: var(--color-white);
+
+    &:hover {
+        background: linear-gradient(96.7deg, #222, #008000);
+    }
+}

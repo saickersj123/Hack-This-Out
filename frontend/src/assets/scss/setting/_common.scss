@@ -2,14 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap');
 
-*{
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-gray-400) transparent;
-}
-
 body {
 	margin: 0;
 	line-height: normal;
+	scrollbar-width: none;
+	scrollbar-color: var(--color-gray-400) transparent;
+	
+	&::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 :root {
@@ -35,8 +36,16 @@ body {
 
 
 	/* Colors */
-	--color-background-transparent: #13151ab3;
-	--color-background: #13151a;
+	--color-background-transparent: #071125;
+	--color-layout: #13151a;
+	--blue-100: #09509A;
+	--blue-200: #16488F;
+	--blue-300: #0B1F65;
+	--blue-400: #0C2144;
+	--blue-500: #071125;
+	--lightblue-100: #64AFD0;
+	--lightblue-200: #2E74A0;
+
 	--color-list-border: #EEEEEE;
 	--colors-neutral-grey-900: #3a383f;
 	--color-white-200: #f7f3fd;

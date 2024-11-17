@@ -10,7 +10,7 @@
   font-size: var(--font-size-mid-5);
   color: var(--color-white);
   font-family: var(--font-inter);
-  background: var(--color-background);
+  background: var(--color-layout);
 
   .userinfoDark_container {
     width: var(--profile-width);
@@ -96,7 +96,7 @@
     cursor: pointer;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 10;
-    background: var(--color-background);
+    background: var(--color-layout);
     border-radius: 0 0 24px 24px;
 
     &.collapsed {

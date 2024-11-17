@@ -5,6 +5,7 @@
     top: 0;
     left: 0;
     z-index: 0;
+    background: linear-gradient(to top right, var(--blue-500), var(--lightblue-200));
 }
 
 .main_container {
@@ -35,7 +36,7 @@
         .upper_bar {
             width: calc(100% - var(--sidebar-width));
             height: 85px;
-            background-color: #13151a;
+            background-color: var(--color-layout);
             z-index: 1;
         }
         .profile_container {
@@ -46,17 +47,23 @@
     .props_container {
         position: relative;
         flex-grow: 1;
-        flex-shrink: 0;
         height: 100vh;
         padding-left: var(--sidebar-width);
         box-sizing: border-box;
-        overflow-y: auto;  // 내부 스크롤 허용
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         padding-top: 48px;
+        margin-bottom: 24px;
         z-index: 1;
+
+        scrollbar-width: none;
+        
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         &.collapsed {
             padding-left: var(--sidebar-collapsed);
