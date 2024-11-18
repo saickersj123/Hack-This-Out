@@ -9,13 +9,12 @@ import { FaArrowRightToBracket } from "react-icons/fa6";
 
 import down_arrow from '../../assets/img/icon/down_arrow.svg';
 import up_arrow from '../../assets/img/icon/up_arrow.svg';
-import chat from '../../assets/img/icon/chat_icon.svg';
 import setting from '../../assets/img/icon/setting_icon.svg';
-import personal_info from '../../assets/img/icon/personal_info.svg';
 import darkmode_icon from '../../assets/img/icon/darkmode_icon.svg';
 import darkmode_switch from '../../assets/img/icon/darkmode_switch.svg';
 import { Avatar } from '@mui/material';
 import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
+import { FaHouseUser, FaRegUserCircle } from 'react-icons/fa';
 
 interface MenuItemProps {
     onClick?: () => void;
@@ -79,14 +78,14 @@ const Profile: React.FC = () => {
                 <li className={styles.settings}>
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
-                            <img className={styles.icon} alt="" src={personal_info} />
-                            <MenuItem onClick={() => navigate('/mypage')}>개인정보 수정</MenuItem>
+                            <FaRegUserCircle className={styles.icon} />
+                            <MenuItem onClick={() => navigate('/mypage')}>My Page</MenuItem>
                         </div>
                     </div>
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
-                            <img className={styles.icon} alt="" src={chat} />
-                            <div className={styles.dashboard}>Messages</div>
+                            <FaHouseUser className={styles.icon} />
+                            <MenuItem onClick={() => navigate('/mystats')}>My Stats</MenuItem>
                         </div>
                     </div>
                     <div className={styles.settingsInner}>

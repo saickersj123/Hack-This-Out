@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getInstanceByMachine } from '../../api/axiosInstance';
 import { Instance } from '../../types/Instance';
 import LoadingIcon from '../public/LoadingIcon';
+import ErrorIcon from '../public/ErrorIcon';
 
 /**
  * Props interface for InstanceInfo component.
@@ -81,7 +82,7 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
   }
 
   if (error) {
-    return <div className="instance-error">Error: {error}</div>;
+    return <div className="instance-error"><ErrorIcon /> {error}</div>;
   }
 
   if (!instance) {

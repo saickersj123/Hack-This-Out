@@ -11,6 +11,7 @@ import SubmitFlagForm from '../../components/play/SubmitFlagForm';
 import GiveUpButton from '../../components/play/GiveUpButton';
 import Main from '../../components/main/Main';
 import { Instance } from '../../types/Instance';
+import ErrorIcon from '../../components/public/ErrorIcon';
 
 /**
  * Interface representing the Machine details.
@@ -100,7 +101,7 @@ const MachinePlayPage: React.FC = () => {
       <Main>
         <div className="machine-play-container">
           <h2>Machine Play</h2>
-          <div className="error-message">{error}</div>
+          <div className="error-message"><ErrorIcon /> {error}</div>
         </div>
       </Main>
     );

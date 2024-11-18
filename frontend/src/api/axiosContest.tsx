@@ -318,3 +318,16 @@ export const getContests = async () => {
       throw error.response ? error.response.data : new Error('Failed to fetch latest contest');
     }
   };
+
+/**
+ * Get contest participation.
+ * @returns {Promise<Object>} - The response data containing contest participation.
+ */
+export const getContestParticipations = async () => {
+  try {
+    const response = await axiosInstance.get('/contest/participations');
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : new Error('Failed to fetch contest participation');
+  }
+};

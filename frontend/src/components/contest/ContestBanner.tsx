@@ -10,6 +10,7 @@ import { formatDate, formatRemainingTime } from '../../utils/dateUtils';
 import { getLatestContest } from '../../api/axiosContest';
 import { getStartedContest } from '../../api/axiosContest';
 import LoadingIcon from '../public/LoadingIcon';
+import ErrorIcon from '../public/ErrorIcon';
 
 const ContestBanner: React.FC = () => {
   const [latestContest, setLatestContest] = useState<ContestBannerItem | null>(null);
@@ -42,7 +43,7 @@ const ContestBanner: React.FC = () => {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <ErrorIcon />;
   }
 
   const contests = [
@@ -91,7 +92,11 @@ const ContestBanner: React.FC = () => {
                 </Avatar>
                 <h4>{contest.name}</h4>
                 <p className='banner-time'>{formatDate(contest.startTime)} - {formatDate(contest.endTime)}</p>
-                <p className='ramaining-time'>{formatRemainingTime(contest.endTime)}</p>
+                {new Date(contest.startTime) > new Date() ? (
+                  <p className='ramaining-time'>시작까지 {formatRemainingTime(contest.startTime)}</p>
+                ) : (
+                  <p className='ramaining-time'>종료까지 {formatRemainingTime(contest.endTime)}</p>
+                )}
                 <p className='banner-exp'>Rewards: {contest.contestExp} EXP</p>
                 <Button
                   sx={{

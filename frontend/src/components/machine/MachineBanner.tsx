@@ -10,6 +10,7 @@ import { Paper, Button, Avatar } from '@mui/material';
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
 import LoadingIcon from '../public/LoadingIcon';
+import ErrorIcon from '../public/ErrorIcon';
 
 const MachineBanner: React.FC = () => {
   const [latestMachine, setLatestMachine] = useState<MachineforBanner | null>(null);
@@ -42,7 +43,7 @@ const MachineBanner: React.FC = () => {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <ErrorIcon />;
   }
 
   const machines = [
@@ -90,16 +91,20 @@ const MachineBanner: React.FC = () => {
                   {machine.name.charAt(0).toUpperCase()}
                 </Avatar>
                 <h4>{machine.name}</h4>
-                <p className='banner-category'>Category: {machine.category}</p>
+                {/* <p className='banner-category'>Category: {machine.category}</p> */}
                 <p className='banner-exp'>Rewards: {machine.exp} EXP</p>
-                <p className='banner-played'>Played: {machine.playerCount}</p>
+                {/* {mostPlayedMachine && machine.playerCount > 0 && <p className='banner-played'>Played: {machine.playerCount}</p>} */}
                 <Box className='rating-box'>
-                  <Rating
+                <Rating
                     name={`read-only-rating-${machine._id}`}
                     value={Number(machine.rating)}
-                    size='large'
                     precision={0.5}
                     readOnly
+                    sx={{
+                      '& .MuiRating-icon': {
+                        fontSize: '40px', // 별 크기 설정
+                      },
+                    }}
                   />
                   <span className='rating'>{machine.rating.toFixed(1)}</span>
                 </Box>

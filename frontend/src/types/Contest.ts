@@ -6,6 +6,11 @@ export interface Machine {
   name: string;
 }
 
+export interface Contest {
+  _id: string;
+  name: string;
+}
+
 /**
  * Interface representing the details of a contest.
  */

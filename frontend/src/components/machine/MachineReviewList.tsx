@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { Review } from '../../types/Machine';
 import '../../assets/scss/machine/MachineReviewList.scss';
 import LoadingIcon from '../public/LoadingIcon';
+import ErrorIcon from '../public/ErrorIcon';
 
 interface MachineReviewListProps {
   machineId: string;
@@ -40,7 +41,7 @@ const MachineReviewList: React.FC<MachineReviewListProps> = ({ machineId }) => {
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <ErrorIcon />;
   }
 
   return (

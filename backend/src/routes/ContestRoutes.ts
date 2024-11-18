@@ -11,7 +11,7 @@ import {
     updateContestDetails,
     getContestStatus,
     getContestDetails,
-    getUserContestParticipation,
+    getContestParticipations,
     activateContest,
     deactivateContest,
     getActiveContests,
@@ -46,8 +46,8 @@ ContestRoutes.get('/active/:contestId', verifyToken, getActiveContestDetails);
 // Route to get all active contests
 ContestRoutes.get('/active', verifyToken, getActiveContests);
 
-// Route to get user contest participation
-ContestRoutes.get('/:contestId/participate', verifyToken, getUserContestParticipation);
+// Route to get user contest participations
+ContestRoutes.get('/participations', verifyToken, getContestParticipations);
 
 // Route to participate in a contest
 ContestRoutes.post('/:contestId/participate', verifyToken, participateInContest);

@@ -11,7 +11,7 @@ export const formatDate = (dateString: string | Date): string => {
     throw new Error('Invalid date string provided.');
   }
 
-  const year = date.getFullYear();
+  const year = String(date.getFullYear()).slice(-2); // display last 2 digits of year
   const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
   const day = String(date.getDate()).padStart(2, '0');
   const hours = String(date.getHours()).padStart(2, '0');
@@ -33,9 +33,10 @@ export const formatRemainingTime = (endDateString: string | Date): string => {
   if (diff <= 0) {
     return "Time's up!"; // 시간이 만료된 경우
   }
-
-  const hours = Math.floor(diff / (1000 * 60 * 60)); // 남은 시간(시)
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24)); // 남은 시간(일)
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24); // 남은 시간(시)
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)); // 남은 시간(분)
 
-  return `남은 시간: ${hours}시간 ${minutes}분`;
+  return `남은 시간: ${days}일 ${hours}시간 ${minutes}분`;
 };

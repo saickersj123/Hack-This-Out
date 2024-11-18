@@ -15,6 +15,7 @@ import { ContestDetail, Machine } from '../../types/Contest';
 import { Instance } from '../../types/Instance';
 import '../../assets/scss/contest/ContestPlayPage.scss';
 import Loading from '../../components/public/Loading';
+import ErrorIcon from '../../components/public/ErrorIcon';
 
 /**
  * Interface for API response when fetching contest details.
@@ -107,7 +108,7 @@ const ContestPlayPage: React.FC = () => {
       <Main>
         <div className="contest-play-container">
           <h2>Contest Play</h2>
-          <div className="error-message">{error}</div>
+          <div className="error-message"><ErrorIcon /> {error}</div>
         </div>
       </Main>
     );

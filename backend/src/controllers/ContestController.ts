@@ -282,25 +282,6 @@ export const participateInContest = async (req: Request, res: Response): Promise
 };
 
 /**
- * Get user is participated in contest.
- */
-export const getUserContestParticipation = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { contestId } = req.params;
-        const userId = res.locals.jwtData.id;
-        const participation = await ContestParticipation.findOne({ user: userId, contest: contestId, contestCompleted: false });
-        res.status(200).json({ 
-            message: "OK", 
-            msg: 'User contest participation fetched successfully.', 
-            participation: participation 
-        });
-    } catch (error: any) {
-        console.error('Error getting user contest participation:', error);
-        res.status(500).send('Failed to get user contest participation.');
-    }
-};
-
-/**
  * Submit a flag for a contest.
  */
 export const submitFlagForContest = async (req: Request, res: Response): Promise<void> => {
@@ -983,6 +964,46 @@ export const getLatestContest = async (req: Request, res: Response) => {
         res.status(500).json({
             message: "ERROR",
             msg: 'Failed to fetch latest contest.',
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Get contest participations.
+ */
+export const getContestParticipations = async (req: Request, res: Response) => {
+    try {
+        const userId = res.locals.jwtData.id;
+        if (!userId) {
+            res.status(404).json({
+                message: "ERROR",
+                msg: 'User not found.'
+            });
+            return;
+        }
+        const participations = await ContestParticipation.find({ user: userId })
+            .populate('contest', 'name')
+            .populate('machineCompleted', 'name')
+            .select('-__v -updatedAt -createdAt -usedHints -remainingHints');
+        if (!participations) {
+            res.status(200).json({
+                message: "OK",
+                msg: 'You are not participating in any contest.',
+                participation: []
+            });
+            return;
+        }
+        res.status(200).json({
+            message: "OK",
+            msg: 'Contest participations fetched successfully.',
+            participations: participations
+        });
+    } catch (error: any) {
+        console.error('Error getting contest participation:', error);
+        res.status(500).json({
+            message: "ERROR",
+            msg: 'Failed to get contest participation.',
             error: error.message
         });
     }

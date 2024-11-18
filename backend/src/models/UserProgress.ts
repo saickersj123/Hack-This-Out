@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import Machine from './Machine';
 const UserProgressSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,

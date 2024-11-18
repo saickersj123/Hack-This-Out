@@ -22,10 +22,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   // 화면 크기 감지 및 isCollapsed 상태 변경
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 1200 && !isCollapsed) {
+      if (window.innerWidth <= 1000 && !isCollapsed) {
         toggleSidebar(true); // 강제로 collapse 상태로 변경
         setIsAutoCollapsed(true); // 자동 collapse 상태 기록
-      } else if (window.innerWidth > 1200 && isAutoCollapsed) {
+      } else if (window.innerWidth > 1000 && isAutoCollapsed) {
         toggleSidebar(false); // 강제로 확장 상태로 변경
         setIsAutoCollapsed(false); // 자동 collapse 상태 해제
       }

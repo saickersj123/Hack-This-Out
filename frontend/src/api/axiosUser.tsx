@@ -328,3 +328,16 @@ export const getAllUser = async () => {
       throw new Error('Failed to fetch my rank');
     }
   };
+
+/**
+ * Get user progress.
+ * @returns {Promise<Object>} - The response data containing user progress.
+ */
+export const getUserProgress = async () => {
+  try {
+    const response = await axiosInstance.get('/user/progress');
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : new Error('Failed to fetch user progress');
+  }
+};

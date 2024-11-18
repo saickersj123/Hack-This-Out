@@ -652,7 +652,7 @@ export const getMyRank = async (req: Request, res: Response) => {
 			cause: 'Server error' 
 		});
     }
-}
+};
 
 // Make User Admin by User ID(Admin Only)
 export const makeUserAdmin = async (req: Request, res: Response) => {
@@ -732,3 +732,36 @@ export const checkAdminPassword = async (req: Request, res: Response) => {
 	}
 };
 
+// Get User Progress
+export const getUserProgress = async (req: Request, res: Response) => {
+	try {
+		const userId = res.locals.jwtData.id;
+		if (!userId) {
+			return res.status(404).json({
+				message: "ERROR",
+				msg: 'User not found.'
+			});
+		}
+		const userProgress = await UserProgress.find({ user: userId })
+			.sort({ createdAt: -1 })
+			.populate('machine', 'name')
+			.select('-__v -updatedAt -createdAt -usedHints -remainingHints');
+		if (!userProgress) {
+			return res.status(200).json({
+				message: "OK",
+				msg: 'You are new here.',
+				userProgress: []
+			});
+		}
+		return res.status(200).json({
+			message: "OK",
+			userProgress: userProgress
+		});
+	} catch (error: any) {
+		console.error('Error getting user progress:', error);
+		res.status(500).json({
+			message: "ERROR",
+			cause: 'Server error'
+		});
+	}
+};

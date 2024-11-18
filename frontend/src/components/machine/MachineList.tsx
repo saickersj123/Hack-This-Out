@@ -10,6 +10,7 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { BsArrowRightCircle } from "react-icons/bs";
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
 import LoadingIcon from '../public/LoadingIcon';
+import ErrorIcon from '../public/ErrorIcon';
 
 interface Machine {
   _id: string;
@@ -81,7 +82,7 @@ const MachineList: React.FC = () => {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <ErrorIcon />;
   }
 
   return (
