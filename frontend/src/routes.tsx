@@ -6,6 +6,8 @@ import NotFound from './components/public/notfound';
 import Unauthorized from './pages/Unauthorized';
 import Loading from './components/public/Loading';
 import App from './App';
+import './assets/scss/admin/AdminDashboard.scss';
+import AdminLayout from './components/admin/AdminLayout';
 
 // Lazy-loaded components
 const LoginPage = lazy(() => import('./pages/public/LoginPage'));
@@ -203,14 +205,20 @@ const routes: RouteObject[] = [
         path: 'admin',
         element: (
           <AdminProtectedRoute>
-            <div className="admin-dashboard">
-              <div className="admin-content">
-                <DashboardHome />
-              </div>
-            </div>
+            <AdminLayout />
           </AdminProtectedRoute>
         ),
         children: [
+          {
+            index: true, // Default admin route
+            element: (
+              <div className="admin-dashboard">
+                <div className="admin-content"> 
+                  <DashboardHome />
+                </div>
+              </div>
+            ),
+          },
           {
             path: 'users',
             element: (

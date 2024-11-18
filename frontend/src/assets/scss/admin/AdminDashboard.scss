@@ -6,13 +6,15 @@
 
     /* Admin Content Area */
     .admin-content {
+        position: relative;
         flex: 1;
-        margin-left: var(--sidebar-width);
         padding: 20px;
+        margin-left: 180px;
         overflow-y: auto;
         background-color: var(--background-alt);
         color: var(--text-primary);
         align-items: center;
+        justify-content: center;
     }
 
     /* Header or Profile Section */
