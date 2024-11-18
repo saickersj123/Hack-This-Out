@@ -38,5 +38,5 @@ export const formatRemainingTime = (endDateString: string | Date): string => {
   const hours = Math.floor((diff / (1000 * 60 * 60)) % 24); // 남은 시간(시)
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)); // 남은 시간(분)
 
-  return `남은 시간: ${days}일 ${hours}시간 ${minutes}분`;
+  return `${days}일 ${hours}시간 ${minutes}분`;
 };
