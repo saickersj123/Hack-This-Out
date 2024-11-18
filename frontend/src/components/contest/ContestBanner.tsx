@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Paper, Button, Avatar } from '@mui/material';
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
-import { formatDate, formatRemainingTime } from '../../utils/dateUtils';
+import { formatRemainingTime } from '../../utils/dateUtils';
 import { getLatestContest } from '../../api/axiosContest';
 import { getStartedContest } from '../../api/axiosContest';
 import LoadingIcon from '../public/LoadingIcon';
@@ -23,7 +23,7 @@ const ContestBanner: React.FC = () => {
     const fetchMachines = async () => {
       try {
         setLoading(true);
-        const latest = await getLatestContest ();
+        const latest = await getLatestContest();
         const started = await getStartedContest();
         setLatestContest(latest.contest);
         setStartedContest(started.contests[0]);
@@ -54,6 +54,7 @@ const ContestBanner: React.FC = () => {
   return (
     <div className="contest-banner-container">
       <Carousel
+        className='carousel'
         navButtonsAlwaysVisible
         indicators={false}
         autoPlay
@@ -68,7 +69,7 @@ const ContestBanner: React.FC = () => {
         }}
         navButtonsWrapperProps={{
           style: {
-            height: '213px',
+            height: '100%',
             bottom: '0',
           },
         }}
@@ -91,19 +92,18 @@ const ContestBanner: React.FC = () => {
                   {contest.name.charAt(0).toUpperCase()}
                 </Avatar>
                 <h4>{contest.name}</h4>
-                <p className='banner-time'>{formatDate(contest.startTime)} - {formatDate(contest.endTime)}</p>
                 {new Date(contest.startTime) > new Date() ? (
-                  <p className='ramaining-time'>시작까지 {formatRemainingTime(contest.startTime)}</p>
+                  <p className='ramaining-time'>시작까지 - {formatRemainingTime(contest.startTime)}</p>
                 ) : (
-                  <p className='ramaining-time'>종료까지 {formatRemainingTime(contest.endTime)}</p>
+                  <p className='ramaining-time'>종료까지 - {formatRemainingTime(contest.endTime)}</p>
                 )}
-                <p className='banner-exp'>Rewards: {contest.contestExp} EXP</p>
+                <div className='contest_reward_box'>
+                  <p className='banner-exp'>Reward :</p>
+                  <p className='exp'>{contest.contestExp} EXP</p>
+                </div>
                 <Button
-                  sx={{
-                    width: '200px',
-                  }}
+                  className='go-to-machine-btn'
                   variant="contained"
-                  color="primary"
                   onClick={() => navigate(`/contest/${contest._id}`)}
                 >
                   Go to Contest

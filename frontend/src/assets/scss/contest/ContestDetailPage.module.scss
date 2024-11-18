@@ -16,15 +16,19 @@
         }
 
         .participate_button {
-            @include button_color;
             position: fixed;
             right: 83px;
             top: 190px;
-
+            color: var(--color-white);
+            background-color: var(--blue-500);
             width: 140px;
             height: 48px;
             box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08), 0px 4px 8px rgba(44, 39, 56, 0.08);
             border-radius: 6px;
+
+            &:hover {
+                background-color: var(--blue-200);
+            }
         }
     }
 

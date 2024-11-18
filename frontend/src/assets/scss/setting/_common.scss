@@ -53,12 +53,10 @@ body {
 	/* Colors */
 	--color-background-transparent: #071125;
 	--color-layout: #13151a;
-	--blue-100: #09509A;
 	--blue-200: #16488F;
 	--blue-300: #0B1F65;
 	--blue-400: #0C2144;
 	--blue-500: #071125;
-	--lightblue-100: #64AFD0;
 	--lightblue-200: #2E74A0;
 
 	--color-list-border: #EEEEEE;
@@ -73,7 +71,6 @@ body {
 
 	/* Gradient Colors */
 	--gradient-container : linear-gradient(to bottom right, var(--blue-500), #64AFD080); // 컨테이너 배경. ex)CurrentUserInfo 배경 그라데이션
-	--gradient-button : linear-gradient(96.7deg, var(--blue-500), var(--blue-100));		// 버튼 배경. ex) GO TO CONTEST 버튼
 
 	/* Border */
 	--border-container: 24px;

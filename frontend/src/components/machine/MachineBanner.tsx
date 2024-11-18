@@ -54,6 +54,7 @@ const MachineBanner: React.FC = () => {
   return (
     <div className="machine-banner-container">
       <Carousel
+        className='carousel'
         navButtonsAlwaysVisible
         indicators={false}
         autoPlay
@@ -68,7 +69,7 @@ const MachineBanner: React.FC = () => {
         }}
         navButtonsWrapperProps={{
           style: {
-            height: '213px',
+            height: '100%',
             bottom: '0',
           },
         }}
@@ -91,31 +92,28 @@ const MachineBanner: React.FC = () => {
                   {machine.name.charAt(0).toUpperCase()}
                 </Avatar>
                 <h4>{machine.name}</h4>
-                {/* <p className='banner-category'>Category: {machine.category}</p> */}
-                <p className='banner-exp'>Rewards: {machine.exp} EXP</p>
-                {/* {mostPlayedMachine && machine.playerCount > 0 && <p className='banner-played'>Played: {machine.playerCount}</p>} */}
+                <div className='machine_reward_box'>
+                  <p className='banner-exp'>Reward :</p>
+                  <p className='exp'>{machine.exp} EXP</p>
+                </div>
                 <Box className='rating-box'>
-                <Rating
+                  <Rating
                     name={`read-only-rating-${machine._id}`}
                     value={Number(machine.rating)}
                     precision={0.5}
                     readOnly
                     sx={{
                       '& .MuiRating-icon': {
-                        fontSize: '40px', // 별 크기 설정
+                        fontSize: 'clamp(28px, 2vw, 40px)', // 별 크기 설정
                       },
                     }}
                   />
-                  <span className='rating'>{machine.rating.toFixed(1)}</span>
+                  <span className='rating-text'>{machine.rating.toFixed(1)}</span>
                 </Box>
                 <Button
-                  sx={{
-                    width: '170px',
-                  }}
+                  className='go-to-machine-btn'
                   variant="contained"
-                  color="primary"
                   onClick={() => navigate(`/machine/${machine._id}`)}
-
                 >
                   Go to Machine
                 </Button>

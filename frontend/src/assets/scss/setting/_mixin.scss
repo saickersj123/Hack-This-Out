@@ -14,11 +14,11 @@
 }
 
 @mixin button_color {
-    background: var(--gradient-button);
+    background: var(--blue-400);
     color: var(--color-white);
 
     &:hover {
-        background: linear-gradient(96.7deg, #222, #008000);
+        background: var(--blue-200)
     }
 }
 

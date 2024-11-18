@@ -37,7 +37,7 @@ const ContestDetail: React.FC<ContestDetailProps> = ({ contestDetail }) => {
           </div>
           <div className={styles.contest_reward_box}>
             <p className={styles.text}>Reward:</p>
-            <p className={styles.reward_text}>EXP {contestExp || 0}</p>
+            <p className={styles.reward_text}>{contestExp || 0} EXP</p>
           </div>
         </div>
         <div className={styles.time_text}>{startTime ? formatDate(startTime) : 'N/A'} ~ {endTime ? formatDate(endTime) : 'N/A'}</div>

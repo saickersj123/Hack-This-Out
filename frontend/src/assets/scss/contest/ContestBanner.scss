@@ -3,117 +3,131 @@
 .contest-banner-container {
   width: 100%;
   max-width: 1200px;
-  height: 213px;
+  height: 100%;
 
-  .banner-slide {
-    padding: 20px 40px 0;
-    height: 213px;
-    background: transparent;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    @include flex_center;
+  .carousel {
+    height: 100%;
+    border-radius: 24px;
 
-    .banner-contents {
-      display: grid;
-      align-items: center;
-      width: 90%;
-      min-width: calc(500px - 221px);
-      height: 173px;
-      grid-template-columns: 30% 40% 30%;
-      grid-template-rows: 30% 20% 20% 30%;
+    .banner-slide {
+      padding: 16px 32px;
+      height: 28vh;
+      background: transparent;
+      @include flex_center;
 
-      h3 {
-        width: 100%;
-        grid-column: 1 / -1;
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: white;
-      }
+      .banner-contents {
+        height: 100%;
+        display: grid;
+        align-items: center;
+        width: 90%;
+        grid-template-columns: 30% 40% 30%;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        white-space: nowrap;
 
-      .contest-avatar {
-        justify-self: center;
-        grid-row: 1 / -1;
-        grid-row-start: 2;
-        width: 80px;
-        height: 80px;
-        top: 0;
-        font-size: var(--font-title);
-      }
+        h3 {
+          width: 100%;
+          grid-column: 1 / -1;
+          font-size: 1.8rem;
+          font-weight: 600;
+          color: white;
+        }
 
+        .contest-avatar {
+          justify-self: center;
+          grid-row: 1 / -1;
+          grid-row-start: 2;
+          width: clamp(80px, 8vw, 120px);
+          height: clamp(80px, 8vw, 120px);
+          top: 0;
+          font-size: var(--font-title);
+        }
 
-      h4 {
-        grid-column: 2 / -1;
-        font-size: var(--font-size-large);
-        color: var(--color-white);
-      }
+        h4 {
+          justify-self: flex-start;
+          grid-column: 2;
+          grid-row: 2/4;
+          font-size: 2.8rem;
+          color: var(--color-white);
+        }
 
-      .banner-time {
-        grid-column: 2 / 4;
-        grid-row: 3 / 4;
-        color: var(--color-white);
-        font-size: 14px;
-      }
+        .ramaining-time {
+          grid-column: 2;
+          grid-row: 4;
+          color: var(--color-white);
+          font-size: clamp(0.8rem, 2vw, 1.2rem);
+        }
 
-      .ramaining-time {
-        grid-column: 2 / 4;
-        grid-row: 4 / 4;
-        color: var(--color-white);
-        font-size: var(--font-size-small);
-      }
+        .contest_reward_box {
+          grid-column: 3;
+          grid-row: 2/4;
+          justify-self: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          width: 80%;
+          min-width: 175px;
+          border-radius: 4px;
+          background-color: var(--blue-400);
+          height: 77px;
 
-      .banner-exp {
-        grid-column: 3 / 4;
-        grid-row: 3 / 4;
-        color: var(--color-white);
-        font-size: var(--font-size-small);
-      }
+          .banner-exp,
+          .exp {
+            padding-left: 12px;
+          }
 
-      .MuiRating-root {
-        color: #ffd700;
-        /* Gold color for filled stars */
-      }
+          .banner-exp {
+            font-size: var(--font-size-small);
+            color: var(--color-white);
+          }
 
-      .MuiRating-iconEmpty {
-        color: #ccc;
-        /* Grey color for empty stars */
-      }
+          .exp {
+            font-size: var(--font-size-mid);
+            color: #fbff8f;
+            font-weight: 600;
+          }
+        }
 
-      button {
-        @include button_color;
-        width: 100%;
-        grid-column: 3;
-        grid-row: 4;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: var(--font-size-small);
+        .go-to-machine-btn {
+          @include button_color;
+          justify-self: center;
+          width: 80%;
+          min-width: 175px;
+          grid-column: 3;
+          grid-row: 4;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          white-space: nowrap;
+          font-size: var(--font-size-small);
+        }
       }
     }
-  }
 
-  /* Customize Carousel Indicators */
-  .MuiCarousel-indicator {
-    background-color: #ccc;
-    /* Inactive indicator color */
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin: 0 4px;
-  }
+    /* Customize Carousel Indicators */
+    .MuiCarousel-indicator {
+      background-color: #ccc;
+      /* Inactive indicator color */
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0 4px;
+    }
 
-  .MuiCarousel-indicator.Mui-selected {
-    background-color: #3f51b5;
-    /* Active indicator color */
-  }
+    .MuiCarousel-indicator.Mui-selected {
+      background-color: #3f51b5;
+      /* Active indicator color */
+    }
 
-  .MuiSvgIcon-root {
-    font-size: 1.2rem;
-  }
+    .MuiSvgIcon-root {
+      font-size: 1.2rem;
+    }
 
-  .MuiCarousel-indicators {
-    bottom: 10px;
-  }
+    .MuiCarousel-indicators {
+      bottom: 10px;
+    }
 
-  .MuiCarousel-navButtons {
-    top: 45%;
+    .MuiCarousel-navButtons {
+      top: 45%;
+    }
   }
 }

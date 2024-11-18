@@ -154,6 +154,14 @@ const MachineList: React.FC = () => {
                         value={Number(machine.rating)}
                         precision={0.5}
                         readOnly
+                        sx={{
+                          '& .MuiRating-iconEmpty': {
+                            color: '#fff', // 빈 별 색상
+                          },
+                          '& .MuiRating-iconFilled': {
+                            color: '#ffd700', // 채워진 별 색상
+                          },
+                        }}
                       />
                     </Box>
                   </td>

@@ -118,28 +118,26 @@ const ContestList: React.FC = () => {
 
   return (
     <div className={styles.contest_list_container}>
-      <div className={styles.contest_fixed_box}>
-        <div className={styles.contest_list_title}>Contest List</div>
-        <div className={styles.tabs}>
-          <button
-            className={`${styles.tab_button} ${activeTab === 'ongoing' ? styles.active : ''}`}
-            onClick={() => setActiveTab('ongoing')}
-          >
-            Ongoing Contests
-          </button>
-          <button
-            className={`${styles.tab_button} ${activeTab === 'notStarted' ? styles.active : ''}`}
-            onClick={() => setActiveTab('notStarted')}
-          >
-            Not Started Contests
-          </button>
-          <button
-            className={`${styles.tab_button} ${activeTab === 'ended' ? styles.active : ''}`}
-            onClick={() => setActiveTab('ended')}
-          >
-            Ended Contests
-          </button>
-        </div>
+      <div className={styles.contest_list_title}>Contest List</div>
+      <div className={styles.tabs}>
+        <button
+          className={`${styles.tab_button} ${activeTab === 'ongoing' ? styles.active : ''}`}
+          onClick={() => setActiveTab('ongoing')}
+        >
+          Ongoing Contests
+        </button>
+        <button
+          className={`${styles.tab_button} ${activeTab === 'notStarted' ? styles.active : ''}`}
+          onClick={() => setActiveTab('notStarted')}
+        >
+          Not Started Contests
+        </button>
+        <button
+          className={`${styles.tab_button} ${activeTab === 'ended' ? styles.active : ''}`}
+          onClick={() => setActiveTab('ended')}
+        >
+          Ended Contests
+        </button>
       </div>
       <table className={styles.contest_list_table}>
         <thead>
