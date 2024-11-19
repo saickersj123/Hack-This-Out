@@ -47,8 +47,8 @@ const ContestBanner: React.FC = () => {
   }
 
   const contests = [
-    { ...latestContest!, title: 'Latest Contest' },
-    { ...startedContest!, title: 'Active Contest' },
+    { ...latestContest!, title: 'Latest' },
+    { ...startedContest!, title: 'Ongoing' },
   ];
 
   return (
@@ -91,11 +91,11 @@ const ContestBanner: React.FC = () => {
                 >
                   {contest.name.charAt(0).toUpperCase()}
                 </Avatar>
-                <h4>{contest.name}</h4>
+                <h4><b>{contest.name}</b></h4>
                 {new Date(contest.startTime) > new Date() ? (
-                  <p className='ramaining-time'>시작까지 - {formatRemainingTime(contest.startTime)}</p>
+                  <p className='ramaining-time'>시작까지 {formatRemainingTime(contest.startTime)}</p>
                 ) : (
-                  <p className='ramaining-time'>종료까지 - {formatRemainingTime(contest.endTime)}</p>
+                  <p className='ramaining-time'>종료까지 {formatRemainingTime(contest.endTime)}</p>
                 )}
                 <div className='contest_reward_box'>
                   <p className='banner-exp'>Reward :</p>
