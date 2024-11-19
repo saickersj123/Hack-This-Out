@@ -166,7 +166,7 @@
             }
 
             .pw-submit {
-                @include button_color;
+                background: var(--lightblue-100);
                 width: 100%;
                 height: 3rem;
                 border-radius: 0.75rem; 
@@ -177,6 +177,10 @@
                 font-weight: 600;
                 font-size: var(--font-size-small);
                 letter-spacing: -0.019rem; 
+                
+                &:hover {
+                    background: var(--lightblue-200);
+                }
             }
         }
     }
