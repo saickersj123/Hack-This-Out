@@ -124,19 +124,19 @@ const ContestList: React.FC = () => {
           className={`${styles.tab_button} ${activeTab === 'ongoing' ? styles.active : ''}`}
           onClick={() => setActiveTab('ongoing')}
         >
-          Ongoing Contests
+          <p>Ongoing Contests</p>
         </button>
         <button
           className={`${styles.tab_button} ${activeTab === 'notStarted' ? styles.active : ''}`}
           onClick={() => setActiveTab('notStarted')}
         >
-          Not Started Contests
+          <p>Not Started Contests</p>
         </button>
         <button
           className={`${styles.tab_button} ${activeTab === 'ended' ? styles.active : ''}`}
           onClick={() => setActiveTab('ended')}
         >
-          Ended Contests
+          <p>Ended Contests</p>
         </button>
       </div>
       <table className={styles.contest_list_table}>

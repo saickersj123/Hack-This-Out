@@ -4,17 +4,25 @@
   width: 100%;
   max-width: 1200px;
   height: 100%;
+  font-weight: bold;
+  
+  p{
+    font-weight: bold;
+  }
 
+  h4{
+    font-weight: bold;
+  }
   .carousel {
     height: 100%;
     border-radius: 24px;
-
+    
     .banner-slide {
       padding: 16px 32px;
       height: 28vh;
       background: transparent;
       @include flex_center;
-
+      
       .banner-contents {
         height: 100%;
         display: grid;
@@ -23,12 +31,12 @@
         grid-template-columns: 30% 40% 30%;
         grid-template-rows: 1fr 1fr 1fr 1fr;
         white-space: nowrap;
-
+        
         h3 {
           width: 100%;
           grid-column: 1 / -1;
           font-size: 1.8rem;
-          font-weight: 600;
+          font-weight: bold;
           color: white;
         }
 
@@ -51,7 +59,7 @@
         }
 
         .ramaining-time {
-          justify-self: flex-end;
+          justify-self: flex-start;
           grid-column: 2;
           grid-row: 4;
           color: var(--color-white);
@@ -100,6 +108,7 @@
           cursor: pointer;
           white-space: nowrap;
           font-size: var(--font-size-small);
+          font-weight: bold;
         }
       }
     }

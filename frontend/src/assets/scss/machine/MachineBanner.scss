@@ -4,6 +4,14 @@
   width: 100%;
   max-width: 1200px;
   height: 100%;
+  font-weight: bold;
+
+  p{
+    font-weight: bold;
+  }
+  h4{
+    font-weight: bold;
+  }
 
   .carousel {
     height: 100%;
@@ -124,6 +132,7 @@
           cursor: pointer;
           white-space: nowrap;
           font-size: var(--font-size-small);
+          font-weight: bold;
         }
       }
     }

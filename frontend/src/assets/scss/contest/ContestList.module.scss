@@ -14,7 +14,9 @@
     .tabs {
         display: flex;
         margin: 0 16px 0;
-
+        p {
+            font-weight: bold;
+        }
         .tab_button {
             min-width: 120px;
             padding: 8px 24px;
