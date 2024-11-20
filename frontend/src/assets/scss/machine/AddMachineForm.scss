@@ -1,5 +1,4 @@
 @use "../style" as *;
-
 .add-machine-form {
     @include background_set;
     position: relative;
@@ -8,7 +7,13 @@
     flex-direction: column;
     padding: 24px 32px;
     gap: 16px;
-    overflow-y: auto;
+    overflow: scroll;
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Opera에서 스크롤바 숨기기 */
+    }
 
     h2 {
         font-size: 2rem;
@@ -32,7 +37,6 @@
     label {
         font-weight: bold;
         color: rgb(202, 202, 202);
-
     }
 
     input,
@@ -54,35 +58,11 @@
         gap: 16px;
         margin-left: 24px;
 
-        .name-container {
+        .name-container, .category-container, .exp-container, .amiId-container, .flag-container {
             grid-column-start: 1;
 
-            input {
+            input, select {
                 width: 50%;
-                padding: 0.5rem;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
-            }
-        }
-
-        .category-container {
-            grid-column-start: 1;
-
-            select {
-                width: 31%;
-                padding: 0.5rem;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
-            }
-        }
-
-        .exp-container {
-            grid-column-start: 1;
-
-            input {
-                width: 10%;
                 padding: 0.5rem;
                 border-radius: 10px;
                 outline: none;
@@ -115,7 +95,9 @@
 
         .hint-container {
             grid-column-start: 1;
-
+            label{
+                display: block;
+            }
             input {
                 margin-top: 0.5rem;
                 padding: 0.5rem;
@@ -126,78 +108,47 @@
             }
 
             .key-container {
-                width: 100%;
+                display: inline-block;
                 align-items: center;
                 margin-bottom: 0.5rem;
 
                 input[type="text"] {
                     flex: 3;
-                    width: 60%;
+                    width: 25vw;
                     margin-right: 1rem;
                 }
 
                 input[type="number"] {
                     flex: 1;
-                    width: 10%;
+                    width: 65px;
                     margin-right: 1rem;
                 }
 
-                button {
-                    padding: 0.3rem 0.6rem;
-                    margin-right: 0.5rem;
-                    border: none;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    background-color: #e0e0e0;
-                    transition: background-color 0.2s;
+            }
+            
+            button {
+                padding: 0.47rem 0.6rem;
+                margin-right: 0.5rem;
+                background-color: var(--blue-500);
+                color: white;
+                border: 1.5px solid var(--color-white);
+                border-radius: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s;
 
+                &:hover {
+                    background-color: var(--blue-200);
+                    border: 1.5px solid transparent;
+                }
+
+                &.remove-hint {
                     &:hover {
-                        background-color: #c0c0c0;
-                    }
-
-                    &.add-hint {
-                        background-color: #5b9bd5;
-                        color: white;
-
-                        &:hover {
-                            background-color: #4a8ac5;
-                        }
-                    }
-
-                    &.remove-hint {
-                        background-color: #d9534f;
-                        color: white;
-
-                        &:hover {
-                            background-color: #c9302c;
-                        }
+                        background-color: #c9302c;
                     }
                 }
             }
-        }
-
-        .amiId-container {
-            grid-column-start: 1;
-
-            input {
-                width: 30%;
-                padding: 0.5rem;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
-            }
-        }
-
-        .flag-container {
-            grid-column-start: 1;
-
-            input {
-                width: 50%;
-                padding: 0.5rem;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
-            }
+            
         }
 
         .error-message {
@@ -206,31 +157,28 @@
             font-size: 0.9rem;
             margin-bottom: 1rem;
         }
-
-        .add-machine-form-button {
-            grid-column-start: 2;
-            grid-row-start: 7;
-            justify-self: end;
-            align-self: end;
-            height: 48px;
-
-            button[type="submit"] {
-
-                background-color: #5b9bd5;
-                color: white;
-                border: none;
-                border-radius: 20px;
-                padding: 0.75rem 1.5rem;
-                font-weight: bold;
-                cursor: pointer;
-                transition: background-color 0.3s;
-
-                &:hover {
-                    background-color: #4a8ac5;
-                }
-            }
-
-        }
     }
 
+    .add-machine-form-button {
+        position: sticky; /* sticky를 사용하여 부모의 하단에 고정 */
+        bottom: 16px; /* 부모의 하단에서 16px 위에 위치 */
+        align-self: flex-end; /* 부모의 오른쪽 끝에 위치 */
+        height: 48px;
+
+        button[type="submit"] {
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            background-color: var(--blue-500);
+            color: white;
+            border: 1.5px solid var(--color-white);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: var(--blue-200);
+                border: 1.5px solid transparent;
+            }
+        }
+    }
 }

@@ -125,13 +125,14 @@ const AddMachineForm: React.FC = () => {
 
 
         <div className='name-container'>
-          <label htmlFor='name'>Machine name <span style={{ color: 'red' }}>*</span></label>
+          <label htmlFor='name'>Machine Name <span style={{ color: 'red' }}>*</span></label>
           <input
             type='text'
             id='name'
             name='name'
             value={formData.name}
             onChange={handleChange}
+            placeholder="Enter the machine name"
             required
           />
         </div>
@@ -233,17 +234,15 @@ const AddMachineForm: React.FC = () => {
                   Remove
                 </button>
               )}
-              <button className='add-hint' type='button' onClick={addHint}>
-                Add Hint
-              </button>
             </div>
           ))}
+          <button className='add-hint' type='button' onClick={addHint}>
+            Add Hint
+          </button>
         </div>
-
-
-        <div className='add-machine-form-button'>
-          <button type='submit'>Create Machine</button>
-        </div>
+      </div>
+      <div className='add-machine-form-button'>
+        <button type='submit'>Create Machine</button>
       </div>
     </form>
   );

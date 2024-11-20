@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createContest } from '../../api/axiosContest';
 import { getActiveMachines } from '../../api/axiosMachine';
+import { useNavigate } from 'react-router-dom';
 import '../../assets/scss/contest/AddContestForm.scss';
 import Loading from '../public/Loading';
+import ArrowLeftOutlinedIcon from '@mui/icons-material/ArrowLeftOutlined';
 
 interface Contest {
     id: string;
@@ -50,6 +52,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     const [suggestions, setSuggestions] = useState<Suggestions>({});
     const [activeSuggestion, setActiveSuggestion] = useState<Record<number, number>>({});
     const [focusedMachineIndex, setFocusedMachineIndex] = useState<number | null>(null);
+    const navigate = useNavigate();
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -79,7 +82,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                 ) {
                     const machinesList = data.machines.map((machine: any) => ({
                         id: machine._id,
-                        name: machine.name, 
+                        name: machine.name,
                     }));
                     setAllMachines(machinesList);
                 } else if (Array.isArray(data.machines) && typeof data.machines[0] === 'string') {
@@ -265,6 +268,8 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
         }
     };
 
+
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (formRef.current && !formRef.current.contains(event.target as Node)) {
@@ -286,143 +291,153 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
 
     return (
         <form className='add-contest-form' onSubmit={handleSubmit} ref={formRef}>
+            <div className='back-button'>
+                <button className="IconButton" type='button' onClick={() => navigate(-1)}><ArrowLeftOutlinedIcon style={{ color: 'white', fontSize: "34px" }} /></button>
+            </div>
             <h2>Register a New Contest</h2>
-            <div>
-                <label htmlFor="name">Name<span style={{ color: 'red' }}> *</span>:</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={name}
-                    onChange={(e) => handleChange(e)}
-                    placeholder="Enter the contest name"
-                    required
-                />
+
+            <div className='create-container'>
+                <div className='name-container'>
+                    <label htmlFor="name">Contest Name<span style={{ color: 'red' }}> *</span></label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={name}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter the contest name"
+                        required
+                    />
+                </div>
+                <div className='description-container'>
+                    <label htmlFor="description">Description<span style={{ color: 'red' }}> *</span></label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        value={description}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter contest description"
+                        required
+                    ></textarea>
+                </div>
+
+                <div className='start-time-container'>
+                    <label htmlFor="startTime">Start Time<span style={{ color: 'red' }}> *</span></label>
+                    <input
+                        type="datetime-local"
+                        id="startTime"
+                        name="startTime"
+                        value={startTime}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter the start time"
+                        required
+                    />
+                </div>
+                <div className='end-time-container'>
+                    <label htmlFor="endTime">End Time<span style={{ color: 'red' }}> *</span></label>
+                    <input
+                        type="datetime-local"
+                        id="endTime"
+                        name="endTime"
+                        value={endTime}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter the end time"
+                        required
+                    />
+                </div>
+                <div className='exp-container'>
+                    <label htmlFor="contestExp">Experience Points (EXP)<span style={{ color: 'red' }}> *</span></label>
+                    <input
+                        type="number"
+                        id="contestExp"
+                        name="contestExp"
+                        value={contestExp}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter the EXP"
+                        min="100"
+                        required
+                    />
+                </div>
+                <div className='add-machine-container'>
+                    <label>Machines<span style={{ color: 'red' }}> *</span></label>
+                    {machines.map((machine, index) => (
+                        <div key={index} className="machine-field">
+                            <input
+                                type="text"
+                                name={`machine-${index}`}
+                                value={machine.name}
+                                onChange={(e) => handleChange(e, index)}
+                                onFocus={() => handleFocus(index)}
+                                onKeyDown={(e) => handleKeyDown(e, index)}
+                                placeholder={`Machine ${index + 1}`}
+                                autoComplete="off"
+                                required
+                                aria-autocomplete="list"
+                                aria-controls={`suggestions-${index}`}
+                                aria-expanded={focusedMachineIndex === index && suggestions[index]?.length > 0}
+                                role="combobox"
+                                aria-haspopup="listbox"
+                                aria-activedescendant={
+                                    activeSuggestion[index] >= 0
+                                        ? `suggestion-${index}-${activeSuggestion[index]}`
+                                        : undefined
+                                }
+                            />
+                            {machines.length > 1 && (
+                                <button
+                                    type="button"
+                                    className='delete-machine'
+                                    onClick={() => handleDeleteMachineField(index)}
+                                >
+                                    Delete
+                                </button>
+                            )}
+                            {focusedMachineIndex === index && suggestions[index] && suggestions[index].length > 0 ? (
+                                <ul
+                                    className="suggestions-list"
+                                    id={`suggestions-${index}`}
+                                    role="listbox"
+                                >
+                                    {suggestions[index].map((suggestion, sIndex) => (
+                                        <li
+                                            key={sIndex}
+                                            id={`suggestion-${index}-${sIndex}`}
+                                            className={activeSuggestion[index] === sIndex ? 'active' : ''}
+                                            onMouseDown={() => handleSuggestionClick(index, suggestion)}
+                                            onMouseEnter={() =>
+                                                setActiveSuggestion(prev => ({
+                                                    ...prev,
+                                                    [index]: sIndex,
+                                                }))
+                                            }
+                                            onMouseLeave={() =>
+                                                setActiveSuggestion(prev => ({
+                                                    ...prev,
+                                                    [index]: -1,
+                                                }))
+                                            }
+                                            role="option"
+                                            aria-selected={activeSuggestion[index] === sIndex}
+                                        >
+                                            {suggestion.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : machine.name && focusedMachineIndex === index && (
+                                <div className="no-suggestions">No matching machines found.</div>
+                            )}
+                        </div>
+                    ))}
+                    <button className='add-machine-button' type="button" onClick={handleAddMachineField}>
+                        Add Machine
+                    </button>
+                </div>
             </div>
-            <div>
-                <label htmlFor="description">Description<span style={{ color: 'red' }}> *</span>:</label>
-                <textarea
-                    id="description"
-                    name="description"
-                    value={description}
-                    onChange={(e) => handleChange(e)}
-                    placeholder="Enter contest description"
-                    required
-                ></textarea>
-            </div>
-            <div>
-                <label htmlFor="contestExp">Experience Points (EXP)<span style={{ color: 'red' }}> *</span>:</label>
-                <input
-                    type="number"
-                    id="contestExp"
-                    name="contestExp"
-                    value={contestExp}
-                    onChange={(e) => handleChange(e)}
-                    placeholder="Enter the EXP"
-                    min="100"
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="startTime">Start Time<span style={{ color: 'red' }}> *</span>:</label>
-                <input
-                    type="datetime-local"
-                    id="startTime"
-                    name="startTime"
-                    value={startTime}
-                    onChange={(e) => handleChange(e)}
-                    placeholder="Enter the start time"
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="endTime">End Time<span style={{ color: 'red' }}> *</span>:</label>
-                <input
-                    type="datetime-local"
-                    id="endTime"
-                    name="endTime"
-                    value={endTime}
-                    onChange={(e) => handleChange(e)}
-                    placeholder="Enter the end time"
-                    required
-                />
-            </div>
-            <div>
-                <label>Machines<span style={{ color: 'red' }}> *</span>:</label>
-                {machines.map((machine, index) => (
-                    <div key={index} className="machine-field">
-                        <input
-                            type="text"
-                            name={`machine-${index}`}
-                            value={machine.name}
-                            onChange={(e) => handleChange(e, index)}
-                            onFocus={() => handleFocus(index)}
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                            placeholder={`Machine ${index + 1}`}
-                            autoComplete="off"
-                            required
-                            aria-autocomplete="list"
-                            aria-controls={`suggestions-${index}`}
-                            aria-expanded={focusedMachineIndex === index && suggestions[index]?.length > 0}
-                            role="combobox"
-                            aria-haspopup="listbox"
-                            aria-activedescendant={
-                                activeSuggestion[index] >= 0
-                                    ? `suggestion-${index}-${activeSuggestion[index]}`
-                                    : undefined
-                            }
-                        />
-                        {machines.length > 1 && (
-                            <button
-                                type="button"
-                                onClick={() => handleDeleteMachineField(index)}
-                            >
-                                Delete
-                            </button>
-                        )}
-                        {focusedMachineIndex === index && suggestions[index] && suggestions[index].length > 0 ? (
-                            <ul
-                                className="suggestions-list"
-                                id={`suggestions-${index}`}
-                                role="listbox"
-                            >
-                                {suggestions[index].map((suggestion, sIndex) => (
-                                    <li
-                                        key={sIndex}
-                                        id={`suggestion-${index}-${sIndex}`}
-                                        className={activeSuggestion[index] === sIndex ? 'active' : ''}
-                                        onMouseDown={() => handleSuggestionClick(index, suggestion)}
-                                        onMouseEnter={() =>
-                                            setActiveSuggestion(prev => ({
-                                                ...prev,
-                                                [index]: sIndex,
-                                            }))
-                                        }
-                                        onMouseLeave={() =>
-                                            setActiveSuggestion(prev => ({
-                                                ...prev,
-                                                [index]: -1,
-                                            }))
-                                        }
-                                        role="option"
-                                        aria-selected={activeSuggestion[index] === sIndex}
-                                    >
-                                        {suggestion.name}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : machine.name && focusedMachineIndex === index && (
-                            <div className="no-suggestions">No matching machines found.</div>
-                        )}
-                    </div>
-                ))}
-                <button type="button" onClick={handleAddMachineField}>
-                    Add Machine
+            <div className='add-contest-form-button'>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Registering...' : 'Register Contest'}
                 </button>
             </div>
-            <button type="submit" disabled={loading}>
-                {loading ? 'Registering...' : 'Register Contest'}
-            </button>
         </form>
     );
 };
