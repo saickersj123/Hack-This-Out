@@ -91,7 +91,7 @@ const ContestBanner: React.FC = () => {
                 >
                   {contest.name.charAt(0).toUpperCase()}
                 </Avatar>
-                <h4><b>{contest.name}</b></h4>
+                <h4><b>{contest.name.charAt(0).toUpperCase() + contest.name.slice(1)}</b></h4>
                 {new Date(contest.startTime) > new Date() ? (
                   <p className='ramaining-time'>시작까지 {formatRemainingTime(contest.startTime)}</p>
                 ) : (

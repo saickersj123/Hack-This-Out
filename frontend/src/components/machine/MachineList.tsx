@@ -140,7 +140,7 @@ const MachineList: React.FC = () => {
                       height: 40 
                     }}>
                       {machine.name.charAt(0).toUpperCase()}
-                    </Avatar>{machine.name}</td>
+                    </Avatar>{machine.name.charAt(0).toUpperCase() + machine.name.slice(1)}</td>
                   <td className={styles.machine_category}>{machine.category}</td>
                   <td className={styles.machine_rating}>
                     <Box

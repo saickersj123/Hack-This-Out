@@ -94,7 +94,7 @@ const ContestList: React.FC = () => {
                   height: 40,
                 }}>
                 {avatarUrls[getAvatarIndex(contest.name)] && contest.name.charAt(0).toUpperCase()}
-              </Avatar>{contest.name || 'N/A'}</td>
+              </Avatar>{contest.name.charAt(0).toUpperCase() + contest.name.slice(1) || 'N/A'}</td>
             <td className={styles.contest_start_time}>{contest.startTime ? formatDate(contest.startTime) : 'N/A'}</td>
             <td className={styles.contest_end_time}>{contest.endTime ? formatDate(contest.endTime) : 'N/A'}</td>
             <td className={styles.contest_reward}>{contest.contestExp}</td>
