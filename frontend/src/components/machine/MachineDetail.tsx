@@ -41,7 +41,7 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
           {name.charAt(0).toUpperCase()}
         </Avatar>}
         <div className='machine-textbox'>
-          <p className="machine-name"><b>{name}</b></p>
+          <p className="machine-name"><b>{name.charAt(0).toUpperCase() + name.slice(1)}</b></p>
           <p className='machine-category'><b>Category: </b>{category || 'N/A'}</p>
           <div className='description'><p><b>Description:</b> {description || 'N/A'}</p></div>
         </div>

@@ -91,7 +91,7 @@ const MachineBanner: React.FC = () => {
                 >
                   {machine.name.charAt(0).toUpperCase()}
                 </Avatar>
-                <h4><b>{machine.name}</b></h4>
+                <h4><b>{machine.name.charAt(0).toUpperCase() + machine.name.slice(1)}</b></h4>
                 <div className='machine_reward_box'>
                   <p className='banner-exp'>Reward</p>
                   <p className='exp'>{machine.exp} EXP</p>
