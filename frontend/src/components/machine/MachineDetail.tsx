@@ -28,22 +28,23 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
   return (
     <div className="machine-detail-container">
       <div className="machine-detail">
-        {<Avatar
-          variant="rounded"
-          sx={{
-            backgroundColor: avatarBgColor,
-            width: 150,
-            height: 150,
-            fontSize: '5rem',
-            margin: '0 -250px 0 8px',
-          }}
-        >
-          {name.charAt(0).toUpperCase()}
-        </Avatar>}
+        <div style={{ width: '150px' }}>
+          {<Avatar
+            variant="rounded"
+            sx={{
+              backgroundColor: avatarBgColor,
+              width: 150,
+              height: 150,
+              fontSize: '5rem',
+            }}
+          >
+            {name.charAt(0).toUpperCase()}
+          </Avatar>}
+        </div>
         <div className='machine-textbox'>
           <p className="machine-name"><b>{name.charAt(0).toUpperCase() + name.slice(1)}</b></p>
           <p className='machine-category'><b>Category: </b>{category || 'N/A'}</p>
-          <div className='description'><p><b>Description:</b> {description || 'N/A'}</p></div>
+          <div className='description'><p><b>Description: </b>{description || 'N/A'}</p></div>
         </div>
         <div className='right-part'>
           <div className='rating-box'>
@@ -62,7 +63,7 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
             <span style={{ marginLeft: '32px', color: '#fff' }}>{rating.toFixed(1)} / 5.0</span>
           </div>
           <div className='machine-reward-box'>
-            <p className='text'>Rewards</p>
+            <p className='text'>Reward</p>
             <p className='reward-text'>EXP {exp || 0}</p>
           </div>
           {/* <p><strong>AMI ID:</strong> {amiId || 'N/A'}</p> */}

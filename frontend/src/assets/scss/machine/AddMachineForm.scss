@@ -132,41 +132,33 @@
 
                 input[type="text"] {
                     flex: 3;
-                    width: 60%;
+                    width: 55%;
                     margin-right: 1rem;
                 }
 
                 input[type="number"] {
                     flex: 1;
-                    width: 10%;
+                    width: 65px;
                     margin-right: 1rem;
                 }
 
                 button {
-                    padding: 0.3rem 0.6rem;
+                    padding: 0.47rem 0.6rem;
                     margin-right: 0.5rem;
-                    border: none;
-                    border-radius: 10px;
+                    background-color: var(--blue-500);
+                    color: white;
+                    border: 1.5px solid var(--color-white);
+                    border-radius: 20px;
+                    font-weight: bold;
                     cursor: pointer;
-                    background-color: #e0e0e0;
-                    transition: background-color 0.2s;
+                    transition: background-color 0.3s;
 
                     &:hover {
-                        background-color: #c0c0c0;
-                    }
-
-                    &.add-hint {
-                        background-color: #5b9bd5;
-                        color: white;
-
-                        &:hover {
-                            background-color: #4a8ac5;
-                        }
+                        background-color: var(--blue-200);
+                        border: 1.5px solid transparent;
                     }
 
                     &.remove-hint {
-                        background-color: #d9534f;
-                        color: white;
 
                         &:hover {
                             background-color: #c9302c;
@@ -215,18 +207,17 @@
             height: 48px;
 
             button[type="submit"] {
-
-                background-color: #5b9bd5;
-                color: white;
-                border: none;
-                border-radius: 20px;
                 padding: 0.75rem 1.5rem;
                 font-weight: bold;
+                background-color: var(--blue-500);
+                color: white;
+                border: 1.5px solid var(--color-white);
+                border-radius: 20px;
                 cursor: pointer;
                 transition: background-color 0.3s;
-
                 &:hover {
-                    background-color: #4a8ac5;
+                    background-color: var(--blue-200);
+                    border: 1.5px solid transparent;
                 }
             }
 

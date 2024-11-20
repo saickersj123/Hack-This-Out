@@ -3,74 +3,79 @@
   height: 100%;
   position: relative;
   border-radius: 30px;
-
+  
   background: linear-gradient(to right, var(--blue-500), var(--lightblue-200));
-
+  
   .machine-detail {
     display: flex;
     justify-content: space-between;
+    height: 100%;
     padding: 48px 48px 16px;
     flex-grow: 1;
-
+    
     .machine-textbox {
       color: var(--color-white);
       height: 200px;
-
+      flex-basis:30%;
+      
       .machine-name {
         position: relative;
         height: 56px;
         text-align: left;
         font-size: var(--font-title);
-        font-family: var(--font-ibm-plex-sans);
         font-weight: 900;
         filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
       }
-
+      
       .machine-category {
         padding-left: 16px;
         padding-top: 16px;
         font-size: 20px;
       }
 
+      
     }
-
+    
     .description {
       margin-top: 10px;
       padding-left: 16px;
       line-height: 8px;
       font-size: 20px;
     }
-
-
+    
+    
     .right-part {
       display: flex;
+      flex-basis: 51%;
       justify-content: space-between;
 
       .rating-box {
-        margin-right: 64px;
+        margin-left: 150px;
+        justify-self: right;
       }
-
       .machine-reward-box {
         display: flex;
         flex-direction: column;
         justify-content: center;
         width: 210px;
-        border-radius: 16px;
-        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 24px;
+        background-color: var(--blue-500);
         height: 77px;
         font-weight: 600;
-        font-family: var(--font-ibm-plex-sans);
-        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+        justify-self: right;
 
         .text,
         .reward-text {
-          padding-left: 30px;
-          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+            padding-left: 30px;
+        }
+
+        .text {
+            color: var(--color-white);
         }
 
         .reward-text {
-          font-size: 24px;
-          color: #fbff8f;
+            font-size: 24px;
+            color: #fbff8f;
         }
       }
     }

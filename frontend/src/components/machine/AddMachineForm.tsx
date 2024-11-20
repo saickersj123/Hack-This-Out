@@ -125,7 +125,7 @@ const AddMachineForm: React.FC = () => {
 
 
         <div className='name-container'>
-          <label htmlFor='name'>Machine name <span style={{ color: 'red' }}>*</span></label>
+          <label htmlFor='name'>Machine Name <span style={{ color: 'red' }}>*</span></label>
           <input
             type='text'
             id='name'
