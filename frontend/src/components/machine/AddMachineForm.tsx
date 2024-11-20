@@ -132,6 +132,7 @@ const AddMachineForm: React.FC = () => {
             name='name'
             value={formData.name}
             onChange={handleChange}
+            placeholder="Enter the machine name"
             required
           />
         </div>
@@ -233,17 +234,15 @@ const AddMachineForm: React.FC = () => {
                   Remove
                 </button>
               )}
-              <button className='add-hint' type='button' onClick={addHint}>
-                Add Hint
-              </button>
             </div>
           ))}
+          <button className='add-hint' type='button' onClick={addHint}>
+            Add Hint
+          </button>
         </div>
-
-
-        <div className='add-machine-form-button'>
-          <button type='submit'>Create Machine</button>
-        </div>
+      </div>
+      <div className='add-machine-form-button'>
+        <button type='submit'>Create Machine</button>
       </div>
     </form>
   );
