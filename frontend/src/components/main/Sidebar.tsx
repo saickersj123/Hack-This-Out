@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MdOutlineLeaderboard, MdLeaderboard, MdOutlineTimer, MdTimer } from "react-icons/md";
+import { MdOutlineLeaderboard, MdLeaderboard } from "react-icons/md";
 import { FaQuestionCircle, FaRegQuestionCircle } from "react-icons/fa";
-import { PiComputerTowerLight, PiComputerTowerFill } from "react-icons/pi";
+import { PiComputerTowerBold, PiComputerTowerFill } from "react-icons/pi";
 import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from "react-icons/ri";
-
+import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
+import EmojiEventsIconRounded from '@mui/icons-material/EmojiEventsRounded';
 import styles from '../../assets/scss/section/_sidebar.module.scss';
 import logo from "../../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
 import collapsed_logo from '../../assets/img/icon/HTO ICON DARK RECOLORED_crop_fill.png';
@@ -96,14 +97,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 to="/contest"
                 className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/contest') ? styles.selected : ''}`}
               >
-                {getMenuIcon('/contest', <MdTimer className={styles.menuIcon} />, <MdOutlineTimer className={styles.menuIcon} />)}
+                {getMenuIcon('/contest', <EmojiEventsOutlinedIcon className={styles.menuIcon} />, <EmojiEventsIconRounded className={styles.menuIcon} />)}
                 <div className={styles.label}>Contest</div>
               </Link>
               <Link
                 to="/machines"
                 className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/machines') ? styles.selected : ''}`}
               >
-                {getMenuIcon('/machines', <PiComputerTowerFill className={styles.menuIcon} />, <PiComputerTowerLight className={styles.menuIcon} />)}
+                {getMenuIcon('/machines', <PiComputerTowerFill className={styles.menuIcon} />, <PiComputerTowerBold className={styles.menuIcon} />)}
                 <div className={styles.label}>Machines</div>
               </Link>
             </li>

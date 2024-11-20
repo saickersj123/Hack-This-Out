@@ -61,7 +61,7 @@
         font-size: var(--font-size-small);
         letter-spacing: -0.01em;
         font-weight: 600;
-        color: #b5b7c0;
+        color: var(--color-white-200);
         text-align: left;
       }
 
@@ -92,10 +92,10 @@
 
             top: 30px;
             gap: 8px;
-            background: var(--blue-400);
+            background: var(--blue-500);
             height: 50px;
             padding: 8px;
-            border: 2px solid var(--blue-300);
+            border: 1px solid white;
             border-radius: 8px;
             z-index: 10;
 
@@ -113,7 +113,7 @@
             }
 
             .category {
-              background: var(--blue-200);
+              background: var(--blue-400);
               border: none;
             }
           }

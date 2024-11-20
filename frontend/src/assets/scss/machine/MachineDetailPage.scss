@@ -26,16 +26,16 @@
             position: fixed;
             right: 83px;
             top: 190px;
-
+            font-weight: 600;
             width: 140px;
             height: 48px;
             box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08), 0px 4px 8px rgba(44, 39, 56, 0.08);
             border-radius: 6px;
-            background: linear-gradient(96.7deg, #222, #008000);
+            background: var(--blue-500);
             color: var(--color-white);
 
             &:hover {
-                background: linear-gradient(96.7deg, #495057, #9EF01A);
+                background: var(--blue-200);
             }
         }
 
@@ -78,9 +78,9 @@
                     float: right;
                     margin-top: 16px;
                     margin-right: 5%;
-                    background-color: #5b9bd5;
+                    background-color: var(--blue-500);
                     color: white;
-                    border: none;
+                    border: 1.5px solid var(--color-white);
                     border-radius: 20px;
                     padding: 0.75rem 1.5rem;
                     font-weight: bold;
@@ -88,7 +88,8 @@
                     transition: background-color 0.3s;
 
                     &:hover {
-                        background-color: #4a8ac5;
+                        background-color: var(--blue-200);
+                        border: 1.5px solid transparent;
                     }
                 }
             }

@@ -47,8 +47,8 @@ const ContestBanner: React.FC = () => {
   }
 
   const contests = [
-    { ...latestContest!, title: 'Latest' },
-    { ...startedContest!, title: 'Ongoing' },
+    { ...latestContest!, title: 'Latest Contest' },
+    { ...startedContest!, title: 'Ongoing Contest' },
   ];
 
   return (
@@ -98,7 +98,7 @@ const ContestBanner: React.FC = () => {
                   <p className='ramaining-time'>종료까지 {formatRemainingTime(contest.endTime)}</p>
                 )}
                 <div className='contest_reward_box'>
-                  <p className='banner-exp'>Reward :</p>
+                  <p className='banner-exp'>Reward</p>
                   <p className='exp'>{contest.contestExp} EXP</p>
                 </div>
                 <Button

@@ -87,7 +87,7 @@ const MachineList: React.FC = () => {
 
   return (
     <div className={styles.machine_list_container}>
-      <div className={styles.machine_list_title}>Machine List</div>
+      <div className={styles.machine_list_title}>Machines</div>
       <table className={styles.machine_list_table}>
         <thead>
           <tr className={styles.table_text_box}>
@@ -99,7 +99,7 @@ const MachineList: React.FC = () => {
                   <FilterAltIcon onClick={toggleFilterVisibility} />
                   {filterVisible && (
                     <div className={styles.category_filter}>
-                      <label className={styles.category_label} htmlFor='category-select'>Filter by Category:</label>
+                      <label className={styles.category_label} htmlFor='category-select'>Filter by </label>
                       <select
                         className={styles.category_select}
                         id='category-select'
