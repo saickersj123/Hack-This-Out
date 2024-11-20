@@ -118,7 +118,7 @@ const ContestList: React.FC = () => {
 
   return (
     <div className={styles.contest_list_container}>
-      <div className={styles.contest_list_title}>Contest List</div>
+      <div className={styles.contest_list_title}>Contests</div>
       <div className={styles.tabs}>
         <button
           className={`${styles.tab_button} ${activeTab === 'ongoing' ? styles.active : ''}`}

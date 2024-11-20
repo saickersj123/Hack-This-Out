@@ -62,7 +62,7 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
             <span style={{ marginLeft: '32px', color: '#fff' }}>{rating.toFixed(1)} / 5.0</span>
           </div>
           <div className='machine-reward-box'>
-            <p className='text'>Rewards:</p>
+            <p className='text'>Rewards</p>
             <p className='reward-text'>EXP {exp || 0}</p>
           </div>
           {/* <p><strong>AMI ID:</strong> {amiId || 'N/A'}</p> */}

@@ -18,7 +18,7 @@ const CurrentUserInfo: React.FC<CurrentUserInfoProps> = ({ currentUser }) => {
         <div className={styles.user_box}>
             <div className={styles.current_user_container}>
                 <div className={styles.user_rank}>#{myRank || 'Unranked'}</div>
-                <div className={styles.user_level}>LV. {myLevel}</div>
+                <div className={styles.user_level}><b>LV. {myLevel}</b></div>
                 <div className={styles.info_container}>
                     <Avatar alt={myUsername || ''} sx={{ 
                         backgroundColor: avatarBgColor,

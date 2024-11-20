@@ -38,13 +38,11 @@
             background: var(--color-background-transparent);
 
             &:hover {
-                background: var(--blue-400);
-                opacity: 0.9;
-
+                background: var(--blue-300);
                 .machine,
                 .plus,
                 .register_text {
-                    color: var(--color-dimgray);
+                    color: var(--color-white);
                 }
             }
 
@@ -57,12 +55,12 @@
             .plus {
                 position: relative;
                 left: 0px;
-                bottom: 35px;
+                bottom: 50px;
                 color: var(--color-white);
             }
 
             .register_text {
-                font-size: var(--font-size-small);
+                font-size: 24px;
                 font-weight: bold;
                 color: var(--color-white);
             }

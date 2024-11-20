@@ -47,8 +47,8 @@ const MachineBanner: React.FC = () => {
   }
 
   const machines = [
-    { ...latestMachine!, title: <><b>Latest</b></> },
-    { ...mostPlayedMachine!, title: <><b>Most Played</b></> },
+    { ...latestMachine!, title: <><b>Latest Machine</b></> },
+    { ...mostPlayedMachine!, title: <><b>Trending Machine</b></> },
   ];
 
   return (
@@ -93,7 +93,7 @@ const MachineBanner: React.FC = () => {
                 </Avatar>
                 <h4><b>{machine.name}</b></h4>
                 <div className='machine_reward_box'>
-                  <p className='banner-exp'>Reward :</p>
+                  <p className='banner-exp'>Reward</p>
                   <p className='exp'>{machine.exp} EXP</p>
                 </div>
                 <Box className='rating-box'>
