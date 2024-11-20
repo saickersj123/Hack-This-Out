@@ -18,6 +18,7 @@ const ErrorIcon: React.FC = () => {
         strokeColor={"#fff"}
         fillColor={"var(--primary)"}
       />
+      
     </Box>
   );
 };
