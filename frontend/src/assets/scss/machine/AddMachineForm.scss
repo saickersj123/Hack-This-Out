@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     padding: 24px 32px;
-    gap: 16px;
+    gap: 8px;
     overflow: scroll;
     scrollbar-width: none;
 
@@ -53,6 +53,7 @@
     }
 
     .create-container {
+        flex: 1 0 auto;
         display: grid;
         grid-template-columns: 2.5fr 1fr;
         gap: 16px;
@@ -157,28 +158,29 @@
             font-size: 0.9rem;
             margin-bottom: 1rem;
         }
-    }
-
-    .add-machine-form-button {
-        position: sticky; /* sticky를 사용하여 부모의 하단에 고정 */
-        bottom: 16px; /* 부모의 하단에서 16px 위에 위치 */
-        align-self: flex-end; /* 부모의 오른쪽 끝에 위치 */
-        height: 48px;
-
-        button[type="submit"] {
-            padding: 0.75rem 1.5rem;
-            font-weight: bold;
-            background-color: var(--blue-500);
-            color: white;
-            border: 1.5px solid var(--color-white);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-
-            &:hover {
-                background-color: var(--blue-200);
-                border: 1.5px solid transparent;
+        .add-machine-form-button {
+            grid-column-start: 2;
+            grid-row-start: 8;
+            align-self: flex-end;
+            justify-self: right;
+            height: 48px;
+    
+            button[type="submit"] {
+                padding: 0.75rem 1.5rem;
+                font-weight: bold;
+                background-color: var(--blue-500);
+                color: white;
+                border: 1.5px solid var(--color-white);
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+    
+                &:hover {
+                    background-color: var(--blue-200);
+                    border: 1.5px solid transparent;
+                }
             }
         }
     }
+
 }

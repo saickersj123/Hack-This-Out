@@ -240,9 +240,9 @@ const AddMachineForm: React.FC = () => {
             Add Hint
           </button>
         </div>
-      </div>
-      <div className='add-machine-form-button'>
-        <button type='submit'>Create Machine</button>
+        <div className='add-machine-form-button'>
+          <button type='submit'>Create Machine</button>
+        </div>
       </div>
     </form>
   );
