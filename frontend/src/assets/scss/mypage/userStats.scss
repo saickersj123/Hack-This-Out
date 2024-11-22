@@ -1,0 +1,106 @@
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--color-white);
+    gap: 8px;
+
+    .stats-header {
+        width: 100%;
+        height: 70px;
+        padding-left: 24px;
+        font-size: var(--font-title);
+        font-weight: 600;
+    }
+
+    .upper-container {
+        display: flex;
+        width: 90%;
+        height: 250px;
+        justify-content: space-around;
+        align-items: center;
+        gap: 32px;
+        margin: 16px 0;
+
+        .stats-avatar {
+            width: 30%;
+            height: 250px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding-bottom: 32px;
+
+            .stats-avatar-image {
+                width: 150px;
+                height: 150px;
+                font-size: 3rem;
+            }
+        }
+
+        .stats-progress {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+            height: 250px;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            border-left: 1px solid var(--color-list-border);
+            border-right: 1px solid var(--color-list-border);
+
+            .stats-progress-container {
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+
+                .progress-bar {
+                    color: #1976d2;
+                }
+
+                .progress-text {
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    position: absolute;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    .h6,
+                    .caption {
+                        color: var(--color-white);
+                    }
+                }
+            }
+
+            .next-level {
+                width: 250px;
+                text-align: center;
+            }
+        }
+
+        .stats-rank {
+            width: 30%;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+
+            .rank-badge {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    }
+}
