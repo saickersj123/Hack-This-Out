@@ -432,11 +432,11 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         Add Machine
                     </button>
                 </div>
-            </div>
-            <div className='add-contest-form-button'>
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Registering...' : 'Register Contest'}
-                </button>
+                <div className='add-contest-form-button'>
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Registering...' : 'Register Contest'}
+                    </button>
+                </div>
             </div>
         </form>
     );
