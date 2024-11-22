@@ -6,6 +6,7 @@ import LoadingIcon from "../public/LoadingIcon";
 import { Avatar, Badge, Box, Typography, CircularProgress } from "@mui/material";
 import { avatarBackgroundColors, getAvatarColorIndex } from "../../utils/avatars";
 import { styled } from "@mui/material/styles";
+import '../../assets/scss/mypage/userStats.scss';
 
 // Import all badge frame SVGs
 import frame1 from '../../assets/img/level/Level_1.svg';
@@ -70,11 +71,11 @@ const StyledBadge = styled(Badge)<StyledBadgeProps>(() => ({
         minWidth: 'auto',
         borderRadius: '50%', // Ensure the badge is circular
         // Adjust the size of the badge as needed
-        width: 180,
-        height: 180,
+        width: 230,
+        height: 230,
         position: 'absolute',
-        top: -125, // ****************!! Adjust this value to position the badge !!***************
-        left: -125, // ****************!! Adjust this value to position the badge !!***************
+        top: -155, // ****************!! Adjust this value to position the badge !!***************
+        left: -155, // ****************!! Adjust this value to position the badge !!***************
         '& img': {
             width: '100%',
             height: '100%',
@@ -140,6 +141,7 @@ const UserStats = () => {
     const levelFrame = getLevelFrame(myStats.myLevel || 1);
     const nextLevelExp = getNextLevelExp(myStats.myLevel || 1);
     const expPercentage = ((myStats?.myExp || 0) / nextLevelExp) * 100;
+    const remainExp = nextLevelExp - (myStats?.myExp || 0);
 
     // Function to determine rank frame based on rank
     const getRankBadge = (rank: number): number => {
@@ -159,74 +161,55 @@ const UserStats = () => {
     const rankBadge = getRankBadge(myStats.myRank || 0);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                <Typography variant="h6">{myStats?.myUsername}'s Stats</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                <StyledBadge
-                    overlap="circular"
+        <Box className="stats-container">
+            <Typography className="stats-header">{myStats?.myUsername}'s Stats</Typography>
+            <Box className="upper-container">
+                <Box className="stats-avatar">
+                    <StyledBadge
+                        overlap="circular"
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                         variant="standard"
-                        frame={levelFrame} // Pass the frame number to StyledBadge
-                        badgeContent={
-                    <img src={levelFrames[levelFrame]}  />
-                }
-            >
-                <Avatar
-                    alt={myStats?.myUsername || ''}
-                    sx={{
-                        backgroundColor: avatarBgColor,
-                        width: 110,
-                        height: 110,
-                        fontSize: '3rem',
-                    }}
-                >
-                    {myStats?.myUsername?.charAt(0).toUpperCase() || ''}
-                    </Avatar>
-                </StyledBadge>
-            </Box>
-            <Box sx={{ width: '100%', maxWidth: 300, mt: 4, position: 'relative' }}>
-                <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                    <CircularProgress
-                        variant="determinate"
-                        value={Math.min(expPercentage, 100)}
-                        size={120}
-                        thickness={4}
-                        sx={{
-                            color: '#1976d2',
-                        }}
-                        aria-label={`Level ${myStats?.myLevel}, ${Math.round(expPercentage)}% to next level`}
-                    />
-                    <Box
-                        sx={{
-                            top: 0,
-                            left: 0,
-                            bottom: 0,
-                            right: 0,
-                            position: 'absolute',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
+                        frame={levelFrame}
+                        badgeContent={<img src={levelFrames[levelFrame]} alt="Level Frame" />}
                     >
-                        <Typography variant="h6" component="div" color="textPrimary">
-                            Level {myStats?.myLevel}
-                        </Typography>
-                        <Typography variant="caption" component="div" color="textSecondary">
-                            {`${Math.round(expPercentage)}%`}
-                        </Typography>
-                    </Box>
+                        <Avatar
+                            alt={myStats?.myUsername || ''}
+                            className="stats-avatar-image"
+                            sx={{
+                                backgroundColor: avatarBgColor
+                            }}
+                        >
+                            {myStats?.myUsername?.charAt(0).toUpperCase() || ''}
+                        </Avatar>
+                    </StyledBadge>
                 </Box>
-            </Box>
-            <Box sx={{ mt: 4, textAlign: 'center' }}>
-                <Typography variant="h6">#{myStats?.myRank}</Typography>
-                <Box>
+                <Box className="stats-progress">
+                    <Box className="stats-progress-container">
+                        <CircularProgress
+                            variant="determinate"
+                            value={Math.min(expPercentage, 100)}
+                            size={200}
+                            thickness={4}
+                            className="progress-bar"
+                            aria-label={`Level ${myStats?.myLevel}, ${Math.round(expPercentage)}% to next level`}
+                        />
+                        <Box className="progress-text">
+                            <Typography style={{fontSize: "2rem"}} component="div" color="var(--color-white)">
+                                Level {myStats?.myLevel}
+                            </Typography>
+                            <Typography variant="h6" component="div" color="var(--color-white)">
+                                {Math.round(expPercentage)}%
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <Typography className="next-level" variant="h6" component="div">Next Level: {remainExp} EXP</Typography>
+                </Box>
+                <Box className="stats-rank">
                     <Avatar
                         src={rankBadges[rankBadge]}
-                        sx={{ width: 120, height: 120 }}
+                        className="rank-badge"
                     />
+                    <Typography variant="h6">Ranking #{myStats?.myRank}</Typography>
                 </Box>
             </Box>
         </Box>

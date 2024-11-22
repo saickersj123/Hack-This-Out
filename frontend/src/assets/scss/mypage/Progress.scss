@@ -1,0 +1,217 @@
+@use "../style" as *;
+
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: hidden;
+
+    h2 {
+        color: var(--color-white);
+        font-size: var(--font-size-large);
+        padding-left: 24px;
+        font-weight: 600;
+    }
+
+    .tabs {
+        display: flex;
+        position: sticky;
+        top: 0;
+        margin: 0 16px 0;
+        
+        p {
+            font-weight: bold;
+        }
+        .tab-button {
+            min-width: 120px;
+            padding: 8px 24px;
+            border-right: 1px solid var(--color-list-border);
+            border-left: 1px solid var(--color-list-border);
+            background: var(--color-background-transparent);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--color-white);
+            font-size: var(--font-size-small);
+
+            &:hover {
+                background: var(--blue-200);
+            }
+        }
+
+        .active {
+            background: var(--blue-300);
+        }
+    }
+
+    .progress-table {
+        width: 100%;
+        height: 100%;
+        display: table;
+        overflow-y: auto;
+
+        tbody {
+            display: block;
+            overflow-y: auto;
+            height: 100%;
+            max-height: 350px;
+            @include scrollbar-none;
+
+            tr {
+                color: var(--color-white);
+                height: 70px;
+            }
+        }
+
+        thead {
+            width: 100%;
+            position: sticky;
+            top: 0;
+            background-color: var(--color-background);
+            z-index: 1;
+
+            th {
+                color: var(--color-white);
+            }
+        }
+
+        .head-detail {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 50px;
+            border-bottom: 1px solid var(--color-list-border);
+
+            .head-name {
+                width: 200px;
+            }
+
+            .head-exp,
+            .head-hint,
+            .head-time {
+                width: 130px;
+            }
+            
+            .head-comp {
+                width: 200px;
+            }
+        }
+
+        .body-detail {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 1px solid var(--color-list-border);
+
+            .body-name {
+                display: flex;
+                gap: 16px;
+                width: 200px;
+                height: 70px;
+                text-align: center;
+                align-items: center;
+            }
+
+            .body-exp,
+            .body-hint,
+            .body-time {
+                width: 130px;
+                text-align: center;
+                height: 70px;
+                text-align: center;
+                align-content: center;
+            }
+            
+            .body-comp {
+                width: 200px;
+                height: 70px;
+                text-align: center;
+                align-content: center;
+            }
+        }
+    }
+
+    .contest-table {
+        width: 100%;
+        height: 100%;
+        display: table;
+        overflow-y: auto;
+
+        tbody {
+            display: block;
+            overflow-y: auto;
+            height: 100%;
+            max-height: 350px;
+            @include scrollbar-none;
+
+            tr {
+                color: var(--color-white);
+                height: 70px;
+            }
+        }
+
+        thead {
+            width: 100%;
+            position: sticky;
+            top: 0;
+            background-color: var(--color-background);
+            z-index: 1;
+
+            th {
+                color: var(--color-white);
+            }
+        }
+
+        .head-detail {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 50px;
+            border-bottom: 1px solid var(--color-list-border);
+
+            .head-name {
+                width: 200px;
+            }
+
+            .head-exp,
+            .head-comp,
+            .head-time {
+                width: 130px;
+            }
+            
+            .head-machine {
+                width: 200px;
+            }
+        }
+
+        .body-detail {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 1px solid var(--color-list-border);
+
+            .body-name {
+                display: flex;
+                align-items: center;
+                height: 70px;
+                gap: 16px;
+                width: 200px;
+            }
+
+            .body-exp,
+            .body-comp,
+            .body-time {
+                width: 130px;
+                height: 70px;
+                text-align: center;
+                align-content: center;
+            }
+            
+            .body-machine {
+                height: 70px;
+                width: 200px;
+                text-align: center;
+                align-content: center;
+            }
+        }
+    }
+}
