@@ -2,18 +2,7 @@
 @use 'sass:color';
 @use "../style" as *;
 
-/* Define color variables for the dark theme */
-$background-color: #2c2c2c;
-$input-background: #3c3c3c;
-$input-text-color: #f5f5f5;
-$border-color: #555555;
-$button-background: #4a4a4a;
-$button-text-color: #f5f5f5;
-$button-hover-background: #5a5a5a;
-$label-color: #e0e0e0;
-$suggestion-background: #3c3c3c;
-$suggestion-hover-background: #555555;
-$suggestion-text-color: #f5f5f5;
+
 
 .add-contest-form {
     @include background_set;
@@ -22,7 +11,7 @@ $suggestion-text-color: #f5f5f5;
     display: flex;
     flex-direction: column;
     padding: 24px 32px;
-    gap: 16px;
+    gap: 8px;
 
     overflow: scroll;
     scrollbar-width: none;
@@ -71,6 +60,7 @@ $suggestion-text-color: #f5f5f5;
     }
 
     .create-container {
+        flex: 1 0 auto;
         display: grid;
         grid-template-columns: 2.5fr 1fr;
         gap: 16px;
@@ -201,6 +191,44 @@ $suggestion-text-color: #f5f5f5;
                 transition: all 0.3s;
             }
 
+            .suggestions-list {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                align-items: center;
+                justify-content: center;
+                width: 20vw;
+
+
+                background: var(--blue-400);
+                border: 1px solid white;
+                z-index: 10;
+
+                li {
+                    width: 100%;
+                    padding: 4px;
+                    color: var(--color-white);
+                    font-size: var(--font-size-small);
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: #1A67d2;
+                    }
+                }
+            }
+
+            .no-suggestions{
+                position: absolute;
+                width: 20vw;
+
+                background: var(--blue-400);
+                color: var(--color-white);
+                font-size: var(--font-size-small);
+                border: 1px solid white;
+                z-index: 10;
+                padding: 4px;
+            }
+
             button {
                 padding: 0.47rem 0.6rem;
                 margin-left: 0.5rem;
@@ -225,31 +253,28 @@ $suggestion-text-color: #f5f5f5;
             }
         }
 
-    }
-    .add-contest-form-button {
-        position: sticky;
-        bottom: 16px; /* 부모의 하단에서 16px 위에 위치 */
-        align-self: flex-end; /* 부모의 오른쪽 끝에 위치 */
-        height: 48px;
-        margin-top: 40px;
+        .add-contest-form-button {
+            grid-column-start: 2;
+            grid-row-start: 7;
+            align-self: flex-end;
+            justify-self: right;
+            height: 48px;
 
-        button[type="submit"] {
-            padding: 0.75rem 1.5rem;
-            font-weight: bold;
-            background-color: var(--blue-500);
-            color: white;
-            border: 1.5px solid var(--color-white);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-
-            &:hover {
-                background-color: var(--blue-200);
-                border: 1.5px solid transparent;
+            button[type="submit"] {
+                padding: 0.75rem 1.5rem;
+                font-weight: bold;
+                background-color: var(--blue-500);
+                color: white;
+                border: 1.5px solid var(--color-white);
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+    
+                &:hover {
+                    background-color: var(--blue-200);
+                    border: 1.5px solid transparent;
+                }
             }
         }
-
     }
-
-
 }
