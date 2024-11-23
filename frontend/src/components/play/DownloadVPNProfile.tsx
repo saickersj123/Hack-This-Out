@@ -1,6 +1,6 @@
 import React from 'react';
 import { downloadOpenVPNProfile } from '../../api/axiosInstance';
-
+import '../../assets/scss/play/DownloadVPNProfile.scss';
 /**
  * Component to download the OpenVPN profile.
  */
@@ -34,9 +34,31 @@ const DownloadVPNProfile: React.FC = () => {
   };
 
   return (
-    <button onClick={handleDownload} className="download-vpn-button">
-      Download VPN Profile
-    </button>
+    <div className="download-container">
+      <label className="download-label">
+        <input type="checkbox" className="download-input" onClick={handleDownload} />
+        <span className="download-circle">
+          <svg
+            className="download-icon"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.5"
+              d="M12 19V5m0 14-4-4m4 4 4-4"
+            ></path>
+          </svg>
+          <div className="download-square"></div>
+        </span>
+        <p className="download-title">Download</p>
+        <p className="download-title">Downloaded</p>
+      </label>
+    </div>
   );
 };
 

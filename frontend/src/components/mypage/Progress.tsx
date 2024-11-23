@@ -4,10 +4,12 @@ import { getContestParticipations } from "../../api/axiosContest";
 import LoadingIcon from "../public/LoadingIcon";
 import ErrorIcon from "../public/ErrorIcon";
 import { UserProgressItem, ContestParticipationItem } from "../../types/Progress";
-import { formatDate } from "../../utils/dateUtils";
+import { formatDate, formatTimeSpent } from "../../utils/dateUtils";
 import { Avatar } from "@mui/material";
 import { avatarBackgroundColors } from "../../utils/avatars";
 import { getAvatarColorIndex } from "../../utils/avatars";
+import '../../assets/scss/mypage/Progress.scss';
+
 
 const Progress = () => {
     const [userProgress, setUserProgress] = useState<UserProgressItem[]>([]);
@@ -60,13 +62,12 @@ const Progress = () => {
                 userProgress.length > 0 ? (
                     <table className="progress-table">
                         <thead>
-                            <tr>
-                                <th>{/*avatar*/}</th>
-                                <th>Machine Name</th>
-                                <th>EXP Earned</th>
-                                <th>Time Spent (s)</th>
-                                <th>Hints Used</th>
-                                <th>Completed</th>
+                            <tr className="head-detail">
+                                <th className="head-name">Machine Name</th>
+                                <th className="head-exp">EXP Earned</th>
+                                <th className="head-time">Time Spent</th>
+                                <th className="head-hint">Hints Used</th>
+                                <th className="head-comp">Completed</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,18 +75,18 @@ const Progress = () => {
                                 const avatarColorIndex = getAvatarColorIndex(progress.machine.name);
                                 const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
                                 return (
-                                <tr key={progress._id}>
-                                    <td><Avatar 
+                                <tr className="body-detail" key={progress._id}>
+                                    <td className="body-name">
+                                        <Avatar 
                                         variant="rounded" 
                                         sx={{ backgroundColor: avatarBgColor, width: 40, height: 40 }}>
                                         {progress.machine.name.charAt(0).toUpperCase()}
-                                        </Avatar>
-                                        </td>
-                                    <td>{progress.machine.name}</td>
-                                    <td>{progress.expEarned}</td>
-                                    <td>{progress.timeSpent}</td>
-                                    <td>{progress.hintsUsed}</td>
-                                    <td>{progress.completedAt ? formatDate(progress.completedAt) : "Given up"}</td>
+                                        </Avatar> {progress.machine.name.charAt(0).toUpperCase() + progress.machine.name.slice(1)}
+                                    </td>
+                                    <td className="body-exp">{progress.expEarned} EXP</td>
+                                    <td className="body-time">{progress.timeSpent ? formatTimeSpent(progress.timeSpent) : "-"}</td>
+                                    <td className="body-hint">{progress.hintsUsed}</td>
+                                    <td className="body-comp">{progress.completedAt ? formatDate(progress.completedAt) : "Given up"}</td>
                                     </tr>
                                 );
                             })}
@@ -97,13 +98,12 @@ const Progress = () => {
             ) : contestParticipation.length > 0 ? (
                 <table className="contest-table">
                     <thead>
-                        <tr>
-                            <th>{/*avatar*/}</th>
-                            <th>Contest Name</th>
-                            <th>Start Time</th>
-                            <th>Completed</th>
-                            <th>EXP Earned</th>
-                            <th>Machines Completed</th>
+                        <tr className="head-detail">
+                            <th className="head-name">Contest Name</th>
+                            <th className="head-time">Start Time</th>
+                            <th className="head-comp">Completed</th>
+                            <th className="head-exp">EXP Earned</th>
+                            <th className="head-machine">Machines Completed</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -111,25 +111,24 @@ const Progress = () => {
                             const avatarColorIndex = getAvatarColorIndex(participation.contest.name);
                             const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
                             return (
-                            <tr key={participation._id}>
-                                <td><Avatar 
+                            <tr className="body-detail" key={participation._id}>
+                                <td className="body-name"><Avatar 
                                     variant="rounded" 
                                     sx={{ backgroundColor: avatarBgColor, width: 40, height: 40 }}>
                                     {participation.contest.name.charAt(0).toUpperCase()}
-                                    </Avatar>
+                                    </Avatar> {participation.contest.name.charAt(0).toUpperCase() + participation.contest.name.slice(1)}
                                     </td>
-                                <td>{participation.contest.name}</td>
-                                <td>{formatDate(participation.participationStartTime)}</td>
-                                <td>
+                                <td className="body-time">{formatDate(participation.participationStartTime)}</td>
+                                <td className="body-comp">
                                     {participation.participationEndTime
                                         ? formatDate(participation.participationEndTime)
                                         : "Given up"}
                                 </td>
-                                <td>{participation.expEarned}</td>
-                                <td>
+                                <td className="body-exp">{participation.expEarned} EXP</td>
+                                <td className="body-machine">
                                     {participation.machineCompleted.length > 0
                                         ? participation.machineCompleted.map((machine) => machine.name).join(", ")
-                                        : "None"}
+                                        : "-"}
                                 </td>
                             </tr>
                             );

@@ -30,8 +30,7 @@
     border-bottom: 1px solid #cccccc;
 
     color: var(--color-white);
-    font-family: var(--font-ibm-plex-sans);
-
+    font-weight: 700;
     .leaderboard_data {
       display: flex;
       height: 50px;
@@ -48,7 +47,7 @@
 
       .leaderboard_rank,
       .leaderboard_level {
-        width: 50px;
+        width: 51px;
         min-width: 30px;
       }
 
