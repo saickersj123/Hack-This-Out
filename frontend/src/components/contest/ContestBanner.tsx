@@ -26,7 +26,11 @@ const ContestBanner: React.FC = () => {
         const latest = await getLatestContest();
         const started = await getStartedContest();
         setLatestContest(latest.contest);
-        setStartedContest(started.contests[0]);
+        setStartedContest(started.contest);
+        //if started contest is null, set started contest to latest contest
+        if (!started.contest) {
+          setStartedContest(latest.contest);
+        }
       } catch (err: any) {
         console.error('Error fetching machines for banner:', err);
         setError('Failed to load machine banners.');

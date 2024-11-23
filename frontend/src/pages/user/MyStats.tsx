@@ -1,6 +1,8 @@
 import Main from "../../components/main/Main";
 import Progress from "../../components/mypage/Progress";
 import UserStats from "../../components/mypage/UserStats";
+import '../../assets/scss/mypage/myStats.scss';
+
 
 const MyStats = () => {
     return (

@@ -5,11 +5,10 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import CurrentUserInfo from './CurrentUserInfo'; // Import the new component
 import { CurrentUser } from '../../types/CurrentUser'; // Import the CurrentUser interface
 import { User } from '../../types/User'; // Import the User interface
-import { FaMedal } from "react-icons/fa";
 import { Avatar } from '@mui/material';
 import { avatarBackgroundColors } from '../../utils/avatars';
 import { getAvatarColorIndex } from '../../utils/avatars';
-
+import { rankBadges, getRankBadge } from '../../utils/badge';
 
 interface ContestLeaderboardProps {
     leaderboard: User[];
@@ -57,17 +56,17 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
                                         {/* 메달 아이콘과 순위 번호 함께 표시 */}
                                         {startIdx + index + 1 === 1 ? (
                                             <>
-                                                <FaMedal className={styles.goldMedal} size='clamp(24px, 4vw, 32px)' />
+                                                <Avatar src={rankBadges[getRankBadge(startIdx + index + 1)]} sx={{ width: 'clamp(32px, 4vw, 48px)', height: 'clamp(32px, 4vw, 48px)' }} />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
                                         ) : startIdx + index + 1 === 2 ? (
                                             <>
-                                                <FaMedal className={styles.silverMedal} size='clamp(24px, 4vw, 32px)' />
+                                                <Avatar src={rankBadges[getRankBadge(startIdx + index + 1)]} sx={{ width: 'clamp(32px, 4vw, 48px)', height: 'clamp(32px, 4vw, 48px)' }} />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
                                         ) : startIdx + index + 1 === 3 ? (
                                             <>
-                                                <FaMedal className={styles.bronzeMedal} size='clamp(24px, 4vw, 32px)' />
+                                                <Avatar src={rankBadges[getRankBadge(startIdx + index + 1)]} sx={{ width: 'clamp(32px, 4vw, 48px)', height: 'clamp(32px, 4vw, 48px)' }} />
                                                 <span className={styles.high_rank}>{startIdx + index + 1}</span>
                                             </>
                                         ) : (
@@ -81,7 +80,7 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
                                         </Avatar>
                                         <div className={styles.leaderboard_username}>{user.username}</div>
                                     </div>
-                                    <div className={styles.leaderboard_exp}>{user.exp}</div>
+                                    <div className={styles.leaderboard_exp}>{user.exp} EXP</div>
                                 </div>
                             );
                         })

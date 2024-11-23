@@ -7,14 +7,17 @@ import { SidebarProvider } from './contexts/SidebarContext';
 import { ProfileProvider } from './contexts/ProfileContext';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import routes from './routes';
-import Loading from './components/public/Loading';
 const rootElement = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootElement);
 
 const router = createBrowserRouter(routes, {
   // Enable the v7_relativeSplatPath future flag
   future: {
+    v7_fetcherPersist: true,
+    v7_normalizeFormMethod: true,
+    v7_partialHydration: true,
     v7_relativeSplatPath: true,
+    v7_skipActionErrorRevalidation: true,
   },
 });
 
@@ -23,7 +26,12 @@ root.render(
     <AuthUserProvider>
       <SidebarProvider>
         <ProfileProvider>
-          <RouterProvider router={router} fallbackElement={<Loading />} />
+          <RouterProvider
+            future={{
+              v7_startTransition: true,
+            }}
+            router={router} 
+          />
         </ProfileProvider>
       </SidebarProvider>
     </AuthUserProvider>
