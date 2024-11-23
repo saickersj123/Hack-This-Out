@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { getUserStatus } from '../api/axiosUser';
 
-
 interface User {
   id: string;
   username: string;
