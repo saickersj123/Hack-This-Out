@@ -17,7 +17,7 @@ export const formatDate = (dateString: string | Date): string => {
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
 
-  return `${year}/${month}/${day} ${hours}:${minutes}`;
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
 export const formatRemainingTime = (endDateString: string | Date): string => {
@@ -38,5 +38,13 @@ export const formatRemainingTime = (endDateString: string | Date): string => {
   const hours = Math.floor((diff / (1000 * 60 * 60)) % 24); // 남은 시간(시)
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)); // 남은 시간(분)
 
-  return `${days}일 ${hours}시간 ${minutes}분`;
+  return `${days}D ${hours}H ${minutes}M`;
 };
+
+export const formatTimeSpent = (timeSpent: number): string => {
+  //convert seconds to hours, minutes and seconds
+  const minutes = Math.floor((timeSpent % 3600) / 60);
+  const seconds = timeSpent % 60;
+  return `${minutes}:${seconds}`;
+};
+

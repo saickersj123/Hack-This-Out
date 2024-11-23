@@ -921,21 +921,19 @@ export const getMyRankInContest = async (req: Request, res: Response) => {
  */
 export const getStartedContest = async (req: Request, res: Response) => {
     try {
-        const contests = await Contest.find({ isActive: true });
-        const currentTime = new Date();
-        const startedContests = contests.filter(contest => contest.startTime <= currentTime);
-        if (!startedContests) {
+        const contest = await Contest.findOne({ isActive: true, startTime: { $lte: new Date() }, endTime: { $gte: new Date() } });
+        if (!contest) {
             res.status(200).json({
                 message: "OK",
                 msg: 'No started contests found.',
-                contests: []
+                contest: null
             });
             return;
         }
         res.status(200).json({
             message: "OK",
             msg: 'Started contests fetched successfully.',
-            contests: startedContests
+            contest: contest
         });
     } catch (error: any) {
         console.error('Error fetching started contests:', error);
@@ -953,11 +951,11 @@ export const getStartedContest = async (req: Request, res: Response) => {
  */
 export const getLatestContest = async (req: Request, res: Response) => {
     try {
-        const contests = await Contest.find({ isActive: true }).sort({ startTime: -1 }).limit(1);
+        const contest = await Contest.findOne({ isActive: true }).sort({ startTime: -1 });
         res.status(200).json({
             message: "OK",
             msg: 'Latest contest fetched successfully.',
-            contest: contests[0]
+            contest: contest
         });
     } catch (error: any) {
         console.error('Error fetching latest contest:', error);

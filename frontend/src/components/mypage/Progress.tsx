@@ -4,7 +4,7 @@ import { getContestParticipations } from "../../api/axiosContest";
 import LoadingIcon from "../public/LoadingIcon";
 import ErrorIcon from "../public/ErrorIcon";
 import { UserProgressItem, ContestParticipationItem } from "../../types/Progress";
-import { formatDate } from "../../utils/dateUtils";
+import { formatDate, formatTimeSpent } from "../../utils/dateUtils";
 import { Avatar } from "@mui/material";
 import { avatarBackgroundColors } from "../../utils/avatars";
 import { getAvatarColorIndex } from "../../utils/avatars";
@@ -65,7 +65,7 @@ const Progress = () => {
                             <tr className="head-detail">
                                 <th className="head-name">Machine Name</th>
                                 <th className="head-exp">EXP Earned</th>
-                                <th className="head-time">Time Spent (s)</th>
+                                <th className="head-time">Time Spent</th>
                                 <th className="head-hint">Hints Used</th>
                                 <th className="head-comp">Completed</th>
                             </tr>
@@ -83,8 +83,8 @@ const Progress = () => {
                                         {progress.machine.name.charAt(0).toUpperCase()}
                                         </Avatar> {progress.machine.name.charAt(0).toUpperCase() + progress.machine.name.slice(1)}
                                     </td>
-                                    <td className="body-exp">{progress.expEarned}</td>
-                                    <td className="body-time">{progress.timeSpent}</td>
+                                    <td className="body-exp">{progress.expEarned} EXP</td>
+                                    <td className="body-time">{progress.timeSpent ? formatTimeSpent(progress.timeSpent) : "-"}</td>
                                     <td className="body-hint">{progress.hintsUsed}</td>
                                     <td className="body-comp">{progress.completedAt ? formatDate(progress.completedAt) : "Given up"}</td>
                                     </tr>
@@ -124,11 +124,11 @@ const Progress = () => {
                                         ? formatDate(participation.participationEndTime)
                                         : "Given up"}
                                 </td>
-                                <td className="body-exp">{participation.expEarned}</td>
+                                <td className="body-exp">{participation.expEarned} EXP</td>
                                 <td className="body-machine">
                                     {participation.machineCompleted.length > 0
                                         ? participation.machineCompleted.map((machine) => machine.name).join(", ")
-                                        : "None"}
+                                        : "-"}
                                 </td>
                             </tr>
                             );

@@ -1,12 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { logoutUser } from '../../api/axiosUser';
 import { useNavigate } from 'react-router-dom';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import styles from '../../assets/scss/section/_profile.module.scss';
 import { useProfileContext } from '../../contexts/ProfileContext';
-
 import { FaArrowRightToBracket } from "react-icons/fa6";
-
 import down_arrow from '../../assets/img/icon/down_arrow.svg';
 import up_arrow from '../../assets/img/icon/up_arrow.svg';
 import setting from '../../assets/img/icon/setting_icon.svg';
@@ -14,7 +12,8 @@ import darkmode_icon from '../../assets/img/icon/darkmode_icon.svg';
 import darkmode_switch from '../../assets/img/icon/darkmode_switch.svg';
 import { Avatar } from '@mui/material';
 import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
-import { FaHouseUser, FaRegUserCircle } from 'react-icons/fa';
+
+import { FaRegUserCircle, FaHouseUser } from "react-icons/fa";
 
 interface MenuItemProps {
     onClick?: () => void;
@@ -27,9 +26,9 @@ const MenuItem: React.FC<MenuItemProps> = ({ onClick, children }) => (
 
 const Profile: React.FC = () => {
     const { isProfileCollapsed, toggleProfile } = useProfileContext();
-
     const navigate = useNavigate();
     const authUserContext = useContext(AuthUserContext);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     if (!authUserContext) {
         throw new Error('AuthUserContext must be used within an AuthUserProvider');
@@ -49,11 +48,35 @@ const Profile: React.FC = () => {
             }
         }
     };
+
+    const handleMenuItemClick = (action: () => void) => {
+        action();
+        toggleProfile();
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target as Node)
+        ) {
+            if (!isProfileCollapsed) {
+                toggleProfile();
+            }
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isProfileCollapsed]);
+
     const avatarColorIndex = getAvatarColorIndex(currentUser?.username || '');
     const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
 
     return (
-        <div className={styles.userinfoDark}>
+        <div className={styles.userinfoDark} ref={dropdownRef}>
             <div className={styles.userinfoDark_container}>
                 <div className={styles.userinfo}>
                     <div className={styles.rectangleParent}>
@@ -79,19 +102,19 @@ const Profile: React.FC = () => {
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
                             <FaRegUserCircle className={styles.icon} />
-                            <MenuItem onClick={() => navigate('/mypage')}>My Page</MenuItem>
+                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/mypage'))}>My Page</MenuItem>
                         </div>
                     </div>
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
                             <FaHouseUser className={styles.icon} />
-                            <MenuItem onClick={() => navigate('/mystats')}>My Stats</MenuItem>
+                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/mystats'))}>My Stats</MenuItem>
                         </div>
                     </div>
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
                             <img className={styles.icon} alt="" src={setting} />
-                            <div className={styles.lianaParker}>Settings</div>
+                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/settings'))}>Settings</MenuItem>
                         </div>
                     </div>
                     <div className={styles.settingsInner}>
@@ -107,7 +130,7 @@ const Profile: React.FC = () => {
                 <div className={styles.userinfoDarkChild} />
                 <div className={styles.logout}>
                     <FaArrowRightToBracket className={styles.logout_icon} size={30} />
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick(handleLogout)}>Logout</MenuItem>
                 </div>
             </div>
         </div >
