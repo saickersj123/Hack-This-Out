@@ -1,0 +1,41 @@
+@use "../style" as *;
+
+.contest_pending_contents{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 16px;
+    color: var(--color-white);
+    font-weight: bold;
+    align-items: flex-start;
+
+    .contest_pending_upper{
+        display: flex;
+        justify-content: center;
+    }
+
+    .contest_pending_body{
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        text-align: left;
+
+        .contest_pending_time{
+            font-size: var(--font-size-mid);
+            align-self: flex-start;
+            //drop shadow
+            text-shadow: 0 0 10px var(--lightblue-200);
+        }
+    }
+
+    button{
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        margin-left: auto;
+
+        @include button_color;
+    }
+}

@@ -167,7 +167,7 @@ const PreContestPage: React.FC = () => {
             </p>
           </div>
           <button onClick={handleCompletedContest} className={styles.modal_button}>
-            Back to Contest
+            Back to Contests
           </button>
         </div>
         </Modal>
