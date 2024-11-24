@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    gap: 8px;
 
     .machine-play-name {
         background-color: var(--blue-500);
@@ -41,7 +42,6 @@
             gap: 24px;
             display: flex;
             flex-direction: column;
-            margin-bottom: 24px;
         }
     }
 

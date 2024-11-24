@@ -4,7 +4,11 @@ import { Instance } from '../../types/Instance';
 import LoadingIcon from '../public/LoadingIcon';
 import ErrorIcon from '../public/ErrorIcon';
 import '../../assets/scss/play/InstanceInfo.scss';
+import GetHints from '../../components/play/GetHints';
+
 import { FaDotCircle } from "react-icons/fa";
+import { useStatus } from '../../contexts/StatusContext'; // 컨텍스트 가져오기
+import StatusIcon from '../../components/play/StatusIcon';
 
 
 /**
@@ -13,15 +17,18 @@ import { FaDotCircle } from "react-icons/fa";
 export interface InstanceInfoProps {
   machineId: string;
   onStatusChange?: (status: Instance['status']) => void; // Callback prop
+  instplayType: 'machine' | 'contest';
+  contestId?: string;
 }
 
 /**
  * Component to display instance information.
  */
-const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }) => {
+const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, contestId, onStatusChange, instplayType }) => {
   const [instance, setInstance] = useState<Instance | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState<boolean>(false); // To track fetching state
+  const { status, setStatus } = useStatus(); // StatusContext 사용
 
   useEffect(() => {
     if (!machineId) {
@@ -33,6 +40,7 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
 
     const fetchInstanceInfo = async () => {
       setIsFetching(false);
+
       try {
         console.log('Fetching instance info for machineId:', machineId);
         const response = await getInstanceByMachine(machineId);
@@ -44,6 +52,15 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
             setInstance(currentInstance);
             if (onStatusChange) {
               onStatusChange(currentInstance.status);
+            }
+
+            // 동적으로 status 업데이트
+            if (currentInstance.status === 'pending') {
+              setStatus('inProgress');
+            } else if (currentInstance.status === 'running') {
+              setStatus('completed');
+            } else {
+              setStatus('idle'); // 상태가 다른 경우에는 idle로 설정
             }
           } else {
             setInstance(null);
@@ -111,20 +128,33 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
     }
   };
 
+  const isRunning = instance.status === 'running';
+
   return (
-    <div className="instance-info-container">
-      <div className='upper-text'>
-        <FaDotCircle size={40} color={getStatusColor(instance.status)} />
-        <h2>Spawn Machine</h2>
-      </div>
-      <h3>Create machine and Start hacking.</h3>
-      <div
-        className="vpn-info"
-        style={{
-          border: `2px solid ${getStatusColor(instance.status)}`, // 백틱(`)으로 문자열 템플릿 사용
-        }}
-      >
-        VPN IP: {instance.vpnIp}
+    <div className="instance-status">
+      <StatusIcon status={status} />
+      <div className='instance-hint'>
+        <div className='instance-info-container'>
+          <div className='upper-text'>
+            <FaDotCircle size={40} color={getStatusColor(instance.status)} />
+            <h2>Spawn Machine</h2>
+          </div>
+          <h3>Create machine and Start hacking.</h3>
+          <div
+            className="vpn-info"
+            style={{
+              border: `2px solid ${getStatusColor(instance.status)}`, // 백틱(`)으로 문자열 템플릿 사용
+            }}
+          >
+            VPN IP: {instance.vpnIp}
+          </div>
+        </div>
+        <GetHints
+          machineId={machineId || ''}
+          contestId={contestId || ''}
+          playType={instplayType}
+          disabled={!isRunning} // Disable based on instance status
+        />
       </div>
     </div>
   );
