@@ -57,9 +57,8 @@ const GiveUpModal: React.FC<GiveUpModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className={styles.give_up_modal}>
         <div className={styles.textbox}>
-        <div className={styles.text}>Give Up Confirmation</div>
-        <p>Are you sure you want to give up on <strong>{machineName}</strong>?</p>
-        <p className={styles.warning_text}>Warning: All your progress will be lost!</p>
+          <p className={styles.text}>Are you sure you want to give up on {machineName}?</p>
+          <p className={styles.warning_text}>Warning! All your progress will be lost!</p>
         </div>
         <div className={styles.button_group}>
           <button 

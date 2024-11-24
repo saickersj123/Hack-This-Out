@@ -1,31 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/modal/Modal';
-import '../../assets/scss/etc/MachineCompleteModal.scss';
+import Confetti from 'react-confetti';
+import '../../assets/scss/etc/MachineCompleteMD.scss';
 
-
-interface MachineCompleteModalProps {
-  onClose: () => void; // 모달이 닫힐 때 호출할 함수
-}
-
-const MachineCompleteModal: React.FC<MachineCompleteModalProps> = ({ onClose }) => {
+const MachineCompleteModal: React.FC = () => {
   const navigate = useNavigate();
+  const [showConfetti, setShowConfetti] = useState(true);
 
   const handleGoToMain = () => {
-    onClose();
+    setShowConfetti(false);
     navigate('/');
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowConfetti(false);
+    }, 3000); // Confetti stops after 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <Modal isOpen={true} onClose={handleGoToMain}>
-      <div className="machine-complete-modal">
-        <h2>Congratulations!</h2>
-        <p>You have completed the machine.</p>
-        <button onClick={handleGoToMain} className="redirect-button">
-          Go Home
-        </button>
-      </div>
-    </Modal>
+    <>
+      <Modal isOpen={true} onClose={handleGoToMain}>
+        {/* match Confetti width and height to modal size */}
+        {/* ************TODO: Confetti height should be matched to modal height ************ */}
+        {showConfetti && <Confetti width={550} height={550} />}
+        <div className="machine-complete-modal">
+          <div className="title">🎉 Machine Completed! 🎉</div>
+          <div className="content">You have successfully completed the machine.</div>
+          <button onClick={handleGoToMain} className="redirect-button">
+            Go Home
+          </button>
+        </div>
+      </Modal>
+    </>
   );
 };
 

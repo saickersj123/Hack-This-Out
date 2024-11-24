@@ -13,6 +13,7 @@ import Main from '../../components/main/Main';
 import { Instance } from '../../types/Instance';
 import ErrorIcon from '../../components/public/ErrorIcon';
 import '../../assets/scss/machine/MachinePlayPage.scss';
+import LoadingIcon from '../../components/public/LoadingIcon';
 
 
 /**
@@ -116,7 +117,7 @@ const MachinePlayPage: React.FC = () => {
       <Main>
         <div className="machine-play-container">
           <h2>Machine Play</h2>
-          <div>Loading machine details...</div>
+          <div><LoadingIcon /></div>
         </div>
       </Main>
     );
@@ -133,12 +134,12 @@ const MachinePlayPage: React.FC = () => {
     <Main>
       <div className="machine-play-container">
         <div className="machine-play-name">
-          <h3>Now Playing: {machine.name}</h3>
+          <h3><b>Now Playing: {machine.name.charAt(0).toUpperCase() + machine.name.slice(1)}</b></h3>
           <GiveUpButton
             machineId={machineId || ''}
             machineName={machine.name}
             mode="machine"
-          //disabled={!isRunning} // Disable based on instance status
+            disabled={!isRunning} // Disable based on instance status
           />
         </div>
         <div className='download-box'>

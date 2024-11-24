@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate, NavigateFunction } from 'react-router-dom';
+import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import { getContestStatus } from '../../api/axiosContest';
 import { formatDate } from '../../utils/dateUtils';
-import Modal from '../../components/modal/Modal';
+import Modal from './Modal';
 interface GetContestStatusResponse {
   contestName: string;
   isActive: boolean;
@@ -10,7 +10,11 @@ interface GetContestStatusResponse {
   endTime: Date;
 }
 
-const ContestPendingPage: React.FC = () => {
+interface ContestEndedMDProps {
+  onClose: () => void;
+}
+
+const ContestEndedMD: React.FC<ContestEndedMDProps> = ({ onClose }) => {
   const { contestId } = useParams<{ contestId: string }>();
   const navigate: NavigateFunction = useNavigate();
   const [contestStatus, setContestStatus] = useState<GetContestStatusResponse | null>(null);
@@ -33,20 +37,23 @@ const ContestPendingPage: React.FC = () => {
   }, [contestId]);
 
   const handleClose = () => {
-    navigate(`/contest/${contestId}`);
+    onClose();
+  };
+
+  const handleBackToContest = () => {
+    onClose();
+    navigate(`/contest`);
   };
 
   return (
     <Modal isOpen={true} onClose={handleClose}>
       {contestStatus && (
         <>
-          <h2>Contest Pending</h2>
+          <h2>Contest Ended</h2>
           <p>Contest Name: {contestStatus.contestName}</p>
-          <p>Status: {contestStatus.isActive ? 'Active' : 'Inactive'}</p>
-          <p>Start Time: {formatDate(contestStatus.startTime)}</p>
-          <p>End Time: {formatDate(contestStatus.endTime)}</p>
-          <p>Contest is not started yet. Please wait for the contest to start.</p>
-          <button><Link to={`/contest/${contestId}`}>View Contest</Link></button>
+          <p>Ended at {formatDate(contestStatus.endTime)}</p>
+          <p>Contest is ended. Please wait for the next contest.</p>
+          <button onClick={handleBackToContest}>Back to Contests</button>
         </>
       )}
       {error && <div className="error-message">{error}</div>}
@@ -54,4 +61,4 @@ const ContestPendingPage: React.FC = () => {
   );
 };
 
-export default ContestPendingPage;
+export default ContestEndedMD;

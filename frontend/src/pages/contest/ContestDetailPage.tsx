@@ -10,6 +10,8 @@ import { User } from '../../types/User';
 import { ContestStatus } from '../../types/Contest';
 import styles from '../../assets/scss/contest/ContestDetailPage.module.scss';
 import Loading from '../../components/public/Loading';
+import ContestEndedMD from '../../components/modal/ContestEndedMD';
+import ContestPendingMD from '../../components/modal/ContestPendingMD';
 
 /**
  * Component representing the Contest Detail Page.
@@ -36,6 +38,10 @@ const ContestDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { contestId } = useParams<{ contestId: string }>();
   const navigate: NavigateFunction = useNavigate();
+
+  // State to manage ContestEndedMD modal visibility
+  const [showEndedMD, setShowEndedMD] = useState<boolean>(false);
+  const [showPendingMD, setShowPendingMD] = useState<boolean>(false);
 
   /**
    * Fetches the contest details from the API.
@@ -124,7 +130,7 @@ const ContestDetailPage: React.FC = () => {
   }, [contestId]);
 
   /**
-   * Handles navigation to the participate page.
+   * Handles navigation to the participate page or displays appropriate modal.
    */
   const handlePlay = () => {
     if (!contestDetail) return;
@@ -133,15 +139,21 @@ const ContestDetailPage: React.FC = () => {
 
     const now = Date.now();
 
-    const isContestActive =
+    const isContestStarted =
       isActive &&
       new Date(startTime).getTime() <= now &&
       new Date(endTime).getTime() >= now;
 
-    if (isContestActive) {
+    const isContestEnded =
+      isActive &&
+      new Date(endTime).getTime() < now;
+
+    if (isContestStarted) {
       navigate(`/contest/${_id}/pre`);
+    } else if (isContestEnded) {
+      setShowEndedMD(true); // Show the ContestEndedMD modal
     } else {
-      navigate(`/contest/${_id}/pending`);
+      setShowPendingMD(true); // Show the ContestPendingMD modal
     }
   };
 
@@ -181,7 +193,12 @@ const ContestDetailPage: React.FC = () => {
           />
         )}
       </div>
-    </Main >
+
+      {/* Render the ContestEndedMD modal when showEndedMD is true */}
+      {showEndedMD && <ContestEndedMD onClose={() => setShowEndedMD(false)} />}
+      {/* Render the ContestPendingMD modal when showPendingMD is true */}
+      {showPendingMD && <ContestPendingMD onClose={() => setShowPendingMD(false)} />}
+    </Main>
   );
 };
 

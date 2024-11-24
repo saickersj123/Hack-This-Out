@@ -6,7 +6,7 @@
   padding: 10px 20px;
   border-radius: 100px;
   background-color: transparent;
-  border: 1px solid var(--color-white);
+  border: 2px solid var(--color-white);
   display: flex;
   align-items: center;
   font-size: 21px;
@@ -16,7 +16,6 @@
 .give-up-btn:hover {
   border: none;
   background: var(--color-red-rosso);
-  color: black;
 }
 
 .give-up-btn>svg {
@@ -28,11 +27,10 @@
 
 .give-up-btn:hover svg {
   transform: translateX(5px);
-  stroke: black;
 }
 
 .give-up-btn:hover circle {
-  stroke: black;
+  stroke: rgb(255, 255, 255);
 }
 
 

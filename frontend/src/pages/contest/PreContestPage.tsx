@@ -78,8 +78,8 @@ const PreContestPage: React.FC = () => {
       }
     } catch (error: any) {
       // Check if the error response exists
-      if (error.message === "FOUND") {
-        // User has already participated and completed the contest
+      if (error.message === "COMPLETED") {
+        // User has already completed the contest
         setIsModalOpen(true); // Open the modal instead of redirecting immediately
         return;
       }
@@ -100,6 +100,11 @@ const PreContestPage: React.FC = () => {
   const handleJoinContest = () => {
     setIsModalOpen(false);
     navigate(`/contest/${contestId}/play`);
+  };
+
+  const handleCompletedContest = () => {
+    setIsModalOpen(false);
+    navigate(`/contest/${contestId}`);
   };
 
   return (
@@ -129,7 +134,7 @@ const PreContestPage: React.FC = () => {
           <button className={styles.contest_start} onClick={handleStartContest}>Join Contest</button>
         </div>
       </div>
-      {/* Modal Component */}
+      {/* When user participated in the contest */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className={styles.modal_body}>
           <div className={styles.contest_warning}>
@@ -145,8 +150,23 @@ const PreContestPage: React.FC = () => {
           <button onClick={handleJoinContest} className={styles.modal_button}>
             Join Contest
           </button>
-        </div>
+          </div>
       </Modal>
+      {/* When user already completed the contest */}
+      {error === "COMPLETED" && (
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <div className={styles.modal_body}>
+          <div className={styles.contest_warning}>
+            <p>
+              You have already completed the contest.
+            </p>
+          </div>
+          <button onClick={handleCompletedContest} className={styles.modal_button}>
+            Back to Contest
+          </button>
+        </div>
+        </Modal>
+      )}
     </Main>
   );
 };
