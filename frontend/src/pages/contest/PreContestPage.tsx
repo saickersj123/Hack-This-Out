@@ -77,6 +77,11 @@ const PreContestPage: React.FC = () => {
         setError(participation.msg);
       }
     } catch (error: any) {
+      if (error.message === "FOUND") {
+        // User has already participated and completed the contest
+        setIsModalOpen(true); // Open the modal instead of redirecting immediately
+        return;
+      }
       // Check if the error response exists
       if (error.message === "COMPLETED") {
         // User has already completed the contest
