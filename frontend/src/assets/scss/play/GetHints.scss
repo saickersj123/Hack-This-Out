@@ -1,0 +1,75 @@
+.get-hints-container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    color: var(--color-white);
+    width: 100%;
+    background-color: var(--blue-400);
+    border-radius: 24px;
+    padding: 24px;
+    gap: 8px;
+
+    h3 {
+        padding-left: 48px;
+    }
+
+    .upper-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        h2 {
+            font-weight: 600;
+        }
+    }
+
+    .hints-list {
+        display: flex;
+        flex-direction: column;
+        width: 500px;
+        gap: 8px;
+        padding-left: 30px;
+        margin-top: 16px;
+        .list {
+            height: 60px;
+            background-color: var(--blue-200);
+            border-radius: 24px;
+            font-size: var(--font-size-small);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+        }
+    }
+
+    .get-hints-button {
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+        background-color: var(--blue-400);
+        border: 2px solid var(--blue-200);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50px;
+        width: 160px;
+        height: 60px;
+        white-space: nowrap;
+        cursor: pointer;
+        padding: 5px 20px;
+        color: var(--color-white);
+        font-size: var(--font-size-small);
+        font-weight: 600;
+
+        &:hover {
+            background-color: var(--blue-100);
+            color: var(--color-gray-400);
+        }
+    }
+
+    .disabled {
+        opacity: 0.5; /* 흐려짐 효과 */
+        cursor: not-allowed; /* 금지된 커서 */
+        pointer-events: none; /* 상호작용 방지 */
+      }
+}
