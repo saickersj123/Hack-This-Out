@@ -8,6 +8,7 @@ import Loading from './components/public/Loading';
 import App from './App';
 import './assets/scss/admin/AdminDashboard.scss';
 import AdminLayout from './components/admin/AdminLayout';
+import MachineCompleteModal from './components/modal/MachineCompleteModal';
 
 // Lazy-loaded components
 const LoginPage = lazy(() => import('./pages/public/LoginPage'));
@@ -18,7 +19,6 @@ const ContestListPage = lazy(() => import('./pages/contest/ContestListPage'));
 const ContestDetailPage = lazy(() => import('./pages/contest/ContestDetailPage'));
 const ContestRegisterPage = lazy(() => import('./pages/contest/ContestRegisterPage'));
 const ContestCompletePage = lazy(() => import('./pages/contest/ContestCompletePage'));
-const ContestPendingPage = lazy(() => import('./pages/contest/ContestPendingPage'));
 const PreContestPage = lazy(() => import('./pages/contest/PreContestPage'));
 const ContestPlayPage = lazy(() => import('./pages/contest/ContestPlayPage'));
 const MachineListPage = lazy(() => import('./pages/machine/MachineListPage'));
@@ -26,7 +26,6 @@ const MachineDetailPage = lazy(() => import('./pages/machine/MachineDetailPage')
 const NewMachineReview = lazy(() => import('./pages/machine/NewMachineReview'));
 const MachineRegisterPage = lazy(() => import('./pages/machine/MachineRegisterPage'));
 const MachinePlayPage = lazy(() => import('./pages/machine/MachinePlayPage'));
-const MachineCompletePage = lazy(() => import('./pages/machine/MachineCompletePage'));
 const MyPage = lazy(() => import('./pages/user/MyPage'));
 const DashboardHome = lazy(() => import('./pages/admin/DashboardHome'));
 const UsersManagement = lazy(() => import('./pages/admin/UsersManagement'));
@@ -124,14 +123,6 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'contest/:contestId/pending',
-        element: (
-          <ProtectedRoute>
-            <ContestPendingPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
         path: 'machines',
         element: (
           <ProtectedRoute>
@@ -167,7 +158,7 @@ const routes: RouteObject[] = [
         path: 'machine/:machineId/complete',
         element: (
           <ProtectedRoute>
-            <MachineCompletePage />
+            <MachineCompleteModal onClose={() => {}} />
           </ProtectedRoute>
         ),
       },

@@ -3,6 +3,9 @@ import { getInstanceByMachine } from '../../api/axiosInstance';
 import { Instance } from '../../types/Instance';
 import LoadingIcon from '../public/LoadingIcon';
 import ErrorIcon from '../public/ErrorIcon';
+import '../../assets/scss/play/InstanceInfo.scss';
+import { FaDotCircle } from "react-icons/fa";
+
 
 /**
  * Props interface for InstanceInfo component.
@@ -102,22 +105,27 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId, onStatusChange }
       case 'pending':
         return 'yellow';
       case 'running':
-        return 'green';
+        return 'rgb(35, 174, 35)';
       default:
         return 'black';
     }
   };
 
   return (
-    <div className="instance-info-container" style={{ border: '1px solid #ccc', padding: '10px', marginTop: '20px' }}>
-      <h4
+    <div className="instance-info-container">
+      <div className='upper-text'>
+        <FaDotCircle size={40} color={getStatusColor(instance.status)} />
+        <h2>Spawn Machine</h2>
+      </div>
+      <h3>Create machine and Start hacking.</h3>
+      <div
+        className="vpn-info"
         style={{
-          color: getStatusColor(instance.status),
+          border: `2px solid ${getStatusColor(instance.status)}`, // 백틱(`)으로 문자열 템플릿 사용
         }}
       >
-        Instance Status: {instance.status}
-      </h4>
-      <h4>VPN IP: {instance.vpnIp}</h4>
+        VPN IP: {instance.vpnIp}
+      </div>
     </div>
   );
 };

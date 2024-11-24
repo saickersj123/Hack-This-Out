@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { getUsedHintsInContest, getHintInContest } from '../../api/axiosContest';
 import { getUsedHints, getMachineHints } from '../../api/axiosMachine';
 import LoadingIcon from '../public/LoadingIcon';
+import '../../assets/scss/play/GetHints.scss';
+import { GoQuestion } from "react-icons/go";
+import { CiLock } from "react-icons/ci";
 
 /**
  * Props interface for GetHints component.
@@ -131,37 +134,35 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId, dis
 
   return (
     <div className="get-hints-container">
-      <h3>Hints</h3>
+      <div className="upper-text">
+        <GoQuestion size={40} color="white" />
+        <h2>Hints</h2>
+      </div>
+      <h3>If you need a hint, Press the button</h3>
       {loading && <LoadingIcon />}
       {error && <div className="error-message">{error.msg}</div>}
       {!loading && !error && hintsUsed > 0 && (
         <div className="used-hints">
-          <h4>Used Hints ({hintsUsed})</h4>
           <ul className="hints-list">
             {hints.map((hint, index) => (
-              <li key={index}>{hint.content}</li>
+              <li className="list" key={index}>{hint.content}</li>
             ))}
           </ul>
         </div>
       )}
-      {!loading && !error && remainingHints > 0 && (
-        <div className="remaining-hints">
-          <h4>Remaining Hints ({remainingHints})</h4>
-        </div>
-      )}
-      {!loading && !error && hintsUsed === 0 && <p>No hints used yet.</p>}
       <button
         onClick={fetchHint}
         disabled={loading || remainingHints === 0 || disabled}
-        className="get-hints-button"
+        className={`get-hints-button ${disabled || remainingHints === 0 ? "disabled" : ""}`}
       >
-        {loading
-          ? <LoadingIcon />
-          : remainingHints === 0
-          ? 'No More Hints'
-          : disabled
-          ? 'Disabled'
-          : 'Get Hint'}
+        {loading ? (
+          <LoadingIcon />
+        ) : disabled || remainingHints === 0 ? (
+          <CiLock size={40} color="#ccc" /> // disabled일 때 아이콘 렌더링
+        ) : (
+          'Hint'
+        )}
+        {!disabled && remainingHints > 0 && ` (${remainingHints})`}
       </button>
     </div>
   );

@@ -1,13 +1,39 @@
-.give-up-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #e74c3c;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  
-    &:hover {
-      background-color: #c0392b;
-    }
-  }
+/* From Uiverse.io by alexmaracinaru */
+.give-up-btn {
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+  padding: 10px 20px;
+  border-radius: 100px;
+  background-color: transparent;
+  border: 2px solid var(--color-white);
+  display: flex;
+  align-items: center;
+  font-size: 21px;
+  color: white;
+}
+
+.give-up-btn:hover {
+  border: none;
+  background: var(--color-red-rosso);
+}
+
+.give-up-btn>svg {
+  color: white;
+  width: 34px;
+  margin-left: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.give-up-btn:hover svg {
+  transform: translateX(5px);
+}
+
+.give-up-btn:hover circle {
+  stroke: rgb(255, 255, 255);
+}
+
+
+.give-up-btn:active {
+  transform: scale(0.95);
+}

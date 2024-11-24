@@ -98,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/contest') ? styles.selected : ''}`}
               >
                 {getMenuIcon('/contest', <EmojiEventsOutlinedIcon className={styles.menuIcon} />, <EmojiEventsIconRounded className={styles.menuIcon} />)}
-                <div className={styles.label}>Contest</div>
+                <div className={styles.label}>Contests</div>
               </Link>
               <Link
                 to="/machines"

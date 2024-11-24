@@ -10,6 +10,7 @@ import InstanceInfo from '../../components/play/InstanceInfo';
 import SubmitFlagForm from '../../components/play/SubmitFlagForm';
 import Timer from '../../components/play/Timer';
 import GiveUpButton from '../../components/play/GiveUpButton';
+import StatusIcon from '../../components/play/StatusIcon';
 import Main from '../../components/main/Main';
 import { ContestDetail, Machine } from '../../types/Contest';
 import { Instance } from '../../types/Instance';
@@ -36,6 +37,9 @@ const ContestPlayPage: React.FC = () => {
   const [instanceStatus, setInstanceStatus] = useState<Instance['status']>(null);
   const [instanceStarted, setInstanceStarted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [downloadStatus, setDownloadStatus] = useState<'idle' | 'inProgress' | 'completed'>('idle');
+  const [submitStatus, setSubmitStatus] = useState<'flag' | 'flag-success'>('flag');
+
 
   // Fetch contest details and check for existing instance when component mounts
   useEffect(() => {
@@ -128,6 +132,10 @@ const ContestPlayPage: React.FC = () => {
   // Determine if controls should be disabled based on instance status
   const isRunning = instanceStatus === 'running';
 
+  const handleFlagSuccess = () => {
+    setSubmitStatus('flag-success'); // 정답을 제출했을 때 상태를 flag-success로 변경
+  };
+
   return (
     <Main>
       <div className="contest-play-container">
@@ -138,7 +146,7 @@ const ContestPlayPage: React.FC = () => {
           <h3>Contest: {contest.name}</h3>
         </div>
         <div className="contest-play-timer">
-          <Timer endTime={contest.endTime} />
+          <Timer endTime={new Date(contest.endTime)} />
         </div>
 
         {/* List of Machines */}
@@ -148,9 +156,8 @@ const ContestPlayPage: React.FC = () => {
             {contest.machines.map((machine) => (
               <li
                 key={machine._id}
-                className={`select-machine-item ${
-                  selectedMachine?._id === machine._id ? 'selected' : ''
-                }`}
+                className={`select-machine-item ${selectedMachine?._id === machine._id ? 'selected' : ''
+                  }`}
                 onClick={() => handleMachineSelect(machine)}
                 style={{
                   cursor: 'pointer',
@@ -172,8 +179,10 @@ const ContestPlayPage: React.FC = () => {
               <h3>Now Playing: {selectedMachine.name}</h3>
             </div>
             <DisplayReward reward={contest.contestExp} />
-            <DownloadVPNProfile />
-
+            <DownloadVPNProfile
+              downloadStatus={downloadStatus}
+              setDownloadStatus={setDownloadStatus}
+            />
             {/* Conditionally render StartInstanceButton or InstanceInfo */}
             {!instanceStarted ? (
               <StartInstanceButton
@@ -193,18 +202,20 @@ const ContestPlayPage: React.FC = () => {
               contestId={contestId}
               disabled={!isRunning} // Disable based on instance status
             />
+            <StatusIcon status={submitStatus} />
             <SubmitFlagForm
               contestId={contestId}
               machineId={selectedMachine._id}
               playType="contest"
               disabled={!isRunning} // Disable based on instance status
+              onFlagSuccess={handleFlagSuccess}
             />
             <GiveUpButton
               contestId={contestId}
               machineId={selectedMachine._id}
               machineName={selectedMachine.name}
               mode="contest"
-              //disabled={!isRunning} // Disable based on instance status
+            //disabled={!isRunning} // Disable based on instance status
             />
           </>
         ) : (

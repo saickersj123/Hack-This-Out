@@ -1,33 +1,26 @@
 .give_up_modal {
   display: flex;
   flex-direction: column;
-
   padding: 0 16px 16px;
   text-align: left;
   z-index: 1000;
   gap: 16px;
-
-  font-family: var(--font-ibm-plex-sans);
 
   .textbox {
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding-left: 8px;
-
-    p,
-    .warning_text{
-      padding-left: 8px;
-    }
-
-    .text {
-      font-size: 28px;
-      font-weight: 600;
-      color: #2c2738;
+    font-weight: 600;
+    
+    .text{
+      font-size: 24px;
     }
 
     .warning_text {
-      color: #e74c3c;
+      padding-left: 8px;
+      color: var(--color-red-rosso);
+      font-size: 24px;
       font-weight: bold;
       margin: 8px 0;
     }
@@ -50,25 +43,24 @@
         position: relative;
         height: 48px;
         text-align: center;
-        border: 2px solid #7c9cbf;
-
-        color: #7c9cbf;
+        color: var(--color-blue-400);
         font-size: 16px;
-        font-family: var(--font-ibm-plex-sans);
+        background-color: transparent;
+        border: 2px solid var(--color-white);
 
         &:hover {
           background-color: var(--color-red-rosso);
-          border: 2px solid var(--color-black);
           color: var(--color-white);
         }
       }
 
       &.cancel_button {
-        background-color: #0880ae;
-        color: #ebf4f8;
+        background-color: transparent;
+        color: var(--color-white);
+        border: 2px solid var(--color-white);
 
         &:hover {
-          background-color: #008000;
+          background-color: var(--blue-200);
         }
       }
     }

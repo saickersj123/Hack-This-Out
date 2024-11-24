@@ -244,7 +244,7 @@ export const participateInContest = async (req: Request, res: Response): Promise
         );
         if (alreadyCompleted) {
             res.status(400).json({ 
-                message: "ERROR", 
+                message: "COMPLETED", 
                 msg: 'You have already completed this contest.', 
                 participation: alreadyCompleted
             });
