@@ -70,7 +70,7 @@ const ContestList: React.FC = () => {
       return (
         <tbody>
           <tr>
-            <td colSpan={6} className="no-data">No contests available.</td>
+            <td colSpan={6} className={styles.no_data}>No contests available.</td>
           </tr>
         </tbody>
       );

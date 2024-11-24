@@ -22,7 +22,7 @@ const MachineCompleteModal: React.FC<MachineCompleteModalProps> = ({ onClose }) 
         <h2>Congratulations!</h2>
         <p>You have completed the machine.</p>
         <button onClick={handleGoToMain} className="redirect-button">
-          Go to Main Page
+          Go Home
         </button>
       </div>
     </Modal>

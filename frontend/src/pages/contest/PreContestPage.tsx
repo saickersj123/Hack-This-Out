@@ -7,7 +7,7 @@ import { useNavigate, NavigateFunction } from 'react-router-dom';
 import Modal from '../../components/modal/Modal'; // Importing the Modal component
 import styles from '../../assets/scss/contest/PreContestPage.module.scss';
 import Loading from '../../components/public/Loading';
-
+import { MdOutlineRule } from "react-icons/md";
 
 const PreContestPage: React.FC = () => {
   const { contestId } = useParams<{ contestId: string }>();
@@ -96,6 +96,11 @@ const PreContestPage: React.FC = () => {
     setIsModalOpen(false);
     navigate(`/contest`);
   };
+  
+  const handleJoinContest = () => {
+    setIsModalOpen(false);
+    navigate(`/contest/${contestId}/play`);
+  };
 
   return (
     <Main title="Pre Contest" description="Pre Contest 화면입니다.">
@@ -103,38 +108,42 @@ const PreContestPage: React.FC = () => {
         <div className={styles.contest_basic_info}>
           <h1 className={styles.contest_name}>{contestDetail.name}</h1>
           <h2 className={styles.contest_description}>{contestDetail.description}</h2>
-          <h3 className={styles.contest_exp}> 보상: EXP {contestDetail.contestExp}</h3>
+          <h3 className={styles.contest_exp}> Reward: {contestDetail.contestExp} EXP</h3>
         </div>
         <div className={styles.under_box}>
           <div className={styles.contest_rules}>
-            <p>규칙 설명</p>
+            <div className={styles.contest_rules_title}>
+              <p><MdOutlineRule size={25} /> Rules</p>
+            </div>
             <ul>
-              <li>1. 한 번에 하나의 머신만 플레이할 수 있습니다.</li>
-              <li>2. 플레이 중인 머신에는 힌트가 제공됩니다.</li>
-              <li>3. 플레이 중인 머신의 플래그를 제출해야 합니다.</li>
-              <li>4. 콘테스트 모드를 클리어 하려면 모든 머신을 진행해야 합니다.</li>
-              <li>5. 콘테스트 모드는 시간이 지남에 따라 보상이 감소합니다.</li>
-              <li>6. 콘테스트 모드는 시간이 끝나면 종료됩니다.</li>
-              <li>7. 콘테스트를 클리어 하면 경험치(EXP)를 얻을 수 있습니다.</li>
+              <li>1. You can only play one machine at a time.</li>
+              <li>2. While playing, hints are provided for the machine.</li>
+              <li>3. You must submit the flag of the machine you are playing.</li>
+              <li>4. To clear the contest, you must complete all machines.</li>
+              <li>5. The reward decreases over time.</li>
+              <li>6. The contest ends when the time runs out.</li>
+              <li>7. If you finished the contest, you can earn experience points (EXP).</li>
               <li>8. Good luck!</li>
             </ul>
           </div>
-          <button className={styles.contest_start} onClick={handleStartContest}>Start Contest</button>
+          <button className={styles.contest_start} onClick={handleStartContest}>Join Contest</button>
         </div>
       </div>
       {/* Modal Component */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className={styles.modal_body}>
           <div className={styles.contest_warning}>
-            <h3>* 경고 *</h3>
+            <div className={styles.contest_warning_title}>
+              Warning
+            </div>
             <p>
-              시작 버튼을 누를 시 즉시 기록이 시작 됩니다.
+              Once you join the contest, progress will be recorded.
               <br />
-              컨테스트 화면을 떠날 시, 실격 됩니다.
+              If you leave the contest, you will be disqualified.
             </p>
           </div>
-          <button onClick={handleCloseModal} className={styles.modal_button}>
-            시작
+          <button onClick={handleJoinContest} className={styles.modal_button}>
+            Join Contest
           </button>
         </div>
       </Modal>

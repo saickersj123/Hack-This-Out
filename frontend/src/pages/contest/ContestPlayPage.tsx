@@ -146,7 +146,7 @@ const ContestPlayPage: React.FC = () => {
           <h3>Contest: {contest.name}</h3>
         </div>
         <div className="contest-play-timer">
-          <Timer endTime={contest.endTime} />
+          <Timer endTime={new Date(contest.endTime)} />
         </div>
 
         {/* List of Machines */}
