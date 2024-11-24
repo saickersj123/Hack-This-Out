@@ -1,11 +1,13 @@
+@use 'sass:math';
+
 @function rand($min, $max) {
-  @return random() * ($max - $min) + $min;
+  @return math.random() * ($max - $min) + $min;
 }
 
 $animation-duration: 3s;
 $glitch-duration: 20%;
 $glitch-frequency: 15;
-$glitch-interval: $glitch-duration / $glitch-frequency;
+$glitch-interval: math.div($glitch-duration, $glitch-frequency);
 $glitch-intensity: 15;
 
 @mixin keyframes-rgb-shift($name) {
@@ -13,8 +15,8 @@ $glitch-intensity: 15;
     @for $i from 0 through $glitch-frequency {
       #{$i * $glitch-interval} {
         transform: translate(
-          #{rand(-$glitch-intensity, $glitch-intensity)}px,
-          #{rand(-$glitch-intensity / 2, $glitch-intensity / 2)}px
+          #{rand(-$glitch-intensity, math.div($glitch-intensity, 2))}px,
+          #{rand(math.div(-$glitch-intensity, 2), math.div($glitch-intensity, 2))}px
         );
       }
     }
@@ -41,8 +43,8 @@ $glitch-intensity: 15;
           $left $bottom
         );
         transform: translate(
-          #{rand(-$glitch-intensity * 4, $glitch-intensity * 4)}px,
-          #{rand(-$glitch-intensity / 2, $glitch-intensity / 2)}px
+          #{rand(math.div(-$glitch-intensity * 4, 1), math.div($glitch-intensity * 4, 1))}px,
+          #{rand(math.div(-$glitch-intensity, 2), math.div($glitch-intensity, 2))}px
         );
         background-image: url('../../img/Fullscreen_black.png');
         background-size: cover;
@@ -61,13 +63,13 @@ $glitch-intensity: 15;
 }
 
 @mixin glitch-effect($name) {
-  @include keyframes-glitch($name);
   animation: glitch-#{$name} $animation-duration linear infinite both;
+  @include keyframes-glitch($name);
 }
 
 @mixin rgb-shift($name) {
-  @include keyframes-rgb-shift($name);
   animation: rgb-shift-#{$name} $animation-duration steps(1, jump-end) infinite alternate both;
+  @include keyframes-rgb-shift($name);
 }
 
 .glitch {
