@@ -2,7 +2,10 @@ import React, { useState, FormEvent } from 'react';
 import { submitFlagMachine } from '../../api/axiosMachine';
 import { submitFlagForContest } from '../../api/axiosContest';
 import { submitFlagInstance } from '../../api/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+import '../../assets/scss/play/SubmitFlagForm.scss';
+import { LuFlag } from "react-icons/lu";
+import { CiLock } from "react-icons/ci";
+import MachineCompleteModal from '../../components/modal/MachineCompleteModal';
 
 /**
  * Props interface for SubmitFlagForm component.
@@ -12,6 +15,7 @@ interface SubmitFlagFormProps {
   playType: 'machine' | 'contest';
   contestId?: string; // Optional, required only for contest mode
   disabled?: boolean; // Added optional disabled prop
+  onFlagSuccess: () => void;
 }
 
 /**
@@ -33,11 +37,11 @@ interface SubmitFlagResponse {
 /**
  * Component for submitting a flag for a machine or contest.
  */
-const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, contestId, disabled = false }) => {
+const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, contestId, disabled = false, onFlagSuccess }) => {
   const [flag, setFlag] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [errors, setErrors] = useState<ErrorMessage[]>([]);
-  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
   /**
    * Handles the flag submission form.
@@ -82,7 +86,10 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
           }
         }
         setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully!');
-        navigate(`/machine/${machineId}/complete`);
+        onFlagSuccess();
+
+        // Flag submission successful, show modal instead of navigate
+        setShowModal(true);
       } else if (playType === 'contest') {
         if (!contestId) {
           setErrors([{ msg: 'Contest ID is required for contest mode.' }]);
@@ -96,7 +103,10 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
           response = await submitFlagForContest(contestId, machineId, flag);
         }
         setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully for contest!');
-        navigate(`/contest/${contestId}/complete`);
+        onFlagSuccess();
+
+        // Flag submission successful, show modal instead of navigate
+        setShowModal(true);
       }
     } catch (error: any) {
       // Handle different error structures
@@ -108,40 +118,41 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false); // 모달 닫기
+  };
+
   return (
     <div className="submit-flag-form">
-      <h3>Submit Flag</h3>
-      {errors.length > 0 && (
-        <div className="error-messages">
-          {errors.map((error, idx) => (
-            <p key={idx} className="error">
-              {error.msg}
-            </p>
-          ))}
-        </div>
-      )}
+      <div className='upper-text'>
+        <LuFlag size={40} color="white" />
+        <h2>Submit Flag</h2>
+      </div>
       {message && <p className="message">{message}</p>}
-      <form onSubmit={handleSubmitFlag}>
-        <div className="flag-input-group">
-          <label htmlFor="flag">Flag:</label>
-          <input
-            id="flag"
-            type="text"
-            value={flag}
-            onChange={(e) => setFlag(e.target.value)}
-            placeholder="Enter flag here"
-            required
-            disabled={disabled} // Disable input when disabled
-          />
-        </div>
+      <form className="flag-form" onSubmit={handleSubmitFlag}>
+        <input
+          className={`flag-input ${disabled ? "disabled" : ""} ${errors.length ? "error shake-error" : ""}`}
+          id="flag"
+          type="text"
+          value={flag}
+          onChange={(e) => setFlag(e.target.value)}
+          placeholder="Enter flag here"
+          required
+          disabled={disabled} // Disable input when disabled
+        />
         <button
           type="submit"
-          className="submit-flag-button"
-          disabled={disabled} // Disable button when disabled
+          className={`submit-flag-button ${disabled ? "disabled" : ""}`}
+          disabled={disabled}
         >
-          {disabled ? 'Disabled' : 'Submit Flag'}
+          {disabled ? <CiLock size={40} color="#ccc" /> : 'Submit Flag'}
         </button>
       </form>
+
+      {/* 모달을 조건부로 표시 */}
+      {showModal && (
+        <MachineCompleteModal onClose={handleCloseModal} />
+      )}
     </div>
   );
 };

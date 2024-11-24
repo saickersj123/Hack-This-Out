@@ -1,0 +1,53 @@
+@use "../style" as *;
+
+.machine-play-container {
+    @include background_set;
+    @include scrollbar-none;
+    position: relative;
+    height: 100%;
+    padding: 0 32px 32px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    .machine-play-name {
+        background-color: var(--blue-500);
+        position: sticky;
+        top: 0;
+        color: var(--color-white);
+        font-size: 40px;
+        padding: 32px 24px;
+        z-index: 10;
+        display: flex;
+        justify-content: space-between;
+        padding-right: 32px;
+        gap: 60px;
+    }
+
+    .download-box {
+        display: flex;
+        width: 100%;
+        height: 224px;
+        padding-right: 30px;
+    }
+
+    .btn-box {
+        display: flex;
+        width: 100%;
+        padding-right: 30px;
+
+        .instance-hint-box {
+            width: 100%;
+            gap: 24px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 24px;
+        }
+    }
+
+    .submit-box {
+        display: flex;
+        width: 100%;
+        padding-right: 30px;
+    }
+}
