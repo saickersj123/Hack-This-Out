@@ -158,7 +158,7 @@ const routes: RouteObject[] = [
         path: 'machine/:machineId/complete',
         element: (
           <ProtectedRoute>
-            <MachineCompleteModal />
+            <MachineCompleteModal onClose={() => {}} />
           </ProtectedRoute>
         ),
       },

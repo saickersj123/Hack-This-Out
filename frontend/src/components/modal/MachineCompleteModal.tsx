@@ -4,11 +4,12 @@ import Modal from '../../components/modal/Modal';
 import Confetti from 'react-confetti';
 import '../../assets/scss/etc/MachineCompleteMD.scss';
 
-const MachineCompleteModal: React.FC = () => {
+const MachineCompleteModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const navigate = useNavigate();
   const [showConfetti, setShowConfetti] = useState(true);
 
   const handleGoToMain = () => {
+    onClose();
     setShowConfetti(false);
     navigate('/');
   };
@@ -23,7 +24,7 @@ const MachineCompleteModal: React.FC = () => {
 
   return (
     <>
-      <Modal isOpen={true} onClose={handleGoToMain}>
+      <Modal isOpen={true} onClose={onClose}>
         {/* match Confetti width and height to modal size */}
         {/* ************TODO: Confetti height should be matched to modal height ************ */}
         {showConfetti && <Confetti width={550} height={550} />}
