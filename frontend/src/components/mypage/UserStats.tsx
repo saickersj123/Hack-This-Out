@@ -92,7 +92,7 @@ const UserStats = () => {
     return (
         <Box className="stats-container">
             <Typography className="stats-header">{myStats?.myUsername}'s Stats</Typography>
-            <Box className="upper-container">
+            <Box className="stats-upper-container">
                 <Box className="stats-avatar">
                     <StyledBadge
                         overlap="circular"
