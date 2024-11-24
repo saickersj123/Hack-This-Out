@@ -1,0 +1,32 @@
+@use "../style" as *;
+
+.contest_pending_contents{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--color-white);
+    font-weight: bold;
+
+    .contest_pending_upper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contest_pending_body{
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    button{
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        margin-left: auto;
+
+        @include button_color;
+    }
+}
