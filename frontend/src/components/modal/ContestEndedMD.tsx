@@ -3,6 +3,9 @@ import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 import { getContestStatus } from '../../api/axiosContest';
 import { formatDate } from '../../utils/dateUtils';
 import Modal from './Modal';
+import { MdOutlineTimerOff } from "react-icons/md";
+import styles from '../../assets/scss/etc/ContestEndedMd.module.scss';
+import ErrorIcon from '../public/ErrorIcon';
 interface GetContestStatusResponse {
   contestName: string;
   isActive: boolean;
@@ -49,14 +52,21 @@ const ContestEndedMD: React.FC<ContestEndedMDProps> = ({ onClose }) => {
     <Modal isOpen={true} onClose={handleClose}>
       {contestStatus && (
         <>
-          <h2>Contest Ended</h2>
-          <p>Contest Name: {contestStatus.contestName}</p>
-          <p>Ended at {formatDate(contestStatus.endTime)}</p>
-          <p>Contest is ended. Please wait for the next contest.</p>
-          <button onClick={handleBackToContest}>Back to Contests</button>
+          <div className={styles.contest_ended_contents}>
+            <div className={styles.contest_ended_upper}>
+            <MdOutlineTimerOff style={{ fontSize: '36px', marginRight: '4px' }}/>
+              <h2><b>Contest Ended</b></h2>
+            </div>
+            <div className={styles.contest_ended_body}>
+              {/* <p>Contest Name: {contestStatus.contestName}</p> */}
+              <p className={styles.contest_ended_time}>Ended at {formatDate(contestStatus.endTime)}</p>
+              <p>Contest is ended. <br />Please wait for the next contest.</p>
+            </div>
+            <button onClick={handleBackToContest}>Back to Contests</button>
+          </div>
         </>
       )}
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message"><ErrorIcon />{error}</div>}
     </Modal>
   );
 };
