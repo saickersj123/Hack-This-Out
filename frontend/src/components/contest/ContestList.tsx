@@ -8,7 +8,7 @@ import { BsArrowRightCircle } from "react-icons/bs";
 
 import { Avatar } from '@mui/material';
 import { avatarUrls, avatarBackgroundColors, getAvatarIndex, getAvatarColorIndex } from '../../utils/avatars';
-import Loading from '../public/Loading';
+import LoadingIcon from '../public/LoadingIcon';
 
 interface Contest {
   _id: string;
@@ -77,7 +77,7 @@ const ContestList: React.FC = () => {
     }
 
     if (loading) {
-      return <Loading />;
+      return <LoadingIcon />;
     }
 
     return (
@@ -113,7 +113,7 @@ const ContestList: React.FC = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <LoadingIcon />;
   }
 
   return (
