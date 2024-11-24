@@ -3,20 +3,29 @@
 .contest_pending_contents{
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
+    padding: 16px;
     color: var(--color-white);
     font-weight: bold;
+    align-items: flex-start;
 
     .contest_pending_upper{
         display: flex;
         justify-content: center;
-        align-items: center;
     }
 
     .contest_pending_body{
         display: flex;
         flex-direction: column;
         gap: 4px;
+        text-align: left;
+
+        .contest_pending_time{
+            font-size: var(--font-size-mid);
+            align-self: flex-start;
+            //drop shadow
+            text-shadow: 0 0 10px var(--lightblue-200);
+        }
     }
 
     button{

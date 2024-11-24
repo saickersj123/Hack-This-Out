@@ -5,6 +5,7 @@ import { formatDate } from '../../utils/dateUtils';
 import Modal from './Modal';
 import { MdOutlinePending } from "react-icons/md";
 import styles from '../../assets/scss/etc/ContestPendingPage.module.scss';
+import ErrorIcon from '../public/ErrorIcon';
 
 interface GetContestStatusResponse {
   contestName: string;
@@ -55,18 +56,17 @@ const ContestPendingMD: React.FC<ContestPendingMDProps> = ({ onClose }) => {
           <div className={styles.contest_pending_contents}>
             <div className={styles.contest_pending_upper}>
               <MdOutlinePending style={{ fontSize: '36px', marginRight: '4px' }} />
-              <h2>Contest Pending</h2>
+              <h2><b>Contest Pending</b></h2>
             </div>
             <div className={styles.contest_pending_body}>
-              <p>Contest Name: {contestStatus.contestName}</p>
-              <p>Start Time: {formatDate(contestStatus.startTime)}</p>
-              <p>Contest is not started yet. Please wait for the contest to start.</p>
+              <p className={styles.contest_pending_time}>Starts at {formatDate(contestStatus.startTime)}</p>
+              <p>Contest is not started yet. <br />Please wait for the contest to start.</p>
             </div>
-            <button onClick={handleBackToContest}>Back to Contest</button>
+            <button onClick={handleBackToContest}>Back to Contests</button>
           </div>
         </>
       )}
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message"><ErrorIcon />{error}</div>}
     </Modal>
   );
 };
