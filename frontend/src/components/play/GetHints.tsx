@@ -3,7 +3,7 @@ import { getUsedHintsInContest, getHintInContest } from '../../api/axiosContest'
 import { getUsedHints, getMachineHints } from '../../api/axiosMachine';
 import LoadingIcon from '../public/LoadingIcon';
 import '../../assets/scss/play/GetHints.scss';
-import { GoQuestion } from "react-icons/go";
+import { FaRegQuestionCircle } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
 
 /**
@@ -135,7 +135,7 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId, dis
   return (
     <div className="get-hints-container">
       <div className="upper-text">
-        <GoQuestion size={40} color="white" />
+        <FaRegQuestionCircle size={40} color="white" />
         <h2>Hints</h2>
       </div>
       <h3>If you need a hint, Press the button</h3>
