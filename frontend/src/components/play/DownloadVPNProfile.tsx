@@ -2,20 +2,21 @@ import React from 'react';
 import { downloadOpenVPNProfile } from '../../api/axiosInstance';
 import { TbBrandOpenvpn } from "react-icons/tb";
 import '../../assets/scss/play/DownloadVPNProfile.scss';
-import { useStatus } from '../../contexts/StatusContext'; // 컨텍스트 가져오기
-import StatusIcon from '../../components/play/StatusIcon';
 
+
+interface DownloadVPNProfileProps {
+  downloadStatus: 'idle' | 'inProgress' | 'completed';
+  setDownloadStatus: React.Dispatch<React.SetStateAction<'idle' | 'inProgress' | 'completed'>>;
+}
 /**
  * Component to download the OpenVPN profile.
  */
-const DownloadVPNProfile: React.FC = () => {
-  const { status, setStatus } = useStatus(); // StatusContext 사용
-
+const DownloadVPNProfile: React.FC<DownloadVPNProfileProps> = ({ downloadStatus, setDownloadStatus }) => {
   /**
    * Handles the VPN profile download.
    */
   const handleDownload = async () => {
-    setStatus('inProgress');
+    setDownloadStatus('inProgress'); // 상태: 진행 중
 
     try {
       const response = await downloadOpenVPNProfile();
@@ -35,17 +36,16 @@ const DownloadVPNProfile: React.FC = () => {
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-      setStatus('completed');
+      setDownloadStatus('completed'); // 상태: 완료
     } catch (error: any) {
       console.error('Error downloading OpenVPN profile:', error);
       alert(error.response?.data?.msg || 'Failed to download OpenVPN profile.');
-      setStatus('idle');
+      setDownloadStatus('idle'); // 상태: 대기로 복구
     }
   };
 
   return (
     <div className="download-container">
-      <StatusIcon status={status} />
       <div className='text-button-container'>
         <div className="upper-text">
           <TbBrandOpenvpn color="white" size={40} />
@@ -57,7 +57,7 @@ const DownloadVPNProfile: React.FC = () => {
         </h3>
         <div className='download-btn'>
           <label className="download-label">
-            <input type="checkbox" className="download-input" onClick={handleDownload} disabled={status === 'inProgress'} />
+            <input type="checkbox" className="download-input" onClick={handleDownload} disabled={downloadStatus === 'inProgress'}/>
             <span className="download-circle">
               <svg
                 className="download-icon"
