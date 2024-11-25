@@ -66,9 +66,10 @@
             cursor: pointer;
             order: 1;
             margin-left: 16px;
-
+            transition: all 0.3s ease;
             &:hover {
                 background-color: var(--blue-200);
+                transform: translateX(-0.3rem);
             }
         }
     }
@@ -179,15 +180,17 @@
                 display: inline-block; // Add this
                 vertical-align: top; // Add this
                 margin-top: 0; // Add this
-
+                transition: all 0.3s ease;
                 &:hover {
                     background-color: var(--blue-200);
                     border: 2px solid transparent;
+                    transform: translateY(-2px);
                 }
 
                 &.delete-machine {
                     &:hover {
                         background-color: #c9302c;
+                        transform: translateY(-2px);
                     }
                 }
             }
@@ -256,11 +259,12 @@
                 border: 2px solid var(--color-white);
                 border-radius: 20px;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
     
                 &:hover {
                     background-color: var(--blue-200);
                     border: 2px solid transparent;
+                    transform: translateY(-2px);
                 }
             }
         }

@@ -10,7 +10,7 @@
     flex-direction: column;
     gap: clamp(8px, 1.5vw, 12px);
     border-radius: clamp(16px, 2vw, 24px);
-
+    border: 1px solid var(--blue-200);
     @media (max-width: 768px) {
         padding: 16px;
         gap: 8px;
@@ -48,6 +48,7 @@
 
             &:hover {
                 background: var(--blue-200);
+                transform: translateY(-2px);
             }
         }
 
@@ -226,11 +227,12 @@
               border: 2px solid transparent;
               border-radius: 50%;
               background-color: var(--blue-500);
-              transition: background-color 0.2s;
+              transition: all 0.3s ease;
               cursor: pointer;
 
               &:hover {
                 background-color: var(--blue-200);
+                transform: translateY(-2px);
               }
             }
           }

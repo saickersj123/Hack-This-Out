@@ -6,6 +6,7 @@
   height: 100%;
   font-weight: bold;
 
+
   p{
     font-weight: bold;
   }
@@ -15,7 +16,8 @@
 
   .carousel {
     height: 100%;
-    border-radius: 24px;
+    border-radius: clamp(16px, 2vw, 24px);
+    border: 1px solid var(--blue-200);
 
     .banner-slide {
       padding: clamp(16px, 2vw, 32px);

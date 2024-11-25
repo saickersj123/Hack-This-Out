@@ -65,6 +65,7 @@
                     &:hover {
                         background: rgba(255, 255, 255, 0.12);
                         transform: translateY(-1px);
+                        background-color: var(--blue-200);
                     }
                 }
 
@@ -112,6 +113,7 @@
 
                 &:hover {
                     background: rgba(255, 255, 255, 0.04);
+                    background-color: var(--blue-200);
                     transform: translateX(2px);
                 }
 
@@ -174,7 +176,7 @@
             margin-right: 5px;
 
             &:hover {
-                background: var(--color-primary);
+                background: var(--blue-200);
                 transform: translateY(-1px);
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             }
@@ -237,7 +239,7 @@
                 font-weight: 600;
 
                 &:hover {
-                    background: var(--color-primary);
+                    background: var(--blue-200);
                     transform: translateY(-1px);
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                 }
@@ -249,7 +251,7 @@
             border: 2px solid var(--color-primary);
             
             &:hover {
-                background: var(--color-primary);
+                background: var(--blue-200);
             }
         }
     }

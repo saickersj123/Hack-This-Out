@@ -5,6 +5,7 @@ import PersonalInfoForm from '../../components/mypage/PersonalInfoForm';
 import ToAdmin from '../../components/mypage/toAdmin';
 import { useNavigate } from 'react-router-dom';
 import Main from '../../components/main/Main';
+import { IoMdArrowRoundBack } from 'react-icons/io';
 import '../../assets/scss/mypage/toAdmin.scss';
 
 /**
@@ -35,11 +36,13 @@ const MyPage: React.FC = () => {
           <div className="back-btn-container">
             <button
               className="back-button"
-              onClick={() => navigate('/')}
+              onClick={() => navigate(-1)}
               aria-label="Back to Home"
-            ></button>
+            >
+              <IoMdArrowRoundBack />
+            </button>
           </div>
-          <h1>마이페이지</h1>
+          <h1>Profile</h1>
         </div>
         {!isPasswordVerified ? ( 
           <div className="password-check-wrapper">

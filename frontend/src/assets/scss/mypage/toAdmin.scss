@@ -9,16 +9,38 @@
         align-items: center;
         gap: 10px;  /* 요소 간 간격 조정 */
 
+        h2 {
+            font-weight: 600;
+        }
+
         input {
             height: 40px;
             padding: 0 10px;
             border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.4);
+            }
         }
 
         .toAdmin-button {
             height: 40px;
             padding: 0 15px;
             border-radius: 12px;
+            font-weight: 600;
+            background: var(--blue-100);
+            color: var(--color-white);
+            border: 2px solid var(--color-white);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+
+            &:hover {
+                background: var(--blue-200);
+                border: 2px solid transparent;
+                transition: all 0.2s ease-in-out;
+                transform: translateY(-2px);
+            }
         }
     }
 }

@@ -64,9 +64,11 @@
             cursor: pointer;
             order: 1;
             margin-left: 16px;
+            transition: all 0.3s ease;
 
             &:hover {
                 background-color: var(--blue-200);
+                transform: translateX(-0.3rem);
             }
         }
     }
@@ -123,7 +125,7 @@
                 padding: 0.5rem;
                 border-radius: 10px;
                 outline: none;
-                transition: all 0.3s;
+                transition: all 0.3s ease;
                 margin-left: 0;
             }
 
@@ -155,16 +157,18 @@
                 border-radius: 20px;
                 font-weight: bold;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
 
                 &:hover {
                     background-color: var(--blue-200);
                     border: 2px solid transparent;
+                    transform: translateY(-2px);
                 }
 
                 &.remove-hint {
                     &:hover {
                         background-color: #c9302c;
+                        transform: translateY(-2px);
                     }
                 }
             }
@@ -195,11 +199,12 @@
                 border: 2px solid var(--color-white);
                 border-radius: 20px;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
     
                 &:hover {
                     background-color: var(--blue-200);
                     border: 2px solid transparent;
+                    transform: translateY(-2px);
                 }
             }
         }

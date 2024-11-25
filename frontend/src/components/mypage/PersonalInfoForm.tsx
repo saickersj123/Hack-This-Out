@@ -42,7 +42,7 @@ const PersonalInfoForm: React.FC = () => {
       setUserData(response.user);
     } catch (error) {
       console.error('Error fetching user details:', error);
-      alert('사용자 정보를 불러오는 데 실패했습니다.');
+      alert('Failed to fetch user details.');
     }
   };
 
@@ -57,12 +57,12 @@ const PersonalInfoForm: React.FC = () => {
   const handlePasswordChange = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (newPassword !== confirmNewPassword) {
-      alert('새 비밀번호가 일치하지 않습니다.');
+      alert('New password does not match.');
       return;
     }
     try {
       await changePassword(oldPassword, newPassword);
-      alert('비밀번호가 성공적으로 변경되었습니다.');
+      alert('Password changed successfully.');
       setNewPassword('');
       setOldPassword('');
       setConfirmNewPassword('');
@@ -70,7 +70,7 @@ const PersonalInfoForm: React.FC = () => {
       window.location.reload();
     } catch (error) {
       console.error('Error changing password:', error);
-      alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+      alert('Failed to change password. Please try again.');
     }
   };
 
@@ -82,7 +82,7 @@ const PersonalInfoForm: React.FC = () => {
     e.preventDefault();
     try {
       await changeName(username);
-      alert('이름이 성공적으로 변경되었습니다.');
+      alert('Name changed successfully.');
       // Optionally, refetch user data to reflect changes
       fetchUserDetail();
       setUsername('');
@@ -90,7 +90,7 @@ const PersonalInfoForm: React.FC = () => {
       window.location.reload();
     } catch (error) {
       console.error('Error changing name:', error);
-      alert('이름 변경에 실패했습니다. 다시 시도해주세요.');
+      alert('Failed to change name. Please try again.');
     }
   };
 
@@ -101,12 +101,12 @@ const PersonalInfoForm: React.FC = () => {
   const handleAvatarChange = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (!avatar) {
-      alert('업로드할 파일을 선택해주세요.');
+      alert('Please select a file to upload.');
       return;
     }
     try {
       await updateUserAvatar(avatar);
-      alert('아바타가 성공적으로 변경되었습니다.');
+      alert('Avatar changed successfully.');
       // Optionally, refetch user data to reflect changes
       fetchUserDetail();
       setAvatar(null);
@@ -114,7 +114,7 @@ const PersonalInfoForm: React.FC = () => {
       window.location.reload();
     } catch (error) {
       console.error('Error changing avatar:', error);
-      alert('아바타 변경에 실패했습니다. 다시 시도해주세요.');
+      alert('Failed to change avatar. Please try again.');
     }
   };
 
@@ -144,7 +144,7 @@ const PersonalInfoForm: React.FC = () => {
           </Avatar>
           <form className="avatar-form" onSubmit={handleAvatarChange}>
             <label htmlFor="file">
-              <div className="avatar-input">파일 업로드</div>
+              <div className="avatar-input">Upload File</div>
             </label>
             <input
               type="file"
@@ -155,7 +155,7 @@ const PersonalInfoForm: React.FC = () => {
               required
             />
             <button className="avatar-button" type="submit">
-              변경
+              Change
             </button>
           </form>
         </div>
@@ -176,46 +176,46 @@ const PersonalInfoForm: React.FC = () => {
       </div>
       <div className="modify-container">
         <form className="name-form" onSubmit={handleNameChange}>
-          <h3>이름 변경</h3>
+          <h3>Change Name</h3>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="새 이름"
+            placeholder="New Name"
             required
           />
           <div className="button-container">
             <button className="name-button" type="submit">
-              변경
+              Change
             </button>
           </div>
         </form>
         <form className="password-form" onSubmit={handlePasswordChange}>
-          <h3>비밀번호 변경</h3>
+          <h3>Change Password</h3>
           <input
             type="password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
-            placeholder="기존 비밀번호"
+            placeholder="Old Password"
             required
           />
           <input
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="새 비밀번호"
+            placeholder="New Password"
             required
           />
           <input
             type="password"
             value={confirmNewPassword}
             onChange={(e) => setConfirmNewPassword(e.target.value)}
-            placeholder="새 비밀번호 확인"
+            placeholder="Confirm New Password"
             required
           />
           <div className="button-container">
             <button className="password-button" type="submit">
-              변경
+              Change
             </button>
           </div>
         </form>

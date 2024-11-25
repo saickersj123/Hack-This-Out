@@ -20,7 +20,7 @@
         margin: 0 16px 0;
         
         p {
-            font-weight: bold;
+            font-weight: 600;
         }
         .tab-button {
             min-width: 120px;
@@ -32,6 +32,7 @@
             transition: background-color 0.2s;
             color: var(--color-white);
             font-size: var(--font-size-small);
+            font-weight: 600;
 
             &:hover {
                 background: var(--blue-200);
@@ -101,6 +102,7 @@
             justify-content: space-around;
             align-items: center;
             border-bottom: 1px solid var(--color-list-border);
+            font-weight: 600;
 
             .body-name {
                 display: flex;
@@ -188,7 +190,7 @@
             justify-content: space-around;
             align-items: center;
             border-bottom: 1px solid var(--color-list-border);
-
+            font-weight: 600;
             .body-name {
                 display: flex;
                 align-items: center;
@@ -200,6 +202,7 @@
             .body-exp,
             .body-comp,
             .body-time {
+                white-space: nowrap;
                 width: 130px;
                 height: 70px;
                 text-align: center;

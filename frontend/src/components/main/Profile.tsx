@@ -13,8 +13,8 @@ import darkmode_switch from '../../assets/img/icon/darkmode_switch.svg';
 import { Avatar } from '@mui/material';
 import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
 
-import { FaRegUserCircle, FaHouseUser } from "react-icons/fa";
-
+import { FaRegUserCircle } from "react-icons/fa";
+import { IoStatsChartOutline } from "react-icons/io5";
 interface MenuItemProps {
     onClick?: () => void;
     children: React.ReactNode;
@@ -102,12 +102,12 @@ const Profile: React.FC = () => {
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
                             <FaRegUserCircle className={styles.icon} />
-                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/mypage'))}>My Page</MenuItem>
+                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/mypage'))}>My Profile</MenuItem>
                         </div>
                     </div>
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
-                            <FaHouseUser className={styles.icon} />
+                            <IoStatsChartOutline className={styles.icon} />
                             <MenuItem onClick={() => handleMenuItemClick(() => navigate('/mystats'))}>My Stats</MenuItem>
                         </div>
                     </div>
