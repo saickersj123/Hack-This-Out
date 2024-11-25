@@ -2,41 +2,75 @@
 @use 'sass:color';
 @use "../style" as *;
 
-
-
 .add-contest-form {
     @include background_set;
     position: relative;
     backdrop-filter: blur(40px);
     display: flex;
     flex-direction: column;
-    padding: 24px 32px;
+    padding: 0 32px 32px 32px;
     gap: 8px;
-
     overflow: scroll;
     scrollbar-width: none;
 
-    ::-webkit-scrollbar {
-        display: none;
-        /* Chrome, Safari, Opera에서 스크롤바 숨기기 */
+    * {
+        &::-webkit-scrollbar {
+            display: none; // Chrome, Safari, Opera
+        }
+        scrollbar-width: none; // Firefox
+        -ms-overflow-style: none; // IE, Edge
     }
 
-    h2 {
-        font-size: 2rem;
-        margin-bottom: 16px;
-        color: white;
-    }
+    .back-button {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background-color: var(--blue-500);
+        backdrop-filter: blur(10px);
+        padding: 16px 0px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 24px;
+        flex-direction: row;
+        width: 100%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-    .IconButton {
-        width: 34px;
-        height: 34px;
-        background-color: gray;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-        cursor: pointer;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--blue-500);
+            z-index: -1;
+        }
 
-        &:hover {
-            background-color: rgb(83, 83, 83);
+        h2 {
+            margin-bottom: 0;
+            padding-left: 0;
+            color: white;
+            font-weight: bold;
+            font-size: 2rem;
+            order: 2;
+        }
+
+        .IconButton {
+            margin-top: 0;
+            width: 40px;
+            height: 40px;
+            background-color: var(--blue-500);
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            order: 1;
+            margin-left: 16px;
+            transition: all 0.3s ease;
+            &:hover {
+                background-color: var(--blue-200);
+                transform: translateX(-0.3rem);
+            }
         }
     }
 
@@ -60,11 +94,15 @@
     }
 
     .create-container {
-        flex: 1 0 auto;
+        padding: 0 32px;
+        flex: 1;
         display: grid;
         grid-template-columns: 2.5fr 1fr;
         gap: 16px;
         margin-left: 24px;
+        overflow-y: auto;
+        position: relative;
+        padding-bottom: 80px;
 
         label {
             font-weight: bold;
@@ -98,181 +136,135 @@
             display: inline-flex;
         }
 
-        .name-container {
+        .name-container,
+        .description-container,
+        .start-time-container,
+        .end-time-container,
+        .exp-container,
+        .add-machine-container {
             grid-column-start: 1;
-
-            input {
-                width: 50%;
-                padding: 0.5rem;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
-            }
-        }
-
-        .description-container {
-            grid-column-start: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
             width: 100%;
-            margin: 0 auto;
 
+            label {
+                display: block;
+                width: 150px;
+                margin-bottom: 8px;
+            }
+
+            input, 
+            select, 
             textarea {
-                margin-top: 0.5rem;
-                resize: none;
-                min-width: 60%;
-                max-width: 60%;
-                min-height: 100px;
-                max-height: 100px;
+                width: 60%;
                 padding: 0.5rem;
                 border-radius: 10px;
                 outline: none;
                 transition: all 0.3s;
-                display: inline-flex;
-            }
-        }
-
-        .exp-container {
-            grid-column-start: 1;
-
-            input {
-                width: 10%;
-                padding: 0.5rem;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
-            }
-        }
-
-        .start-time-container {
-            grid-column-start: 1;
-
-            input {
-                width: 50%;
-                padding: 0.5rem;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
+                margin-left: 0;
             }
 
-        }
-
-        .end-time-container {
-            grid-column-start: 1;
-
-            input {
-                width: 50%;
-                padding: 0.5rem;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
+            &.exp-container input {
+                width: 120px;
             }
         }
 
         .add-machine-container {
-            grid-column-start: 1;
-
-            label {
-                display: block;
-            }
-
-            .machine-field {
-                display: inline-block;
-            }
-
-            input {
-                width: 20vw;
-                margin-top: 0.5rem;
-                padding: 0.5rem;
-                margin-left: 0px;
-                border-radius: 10px;
-                outline: none;
-                transition: all 0.3s;
-            }
-
-            .suggestions-list {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                align-items: center;
-                justify-content: center;
-                width: 20vw;
-
-
-                background: var(--blue-400);
-                border: 1px solid white;
-                z-index: 10;
-
-                li {
-                    width: 100%;
-                    padding: 4px;
-                    color: var(--color-white);
-                    font-size: var(--font-size-small);
-                    cursor: pointer;
-
-                    &:hover {
-                        background-color: #1A67d2;
-                    }
-                }
-            }
-
-            .no-suggestions{
-                position: absolute;
-                width: 20vw;
-
-                background: var(--blue-400);
-                color: var(--color-white);
-                font-size: var(--font-size-small);
-                border: 1px solid white;
-                z-index: 10;
-                padding: 4px;
-            }
-
             button {
                 padding: 0.47rem 0.6rem;
-                margin-left: 0.5rem;
                 background-color: var(--blue-500);
                 color: white;
-                border: 1.5px solid var(--color-white);
+                border: 2px solid var(--color-white);
                 border-radius: 20px;
                 font-weight: bold;
                 cursor: pointer;
                 transition: background-color 0.3s;
-
+                display: inline-block; // Add this
+                vertical-align: top; // Add this
+                margin-top: 0; // Add this
+                transition: all 0.3s ease;
                 &:hover {
                     background-color: var(--blue-200);
-                    border: 1.5px solid transparent;
+                    border: 2px solid transparent;
+                    transform: translateY(-2px);
                 }
 
                 &.delete-machine {
                     &:hover {
                         background-color: #c9302c;
+                        transform: translateY(-2px);
                     }
+                }
+            }
+
+            .machine-field {
+                width: 100%;
+                margin-bottom: 8px;
+
+                input {
+                    width: 60%;
+                }
+
+                .suggestions-list {
+                    display: flex;
+                    flex-direction: column;
+                    position: absolute;
+                    align-items: center;
+                    justify-content: center;
+                    width: 20vw;
+    
+    
+                    background: var(--blue-400);
+                    border: 1px solid white;
+                    z-index: 10;
+    
+                    li {
+                        width: 100%;
+                        padding: 4px;
+                        color: var(--color-white);
+                        font-size: var(--font-size-small);
+                        cursor: pointer;
+    
+                        &:hover {
+                            background-color: #1A67d2;
+                        }
+                    }
+                }
+    
+                .no-suggestions{
+                    position: absolute;
+                    width: 20vw;
+    
+                    background: var(--blue-400);
+                    color: var(--color-white);
+                    font-size: var(--font-size-small);
+                    border: 1px solid white;
+                    z-index: 10;
+                    padding: 4px;
                 }
             }
         }
 
         .add-contest-form-button {
-            grid-column-start: 2;
-            grid-row-start: 7;
-            align-self: flex-end;
-            justify-self: right;
+            position: fixed; // Change from absolute to fixed
+            bottom: 32px;
+            right: 32px;
             height: 48px;
+            z-index: 100;
+            background-color: transparent; // Add this
 
             button[type="submit"] {
                 padding: 0.75rem 1.5rem;
                 font-weight: bold;
                 background-color: var(--blue-500);
                 color: white;
-                border: 1.5px solid var(--color-white);
+                border: 2px solid var(--color-white);
                 border-radius: 20px;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
     
                 &:hover {
                     background-color: var(--blue-200);
-                    border: 1.5px solid transparent;
+                    border: 2px solid transparent;
+                    transform: translateY(-2px);
                 }
             }
         }

@@ -5,7 +5,7 @@
     top: 0;
     left: 0;
     z-index: 0;
-    background: linear-gradient(to top right, var(--blue-500), var(--lightblue-200));
+    background: linear-gradient(to bottom, #0b1f65, #16488f, #0c2144, #071125);
 }
 
 .main_container {
@@ -47,7 +47,7 @@
     .props_container {
         position: relative;
         flex-grow: 1;
-        height: 100vh;
+        height: calc(100vh - 85px);
         padding-left: var(--sidebar-width);
         box-sizing: border-box;
         overflow-y: auto;
@@ -55,8 +55,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding-top: 48px;
-        margin-bottom: 24px;
+        padding-top: 16px;
         z-index: 1;
 
         scrollbar-width: none;

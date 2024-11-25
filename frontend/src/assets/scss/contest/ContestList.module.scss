@@ -4,12 +4,17 @@
     background: var(--color-background-transparent);
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    padding: 32px 48px;
+    overflow-y: hidden;
+    padding: clamp(16px, 3vw, 32px) clamp(24px, 4vw, 48px);
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    border-radius: 24px;
+    gap: clamp(8px, 1.5vw, 12px);
+    border-radius: clamp(16px, 2vw, 24px);
+    border: 1px solid var(--blue-200);
+    @media (max-width: 768px) {
+        padding: 16px;
+        gap: 8px;
+    }
 
     .no_data{
         display: flex;
@@ -19,23 +24,31 @@
     }
     .tabs {
         display: flex;
-        margin: 0 16px 0;
+        margin: 0 clamp(8px, 2vw, 16px);
+        
+        @media (max-width: 768px) {
+            overflow-x: auto;
+            margin: 0;
+            @include scrollbar-none;
+        }
+
         p {
             font-weight: bold;
         }
         .tab_button {
-            min-width: 120px;
-            padding: 8px 24px;
+            min-width: clamp(100px, 15vw, 120px);
+            padding: clamp(6px, 1.5vw, 8px) clamp(16px, 2vw, 24px);
             border-right: 1px solid var(--color-list-border);
             border-left: 1px solid var(--color-list-border);
             background: var(--color-background-transparent);
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
             color: var(--color-white);
-            font-size: var(--font-size-small);
+            font-size: clamp(0.875rem, 1.5vw, var(--font-size-small));
 
             &:hover {
                 background: var(--blue-200);
+                transform: translateY(-2px);
             }
         }
 
@@ -47,135 +60,182 @@
     .contest_list_title {
         display: flex;
         position: relative;
-        font-size: var(--font-title);
+        font-size: clamp(2rem, 3vw, 2.5rem);
         letter-spacing: -0.01em;
         font-weight: 600;
         color: var(--color-white);
         text-align: left;
-        height: 62px;
+        height: clamp(48px, 6vh, 62px);
     }
 
     .contest_list_table {
         width: 100%;
         display: table;
-        display: flex;
         flex-direction: column;
+        border-collapse: collapse;
+
+        @media (max-width: 768px) {
+          display: block;
+        }
 
         tbody {
-            @include scrollbar-none;
-            display: block;
-            overflow-y: auto;
-            max-height: 350px;
+          @include scrollbar-none;
+          display: block;
+          overflow-y: auto;
+          max-height: clamp(250px, 50vh, 350px);
+
+          @media (max-width: 768px) {
+            max-height: calc(100vh - 400px);
+          }
+
+          tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+          }
         }
 
         thead {
-            display: table;
-            width: 100%;
-            position: sticky;
-            top: 0;
-            background-color: var(--color-background);
-            z-index: 1;
+          display: table;
+          width: 100%;
+          position: sticky;
+          top: 0;
+          background-color: var(--color-background);
+          z-index: 1;
+          table-layout: fixed;
+
+          @media (max-width: 768px) {
+            display: none;
+          }
         }
 
         .table_text_box {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          padding: clamp(12px, 2vw, 20px) clamp(16px, 2vw, 24px);
+          white-space: nowrap;
+          border-bottom: 1px solid var(--color-list-border);
+
+          th {
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            letter-spacing: -0.01em;
+            font-weight: 600;
+            color: var(--color-white-200);
+            text-align: center;
+            padding: 0 clamp(8px, 1.5vw, 16px);
             display: flex;
-            justify-content: space-around;
             align-items: center;
-            padding: 0 0 16px;
-            white-space: nowrap;
-            border-bottom: 1px solid var(--color-list-border);
+            justify-content: center;
+          }
 
-            .table_name,
-            .table_description,
-            .table_start_time,
-            .table_end_time,
-            .table_reward,
-            .table_active,
-            .table_details {
-                font-size: var(--font-size-small);
-                letter-spacing: -0.01em;
-                font-weight: 600;
-                color: var(--color-white-200);
-                text-align: left;
-            }
+          .table_name {
+            width: 30%;
+            text-align: left;
+            justify-content: flex-start;
+          }
 
-            .table_name {
-                width: 300px;
-            }
+          .table_start_time,
+          .table_end_time {
+            width: 20%;
+            justify-content: center;
+          }
 
-            .table_description,
-            .table_active {
-                width: 120px;
-            }
-
-            .table_start_time,
-            .table_end_time {
-                width: 170px;
-            }
-
-            .table_reward,
-            .table_details {
-                width: 60px;
-            }
-
-            .table_active {
-                text-align: center;
-            }
+          .table_reward,
+          .table_details {
+            width: 10%;
+            justify-content: center;
+          }
         }
 
         .contest_box {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: clamp(8px, 1.5vw, 12px) clamp(16px, 2vw, 24px);
+          border-bottom: 1px solid var(--color-list-border);
+
+          @media (max-width: 768px) {
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 16px;
+          }
+
+          td {
+            padding: 0 clamp(8px, 1.5vw, 16px);
+            height: clamp(50px, 8vh, 70px);
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            letter-spacing: -0.01em;
+            font-weight: 600;
+            color: var(--color-white-200);
+
+            @media (max-width: 768px) {
+              height: auto;
+              padding: 8px 0;
+            }
+          }
+
+          .contest_name {
+            width: 30%;
             display: flex;
-            justify-content: space-around;
             align-items: center;
-            border-bottom: 1px solid var(--color-list-border);
-            width: 100%;
+            gap: clamp(8px, 2vw, 16px);
 
-            .contest_name,
-            .contest_description,
-            .contest_start_time,
-            .contest_end_time,
-            .contest_reward,
-            .contest_details {
-                display: flex;
-                align-items: center;
-                text-align: left;
+            @media (max-width: 768px) {
+              width: 100%;
+            }
+          }
 
-                height: 70px;
-                font-size: var(--font-size-small);
-                letter-spacing: -0.01em;
-                font-weight: 600;
-                color: var(--color-white-200);
+          .contest_start_time,
+          .contest_end_time {
+            width: 20%;
+            display: flex;
+            align-items: center;
+
+            @media (max-width: 768px) {
+              width: 50%;
+            }
+          }
+
+          .contest_reward {
+            width: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+
+            @media (max-width: 768px) {
+              width: 50%;
+            }
+          }
+
+          .contest_details {
+            width: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            @media (max-width: 768px) {
+              width: 100%;
             }
 
-            .contest_name {
-                width: 300px;
-                justify-content: flex-start;
-                gap: 16px;
+            .details_button {
+              justify-content: center;
+              align-items: center;
+              width: clamp(32px, 5vw, 40px);
+              height: clamp(32px, 5vw, 40px);
+              border: 2px solid transparent;
+              border-radius: 50%;
+              background-color: var(--blue-500);
+              transition: all 0.3s ease;
+              cursor: pointer;
+
+              &:hover {
+                background-color: var(--blue-200);
+                transform: translateY(-2px);
+              }
             }
-
-            .contest_start_time,
-            .contest_end_time {
-                width: 170px;
-            }
-
-            .contest_reward,
-            .contest_details {
-                width: 60px;
-            }
-
-            .contest_details {
-                justify-content: center;
-
-                .details_button {
-                    width: 24px;
-                    height: 24px;
-                    background: none;
-                }
-
-                .details_button:hover {
-                    cursor: pointer;
-                }
-            }
+          }
         }
     }
 }

@@ -16,13 +16,13 @@ const ToAdmin: React.FC = () => {
     e.preventDefault();
     try {
       const response = await updateUsertoAdmin(password);
-      alert(response.message);
+      alert(response.msg);
       setPassword('');
       //refresh
       window.location.reload();
     } catch (error) {
       console.error('Error updating user permissions:', error);
-      alert('관리자 권한 업데이트에 실패했습니다. 다시 시도해주세요.');
+      alert('Failed to update admin permissions. Please try again.');
       setPassword('');
     }
   };
@@ -30,16 +30,16 @@ const ToAdmin: React.FC = () => {
   return (
     <div className="toAdmin-container">
       <form className="toAdmin-form" onSubmit={handleToAdmin}>
-        <h2>관리자 권한 획득</h2>
+        <h2>Become Admin</h2>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="관리자 비밀번호"
+          placeholder="Admin Password"
           required
         />
         <button className="toAdmin-button" type="submit">
-          확인
+          Confirm
         </button>
       </form>
     </div>

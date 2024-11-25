@@ -23,18 +23,18 @@ const PasswordCheckForm: React.FC<PasswordCheckFormProps> = ({ onSubmit }) => {
   return (
     <div className="lower-container">
       <form onSubmit={handleSubmit}>
-        <h2>비밀번호 확인</h2>
-        <p>개인정보 수정을 위해 비밀번호를 입력해주세요.</p>
+        <h2>Confirm Password</h2>
+        <p>Please enter your password to see your personal information.</p>
         <input
           className="pw-input"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호"
+          placeholder="Password"
           required
         />
         <button className="pw-submit" type="submit">
-          확인
+          Confirm
         </button>
       </form>
     </div>

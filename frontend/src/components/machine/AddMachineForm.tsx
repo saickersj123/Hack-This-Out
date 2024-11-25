@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createMachine } from '../../api/axiosMachine';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/scss/machine/AddMachineForm.scss';
-import ArrowLeftOutlinedIcon from '@mui/icons-material/ArrowLeftOutlined';
+import { IoMdArrowRoundBack } from 'react-icons/io';
 
 interface MachineFormData {
   name: string;
@@ -86,6 +86,10 @@ const AddMachineForm: React.FC = () => {
     if (
       !formData.name ||
       !formData.category ||
+      !formData.exp ||
+      !formData.description ||
+      !formData.hints ||
+      !formData.hintCosts ||
       !formData.amiId ||
       !formData.flag
     ) {
@@ -104,7 +108,6 @@ const AddMachineForm: React.FC = () => {
   const adjustTextareaHeight = () => {
     if (descriptionRef.current) {
       descriptionRef.current.style.height = 'auto';
-      descriptionRef.current.style.width = '50%';
       descriptionRef.current.style.height = `${descriptionRef.current.scrollHeight}px`;
     }
   };
@@ -116,11 +119,14 @@ const AddMachineForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className='add-machine-form'>
       <div className='back-button'>
-        <button className="IconButton" type='button' onClick={() => navigate(-1)}><ArrowLeftOutlinedIcon style={{ color: 'white', fontSize: "34px" }} /></button>
+        <h2>Add New Machine</h2>
+        <button className="IconButton" type='button' onClick={() => navigate(-1)}>
+          <IoMdArrowRoundBack style={{ color: 'white', fontSize: "34px" }} />
+        </button>
       </div>
-      <h2>Add New Machine</h2>
 
-      {error && <p className='error-message'>{error}</p>}
+
+      {error && <p className='error-message'></p>}
       <div className='create-container'>
 
 
@@ -186,7 +192,7 @@ const AddMachineForm: React.FC = () => {
         </div>
 
         <div className='Description-container'>
-          <label htmlFor='description'>Machine Description <span style={{ color: 'red' }}>*</span></label>
+          <label htmlFor='description'>Description <span style={{ color: 'red' }}>*</span></label>
           <textarea
             ref={descriptionRef}
             id='description'
@@ -198,7 +204,7 @@ const AddMachineForm: React.FC = () => {
         </div>
 
         <div className='exp-container'>
-          <label htmlFor='exp'>EXP <span style={{ color: 'red' }}>*</span></label>
+          <label htmlFor='exp'>Reward (EXP) <span style={{ color: 'red' }}>*</span></label>
           <input
             type='number'
             id='exp'
@@ -227,7 +233,8 @@ const AddMachineForm: React.FC = () => {
                   handleHintCostChange(index, Number(e.target.value))
                 }
                 placeholder='Cost'
-                min={0}
+                min={1}
+                max={10}
               />
               {formData.hints.length > 1 && (
                 <button className='remove-hint' type='button' onClick={() => removeHint(index)}>
@@ -241,7 +248,7 @@ const AddMachineForm: React.FC = () => {
           </button>
         </div>
         <div className='add-machine-form-button'>
-          <button type='submit'>Create Machine</button>
+          <button type='submit'>Add Machine</button>
         </div>
       </div>
     </form>

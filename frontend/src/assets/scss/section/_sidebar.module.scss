@@ -59,6 +59,11 @@
           object-fit: contain;
 
           cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateX(-0.2rem);
+          }
         }
       }
     }
@@ -87,9 +92,10 @@
         justify-content: center;
         padding: 4px 16px;
         box-sizing: border-box;
-
+        transition: all 0.3s ease;
         &:hover {
           background-color: #3F4147;
+          transform: translateY(-2px);
         }
 
         .menuIcon {
