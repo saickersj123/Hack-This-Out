@@ -99,7 +99,8 @@ const AddMachineForm: React.FC = () => {
 
     try {
       await createMachine(formData);
-      navigate('/machines'); // Redirect to machine list or detail page
+      alert('Machine Registered, Admin will review and approve it.');
+      navigate('/machine'); // Redirect to machine list or detail page
     } catch (err: any) {
       setError(err.msg || 'Failed to create machine.');
     }

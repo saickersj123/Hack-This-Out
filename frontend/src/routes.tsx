@@ -129,7 +129,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'machines',
+        path: 'machine',
         element: (
           <ProtectedRoute>
             <MachineListPage />
