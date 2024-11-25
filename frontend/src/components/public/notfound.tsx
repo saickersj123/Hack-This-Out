@@ -18,7 +18,7 @@ const NotFound: React.FC = () => {
             <Button 
                 variant="contained" 
                 color="primary"
-                style={{marginTop: '20px'}}
+                className={styles.notfound_content_button}
                 onClick={() => navigate('/')}
             >Go Home</Button>
         </div>

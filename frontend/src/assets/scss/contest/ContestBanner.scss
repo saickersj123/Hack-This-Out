@@ -109,6 +109,7 @@
           &:hover {
             background: var(--blue-200);
             transform: translateY(-2px);
+            filter: drop-shadow(0 0 10px var(--blue-500));
           }
           justify-self: center;
           width: 80%;

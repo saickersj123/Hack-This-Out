@@ -28,6 +28,11 @@
         position: absolute;
         right: 24px;
         bottom: 24px;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            transform: translateY(-2px);
+        }
     }
 
     .start-instance-btn.disabled {

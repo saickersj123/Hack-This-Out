@@ -75,8 +75,12 @@
         overflow: hidden;
         flex-shrink: 0;
         padding-right: 8px;
-
         cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+          transform: translateY(-2px);
+          filter: drop-shadow(0 0 10px var(--color-white));
+        }
       }
     }
 
@@ -97,7 +101,7 @@
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 10;
     background: var(--color-layout);
-    border-radius: 0 0 24px 24px;
+    border-radius: 0 0 10px 10px;
 
     &.collapsed {
       visibility: hidden; // 숨길 때 visibility를 사용
@@ -121,7 +125,7 @@
       .settingsInner,
       .settingsChild {
         align-self: stretch;
-        border-radius: 12.5px;
+        border-radius: 10px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -130,10 +134,11 @@
         gap: 16px;
         color: var(--color-gainsboro);
         justify-content: space-between;
-
+        transition: all 0.3s ease-in-out;
         &:hover {
           background-color: #202227;
           outline: 1px solid #383e4b;
+          transform: translateY(-2px);
         }
 
         .icon {
@@ -175,7 +180,7 @@
 
     .logout {
       align-self: stretch;
-      border-radius: 12.5px;
+      border-radius: 10px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -183,10 +188,11 @@
       margin: 16px;
       padding: 8px;
       gap: 15px;
-
+      transition: all 0.3s ease-in-out;
       &:hover {
         background-color: #202227;
         outline: 1px solid #383e4b;
+        transform: translateY(-2px);
       }
 
       .logout_icon {

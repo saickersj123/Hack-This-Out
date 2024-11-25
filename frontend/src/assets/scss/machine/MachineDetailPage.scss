@@ -41,7 +41,7 @@
             color: var(--color-white);
             font-size: clamp(14px, 2vw, 16px);
             transition: all 0.3s ease-in-out;
-
+            cursor: pointer;
             @media (max-width: 768px) {
                 position: relative;
                 right: auto;
@@ -53,6 +53,7 @@
             &:hover {
                 background: var(--blue-200);
                 transform: translateY(-2px);
+                filter: drop-shadow(0 0 10px var(--blue-500));
             }
         }
     }

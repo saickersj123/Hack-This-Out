@@ -7,6 +7,7 @@ import '../../assets/scss/etc/MachineCompleteMD.scss';
 const MachineCompleteModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const navigate = useNavigate();
   const [showConfetti, setShowConfetti] = useState(true);
+  const [opacity, setOpacity] = useState(1);
 
   const handleGoToMain = () => {
     onClose();
@@ -15,19 +16,40 @@ const MachineCompleteModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowConfetti(false);
-    }, 3000); // Confetti stops after 3 seconds
+    const fadeTimer = setTimeout(() => {
+      setOpacity(0);
+    }, 3000);
 
-    return () => clearTimeout(timer);
+    const removeTimer = setTimeout(() => {
+      setShowConfetti(false);
+    }, 5000);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(removeTimer);
+    };
   }, []);
 
   return (
     <>
       <Modal isOpen={true} onClose={onClose}>
-        {/* match Confetti width and height to modal size */}
-        {/* ************TODO: Confetti height should be matched to modal height ************ */}
-        {showConfetti && <Confetti width={550} height={550} />}
+        {showConfetti && (
+          <div style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            opacity: opacity,
+            transition: 'opacity 2s ease-out',
+            zIndex: 10 
+          }}>
+            <Confetti 
+              width={550} 
+              height={190}
+              recycle={opacity > 0}
+              numberOfPieces={opacity * 200}
+            />
+          </div>
+        )}
         <div className="machine-complete-modal">
           <div className="title">🎉 Machine Completed! 🎉</div>
           <div className="content">You have successfully completed the machine.</div>

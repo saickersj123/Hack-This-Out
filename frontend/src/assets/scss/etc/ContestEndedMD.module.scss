@@ -1,6 +1,6 @@
 @use "../style" as *;
 
-.contest_pending_contents{
+.contest_ended_contents{
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -9,22 +9,21 @@
     font-weight: bold;
     align-items: flex-start;
 
-    .contest_pending_upper{
+    .contest_ended_upper{
         display: flex;
         justify-content: center;
     }
 
-    .contest_pending_body{
+    .contest_ended_body{
         display: flex;
         flex-direction: column;
         gap: 4px;
         text-align: left;
 
-        .contest_pending_time{
+        .contest_ended_time{
             font-size: var(--font-size-mid);
             align-self: flex-start;
-            //drop shadow
-            text-shadow: 0 0 10px var(--lightblue-200);
+            filter: drop-shadow(0 0 10px var(--lightblue-200));
         }
     }
 

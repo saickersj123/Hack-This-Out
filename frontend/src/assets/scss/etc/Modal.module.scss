@@ -28,13 +28,13 @@
       background: none;
       border: none;
       font-size: 1.5rem;
-
       cursor: pointer;
       color: var(--text-secondary);
-      transition: color 0.3s;
+      transition: all 0.3s ease-in-out;
 
       &:hover {
-        color: var(--black200);
+        color: var(--blue-200);
+        transform: translateX(-2px);
       }
 
       svg {

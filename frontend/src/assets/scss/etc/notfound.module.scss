@@ -1,3 +1,4 @@
+@use "../style" as *;
 .notfound_overlay {
     position: fixed;
     top: 0;
@@ -29,6 +30,20 @@
         font-weight: 700;
         color: #fff;
         text-align: center;
+        filter: drop-shadow(0 0 20px var(--danger));
       }
+      .notfound_content_button{
+        @include button_color;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        margin-top: 20px;
+        &:hover{
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 10px var(--blue-200));
+        }
+      }
+
     }
   }
