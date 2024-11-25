@@ -23,7 +23,6 @@ const PreContestPage = lazy(() => import('./pages/contest/PreContestPage'));
 const ContestPlayPage = lazy(() => import('./pages/contest/ContestPlayPage'));
 const MachineListPage = lazy(() => import('./pages/machine/MachineListPage'));
 const MachineDetailPage = lazy(() => import('./pages/machine/MachineDetailPage'));
-const NewMachineReview = lazy(() => import('./pages/machine/NewMachineReview'));
 const MachineRegisterPage = lazy(() => import('./pages/machine/MachineRegisterPage'));
 const MachinePlayPage = lazy(() => import('./pages/machine/MachinePlayPage'));
 const MyPage = lazy(() => import('./pages/user/MyPage'));
@@ -150,14 +149,6 @@ const routes: RouteObject[] = [
         element: (
           <ProtectedRoute>
             <MachineDetailPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'machine/:machineId/review/new',
-        element: (
-          <ProtectedRoute>
-            <NewMachineReview />
           </ProtectedRoute>
         ),
       },
