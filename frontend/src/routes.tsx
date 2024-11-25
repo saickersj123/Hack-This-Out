@@ -52,7 +52,7 @@ const routes: RouteObject[] = [
       
       // Protected Routes
       {
-        path: '/',
+        path: '/intro',
         element: (
           <ProtectedRoute>
             <LandingPage />
@@ -60,7 +60,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: '/main',
+        path: '/',
         element: (
           <ProtectedRoute>
             <MainPage />

@@ -29,10 +29,10 @@ export const About: React.FC<AboutProps> = ({ data }) => {
                   <ul>
                     {data
                       ? data.Why.map((d, i) => (
-                        <div className="list-text">
-                          <GrFormCheckmark color="blue"/>
-                          <li key={`${d}-${i}`}>{d}</li>
-                        </div>
+                        <li key={`${d}-${i}`} className="list-text">
+                          <GrFormCheckmark color="blue" style={{ marginRight: '8px' }} />
+                          {d}
+                        </li>
                       ))
                       : "loading"}
                   </ul>
@@ -41,10 +41,10 @@ export const About: React.FC<AboutProps> = ({ data }) => {
                   <ul>
                     {data
                       ? data.Why2.map((d, i) => (
-                        <div className="list-text">
-                          <GrFormCheckmark color="blue"/>
-                          <li key={`${d}-${i}`}>{d}</li>
-                        </div>
+                        <li key={`${d}-${i}`} className="list-text">
+                          <GrFormCheckmark color="blue" style={{ marginRight: '8px' }} />
+                          {d}
+                        </li>
                       ))
                       : "loading"}
                   </ul>
