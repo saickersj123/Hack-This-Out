@@ -101,10 +101,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 <div className={styles.label}>Contests</div>
               </Link>
               <Link
-                to="/machines"
-                className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/machines') ? styles.selected : ''}`}
+                to="/machine"
+                className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/machine') ? styles.selected : ''}`}
               >
-                {getMenuIcon('/machines', <PiComputerTowerFill className={styles.menuIcon} />, <PiComputerTowerBold className={styles.menuIcon} />)}
+                {getMenuIcon('/machine', <PiComputerTowerFill className={styles.menuIcon} />, <PiComputerTowerBold className={styles.menuIcon} />)}
                 <div className={styles.label}>Machines</div>
               </Link>
             </li>
