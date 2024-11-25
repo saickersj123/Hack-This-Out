@@ -98,19 +98,21 @@
     right: 0;
     width: 100%;
     cursor: pointer;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 10;
     background: var(--color-layout);
     border-radius: 0 0 10px 10px;
+    transition: all 0.2s ease-in-out;
 
     &.collapsed {
-      visibility: hidden; // 숨길 때 visibility를 사용
-      opacity: 0; // 투명도 변경으로 부드러운 전환
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-10px);
     }
 
     &.expanded {
       visibility: visible;
       opacity: 1;
+      transform: translateY(0);
     }
 
     .settings {

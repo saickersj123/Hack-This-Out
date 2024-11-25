@@ -63,7 +63,7 @@
           .collapse_icon_open {
             transition: all 0.3s ease-in-out;
             &:hover {
-              transform: translateX(2px);
+              transform: translateX(-2px);
               filter: drop-shadow(0 0 5px var(--color-white));
             }
           }
