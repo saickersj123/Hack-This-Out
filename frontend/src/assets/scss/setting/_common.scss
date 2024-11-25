@@ -28,7 +28,7 @@ body {
 
 
 	/* component size */
-	--sidebar-width: 350px;
+	--sidebar-width: 336px;
 	--sidebar-collapsed: 80px;
 
 	--container-width: 70vw;
@@ -70,7 +70,7 @@ body {
 	--color-red-rosso: #D10000;
 
 	/* Gradient Colors */
-	--gradient-container : linear-gradient(to bottom right, var(--blue-500), #64AFD080); // 컨테이너 배경. ex)CurrentUserInfo 배경 그라데이션
+	--gradient-container : linear-gradient(to bottom, #0b1f65, #16488f, #0c2144, #071125); // 컨테이너 배경. ex)CurrentUserInfo 배경 그라데이션
 
 	/* Border */
 	--border-container: 24px;

@@ -20,7 +20,7 @@
     .banner-slide {
       padding: 16px 32px;
       height: 28vh;
-      background: linear-gradient(to right, var(--blue-500), var(--lightblue-200));
+      background: linear-gradient(to bottom,#0b1f65, #16488f, #0c2144, #071125);
       @include flex_center;
 
       .banner-contents {
