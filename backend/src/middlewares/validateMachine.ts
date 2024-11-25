@@ -18,7 +18,7 @@ const validateMachine = [
     .withMessage('Description must be at least 4 characters long.'),
   body('hints')
     .optional()
-    .isArray({ min: 1 })
+    .isArray({ min: 1, max: 10 })
     .withMessage('Hints must be an array.'),
   body('hintCosts')
     .optional()

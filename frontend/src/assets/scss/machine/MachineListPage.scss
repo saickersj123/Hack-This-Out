@@ -1,39 +1,63 @@
 .machine-list-page {
-    width: var(--container-width);
-    min-width: 500px;
+    width: min(var(--container-width), 95%);
+    min-width: min(500px, 95vw);
     min-height: var(--container-height);
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: clamp(8px, 1vw, 16px);
     overflow-y: hidden;
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+        gap: 12px;
+        width: 95%;
+        min-width: unset;
+    }
 
     .gradient-wrapper {
         width: 100%;
         display: flex;
         align-items: stretch;
         justify-content: space-between;
-        gap: 8px;
+        gap: clamp(4px, 1vw, 8px);
 
         .machine-banner {
-            width: calc(100% - 28vh);
+            width: calc(100% - min(28vh, 300px));
             height: 100%;
             border-radius: var(--border-container);
             background: var(--blue-500);
+            flex-grow: 1;
+
+            @media (max-width: 1024px) {
+                min-width: 100%;
+                max-width: 100%;
+                height: clamp(250px, 28vh, 400px);
+            }
         }
 
         .register-machine {
-            min-width: 28vh;
-            height: 100%;
-            border-radius: 24px;
+            min-width: min(28vh, 300px);
+            max-width: 300px;
+            height: clamp(250px, 28vh, 400px);
+            border-radius: clamp(16px, 1vw, 24px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             background: var(--color-background-transparent);
+            transition: all 0.3s ease;
+            cursor: pointer;
+
+
+            @media (max-width: 1024px) {
+                display: none;
+            }
 
             &:hover {
-                background: var(--blue-300);
+                background: var(--blue-200);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
                 .machine,
                 .plus,
@@ -44,15 +68,29 @@
 
             .machine {
                 position: relative;
-                left: 15px;
+                left: clamp(8px, 1vw, 16px);
                 color: var(--color-white);
+                font-size: clamp(2rem, 4vw, 3rem);
+                transition: transform 0.3s ease;
+
+                @media (max-width: 1024px) {
+                    left: 0;
+                    margin-left: -20px;
+                }
             }
 
             .plus {
                 position: relative;
                 left: 0px;
-                bottom: 45px;
+                bottom: clamp(30px, 5vh, 45px);
                 color: var(--color-white);
+                font-size: clamp(1.5rem, 3vw, 2rem);
+                transition: transform 0.3s ease;
+
+                @media (max-width: 1024px) {
+                    bottom: 0;
+                    margin-left: -20px;
+                }
             }
 
             .register_text {

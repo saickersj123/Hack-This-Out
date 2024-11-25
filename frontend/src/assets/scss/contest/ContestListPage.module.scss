@@ -1,44 +1,65 @@
 @use "../style" as *;
 
 .contest_container {
-    width: var(--container-width);
-    min-width: 500px;
+    width: min(var(--container-width), 95%);
+    min-width: min(500px, 95vw);
     min-height: var(--container-height);
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: clamp(8px, 1vw, 16px);
     overflow-y: hidden;
+    margin: 0 auto;
 
-    .upper_box{
+    @media (max-width: 768px) {
+        gap: 12px;
+        width: 95%;
+        min-width: unset;
+    }
+
+    .upper_box {
         width: 100%;
         display: flex;
         align-items: stretch;
-        justify-content:space-between;
-        gap: 8px;
+        justify-content: space-between;
+        gap: clamp(4px, 1vw, 8px);
 
         .contest_banner {
-            width: calc(100% - 28vh);
+            width: calc(100% - min(28vh, 300px));
             height: 100%;
-            border-radius: 24px;
+            border-radius: var(--border-container);
             background: var(--blue-500);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-grow: 1;
+
+            @media (max-width: 1024px) {
+                width: 100%;
+                max-width: 100%;
+                height: clamp(250px, 28vh, 400px);
+            }
         }
 
         .contest_register {
-            min-width: 28vh;
-            height: 100%;
-            border-radius: 24px;
+            min-width: min(28vh, 300px);
+            max-width: 300px;
+            height: clamp(250px, 28vh, 400px);
+            border-radius: clamp(16px, 1vw, 24px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             background: var(--color-background-transparent);
+            transition: all 0.3s ease;
+            cursor: pointer;
+
+            @media (max-width: 1024px) {
+                display: none;
+            }
 
             &:hover {
-                background: var(--blue-300);
+                background: var(--blue-200);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
                 .machine,
                 .plus,
                 .register_text {
@@ -48,19 +69,23 @@
 
             .machine {
                 position: relative;
-                left: 15px;
+                left: clamp(8px, 1vw, 16px);
                 color: var(--color-white);
+                font-size: clamp(2rem, 4vw, 3rem);
+                transition: transform 0.3s ease;
             }
 
             .plus {
                 position: relative;
-                left: 0px;
-                bottom: 50px;
+                left: 0;
+                bottom: clamp(30px, 5vh, 45px);
                 color: var(--color-white);
+                font-size: clamp(1.5rem, 3vw, 2rem);
+                transition: transform 0.3s ease;
             }
 
             .register_text {
-                font-size: 24px;
+                font-size: clamp(18px, 2.5vw, 24px);
                 font-weight: bold;
                 color: var(--color-white);
             }

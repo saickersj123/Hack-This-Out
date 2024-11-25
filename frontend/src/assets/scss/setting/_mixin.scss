@@ -1,10 +1,11 @@
 @mixin background_set {
-    width: var(--container-width);
-    min-width: var(--container-min-width);
-    height: var(--container-height);
-    min-height: var(--container-min-height);
+    width: clamp(var(--container-width), 100vw, var(--container-width));
+    min-width: clamp(var(--container-min-width), 100vw, var(--container-min-width));
+    height: clamp(var(--container-height), 100vh, var(--container-height));
+    min-height: clamp(var(--container-min-height), 100vh, var(--container-min-height));
     background: var(--color-background-transparent);
     border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.15);
 }
 
 @mixin flex_center{

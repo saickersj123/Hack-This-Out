@@ -8,7 +8,8 @@ const HintSchema = new mongoose.Schema({
     cost: {
       type: Number,
       required: true,
-      default: 1 // Cost in terms of reward reduction
+      default: 1, // Cost in terms of reward reduction
+      max: 10
     }
   }, {
     timestamps: true

@@ -28,18 +28,19 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
   return (
     <div className="machine-detail-container">
       <div className="machine-detail">
-        <div style={{ width: '150px' }}>
-          {<Avatar
+        <div className="avatar-container">
+          <Avatar
             variant="rounded"
             sx={{
               backgroundColor: avatarBgColor,
-              width: 150,
-              height: 150,
-              fontSize: '5rem',
+              width: '100%',
+              height: 'auto',
+              aspectRatio: '1 / 1',
+              fontSize: 'clamp(3.5rem, 7vw, 5rem)',
             }}
           >
             {name.charAt(0).toUpperCase()}
-          </Avatar>}
+          </Avatar>
         </div>
         <div className='machine-textbox'>
           <p className="machine-name"><b>{name.charAt(0).toUpperCase() + name.slice(1)}</b></p>
@@ -64,7 +65,7 @@ const MachineDetail: React.FC<MachineDetailProps> = ({ machineDetail }) => {
           </div>
           <div className='machine-reward-box'>
             <p className='text'>Reward</p>
-            <p className='reward-text'>EXP {exp || 0}</p>
+            <p className='reward-text'>{exp || 0} EXP</p>
           </div>
           {/* <p><strong>AMI ID:</strong> {amiId || 'N/A'}</p> */}
           {/* Add more fields as necessary */}

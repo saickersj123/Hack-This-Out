@@ -5,21 +5,26 @@
   width: 100%;
   height: 100%;
   overflow-y: hidden;
-  padding: 32px 48px;
+  padding: clamp(16px, 3vw, 32px) clamp(24px, 4vw, 48px);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  border-radius: 24px;
+  gap: clamp(8px, 1.5vw, 12px);
+  border-radius: clamp(16px, 2vw, 24px);
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    gap: 8px;
+  }
 
   .machine_list_title {
     display: flex;
     position: relative;
-    font-size: var(--font-title);
+    font-size: clamp(2rem, 3vw, 2.5rem);
     letter-spacing: -0.01em;
     font-weight: 600;
     color: var(--color-white);
     text-align: left;
-    height: 62px;
+    height: clamp(48px, 6vh, 62px);
   }
 
   .machine_list_table {
@@ -27,12 +32,27 @@
     display: table;
     flex-direction: column;
     border-collapse: collapse;
+    table-layout: fixed;
+
+    @media (max-width: 768px) {
+      display: block;
+    }
 
     tbody {
       @include scrollbar-none;
       display: block;
       overflow-y: auto;
-      max-height: 350px;
+      max-height: clamp(250px, 50vh, 350px);
+
+      @media (max-width: 768px) {
+        max-height: calc(100vh - 400px);
+      }
+
+      tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+      }
     }
 
     thead {
@@ -42,66 +62,84 @@
       top: 0;
       background-color: var(--color-background);
       z-index: 1;
+      table-layout: fixed;
+
+      @media (max-width: 768px) {
+        display: none;
+      }
     }
 
     .table_text_box {
       width: 100%;
       display: flex;
-      justify-content: space-around;
-      padding: 20px 0;
+      justify-content: space-between;
+      padding: clamp(12px, 2vw, 20px) clamp(16px, 2vw, 24px);
       white-space: nowrap;
       border-bottom: 1px solid var(--color-list-border);
 
-      .table_image,
-      .table_name,
-      .table_category,
-      .table_rating,
-      .table_playCount,
-      .table_details {
-        font-size: var(--font-size-small);
+      th {
+        font-size: clamp(0.875rem, 1.5vw, 1rem);
         letter-spacing: -0.01em;
         font-weight: 600;
         color: var(--color-white-200);
-        text-align: left;
+        text-align: center;
+        padding: 0 clamp(8px, 1.5vw, 16px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .table_name {
-        width: 300px;
+        width: 30%;
+        text-align: left;
+        justify-content: flex-start;
       }
 
       .table_category {
-        width: 170px;
+        width: 20%;
         display: flex;
-        gap: 10px;
+        gap: clamp(5px, 1vw, 10px);
         position: relative;
         align-items: center;
+        justify-content: center;
 
         .category_filter_toggle {
-          position: absolute;
-          left: 80px;
+          position: relative;
+          display: flex;
+          align-items: center;
+          margin-left: 8px;
           height: 100%;
           cursor: pointer;
-          align-items: center;
-          justify-content: center;
 
           .category_filter {
-            display: flex;
             position: absolute;
+            display: flex;
             align-items: center;
             justify-content: center;
-
-            top: 30px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
             gap: 8px;
             background: var(--blue-500);
-            height: 50px;
+            height: clamp(40px, 6vh, 50px);
             padding: 8px;
             border: 1px solid white;
             border-radius: 8px;
             z-index: 10;
+            white-space: nowrap;
+
+            @media (max-width: 768px) {
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 90%;
+              max-width: 300px;
+            }
 
             .category_label {
               color: var(--color-white);
-              font-size: var(--font-size-small);
+              font-size: clamp(0.875rem, 1.5vw, 1rem);
             }
 
             .category_select {
@@ -121,24 +159,23 @@
       }
 
       .table_rating {
-        width: 170px;
+        width: 20%;
+        justify-content: center;
       }
 
       .table_playCount,
       .table_details {
-        width: 60px;
+        width: 15%;
+        justify-content: center;
       }
-
-      .table_details {
-        text-align: center;
-      }
-
     }
 
     .machine_box {
+      width: 100%;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
+      padding: clamp(8px, 1.5vw, 12px) clamp(16px, 2vw, 24px);
       border-bottom: 1px solid var(--color-list-border);
 
       .machine_name,
@@ -149,7 +186,7 @@
       .machine_playCount {
         display: flex;
         align-items: center;
-        text-align: left;
+        text-align: center;
 
         height: 70px;
         font-size: var(--font-size-small);
@@ -159,30 +196,46 @@
       }
 
       .machine_name {
-        width: 300px;
+        width: 30%;
         justify-content: flex-start;
         gap: 16px;
       }
 
       .machine_details {
-        text-align: center;
+        width: 15%;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        padding: 0;
+
+        @media (max-width: 768px) {
+          width: 100%;
+        }
 
         .details_button {
-          background: none;
-          border: none;
+          justify-content: center;
+          align-items: center;
+          width: clamp(32px, 5vw, 40px);
+          height: clamp(32px, 5vw, 40px);
+          border: 2px solid transparent;
+          border-radius: 50%;
+          background-color: var(--blue-500);
+          transition: background-color 0.2s;
           cursor: pointer;
+
+          &:hover {
+            background-color: var(--blue-200);
+          }
         }
       }
 
       .machine_category,
       .machine_rating {
-        width: 170px;
+        width: 20%;
       }
 
-      .machine_details,
       .machine_playCount {
-        width: 60px;
+        width: 15%;
       }
 
       &.no-data {

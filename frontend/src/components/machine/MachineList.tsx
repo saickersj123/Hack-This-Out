@@ -7,10 +7,10 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { BsArrowRightCircle } from "react-icons/bs";
 import { getAvatarColorIndex, avatarBackgroundColors } from '../../utils/avatars';
 import LoadingIcon from '../public/LoadingIcon';
 import ErrorIcon from '../public/ErrorIcon';
+import { IoMdArrowRoundForward } from 'react-icons/io';
 
 interface Machine {
   _id: string;
@@ -96,19 +96,26 @@ const MachineList: React.FC = () => {
               Category
               <ClickAwayListener onClickAway={handleClickAway}>
                 <div className={styles.category_filter_toggle}>
-                  <FilterAltIcon onClick={toggleFilterVisibility} />
+                  <FilterAltIcon 
+                    onClick={toggleFilterVisibility}
+                    sx={{
+                      fontSize: 'clamp(20px, 2.5vw, 24px)',
+                      cursor: 'pointer'
+                    }} 
+                  />
                   {filterVisible && (
                     <div className={styles.category_filter}>
-                      <label className={styles.category_label} htmlFor='category-select'>Filter by </label>
+                      <label className={styles.category_label}>Filter by </label>
                       <select
                         className={styles.category_select}
-                        id='category-select'
                         value={categoryFilter}
                         onChange={(e) => setCategoryFilter(e.target.value)}
                       >
                         <option className={styles.category} value=''>All</option>
                         {categories.map((category) => (
-                          <option className={styles.category} key={category} value={category}>{category}</option>
+                          <option className={styles.category} key={category} value={category}>
+                            {category}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -123,8 +130,8 @@ const MachineList: React.FC = () => {
         </thead>
         <tbody>
           {filteredMachines.length === 0 ? (
-            <tr>
-              <td colSpan={6} className="no-data">No machines available.</td>
+            <tr className={styles['no-data']}>
+              {/* <td colSpan={5}>No machines available.</td> */}
             </tr>
           ) : (
             filteredMachines.map((machine) => {
@@ -133,41 +140,52 @@ const MachineList: React.FC = () => {
               return (
                 <tr className={styles.machine_box} key={machine._id}>
                   <td className={styles.machine_name}>
-                    <Avatar
-                      variant="rounded"
-                      sx={{ backgroundColor: avatarBgColor, 
-                      width: 40, 
-                      height: 40 
-                    }}>
-                      {machine.name.charAt(0).toUpperCase()}
-                    </Avatar>{machine.name.charAt(0).toUpperCase() + machine.name.slice(1)}</td>
-                  <td className={styles.machine_category}>{machine.category}</td>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 16px)', width: '100%' }}>
+                      <Avatar
+                        variant="rounded"
+                        sx={{
+                          backgroundColor: avatarBgColor,
+                          width: 'clamp(32px, 5vw, 40px)',
+                          height: 'clamp(32px, 5vw, 40px)',
+                          fontSize: 'clamp(14px, 2vw, 16px)',
+                        }}
+                      >
+                        {machine.name.charAt(0).toUpperCase()}
+                      </Avatar>
+                      <span>{machine.name.charAt(0).toUpperCase() + machine.name.slice(1)}</span>
+                    </Box>
+                  </td>
+                  <td className={styles.machine_category}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                      {machine.category}
+                    </Box>
+                  </td>
                   <td className={styles.machine_rating}>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
+                    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                       <Rating
                         name={`read-only-rating-${machine._id}`}
                         value={Number(machine.rating)}
                         precision={0.5}
                         readOnly
                         sx={{
-                          '& .MuiRating-iconEmpty': {
-                            color: '#fff', // 빈 별 색상
-                          },
-                          '& .MuiRating-iconFilled': {
-                            color: '#ffd700', // 채워진 별 색상
-                          },
+                          fontSize: 'clamp(20px, 2vw, 24px)',
+                          '& .MuiRating-iconEmpty': { color: '#fff' },
+                          '& .MuiRating-iconFilled': { color: '#ffd700' },
                         }}
                       />
                     </Box>
                   </td>
-                  <td className={styles.machine_playCount}>{machine.playerCount}</td>
+                  <td className={styles.machine_playCount}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                      {machine.playerCount}
+                    </Box>
+                  </td>
                   <td className={styles.machine_details}>
-                    <button className={styles.details_button} onClick={() => handleMachineClick(machine)}><BsArrowRightCircle size={24} color='white' /></button>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                      <button className={styles.details_button} onClick={() => handleMachineClick(machine)}>
+                        <IoMdArrowRoundForward size={'clamp(20px, 2.5vw, 24px)'} color='white' />
+                      </button>
+                    </Box>
                   </td>
                 </tr>
               );
