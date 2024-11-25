@@ -1,8 +1,9 @@
 /* Navigation */
 #menu {
+    display: flex;
+    justify-content: center;
     padding: 15px;
     transition: all 0.8s;
-    justify-content: center;
 }
 
 .navbar-default {
@@ -35,7 +36,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Raleway", sans-serif;
     font-size: 30px;
     font-weight: 700;
     color: #333;
@@ -47,7 +47,6 @@
 }
 
 .navbar-nav>li>a {
-    font-family: "Lato", sans-serif;
     text-transform: uppercase;
     color: #555;
     font-size: 15px;
@@ -155,6 +154,7 @@
 
 .menu-container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding-right: 15px;
     padding-left: 15px;
