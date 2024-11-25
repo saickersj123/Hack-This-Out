@@ -46,14 +46,14 @@ $glitch-intensity: 15;
           #{rand(math.div(-$glitch-intensity * 4, 1), math.div($glitch-intensity * 4, 1))}px,
           #{rand(math.div(-$glitch-intensity, 2), math.div($glitch-intensity, 2))}px
         );
-        background-image: url('../../img/Fullscreen_black.png');
+        background-image: url('@assets/img/Fullscreen_black.png');
         background-size: cover;
         background-position: center;
       }
     }
 
     #{$glitch-duration}, 100% {
-      background-image: url('../../img/Fullscreen_black.png');
+      background-image: url('@assets/img/Fullscreen_black.png');
       background-size: cover;
       background-position: center;
       clip-path: none;
@@ -76,7 +76,7 @@ $glitch-intensity: 15;
   position: relative;
   height: 100vh;
   background: #000 no-repeat center;
-  background-image: url('../../img/Fullscreen_black.png');
+  background-image: url('@assets/img/Fullscreen_black.png');
   background-position: center;
   background-size: cover;
   overflow: hidden;
