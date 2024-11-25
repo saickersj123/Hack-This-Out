@@ -47,7 +47,7 @@
     .props_container {
         position: relative;
         flex-grow: 1;
-        height: 100vh;
+        height: calc(100vh - 85px);
         padding-left: var(--sidebar-width);
         box-sizing: border-box;
         overflow-y: auto;
@@ -55,8 +55,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding-top: 48px;
-        margin-bottom: 24px;
+        padding-top: 16px;
         z-index: 1;
 
         scrollbar-width: none;

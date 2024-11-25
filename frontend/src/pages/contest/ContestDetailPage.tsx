@@ -183,7 +183,7 @@ const ContestDetailPage: React.FC = () => {
             <ContestDetail contestDetail={contestDetail} />
           </div>
           <button onClick={handlePlay} className={styles.participate_button}>
-            Play
+            Join
           </button>
         </div>
         {contestStatus.isActive && contestStatus.isStarted && (

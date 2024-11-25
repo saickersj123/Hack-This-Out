@@ -2,94 +2,149 @@
     width: 100%;
     height: 100%;
     position: relative;
-    border-radius: 30px;
-
+    border-radius: clamp(16px, 3vw, 30px);
     background: linear-gradient(to bottom, #071125, #0b1f65, #16488f, #0c2144, #071125);
 
     .box_upper_content {
         display: flex;
         justify-content: space-between;
         height: 100%;
-        padding: 48px 48px 16px;
+        padding: clamp(24px, 4vw, 48px) clamp(24px, 4vw, 48px) clamp(12px, 2vw, 16px);
         flex-grow: 1;
+        gap: clamp(16px, 3vw, 32px);
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            gap: 16px;
+        }
+
+        .avatar_container {
+            width: clamp(100px, 15vw, 150px);
+            flex-shrink: 0;
+            aspect-ratio: 1 / 1;
+
+            @media (max-width: 768px) {
+                width: clamp(80px, 20vw, 100px);
+            }
+        }
 
         .contest_textbox {
             color: var(--color-white);
+            height: auto;
             flex-basis: 30%;
+
+            @media (max-width: 768px) {
+                width: 100%;
+                text-align: center;
+            }
 
             .contest_name {
                 position: relative;
-                height: 56px;
+                height: auto;
                 text-align: left;
-                font-size: var(--font-title);
+                font-size: clamp(1.5rem, 3vw, var(--font-title));
                 font-weight: 900;
                 filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+                margin-bottom: clamp(8px, 2vw, 16px);
+
+                @media (max-width: 768px) {
+                    text-align: center;
+                }
+            }
+
+            .contest_description {
+                padding-left: clamp(8px, 2vw, 16px);
+                padding-top: clamp(8px, 2vw, 16px);
+                font-size: clamp(1rem, 2vw, 20px);
+                line-height: 1.4;
+
+                @media (max-width: 768px) {
+                    padding: 8px;
+                    text-align: center;
+                }
             }
 
             .contest_machines {
-                padding-left: 16px;
+                margin-top: clamp(8px, 1.5vw, 10px);
+                padding-left: clamp(8px, 2vw, 16px);
+                line-height: 1.4;
+                font-size: clamp(1rem, 2vw, 20px);
+
+                @media (max-width: 768px) {
+                    padding: 8px;
+                    text-align: center;
+                }
+
+                li {
+                    padding-left: clamp(8px, 2vw, 16px);
+                    margin-top: 4px;
+                }
             }
         }
-
-        .contest_description {
-            padding-left: 16px;
-            padding-top: 16px;
-            font-size: 20px;
-            color: var(--color-white);
-        }
-
-        .contest_machines {
-            padding-left: 16px;
-            font-size: 20px;
-            color: var(--color-white);
-
-            li {
-                padding-left: 16px;
-            }
-        }
-
 
         .right_part {
             display: flex;
             flex-basis: 51%;
             justify-content: space-between;
+            gap: clamp(16px, 3vw, 32px);
 
-            .time_text {
-                justify-self: right;
-                align-self: self-end;
-                text-align: right;
-                font-size: var(--font-size-mid);
-                font-weight: 600;
-                color: var(--color-white);
+            @media (max-width: 768px) {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .time_box {
+                margin-left: clamp(16px, 3vw, 150px);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+
+                @media (max-width: 768px) {
+                    margin-left: 0;
+                }
+        
+
+                .time_text {
+                    white-space: pre-line;
+                    color: var(--color-white);
+                    font-size: clamp(16px, 1.5vw, 24px);
+                    font-weight: 600;
+                    text-align: right;
+                    margin-top: 8px;
+                }
             }
 
             .contest_reward_box {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                width: 210px;
-                border-radius: 24px;
+                width: clamp(140px, 15vw, 180px);
+                border-radius: clamp(4px, 1vw, 24px);
                 background-color: var(--blue-500);
-                height: 77px;
+                height: clamp(60px, 8vh, 77px);
                 font-weight: 600;
-                justify-self: right;
 
                 .text,
                 .reward_text {
-                    padding-left: 30px;
+                    padding-left: clamp(12px, 3vw, 30px);
+                    padding-right: clamp(12px, 3vw, 30px);
                 }
 
                 .text {
                     color: var(--color-white);
+                    font-size: clamp(14px, 2vw, 16px);
                 }
 
                 .reward_text {
-                    font-size: 24px;
+                    white-space: nowrap;
+                    font-size: clamp(18px, 2vw, 24px);
                     color: #fbff8f;
                 }
             }
         }
-
-
     }
 }

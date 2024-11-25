@@ -18,24 +18,25 @@
     border-radius: 24px;
 
     .banner-slide {
-      padding: 16px 32px;
-      height: 28vh;
-      background: linear-gradient(to bottom,#0b1f65, #16488f, #0c2144, #071125);
+      padding: clamp(16px, 2vw, 32px);
+      height: clamp(250px, 28vh, 400px);
+      background: linear-gradient(to bottom, #071125,#0b1f65, #16488f, #0c2144, #071125);
       @include flex_center;
 
       .banner-contents {
         height: 100%;
         display: grid;
         align-items: center;
-        width: 90%;
-        grid-template-columns: 30% 40% 30%;
-        grid-template-rows: 1fr 1fr 1fr 1fr;
-        white-space: nowrap;
+        width: min(90%, 1100px);
+        grid-template-columns: minmax(120px, 1fr) minmax(200px, 2fr) minmax(120px, 1fr);
+        grid-template-rows: auto 1fr 1fr auto;
+        gap: clamp(8px, 1vw, 16px);
+        white-space: normal;
 
         h3 {
           width: 100%;
           grid-column: 1/-1;
-          font-size: 1.8rem;
+          font-size: clamp(1.2rem, 3vw, 1.8rem);
           font-weight: 600;
           color: var(--color-white);
         }
@@ -46,9 +47,8 @@
           grid-row-start: 2;
           width: clamp(80px, 8vw, 120px);
           height: clamp(80px, 8vw, 120px);
-          top: 0;
           font-size: var(--font-title);
-          margin: 10px;
+          margin: clamp(5px, 1vw, 10px);
         }
 
 
@@ -56,13 +56,15 @@
           justify-self: flex-start;
           grid-column: 2;
           grid-row: 2/4;
-          font-size: 2.8rem;
+          font-size: clamp(1.8rem, 4vw, 2.8rem);
           color: var(--color-white);
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         p {
           color: var(--color-white);
-          font-size: 1rem;
+          font-size: var(--font-size-small);
         }
 
         .rating-box {
@@ -71,10 +73,10 @@
           align-items: center;
           grid-column: 2;
           grid-row: 4;
-          gap: 8px;
+          gap: clamp(4px, 1vw, 8px);
 
           .rating-text {
-            font-size: var(--font-size-mid);
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
             color: var(--color-white);
             font-weight: 600;
           }
@@ -87,24 +89,24 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
-          width: 80%;
-          min-width: 175px;
+          width: min(80%, 175px);
+          min-width: 77px;
           border-radius: 4px;
-          background-color: var(--blue-400);
+          background-color: var(--blue-500);
           height: 77px;
 
           .banner-exp,
           .exp {
-            padding-left: 12px;
+            padding-left: clamp(4px, 1vw, 8px);
           }
 
           .banner-exp {
-            font-size: var(--font-size-small);
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
             color: var(--color-white);
           }
 
           .exp {
-            font-size: var(--font-size-mid);
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
             color: #fbff8f;
             font-weight: 600;
           }
@@ -121,9 +123,14 @@
         }
 
         .go-to-machine-btn {
-          @include button_color;
+          background: var(--blue-500);
+          color: var(--color-white);
+
+          &:hover {
+            background: var(--blue-200)
+          }
           justify-self: center;
-          width: 80%;
+          width: min(80%, 175px);
           min-width: 175px;
           grid-column: 3;
           grid-row: 4;
@@ -131,8 +138,8 @@
           border-radius: 4px;
           cursor: pointer;
           white-space: nowrap;
-          font-size: var(--font-size-small);
-          font-weight: bold;
+          font-size: clamp(0.8rem, 2vw, 1rem);
+          font-weight: 600;
         }
       }
     }

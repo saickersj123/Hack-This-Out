@@ -4,7 +4,7 @@ import { getActiveMachines } from '../../api/axiosMachine';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/scss/contest/AddContestForm.scss';
 import Loading from '../public/Loading';
-import ArrowLeftOutlinedIcon from '@mui/icons-material/ArrowLeftOutlined';
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 interface Contest {
     id: string;
@@ -292,9 +292,11 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     return (
         <form className='add-contest-form' onSubmit={handleSubmit} ref={formRef}>
             <div className='back-button'>
-                <button className="IconButton" type='button' onClick={() => navigate(-1)}><ArrowLeftOutlinedIcon style={{ color: 'white', fontSize: "34px" }} /></button>
+                <h2>Add New Contest</h2>
+                <button className="IconButton" type='button' onClick={() => navigate(-1)}>
+                    <IoMdArrowRoundBack style={{ color: 'white', fontSize: "34px" }} />
+                </button>
             </div>
-            <h2>Register a New Contest</h2>
 
             <div className='create-container'>
                 <div className='name-container'>
@@ -322,7 +324,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                 </div>
 
                 <div className='start-time-container'>
-                    <label htmlFor="startTime">Start Time<span style={{ color: 'red' }}> *</span></label>
+                    <label htmlFor="startTime">Starts at<span style={{ color: 'red' }}> *</span></label>
                     <input
                         type="datetime-local"
                         id="startTime"
@@ -334,7 +336,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                     />
                 </div>
                 <div className='end-time-container'>
-                    <label htmlFor="endTime">End Time<span style={{ color: 'red' }}> *</span></label>
+                    <label htmlFor="endTime">Ends at<span style={{ color: 'red' }}> *</span></label>
                     <input
                         type="datetime-local"
                         id="endTime"
@@ -346,7 +348,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                     />
                 </div>
                 <div className='exp-container'>
-                    <label htmlFor="contestExp">Experience Points (EXP)<span style={{ color: 'red' }}> *</span></label>
+                    <label htmlFor="contestExp">Reward (EXP)<span style={{ color: 'red' }}> *</span></label>
                     <input
                         type="number"
                         id="contestExp"
@@ -434,7 +436,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                 </div>
                 <div className='add-contest-form-button'>
                     <button type="submit" disabled={loading}>
-                        {loading ? 'Registering...' : 'Register Contest'}
+                        {loading ? 'Registering...' : 'Add Contest'}
                     </button>
                 </div>
             </div>
