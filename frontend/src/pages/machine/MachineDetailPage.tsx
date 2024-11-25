@@ -7,6 +7,7 @@ import { MachineDetail as MachineDetailType } from '../../types/Machine';
 import '../../assets/scss/machine/MachineDetailPage.scss';
 import MachineReviewList from '../../components/machine/MachineReviewList';
 import Loading from '../../components/public/Loading';
+import MachineReviewForm from '../../components/machine/MachineReviewForm';
 
 /**
  * Component representing the Machine Detail Page.
@@ -20,7 +21,7 @@ const MachineDetailPage: React.FC = () => {
   const [machineDetail, setMachineDetail] = useState<MachineDetailType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   /**
    * Fetches the machine details from the API.
    */
@@ -59,11 +60,11 @@ const MachineDetailPage: React.FC = () => {
   };
 
   const handleRegisterReview = () => {
-    if (machineId) {
-      navigate(`/machine/${machineId}/review/new`);
-    } else {
-      alert('Invalid machine ID.');
-    }
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   if (isLoading) {
@@ -107,6 +108,17 @@ const MachineDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <MachineReviewForm 
+          machineId={machineId || ''} 
+          onReviewAdded={() => {
+            // Refresh reviews here if needed
+            handleCloseModal();
+          }} 
+          isModalOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
     </Main>
   );
 };

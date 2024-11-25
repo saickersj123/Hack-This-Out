@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { postMachineReview } from '../../api/axiosMachine';
 import { Review } from '../../types/Machine';
-import { useNavigate, NavigateFunction } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import '../../assets/scss/machine/MachineReviewForm.scss';
 import LoadingIcon from '../public/LoadingIcon';
+import Modal from '../modal/Modal';
 
 interface MachineReviewFormProps {
   onReviewAdded: (review: Review) => void;
   machineId: string;
+  isModalOpen: boolean;
+  onClose: () => void;
 }
 
 interface FormData {
@@ -17,14 +19,18 @@ interface FormData {
   review: string;
 }
 
-const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onReviewAdded }) => {
+const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ 
+  machineId, 
+  onReviewAdded, 
+  isModalOpen,
+  onClose
+}) => {
   const [formData, setFormData] = useState<FormData>({
     rating: 0,
     review: '',
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate: NavigateFunction = useNavigate();
   const reviewContentRef = useRef<HTMLTextAreaElement>(null);
 
   const { rating, review } = formData;
@@ -84,7 +90,7 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
       const newReview = await postMachineReview(machineId, formData);
       onReviewAdded(newReview);
       setFormData({ rating: 0, review: '' });
-      navigate(`/machine/${machineId}`);
+      onClose(); // Close modal after successful submission
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.msg) {
         setError(`Error submitting review: ${err.response.data.msg}`);
@@ -103,45 +109,55 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({ machineId, onRevi
   }
 
   return (
-    <form className='machine-review-form' onSubmit={handleSubmit}>
-      <h2>New Review</h2>
+    <Modal isOpen={isModalOpen} onClose={onClose}>
+      <form className='machine-review-form' onSubmit={handleSubmit}>
+        <div className="modal-header">
+          <h2>New Review</h2>
+        </div>
       
-      {error && <p className='error-message'>{error}</p>}
+        {error && <p className='error-message'>{error}</p>}
       
-      <div className='machine-review-form-rating'>
-        <label htmlFor='rating' className='rating'>Rating</label>
-        <Box
-          sx={{
-            '& > legend': { mt: 2 },
-          }}
-        >
-          <Rating
-            name="rating"
-            className="test"
-            value={rating}
-            precision={0.5}
-            onChange={handleRatingChange}
+        <div className='machine-review-form-rating'>
+          <label htmlFor='rating' className='rating'>Rating</label>
+          <Box
+            sx={{
+              '& > legend': { mt: 2 },
+            }}
+          >
+            <Rating
+              name="rating"
+              className="test"
+              value={rating}
+              precision={0.5}
+              onChange={handleRatingChange}
+            />
+          </Box>
+        </div>
+      
+        <div className='machine-review-form-content'>
+          <label htmlFor='review'>Comment</label>
+          <textarea 
+            ref={reviewContentRef} 
+            id='review' 
+            name='review' 
+            value={review} 
+            placeholder='Please write your review here'
+            onChange={handleChange} 
+            required 
           />
-        </Box>
-      </div>
+        </div>
       
-      <div className='machine-review-form-content'>
-        <label htmlFor='review'>Comment</label>
-        <textarea 
-          ref={reviewContentRef} 
-          id='review' 
-          name='review' 
-          value={review} 
-          placeholder='Please write your review here'
-          onChange={handleChange} 
-          required 
-        />
-      </div>
-      
-      <button className='machine-review-form-submit' type='submit' disabled={loading}>
-        {loading ? 'Submitting...' : 'Submit'}
-      </button>
-    </form>
+        <div className="modal-footer">
+          <button 
+            className='machine-review-form-submit' 
+            type='submit' 
+            disabled={loading}
+          >
+            {loading ? 'Submitting...' : 'Submit'}
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 };
 
