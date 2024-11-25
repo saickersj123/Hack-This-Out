@@ -82,6 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
               <Link
                 to="/tutorial"
                 className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/tutorial') ? styles.selected : ''}`}
+                data-tooltip="Tutorial"
               >
                 {getMenuIcon('/tutorial', <FaQuestionCircle className={styles.menuIcon} />, <FaRegQuestionCircle className={styles.menuIcon} />)}
                 <div className={styles.label}>Tutorial</div>
@@ -89,6 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
               <Link
                 to="/leaderboard"
                 className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/leaderboard') ? styles.selected : ''}`}
+                data-tooltip="LeaderBoard"
               >
                 {getMenuIcon('/leaderboard', <MdLeaderboard className={styles.menuIcon} />, <MdOutlineLeaderboard className={styles.menuIcon} />)}
                 <div className={styles.label}>LeaderBoard</div>
@@ -96,6 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
               <Link
                 to="/contest"
                 className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/contest') ? styles.selected : ''}`}
+                data-tooltip="Contests"
               >
                 {getMenuIcon('/contest', <EmojiEventsOutlinedIcon className={styles.menuIcon} />, <EmojiEventsIconRounded className={styles.menuIcon} />)}
                 <div className={styles.label}>Contests</div>
@@ -103,6 +106,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
               <Link
                 to="/machine"
                 className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/machine') ? styles.selected : ''}`}
+                data-tooltip="Machines"
               >
                 {getMenuIcon('/machine', <PiComputerTowerFill className={styles.menuIcon} />, <PiComputerTowerBold className={styles.menuIcon} />)}
                 <div className={styles.label}>Machines</div>
