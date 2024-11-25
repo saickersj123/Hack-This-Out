@@ -1,0 +1,218 @@
+/* Navigation */
+#menu {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    transition: all 0.8s;
+}
+
+.navbar-default {
+    background-color: #fff;
+    border-color: rgba(231, 231, 231, 0);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.navbar {
+    position: relative;
+    /* min-height: 50px; */
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+
+    & #menu {
+        background-color: #fff;
+        border-color: rgba(231, 231, 231, 0);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.navbar-fixed-top {
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+.navbar-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #333;
+    text-transform: uppercase;
+    float: left;
+    height: 50px;
+    padding: 10px 10px;
+    line-height: 20px;
+}
+
+.navbar-nav>li>a {
+    text-transform: uppercase;
+    color: #555;
+    font-size: 15px;
+    font-weight: 400;
+    padding: 8px 2px;
+    border-radius: 0;
+    margin: 9px 20px 0;
+
+    &:after {
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(to right, var(--blue-400) 0%, var(--blue-200) 100%);
+        content: "";
+        transition: width 0.2s;
+    }
+
+    &:hover:after {
+        width: 100%;
+    }
+}
+
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar-nav>.active>a,
+.navbar-nav>.active>a:hover,
+.navbar-nav>.active>a:focus {
+    background-color: transparent;
+}
+
+.navbar-nav>.active>a:after,
+.navbar-nav>.active>a:hover:after,
+.navbar-nav>.active>a:focus:after {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    bottom: -1px !important;
+    width: 100% !important;
+    height: 2px !important;
+    background: linear-gradient(to right, #6372ff 0%, #5ca9fb 100%) !important;
+    content: "" !important;
+    transition: width 0.2s !important;
+}
+
+.navbar-toggle {
+    border-radius: 0;
+
+    &:hover,
+    &:focus {
+        background-color: #fff;
+        border-color: #608dfd;
+    }
+
+    >.icon_bar {
+        background-color: #608dfd;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-left {
+        float: left !important;
+    }
+
+    .navbar-nav {
+        float: left;
+        margin: 0;
+    }
+
+    .navbar-right {
+        float: right !important;
+        margin-right: -15px;
+    }
+
+    .navbar-right~.navbar-right {
+        margin-right: 0;
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+}
+
+.menu-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 768px) {
+    .menu-container {
+        width: 750px;
+        margin-right: 0;
+        margin-left: 0;
+    }
+    .navbar-collapse {
+        width: auto;
+        border-top: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}
+
+@media (min-width: 992px) {
+    .menu-container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .menu-container {
+        width: 1170px;
+    }
+}
+
+.navbar-fixed-top {
+    top: 0;
+    border-width: 0 0 1px;
+}
+
+.navbar-fixed-top .navbar-collapse,
+.navbar-fixed-bottom .navbar-collapse {
+    max-height: 340px;
+}
+
+@media (min-width: 768px) {
+
+    .navbar-fixed-top .navbar-collapse,
+    .navbar-static-top .navbar-collapse,
+    .navbar-fixed-bottom .navbar-collapse {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-collapse.collapse {
+        display: block !important;
+        height: auto !important;
+        padding-bottom: 0;
+        overflow: visible !important;
+    }
+}

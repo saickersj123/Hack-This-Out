@@ -1,0 +1,170 @@
+/* Team Section */
+#team {
+  padding: 100px 0;
+}
+
+.team-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .team-container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .team-container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .team-container {
+    width: 1170px;
+  }
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 50px;
+
+  /* 모바일에서 기본적으로 100% 너비를 차지하게 */
+  width: 100%;
+
+  /* 중간 화면 이상에서 8/12 너비를 차지하게 */
+  @media (min-width: 768px) {
+    width: 66.6667%;
+    /* 8/12 */
+  }
+}
+
+
+.team {
+  .thumbnail {
+    display: block;
+    padding: 4px;
+    margin-bottom: 20px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border-radius: 4px;
+    -webkit-transition: border .2s ease-in-out;
+    -o-transition: border .2s ease-in-out;
+    transition: border .2s ease-in-out;
+  }
+
+  .team-img {
+    width: 100%;
+  }
+
+  h2 {
+    text-transform: uppercase;
+    margin: 0 0 20px;
+    font-weight: 800;
+    font-size: 36px;
+    color: #333;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  h4 {
+    margin: 5px 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 15px;
+  }
+}
+
+.team-item {
+  width: 100%;
+
+  /* 기본적으로 전체 너비 */
+  @media (min-width: 576px) {
+    width: 50%;
+    /* 작은 화면에서는 2개씩 표시 */
+  }
+
+  @media (min-width: 768px) {
+    width: 33.33%;
+    /* 중간 화면에서는 3개씩 표시 */
+  }
+
+  @media (min-width: 992px) {
+    width: 25%;
+    /* 큰 화면에서는 4개씩 표시 */
+  }
+}
+
+.caption {
+  padding: 10px;
+  text-align: center;
+  color: #888;
+}
+
+.caption h4 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.caption p {
+  font-size: 14px;
+  color: #777;
+}
+
+.section-title {
+  margin-bottom: 70px;
+}
+
+.section-title h2 {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+}
+
+.section-title h2::after {
+  position: absolute;
+  content: "";
+  background: linear-gradient(to right, var(--blue-400) 0%, var(--blue-200) 100%);
+  height: 4px;
+  width: 60px;
+  bottom: 0;
+  margin-left: -30px;
+  left: 50%;
+}
+
+.section-title p {
+  font-size: 18px;
+}
+
+@media (min-width: 992px) {
+
+  .col-md-1,
+  .col-md-2,
+  .col-md-3,
+  .col-md-4,
+  .col-md-5,
+  .col-md-6,
+  .col-md-7,
+  .col-md-8,
+  .col-md-9,
+  .col-md-10,
+  .col-md-11,
+  .col-md-12 {
+    float: left;
+  }
+}

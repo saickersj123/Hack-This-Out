@@ -32,6 +32,7 @@ const UsersManagement = lazy(() => import('./pages/admin/UsersManagement'));
 const MachinesManagement = lazy(() => import('./pages/admin/MachinesManagement'));
 const ContestsManagement = lazy(() => import('./pages/admin/ContestsManagement'));
 const InstancesManagement = lazy(() => import('./pages/admin/InstancesManagement'));
+const LandingPage = lazy(() => import('./pages/landing/LandingPage'));
 
 const routes: RouteObject[] = [
   {
@@ -50,6 +51,14 @@ const routes: RouteObject[] = [
       },
       
       // Protected Routes
+      {
+        path: '/intro',
+        element: (
+          <ProtectedRoute>
+            <LandingPage />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: '/',
         element: (

@@ -1,0 +1,125 @@
+/* Services Section */
+#services {
+  padding: 100px 0;
+  background: linear-gradient(to right, var(--blue-400) 0%, var(--blue-200)100%);
+  color: #fff;
+}
+
+.services {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  .service-desc {
+    margin: 10px 10px 20px;
+  }
+
+  h2 {
+    color: #fff;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+  }
+
+  .section-title h2::after {
+    position: absolute;
+    content: "";
+    background: rgba(255, 255, 255, 0.3);
+    height: 4px;
+    width: 60px;
+    bottom: 0;
+    margin-left: -30px;
+    left: 50%;
+  }
+
+  .service-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .service-icon {
+      display: flex;
+      justify-content: center;
+      font-size: 42px;
+      width: 120px;
+      height: 120px;
+      padding: 40px 0;
+      background: linear-gradient(to right, var(--blue-400) 0%, var(--blue-200)100%);
+      border-radius: 50%;
+      color: #fff;
+      box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    padding: 5px 0;
+    color: #fff;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 15px;
+    margin: 0 0 10px;
+  }
+
+  .service-desc {
+    margin-bottom: 40px;
+  }
+
+  .row {
+    display: block;
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+
+  h2 {
+    text-transform: uppercase;
+    margin: 0 0 20px;
+    font-weight: 800;
+    font-size: 36px;
+    color: #fff;
+  }
+
+  h4 {
+    margin: 5px 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+  }
+}
+
+.service-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+@media (min-width: 768px) {
+  .service-container {
+    width: 750px;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .service-container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .service-container {
+    width: 1170px;
+  }
+}
