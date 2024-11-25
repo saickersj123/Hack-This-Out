@@ -9,10 +9,10 @@ const MachineCompleteModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
   const [showConfetti, setShowConfetti] = useState(true);
   const [opacity, setOpacity] = useState(1);
 
-  const handleGoToMain = () => {
+  const handleGoToMachines = () => {
     onClose();
     setShowConfetti(false);
-    navigate('/');
+    navigate(`/machine`);
   };
 
   useEffect(() => {
@@ -53,8 +53,8 @@ const MachineCompleteModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
         <div className="machine-complete-modal">
           <div className="title">🎉 Machine Completed! 🎉</div>
           <div className="content">You have successfully completed the machine.</div>
-          <button onClick={handleGoToMain} className="redirect-button">
-            Go Home
+          <button onClick={handleGoToMachines} className="redirect-button">
+            Go to Machines
           </button>
         </div>
       </Modal>
