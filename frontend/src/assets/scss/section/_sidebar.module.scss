@@ -6,11 +6,10 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  transition: all 0.3s ease-in-out;
-  font-size: clamp(14px, 1vw, 16px);
+  transition: width 0.3s ease-in-out;
+  font-size: 16px;
   color: var(--color-gainsboro);
   font-family: var(--font-roboto);
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 
   .headerParent {
     width: 100%;
@@ -31,9 +30,8 @@
       box-sizing: border-box;
 
       .logoimage {
-        width: 100%;
+        width: 300px;
         height: 100%;
-        transition: all 0.3s ease-in-out;
 
         .logoContainerIcon {
           width: 100%;
@@ -52,24 +50,29 @@
         background: none;
         border: none;
         padding: 0;
-        cursor: pointer;
 
         .collapse_button {
-          width: 36px;
-          height: 36px;
+          width: 40px;
+          height: 40px;
           background: none;
-          color: var(--color-gainsboro);
+          color: #D1D1D1;
           object-fit: contain;
+          cursor: pointer;
           transition: all 0.3s ease-in-out;
 
-          .collapse_icon_open,
-          .collapse_icon_close {
+          .collapse_icon_open {
             transition: all 0.3s ease-in-out;
-            
             &:hover {
               transform: translateX(-2px);
               filter: drop-shadow(0 0 5px var(--color-white));
-              color: var(--color-white);
+            }
+          }
+
+          .collapse_icon_close {
+            transition: all 0.3s ease-in-out;
+            &:hover {
+              transform: translateX(-2px);
+              filter: drop-shadow(0 0 5px var(--color-white));
             }
           }
         }
@@ -79,112 +82,71 @@
 
   .topMenu {
     flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: clamp(1rem, 2vh, 1.5rem);
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-gainsboro) transparent;
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: var(--color-gainsboro);
-      border-radius: 4px;
-    }
+    padding: 20px 16px;
 
     .verticalMenuList {
       align-self: stretch;
       display: flex;
       flex-direction: column;
-      gap: clamp(0.5rem, 1vh, 1rem);
-      width: 100%;
+      gap: 8px;
 
       .verticalMenuItem {
-        min-height: 50px;
-        height: clamp(50px, 6vh, 60px);
-        border-radius: 8px;
+        height: 60px;
+        border-radius: 4px;
         display: flex;
         align-items: center;
-        padding: 0.5rem 1rem;
+        justify-content: center;
+        padding: 4px 16px;
         box-sizing: border-box;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
-        
+        transition: all 0.3s ease-in-out;
         &:hover {
-          background-color: rgba(63, 65, 71, 0.8);
-          transform: translateX(4px);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          background-color: #3F4147;
+          transform: translateY(-2px);
         }
 
         .menuIcon {
           width: 24px;
           height: 24px;
           position: relative;
-          transition: all 0.2s ease-in-out;
         }
 
         .label {
           flex: 1;
           position: relative;
-          padding-left: 1rem;
-          line-height: 1.4;
+          padding-left: 10px;
+          line-height: 160%;
           opacity: 1;
-          transition: all 0.2s ease-in-out;
-          white-space: nowrap;
         }
       }
     }
   }
 
   &.collapsed {
-    width: var(--sidebar-collapsed);
-    
+    width: var(--sidebar-collapsed); // 접힘 상태에서의 너비 조정
+    align-items: center;
+
     .header {
-      justify-content: center;
-      padding: 0;
+      justify-content: center; // 중앙 정렬로 변경
 
       .logoimage {
-        width: 0;
-        opacity: 0;
+        display: none; // 접힘 상태에서 로고 숨기기
       }
     }
 
     .topMenu {
-      padding: clamp(0.5rem, 1vh, 1rem);
-      
       .verticalMenuList {
-        align-items: center;
-        
         .verticalMenuItem {
-          width: 40px;
-          padding: 0.5rem;
-          justify-content: center;
-
-          .menuIcon {
-            margin: 0;
-          }
+          justify-content: center; // 접힘 상태에서 텍스트 대신 아이콘 정렬
+          padding: 4px;
 
           .label {
-            width: 0;
+            display: none; // 접힘 상태에서 레이블 숨기기
             opacity: 0;
-            padding: 0;
-          }
-
-          &:hover {
-            width: auto;
-            padding: 0.5rem 1rem;
-            
-            .label {
-              width: auto;
-              opacity: 1;
-              padding-left: 1rem;
-            }
           }
         }
       }
@@ -193,68 +155,21 @@
 }
 
 .selected {
-  background-color: var(--color-gainsboro);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #D1D1D1;
+  /* 선택된 항목의 배경 색상 */
+  border-radius: 5px;
 
   .label {
-    color: var(--color-layout);
-    font-weight: 500;
+    color: #393939;
   }
 
   .menuIcon {
-    color: var(--color-layout);
+    color: #000000;
   }
 
   &:hover {
-    background-color: var(--color-white) !important;
-    
     .label {
-      color: var(--color-layout);
-    }
-    
-    .menuIcon {
-      color: var(--color-layout);
-    }
-  }
-}
-
-// Add responsive breakpoints
-@media screen and (max-width: 1024px) {
-  .sidebarMenu {
-    font-size: 14px;
-    
-    .verticalMenuItem {
-      min-height: 45px;
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .sidebarMenu {
-    position: fixed;
-    z-index: 1000;
-    
-    &:not(.collapsed) {
-      width: 240px;
-    }
-    
-    &.collapsed {
-      width: 0;
-      
-      .header {
-        opacity: 0;
-      }
-    }
-  }
-}
-
-// Add dark mode support
-@media (prefers-color-scheme: dark) {
-  .sidebarMenu {
-    background-color: var(--color-layout-dark, var(--color-layout));
-    
-    .selected {
-      background-color: var(--color-gainsboro-dark, var(--color-gainsboro));
+      color: var(--color-white);
     }
   }
 }
