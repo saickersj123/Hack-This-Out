@@ -32,7 +32,7 @@
                 border-radius: 50%;
                 border: 3px solid rgba(255, 255, 255, 0.1);
                 object-fit: cover;
-                transition: all 0.3s ease;
+                transition: all 0.3s ease-in-out;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
                 &:hover {
@@ -56,7 +56,7 @@
                     border-radius: 10px;
                     color: var(--color-white);
                     cursor: pointer;
-                    transition: all 0.2s ease;
+                    transition: all 0.3s ease-in-out;
                     font-weight: 500;
                     white-space: nowrap;
                     text-align: center;
@@ -64,7 +64,7 @@
 
                     &:hover {
                         background: rgba(255, 255, 255, 0.12);
-                        transform: translateY(-1px);
+                        transform: translateY(-2px);
                         background-color: var(--blue-200);
                     }
                 }
@@ -79,7 +79,7 @@
                     color: var(--color-white);
                     border: none;
                     cursor: pointer;
-                    transition: all 0.2s ease;
+                    transition: all 0.3s ease-in-out;
                     font-weight: 500;
                     display: flex;
                     align-items: center;
@@ -108,13 +108,13 @@
                 padding: 16px;
                 background: rgba(255, 255, 255, 0.02);
                 border-radius: 12px;
-                transition: all 0.2s ease;
+                transition: all 0.3s ease-in-out;
                 border: 1px solid rgba(255, 255, 255, 0.05);
 
                 &:hover {
                     background: rgba(255, 255, 255, 0.04);
                     background-color: var(--blue-200);
-                    transform: translateX(2px);
+                    transform: translateY(-2px);
                 }
 
                 label {
@@ -146,7 +146,7 @@
             border-radius: 12px;
             color: var(--color-white);
             font-size: var(--font-size-small);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease-in-out;
 
             &::placeholder {
                 color: rgba(255, 255, 255, 0.4);
@@ -169,7 +169,7 @@
             border: 1px solid rgba(252, 252, 233, 0.12) !important;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease-in-out;
             font-size: var(--font-size-small);
             font-weight: 600;
             margin-left: auto;
@@ -177,7 +177,7 @@
 
             &:hover {
                 background: var(--blue-200);
-                transform: translateY(-1px);
+                transform: translateY(-2px);
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             }
         }
@@ -234,13 +234,13 @@
                 border: 2px solid var(--color-primary);
                 border-radius: 8px;
                 cursor: pointer;
-                transition: all 0.2s ease;
+                transition: all 0.2s ease-in-out;
                 font-size: var(--font-size-small);
                 font-weight: 600;
 
                 &:hover {
                     background: var(--blue-200);
-                    transform: translateY(-1px);
+                    transform: translateY(-2px);
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                 }
             }

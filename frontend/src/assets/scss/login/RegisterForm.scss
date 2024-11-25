@@ -1,83 +1,94 @@
-.back{
+.sign-up-container{
     display: flex;
-    background-color: #000;
-    align-items: right;
+    align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    background-color: var(--blue-500);
+    border-radius: 10px;
     margin: 0;
 }
 
 .wrap {
     justify-content: center;
     position: relative;
-    width: 500px;
+    width: 600px;
     height: 600px;
     border-radius: 10px;
-    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: var(--blue-500);
     place-items: center;
-    margin: 0 auto;
     
-    & h1 {
+    .sign-up-title h1 {
       margin-bottom: 30px;  
-      color: #000;
+      color: var(--color-white);
+      font-weight: 600;
     }
 
     .error-message {
         color: red;
         margin-top: 10px;
         margin-bottom: 10px;
+        font-weight: 600;
     }
 
     .register-form {
         text-align: center;
         padding: 10px;
         position: relative;
+        font-weight: 600;
     }
 
     .input-box {
-        width: 100% - margin;
+        width: clamp(200px, 15vw, 400px);
         height: 50px;
         margin-bottom: 30px;
         position: relative;
-        margin-left: 20px;
-        margin-right: 20px;
+        margin-left: auto;
+        margin-right: auto;
         
         input {
-            width: calc(100% - 26px); /* 입력칸의 너비에서 padding 값을 제외 */
+            width: 100%;
             height: 100%;
             background: #ddd;
             outline: none;
             border: 2px solid rgba(255, 255, 255);
-            border-radius: 40px;
+            border-radius: 10px;
             font-size: 16px;
             color: #333;
             padding-left: 20px;
+            transition: all 0.3s ease-in-out;
 
             &::placeholder {
                 font-weight: 600;
-                color: #333;
+                color: var(--blue-500);
             }
+
+            &:focus {
+                border: 2px solid var(--blue-500);
+                transform: translateX(2px);
+            }
+
         }
     }
 
-    .button {
+    .sign-up-button {
         display: inline-block;
-        padding: 100px 200px;
+        padding: 10px 20px;
+        width: clamp(200px, 15vw, 400px);
         font-size: 16px;
         font-weight: bold;
         text-align: center;
-        text-decoration: none;
-        border: 2px solid #007bff;
-        border-radius: 5px;
-        color: #21c2c2b2;
-        background-color: transparent;
+        border: 2px solid var(--color-white);
+        border-radius: 10px;
+        color: var(--color-white);
+        background-color: var(--blue-500);
+        margin-top: 20px;
         cursor: pointer;
-        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        transition: all 0.3s ease-in-out;
 
         &:hover {
-            background-color: #007bff;
-            color: #fff;
+            background-color: var(--blue-200);
+            color: var(--color-white);
+            transform: translateY(-2px);
+            border: 2px solid transparent;
         }
 
         &:focus {

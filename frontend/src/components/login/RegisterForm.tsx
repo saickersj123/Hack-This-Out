@@ -13,7 +13,7 @@ interface FormData {
   email: string;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
   const [formData, setFormData] = useState<FormData>({
     username: '',
     password: '',
@@ -33,7 +33,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
 
   const validatePasswords = (): boolean => {
     if (formData.password !== formData.confirmPassword) {
-      setError('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      setError('Password and confirm password do not match.');
       return false;
     }
     return true;
@@ -60,7 +60,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
       console.error('Error registering user:', err.message || err);
       
       // Extract a meaningful error message
-      let errorMessage = '회원가입에 실패했습니다. 다시 시도해주세요.';
+      let errorMessage = 'Sign up failed. Please try again.';
       
       // If the error response contains a message, use it
       if (err.response && err.response.data && err.response.data.msg) {
@@ -74,17 +74,18 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
   };
 
   return (
-    <div className='back'>
+    <div className='sign-up-container'>
       <div className="wrap">
         <form className="register-form" onSubmit={handleSubmit}>
-          <button type="button" onClick={closeRegisterModal}>닫기</button>
-          <h1>회원가입</h1>
+          <div className='sign-up-title'>
+            <h1>Sign Up</h1>
+          </div>
           {error && <p className="error-message">{error}</p>}
           <div className="input-box">
             <input
               type="text"
               name="username"
-              placeholder="사용자 이름"
+              placeholder="Username"
               value={formData.username}
               onChange={handleChange}
               required
@@ -94,7 +95,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
             <input
               type="email"
               name="email"
-              placeholder="이메일"
+              placeholder="Email"
               value={formData.email}
               onChange={handleChange}
               required
@@ -104,7 +105,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
             <input
               type="password"
               name="password"
-              placeholder="비밀번호"
+              placeholder="Password"
               value={formData.password}
               onChange={handleChange}
               required
@@ -114,13 +115,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeRegisterModal }) => {
             <input
               type="password"
               name="confirmPassword"
-              placeholder="비밀번호 확인"
+              placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
           </div>
-          <button type="submit">회원가입</button>
+          <button className='sign-up-button'>Sign Up</button>
         </form>
       </div>
     </div>

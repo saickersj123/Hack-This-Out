@@ -92,14 +92,14 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                 {/* Pagination Buttons */}
                 <div className={styles.pagination}>
                     <button
-                        className={styles.page_button}
+                        className={styles.page_button_left}
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
                     >
                         <IoIosArrowBack />
                     </button>
                     {Array.from({ length: totalPages }, (_, i) => (
-                        <button
+                        <button 
                             key={i}
                             className={`${styles.number_button} ${currentPage === i + 1 ? styles.active : ''}`}
                             onClick={() => handlePageChange(i + 1)}
@@ -108,7 +108,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ leaderboard, curren
                         </button>
                     ))}
                     <button
-                        className={styles.page_button}
+                        className={styles.page_button_right}
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
                     >

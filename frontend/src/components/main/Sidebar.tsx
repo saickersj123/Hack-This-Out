@@ -64,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              {isCollapsed && isHovered && <RiArrowRightDoubleFill size={40} />}
+              {isCollapsed && isHovered && <RiArrowRightDoubleFill className={styles.collapse_icon_open} size={40} />}
               {isCollapsed && !isHovered && (
                 <img
                   className={styles.icon_logo}
@@ -72,7 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                   alt="Collapsed Logo"
                 />
               )}
-              {!isCollapsed && <RiArrowLeftDoubleFill size={40} />}
+              {!isCollapsed && <RiArrowLeftDoubleFill className={styles.collapse_icon_close} size={40} />}
             </button>
           </div>
         </div>

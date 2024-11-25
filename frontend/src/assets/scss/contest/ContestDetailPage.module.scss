@@ -40,7 +40,7 @@
             background: var(--blue-500);
             color: var(--color-white);
             font-size: clamp(14px, 2vw, 16px);
-            transition: all 0.3s ease;
+            transition: all 0.3s ease-in-out;
 
             @media (max-width: 768px) {
                 position: relative;

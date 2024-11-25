@@ -52,12 +52,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <h1>로그인</h1>
+      <h1 className='login-title'>Login</h1>
       <div className="input-box">
         <input 
           type="text" 
           name="email" 
-          placeholder="이메일" 
+          placeholder="Email" 
           value={formData.email} 
           onChange={handleChange}
           required
@@ -67,15 +67,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
         <input 
           type="password" 
           name="password" 
-          placeholder="비밀번호" 
+          placeholder="Password" 
           value={formData.password} 
           onChange={handleChange}
           required
         />
         {error && <p className='error'>{error}</p>}
       </div>
-      <button type="submit">로그인</button>
-      <button type="button" onClick={openRegisterModal}>회원가입</button>
+      <button type="submit">Login</button>
+      <button type="button" onClick={openRegisterModal}>Sign Up</button>
     </form>
   );
 };

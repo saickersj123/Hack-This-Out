@@ -42,7 +42,7 @@ body {
 	--font-roboto: Roboto;
 	--font-inter: Inter;
 	--font-ibm-plex-sans: 'IBM Plex Sans';
-  	
+	--font-sans: 'Noto Sans KR Variable';
 	/* font sizes */							// * 다른 사이즈 이용하더라도 clamp 이용해서 페이지 축소 시 사이즈 글자 줄어들게 *
 	--base-font-size: clamp(16px, 1.8vw, 20px);	// 기본 사이즈
 	--font-size-large: clamp(28px, 3vw, 40px);	// 대

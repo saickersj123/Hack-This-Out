@@ -16,6 +16,14 @@
 .change-background {
 	animation: change-background 1s forwards;
 	width: 80%;
+	
+	@media screen and (max-width: 768px) {
+		width: 70%;
+	}
+	
+	@media screen and (max-width: 480px) {
+		width: 0%;
+	}
 }
 
 @keyframes change-background {
@@ -36,10 +44,26 @@
 	width: 20%;
 	height: 100vh;
 	text-align: center;
-	transition: left 0.5s;
+	transition: all 0.3s ease-in-out;
 	color: var(--black200);
 
 	&.visible {
 		left: 80%;
+	}
+	
+	@media screen and (max-width: 768px) {
+		width: 30%;
+		
+		&.visible {
+			left: 70%;
+		}
+	}
+	
+	@media screen and (max-width: 480px) {
+		width: 100%;
+		
+		&.visible {
+			left: 0;
+		}
 	}
 }

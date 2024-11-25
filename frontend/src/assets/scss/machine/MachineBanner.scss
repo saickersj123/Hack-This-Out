@@ -127,9 +127,10 @@
         .go-to-machine-btn {
           background: var(--blue-500);
           color: var(--color-white);
-
+          transition: all 0.3s ease-in-out;
           &:hover {
-            background: var(--blue-200)
+            background: var(--blue-200);
+            transform: translateY(-2px);
           }
           justify-self: center;
           width: min(80%, 175px);
