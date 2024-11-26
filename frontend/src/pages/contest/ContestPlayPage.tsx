@@ -37,7 +37,6 @@ const ContestPlayPage: React.FC = () => {
   const [instanceStatus, setInstanceStatus] = useState<Instance['status']>(null);
   const [instanceStarted, setInstanceStarted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [downloadStatus, setDownloadStatus] = useState<'idle' | 'inProgress' | 'completed'>('idle');
   const [submitStatus, setSubmitStatus] = useState<'flag' | 'flag-success'>('flag');
 
 
@@ -93,12 +92,6 @@ const ContestPlayPage: React.FC = () => {
       console.error('Error fetching instances:', error);
       setError('Failed to fetch instance details.');
     }
-  };
-
-  // Callback to receive instance status from InstanceInfo
-  const handleInstanceStatusChange = (status: Instance['status']) => {
-    console.log('Instance status changed to:', status); // Debugging
-    setInstanceStatus(status);
   };
 
   // Callback to set instance as started
@@ -180,8 +173,6 @@ const ContestPlayPage: React.FC = () => {
             </div>
             <DisplayReward reward={contest.contestExp} />
             <DownloadVPNProfile
-              downloadStatus={downloadStatus}
-              setDownloadStatus={setDownloadStatus}
             />
             {/* Conditionally render StartInstanceButton or InstanceInfo */}
             {!instanceStarted ? (
@@ -192,7 +183,6 @@ const ContestPlayPage: React.FC = () => {
             ) : (
               <InstanceInfo
                 machineId={selectedMachine._id}
-                onStatusChange={handleInstanceStatusChange}
               />
             )}
 
@@ -207,7 +197,6 @@ const ContestPlayPage: React.FC = () => {
               contestId={contestId}
               machineId={selectedMachine._id}
               playType="contest"
-              disabled={!isRunning} // Disable based on instance status
               onFlagSuccess={handleFlagSuccess}
             />
             <GiveUpButton
