@@ -29,6 +29,7 @@ const LandingPage: React.FC = () => {
         overflowY: "scroll",
         height: "100vh",
         scrollBehavior: "smooth",
+        scrollbarWidth: "none"
       }}
     >
       <div className="landingpage">
