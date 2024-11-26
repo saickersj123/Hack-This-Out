@@ -8,7 +8,7 @@
     padding: 0 32px 32px;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: scroll;
 
     .machine-play-name {
         background-color: var(--color-layout);
@@ -44,10 +44,23 @@
             margin-bottom: 24px;
         }
     }
-
+    
     .submit-box {
         display: flex;
         width: 100%;
         padding-right: 30px;
     }
+}
+
+.machine-play-container.flag-success {
+    /* Disable scrolling */
+    overflow: hidden;
+
+    /* Optionally, you can set the scroll position to top using JavaScript */
+    /* Additional styles can be added here if needed */
+}
+
+/* Ensure smooth scrolling when the flag-success class is added */
+.machine-play-container.flag-success {
+    scroll-behavior: smooth;
 }

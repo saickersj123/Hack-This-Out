@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getActiveMachineDetails } from '../../api/axiosMachine';
 import { getInstanceByMachine } from '../../api/axiosInstance';
@@ -10,11 +10,10 @@ import SubmitFlagForm from '../../components/play/SubmitFlagForm';
 import GiveUpButton from '../../components/play/GiveUpButton';
 import StatusIcon from '../../components/play/StatusIcon';
 import Main from '../../components/main/Main';
-import { Instance } from '../../types/Instance';
 import ErrorIcon from '../../components/public/ErrorIcon';
 import '../../assets/scss/machine/MachinePlayPage.scss';
 import LoadingIcon from '../../components/public/LoadingIcon';
-
+import { PlayProvider, usePlayContext } from '../../contexts/PlayContext';
 
 /**
  * Interface representing the Machine details.
@@ -42,11 +41,18 @@ const MachinePlayPage: React.FC = () => {
   const { machineId } = useParams<{ machineId: string }>();
   const [machine, setMachine] = useState<Machine | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [instanceStatus, setInstanceStatus] = useState<Instance['status']>(null);
-  const [instanceStarted, setInstanceStarted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [downloadStatus, setDownloadStatus] = useState<'idle' | 'inProgress' | 'completed'>('idle');
-  const [submitStatus, setSubmitStatus] = useState<'flag' | 'flag-success'>('flag');
+
+  const {
+    instanceStatus,
+    setInstanceStatus,
+    downloadStatus,
+    submitStatus,
+    setSubmitStatus,
+  } = usePlayContext();
+
+  // Ref to the container for scrolling and class manipulation
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Fetch machine details and check for existing instance when component mounts
   useEffect(() => {
@@ -68,13 +74,11 @@ const MachinePlayPage: React.FC = () => {
         console.log('Instance Response:', instanceResponse); // Debugging
 
         if (instanceResponse.instances && instanceResponse.instances.length > 0) {
-          setInstanceStarted(true);
           // Set initial instance status
           const currentInstance = instanceResponse.instances[0];
           setInstanceStatus(currentInstance.status);
           console.log('Existing Instance Found:', currentInstance); // Debugging
         } else {
-          setInstanceStarted(false);
           setInstanceStatus(null);
           console.log('No Existing Instance Found'); // Debugging
         }
@@ -87,25 +91,32 @@ const MachinePlayPage: React.FC = () => {
     };
 
     fetchData();
-  }, [machineId]);
+  }, [machineId, setInstanceStatus]);
 
-  // Callback to receive instance status from InstanceInfo
-  const handleInstanceStatusChange = (status: Instance['status']) => {
-    console.log('Instance status changed to:', status); // Debugging
-    setInstanceStatus(status);
-  };
+  // Effect to handle submitStatus changes
+  useEffect(() => {
+    if (submitStatus === 'flag-success' && containerRef.current) {
+      // Add the flag-success class
+      containerRef.current.classList.add('flag-success');
+
+      // Scroll to the top
+      containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (containerRef.current) {
+      // Remove the flag-success class if not in success state
+      containerRef.current.classList.remove('flag-success');
+    }
+  }, [submitStatus]);
 
   // Callback to set instance as started
   const handleInstanceStarted = () => {
     console.log('Instance has been started.'); // Debugging
-    setInstanceStarted(true);
+    setInstanceStatus('running'); // Assuming 'running' is a valid status
   };
 
   if (error) {
     return (
       <Main>
-        <div className="machine-play-container">
-          <h2>Machine Play</h2>
+        <div className="machine-play-container" ref={containerRef}>
           <div className="error-message"><ErrorIcon /> {error}</div>
         </div>
       </Main>
@@ -115,80 +126,58 @@ const MachinePlayPage: React.FC = () => {
   if (!machine || isLoading) {
     return (
       <Main>
-        <div className="machine-play-container">
-          <h2>Machine Play</h2>
+        <div className="machine-play-container" ref={containerRef}>
           <div><LoadingIcon /></div>
         </div>
       </Main>
     );
   }
 
-  // Determine if controls should be disabled based on instance status
-  const isRunning = instanceStatus === 'running';
-
-  const handleFlagSuccess = () => {
-    setSubmitStatus('flag-success'); // 정답을 제출했을 때 상태를 flag-success로 변경
-  };
-
   return (
     <Main>
-      <div className="machine-play-container">
+      <div className={`machine-play-container ${submitStatus === 'flag-success' ? 'flag-success' : ''}`} ref={containerRef}>
         <div className="machine-play-name">
           <h3><b>Now Playing: {machine.name.charAt(0).toUpperCase() + machine.name.slice(1)}</b></h3>
           <GiveUpButton
             machineId={machineId || ''}
             machineName={machine.name}
             mode="machine"
-            disabled={!isRunning} // Disable based on instance status
           />
         </div>
         <div className='download-box'>
-          <StatusIcon status={downloadStatus} />
-          <DownloadVPNProfile
-            downloadStatus={downloadStatus}
-            setDownloadStatus={setDownloadStatus}
-          />
+          {(instanceStatus === 'running' || instanceStatus === 'pending') ? (
+            <>
+              <StatusIcon status={'completed'} /> 
+            </>
+          ) : ( <StatusIcon status={downloadStatus || 'idle'} />)}
+          <DownloadVPNProfile />
         </div>
         {/* Conditionally render StartInstanceButton or InstanceInfo */}
         <div className='btn-box'>
-          <StatusIcon
-            status={
-              !instanceStarted
-                ? 'idle'
-                : instanceStatus === 'stopped'
-                  ? 'idle'
-                  : instanceStatus === 'pending'
-                    ? 'inProgress'
-                    : 'completed'
-            }
-          />
+          <StatusIcon status={instanceStatus || 'idle'} />
           <div className='instance-hint-box'>
-            {!instanceStarted ? (
+            {!instanceStatus ? (
               <StartInstanceButton
                 machineId={machineId || ''}
                 onInstanceStarted={handleInstanceStarted}
-                disabled={downloadStatus !== 'completed'} // Pass the callback
               />
             ) : (
               <InstanceInfo
                 machineId={machineId || ''}
-                onStatusChange={handleInstanceStatusChange}
               />
             )}
             <GetHints
               machineId={machineId || ''}
               playType="machine"
-              disabled={!isRunning} // Disable based on instance status
             />
           </div>
         </div>
         <div className='submit-box'>
-          <StatusIcon status={submitStatus} />
+          <StatusIcon status={submitStatus || 'idle'} />
           <SubmitFlagForm
             machineId={machineId || ''}
             playType="machine"
-            disabled={!isRunning} // Disable based on instance status
-            onFlagSuccess={handleFlagSuccess}
+            onFlagSuccess={() => setSubmitStatus('flag-success')}
           />
         </div>
       </div>
@@ -196,4 +185,13 @@ const MachinePlayPage: React.FC = () => {
   );
 };
 
-export default MachinePlayPage;
+/**
+ * Wrap MachinePlayPage with PlayProvider to provide context.
+ */
+const MachinePlayPageWithProvider: React.FC = () => (
+  <PlayProvider>
+    <MachinePlayPage />
+  </PlayProvider>
+);
+
+export default MachinePlayPageWithProvider;

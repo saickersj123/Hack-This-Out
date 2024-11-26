@@ -4,7 +4,7 @@ import { MdFlagCircle } from "react-icons/md";
 import '../../assets/scss/play/StatusIcon.scss';
 
 interface StatusIconProps {
-  status: 'idle' | 'inProgress' | 'completed' | 'flag' | 'flag-success';
+  status: string;
 }
 
 const StatusIcon: React.FC<StatusIconProps> = ({ status }) => {
@@ -17,6 +17,7 @@ const StatusIcon: React.FC<StatusIconProps> = ({ status }) => {
         </div>
       );
     case 'inProgress':
+    case 'pending':
       return(
         <div className='status-icon-container'>
           <FaRegDotCircle size={30} color="#f39c12" title="In Progress" />
@@ -24,6 +25,7 @@ const StatusIcon: React.FC<StatusIconProps> = ({ status }) => {
         </div>
       );
     case 'completed':
+    case 'running':
       return (
         <div className='status-icon-container'>
           <FaRegCheckCircle size={30} color="#27ae60" title="Completed" />

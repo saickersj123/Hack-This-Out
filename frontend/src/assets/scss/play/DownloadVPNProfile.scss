@@ -69,6 +69,69 @@
   transition: all 0.4s ease;
   padding: 5px;
   position: relative;
+
+  &.instance-started {
+    .download-circle {
+      animation: pulse 1s forwards;
+      rotate: 180deg;
+
+      .download-icon {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .download-square {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .download-title {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .download-title:last-child {
+      opacity: 1;
+      visibility: visible;
+      right: 56px;
+    }
+  }
+
+  &.clicked {
+    width: 57px;
+
+    .download-circle {
+      animation: pulse 1s forwards;
+      rotate: 180deg;
+
+      &::before {
+        height: 100%;
+        background-color: var(--blue-300);
+      }
+
+      .download-icon {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .download-square {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .download-title {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .download-title:last-child {
+      opacity: 1;
+      visibility: visible;
+      right: 56px;
+    }
+  }
 }
 
 .download-label::before {

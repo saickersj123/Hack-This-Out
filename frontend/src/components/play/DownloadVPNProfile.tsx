@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { downloadOpenVPNProfile } from '../../api/axiosInstance';
 import { TbBrandOpenvpn } from "react-icons/tb";
 import '../../assets/scss/play/DownloadVPNProfile.scss';
+import { usePlayContext } from '../../contexts/PlayContext';
 
-
-interface DownloadVPNProfileProps {
-  downloadStatus: 'idle' | 'inProgress' | 'completed';
-  setDownloadStatus: React.Dispatch<React.SetStateAction<'idle' | 'inProgress' | 'completed'>>;
-}
 /**
  * Component to download the OpenVPN profile.
  */
-const DownloadVPNProfile: React.FC<DownloadVPNProfileProps> = ({ downloadStatus, setDownloadStatus }) => {
+const DownloadVPNProfile: React.FC = () => {
+  const { downloadStatus, setDownloadStatus, instanceStatus } = usePlayContext();
+  const [isClicked, setIsClicked] = useState(false);
+
   /**
    * Handles the VPN profile download.
    */
   const handleDownload = async () => {
-    setDownloadStatus('inProgress'); // 상태: 진행 중
+    setIsClicked(true);
+    setDownloadStatus('inProgress');
 
     try {
       const response = await downloadOpenVPNProfile();
@@ -28,7 +28,7 @@ const DownloadVPNProfile: React.FC<DownloadVPNProfileProps> = ({ downloadStatus,
       // Create and trigger download
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'vpn-profile.ovpn');
+      link.setAttribute('download', 'hto-profile.ovpn');
       document.body.appendChild(link);
       link.click();
 
@@ -36,12 +36,25 @@ const DownloadVPNProfile: React.FC<DownloadVPNProfileProps> = ({ downloadStatus,
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-      setDownloadStatus('completed'); // 상태: 완료
+      setDownloadStatus('completed');
     } catch (error: any) {
       console.error('Error downloading OpenVPN profile:', error);
       alert(error.response?.data?.msg || 'Failed to download OpenVPN profile.');
-      setDownloadStatus('idle'); // 상태: 대기로 복구
+      setDownloadStatus('idle');
+      setIsClicked(false);
     }
+  };
+
+  // Determine label classes based on status
+  const getLabelClasses = () => {
+    const classes = ['download-label'];
+    if (instanceStatus === 'running' || instanceStatus === 'pending') {
+      classes.push('instance-started');
+    }
+    if (isClicked) {
+      classes.push('clicked');
+    }
+    return classes.join(' ');
   };
 
   return (
@@ -56,8 +69,15 @@ const DownloadVPNProfile: React.FC<DownloadVPNProfileProps> = ({ downloadStatus,
           <br />and connect from your own environment.
         </h3>
         <div className='download-btn'>
-          <label className="download-label">
-            <input type="checkbox" className="download-input" onClick={handleDownload} disabled={downloadStatus === 'inProgress'}/>
+          <label className={getLabelClasses()}>
+            <input
+              type="checkbox"
+              className="download-input"
+              onClick={handleDownload}
+              disabled={downloadStatus === 'inProgress'}
+              checked={isClicked || instanceStatus === 'running' || instanceStatus === 'pending'}
+              readOnly
+            />
             <span className="download-circle">
               <svg
                 className="download-icon"

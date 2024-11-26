@@ -4,6 +4,7 @@ import LoadingIcon from '../public/LoadingIcon';
 import '../../assets/scss/play/StartInstanceButton.scss';
 import { AiOutlineCloudServer } from "react-icons/ai";
 import { IoIosPlay } from "react-icons/io";
+import { usePlayContext } from '../../contexts/PlayContext';
 
 /**
  * Props interface for StartInstanceButton component.
@@ -11,7 +12,6 @@ import { IoIosPlay } from "react-icons/io";
 interface StartInstanceButtonProps {
   machineId: string;
   onInstanceStarted: () => void;
-  disabled?: boolean;
 }
 
 /**
@@ -26,9 +26,11 @@ interface StartInstanceResponse {
 /**
  * Component to start an instance for a machine.
  */
-const StartInstanceButton: React.FC<StartInstanceButtonProps> = ({ machineId, onInstanceStarted, disabled = false }) => {
+const StartInstanceButton: React.FC<StartInstanceButtonProps> = ({ machineId, onInstanceStarted }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { setInstanceStatus, setDownloadStatus } = usePlayContext();
 
   /**
    * Handles the instance start action.
@@ -39,6 +41,8 @@ const StartInstanceButton: React.FC<StartInstanceButtonProps> = ({ machineId, on
     try {
       const response: StartInstanceResponse = await startInstance(machineId);
       console.log('Instance started successfully:', response);
+      setInstanceStatus('running');
+      setDownloadStatus('completed');
       onInstanceStarted();
     } catch (err: any) {
       console.error('Error starting instance:', err);
@@ -55,17 +59,17 @@ const StartInstanceButton: React.FC<StartInstanceButtonProps> = ({ machineId, on
         <h2>Spawn Machine</h2>
       </div>
       <h3>Create machine and Start hacking.</h3>
-      <div className={`start-instance-btn ${disabled ? "disabled" : ""}`}>
+      <div className={`start-instance-btn ${loading ? "disabled" : ""}`}>
         <label className="download-label">
           <input
             type="checkbox"
             className="download-input"
-            onClick={handleStartInstance} // 기존의 onClick 동작
-            disabled={ disabled || loading} // 기존의 disabled 상태 반영
+            onClick={handleStartInstance}
+            disabled={loading}
           />
           <span className="download-circle">
             {loading ? (
-              <LoadingIcon /> // 로딩 상태일 때 LoadingIcon 렌더링
+              <LoadingIcon />
             ) : (
               <IoIosPlay size={30}/>
             )}

@@ -6,6 +6,7 @@ import '../../assets/scss/play/SubmitFlagForm.scss';
 import { LuFlag } from "react-icons/lu";
 import { CiLock } from "react-icons/ci";
 import MachineCompleteModal from '../../components/modal/MachineCompleteModal';
+import { usePlayContext } from '../../contexts/PlayContext';
 
 /**
  * Props interface for SubmitFlagForm component.
@@ -14,7 +15,6 @@ interface SubmitFlagFormProps {
   machineId: string;
   playType: 'machine' | 'contest';
   contestId?: string; // Optional, required only for contest mode
-  disabled?: boolean; // Added optional disabled prop
   onFlagSuccess: () => void;
 }
 
@@ -37,11 +37,14 @@ interface SubmitFlagResponse {
 /**
  * Component for submitting a flag for a machine or contest.
  */
-const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, contestId, disabled = false, onFlagSuccess }) => {
+const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, contestId, onFlagSuccess }) => {
   const [flag, setFlag] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [errors, setErrors] = useState<ErrorMessage[]>([]);
   const [showModal, setShowModal] = useState(false);
+
+  const { instanceStatus, setSubmitStatus } = usePlayContext();
+  const disabled = instanceStatus !== 'running';
 
   /**
    * Handles the flag submission form.
@@ -116,10 +119,9 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
         setErrors([{ msg: error.msg || error }]);
       }
     }
-  };
 
-  const handleCloseModal = () => {
-    setShowModal(false); // 모달 닫기
+    setSubmitStatus('flag-success');
+    setShowModal(true);
   };
 
   return (
@@ -138,7 +140,7 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
           onChange={(e) => setFlag(e.target.value)}
           placeholder="Enter flag here"
           required
-          disabled={disabled} // Disable input when disabled
+          disabled={disabled}
         />
         <button
           type="submit"
@@ -149,9 +151,9 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
         </button>
       </form>
 
-      {/* 모달을 조건부로 표시 */}
+      {/* Modal */}
       {showModal && (
-        <MachineCompleteModal onClose={handleCloseModal} />
+        <MachineCompleteModal onClose={() => setShowModal(false)} />
       )}
     </div>
   );

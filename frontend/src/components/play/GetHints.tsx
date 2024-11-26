@@ -5,7 +5,7 @@ import LoadingIcon from '../public/LoadingIcon';
 import '../../assets/scss/play/GetHints.scss';
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
-
+import { usePlayContext } from '../../contexts/PlayContext';
 /**
  * Props interface for GetHints component.
  */
@@ -33,12 +33,15 @@ interface ErrorMessage {
 /**
  * Component to fetch and display hints for a machine or contest.
  */
-const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId, disabled = false }) => {
+const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) => {
   const [hints, setHints] = useState<Hint[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<ErrorMessage | null>(null);
   const [hintsUsed, setHintsUsed] = useState<number>(0);
   const [remainingHints, setRemainingHints] = useState<number>(0);
+
+  const { instanceStatus } = usePlayContext();
+  const disabled = instanceStatus !== 'running';
 
   /**
    * Fetch used hints and progress for contest mode.
@@ -158,7 +161,7 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId, dis
         {loading ? (
           <LoadingIcon />
         ) : disabled || remainingHints === 0 ? (
-          <CiLock size={40} color="#ccc" /> // disabled일 때 아이콘 렌더링
+          <CiLock size={40} color="#ccc" />
         ) : (
           'Hint'
         )}

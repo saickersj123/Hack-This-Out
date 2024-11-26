@@ -1,30 +1,33 @@
 import React, { useState } from 'react';
 import GiveUpModal from '../modal/GiveUpModal';
 import '../../assets/scss/play/GiveUpButton.scss';
+import { usePlayContext } from '../../contexts/PlayContext';
+import { CiLock } from 'react-icons/ci';
 
 interface GiveUpButtonProps {
   machineId: string;
   contestId?: string;
   machineName: string;
   mode: "machine" | "contest";
-  disabled?: boolean; // Added optional disabled prop
 }
 
-const GiveUpButton: React.FC<GiveUpButtonProps> = ({ machineId, contestId, machineName, mode, disabled = false }) => {
+const GiveUpButton: React.FC<GiveUpButtonProps> = ({ machineId, contestId, machineName, mode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { instanceStatus } = usePlayContext();
 
   const handleClick = () => {
-    if (disabled) return; // Prevent opening modal if disabled
+    if (instanceStatus !== 'running') return; // Prevent opening modal if not running
     setIsModalOpen(true);
   };
-
+  const disabled = instanceStatus !== 'running';
   return (
     <>
       <button
         onClick={handleClick}
         disabled={disabled}
-        className='give-up-btn'>
-        Give up
+        className={`give-up-btn ${disabled ? "disabled" : ""}`}
+      >
+        {disabled ? <CiLock size={40} color="#ccc" /> : 'Give up'}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -41,7 +44,6 @@ const GiveUpButton: React.FC<GiveUpButtonProps> = ({ machineId, contestId, machi
           ></path>
         </svg>
       </button>
-
 
       <GiveUpModal
         isOpen={isModalOpen}
