@@ -5,10 +5,15 @@
     color: var(--color-white);
     width: 100%;
     height: 170px;
-    background-color: var(--blue-400);
+    background-color: var(--color-layout);
+    border: 2px solid var(--color-white);
     border-radius: 24px;
     padding: 24px;
     gap: 8px;
+
+    &:hover {
+        border: 2px solid var(--blue-200);
+    }
 
     .upper-text {
         display: flex;
@@ -45,8 +50,8 @@
 .start-instance-btn {
     /* From Uiverse.io by Na3ar-17 */
     .download-label {
-        background-color: var(--blue-400);
-        border: 2px solid var(--blue-200);
+        background-color: var(--color-layout);
+        border: 2px solid var(--color-white);
         display: flex;
         align-items: center;
         border-radius: 50px;
@@ -101,7 +106,8 @@
         height: 45px;
         width: 45px;
         border-radius: 50%;
-        background-color: var(--blue-300);
+        background-color: var(--color-layout);
+        border: 2px solid var(--color-white);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -140,7 +146,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        background-color: #3333a8;
+        background-color: var(--blue-300);
         width: 100%;
         height: 0;
         transition: all 0.4s ease;

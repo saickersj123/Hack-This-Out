@@ -5,17 +5,103 @@
     top: 0;
     left: 0;
     z-index: 0;
-    background: linear-gradient(to bottom, #0b1f65, #16488f, #0c2144, #071125);
+    background: var(--secondary-layout);
+    overflow: hidden;
+
+    // Updated floating circles with new colors and opacity
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.08;  // Slightly reduced opacity
+        animation: float 20s infinite ease-in-out;
+    }
+
+    &::before {
+        width: 45vw;
+        height: 45vw;
+        background: var(--lightblue-200);  // Using lighter blue for better contrast
+        top: -15%;
+        right: -10%;
+        animation-delay: -3s;
+    }
+
+    &::after {
+        width: 35vw;
+        height: 35vw;
+        background: var(--blue-300);  // Using mid-tone blue
+        bottom: -5%;
+        left: -5%;
+        animation-duration: 25s;
+    }
+
+    // Updated geometric patterns
+    .geometric {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            width: 25vw;
+            height: 25vw;
+            border: 3px solid var(--lightblue-200);  // Thicker border, lighter color
+            opacity: 0.15;
+            top: 35%;
+            left: 45%;
+            transform: rotate(45deg);
+            animation: rotate 30s infinite linear;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 20vw;
+            height: 20vw;
+            border: 2px solid var(--blue-200);  // Lighter border color
+            opacity: 0.12;
+            top: 15%;
+            right: 20%;
+            transform: rotate(30deg);
+            animation: rotate 25s infinite linear reverse;
+        }
+    }
+}
+
+// Enhanced animation keyframes
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translateY(60px) rotate(5deg) scale(1.05);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg) scale(1);
+    }
+    50% {
+        transform: rotate(180deg) scale(0.95);
+    }
+    to {
+        transform: rotate(360deg) scale(1);
+    }
 }
 
 .main_container {
     position: relative;
+    z-index: 1;
     display: flex;
     width: 100%;
     height: 100vh;
     transition: padding-left 1s ease;
     overflow: hidden;
     flex-direction: column;
+    
 
     .sidebar_container {
         position: fixed;

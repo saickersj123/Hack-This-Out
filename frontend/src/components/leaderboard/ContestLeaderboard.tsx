@@ -94,7 +94,7 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
                 {/* Pagination Buttons */}
                 <div className={styles.pagination}>
                     <button
-                        className={styles.page_button}
+                        className={styles.page_button_left}
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
                     >
@@ -110,7 +110,7 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
                         </button>
                     ))}
                     <button
-                        className={styles.page_button}
+                        className={styles.page_button_right}
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
                     >

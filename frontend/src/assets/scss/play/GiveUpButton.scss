@@ -2,7 +2,6 @@
 .give-up-btn {
   cursor: pointer;
   font-weight: 700;
-  transition: all 0.2s;
   padding: 10px 20px;
   border-radius: 100px;
   background-color: transparent;
@@ -11,11 +10,14 @@
   align-items: center;
   font-size: 21px;
   color: white;
+  transition: all 0.3s ease-in-out;
 }
 
 .give-up-btn:hover {
-  border: none;
+  transform: translateX(-2px);
+  border: 2px solid transparent;
   background: var(--color-red-rosso);
+  filter: drop-shadow(0 0 10px var(--color-red-rosso));
 }
 
 .give-up-btn>svg {

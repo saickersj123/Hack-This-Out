@@ -25,7 +25,7 @@
         position: sticky;
         top: 0;
         z-index: 100;
-        background-color: var(--blue-500);
+        background-color: var(--color-layout);
         backdrop-filter: blur(10px);
         padding: 16px 0px;
         display: flex;
@@ -43,7 +43,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: var(--blue-500);
+            background-color: var(--color-layout);
             z-index: -1;
         }
 
@@ -60,7 +60,7 @@
             margin-top: 0;
             width: 40px;
             height: 40px;
-            background-color: var(--blue-500);
+            background-color: var(--color-layout);
             border-radius: 5px;
             transition: background-color 0.3s;
             cursor: pointer;
@@ -68,7 +68,7 @@
             margin-left: 16px;
             transition: all 0.3s ease;
             &:hover {
-                background-color: var(--blue-200);
+                background-color: var(--blue-400);
                 transform: translateX(-0.3rem);
             }
         }
@@ -170,7 +170,7 @@
         .add-machine-container {
             button {
                 padding: 0.47rem 0.6rem;
-                background-color: var(--blue-500);
+                background-color: var(--color-layout);
                 color: white;
                 border: 2px solid var(--color-white);
                 border-radius: 20px;
@@ -182,14 +182,16 @@
                 margin-top: 0; // Add this
                 transition: all 0.3s ease;
                 &:hover {
-                    background-color: var(--blue-200);
+                    background-color: var(--blue-400);
                     border: 2px solid transparent;
+                    filter: drop-shadow(0 0 10px var(--blue-500));
                     transform: translateY(-2px);
                 }
 
                 &.delete-machine {
                     &:hover {
                         background-color: #c9302c;
+                        filter: drop-shadow(0 0 10px var(--danger));
                         transform: translateY(-2px);
                     }
                 }
@@ -254,7 +256,7 @@
             button[type="submit"] {
                 padding: 0.75rem 1.5rem;
                 font-weight: bold;
-                background-color: var(--blue-500);
+                background-color: var(--color-layout);
                 color: white;
                 border: 2px solid var(--color-white);
                 border-radius: 20px;
@@ -262,8 +264,9 @@
                 transition: all 0.3s ease;
     
                 &:hover {
-                    background-color: var(--blue-200);
+                    background-color: var(--blue-400);
                     border: 2px solid transparent;
+                    filter: drop-shadow(0 0 10px var(--blue-500));
                     transform: translateY(-2px);
                 }
             }

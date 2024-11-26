@@ -21,7 +21,7 @@
     .banner-slide {
       padding: clamp(16px, 2vw, 32px);
       height: clamp(250px, 28vh, 400px);
-      background: linear-gradient(to bottom, #071125,#0b1f65, #16488f, #0c2144, #071125);
+      background: var(--color-layout);
       @include flex_center;
       
       .banner-contents {
@@ -84,8 +84,9 @@
           width: min(80%, 175px);
           min-width: 77px;
           border-radius: 4px;
-          background-color: var(--blue-500);
+          background-color: var(--color-layout);
           height: 77px;
+          border: 2px solid var(--color-white);
 
           .banner-exp {
             padding-left: clamp(4px, 1vw, 8px);
@@ -102,21 +103,22 @@
         }
 
         .go-to-machine-btn {
-          background: var(--blue-500);
+          background: var(--color-layout);
           color: var(--color-white);
           transition: all 0.3s ease-in-out;
 
           &:hover {
-            background: var(--blue-200);
+            background: var(--blue-400);
             transform: translateY(-2px);
             filter: drop-shadow(0 0 10px var(--blue-500));
+            border: 2px solid transparent;
           }
           justify-self: center;
           width: 80%;
           min-width: 175px;
           grid-column: 3;
           grid-row: 4;
-          border: none;
+          border: 2px solid var(--color-white);
           border-radius: 4px;
           cursor: pointer;
           white-space: nowrap;

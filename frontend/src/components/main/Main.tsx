@@ -26,7 +26,10 @@ const Main: React.FC<MainProps> = ({ title, description, children }) => {
         <meta name="description" content={description} />
       </Helmet>
 
-      <div className={styles.background}/>
+      <div className={styles.background}>
+        <div className={styles.geometric}></div>
+      </div>
+
       <div className={styles.main_container}>
         <div className={`${styles.sidebar_container} ${isCollapsed ? styles.collapsed : ''}`}>
           <Sidebar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />

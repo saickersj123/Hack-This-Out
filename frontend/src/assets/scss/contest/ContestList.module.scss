@@ -11,6 +11,8 @@
     gap: clamp(8px, 1.5vw, 12px);
     border-radius: clamp(16px, 2vw, 24px);
     border: 1px solid var(--blue-200);
+    transition: all 0.3s ease-in-out;
+
     @media (max-width: 768px) {
         padding: 16px;
         gap: 8px;
@@ -47,13 +49,15 @@
             font-size: clamp(0.875rem, 1.5vw, var(--font-size-small));
 
             &:hover {
-                background: var(--blue-200);
+                background: var(--blue-400);
                 transform: translateY(-2px);
+                filter: drop-shadow(0 0 10px var(--blue-500));
             }
         }
 
         .active {
-            background: var(--blue-300);
+            filter: drop-shadow(0 0 10px var(--blue-300));
+            transform: translateY(-2px);
         }
     }
 
@@ -226,12 +230,13 @@
               height: clamp(32px, 5vw, 40px);
               border: 2px solid transparent;
               border-radius: 50%;
-              background-color: var(--blue-500);
+              background-color: var(--color-layout);
               transition: all 0.3s ease-in-out;
               cursor: pointer;
 
               &:hover {
-                background-color: var(--blue-200);
+                background-color: var(--blue-400);
+                filter: drop-shadow(0 0 10px var(--blue-500));
                 transform: translateY(-2px);
               }
             }

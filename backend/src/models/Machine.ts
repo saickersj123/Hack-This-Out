@@ -62,7 +62,6 @@ const MachineSchema = new mongoose.Schema({
     amiId: { 
         type: String,
         required: true,
-        unique: true
     },
     flag: { 
         type: String,

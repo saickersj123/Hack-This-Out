@@ -3,7 +3,7 @@
     height: 100%;
     position: relative;
     border-radius: clamp(16px, 3vw, 30px);
-    background: linear-gradient(to bottom, #071125, #0b1f65, #16488f, #0c2144, #071125);
+    background: var(--secondary-layout);
 
     .box_upper_content {
         display: flex;
@@ -123,8 +123,8 @@
                 flex-direction: column;
                 justify-content: center;
                 width: clamp(140px, 15vw, 180px);
-                border-radius: clamp(4px, 1vw, 24px);
-                background-color: var(--blue-500);
+                border-radius: clamp(4px, 2vw, 8px);
+                background-color: var(--color-layout);
                 height: clamp(60px, 8vh, 77px);
                 font-weight: 600;
 

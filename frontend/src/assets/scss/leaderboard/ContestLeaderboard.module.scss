@@ -85,25 +85,60 @@
       align-items: center;
       justify-content: center;
 
-      .page_button {
+      .page_button_left,
+      .page_button_right {
         display: flex;
         align-items: center;
         justify-content: center;
         color: var(--color-white);
-        border-radius: 6px;
+        background: var(--color-layout);
+        border-radius: 5px;
+        margin-left: 16px;
+        margin-right: 16px;
+        width: 30px;
+        height: 30px;
+        transition: all 0.3s ease-in-out;
+      }
 
-        margin-left: 20px;
-        margin-right: 20px;
+      .page_button_left {
+        &:hover {
+          background: var(--blue-400);
+          transform: translateX(-2px);
+          filter: drop-shadow(0 0 10px var(--blue-500));
+        }
+      }
 
-        width: 20px;
-        height: 100%;
+      .page_button_right {
+        &:hover {
+          background: var(--blue-400);
+          transform: translateX(2px);
+          filter: drop-shadow(0 0 10px var(--blue-500));
+        }
       }
 
       .number_button {
         background: none;
-        width: 20px;
-        height: 100%;
+        width: 30px;
+        height: 30px;
         color: var(--color-white);
+        transition: all 0.3s ease-in-out;
+        font-weight: 700;
+        border-radius: 4px;
+        &.active {
+          border: 1px solid var(--blue-200);
+          transform: translateY(-2px);
+          filter: drop-shadow(0 0 10px var(--blue-200));
+          &:hover {
+            background-color: var(--blue-400);
+            border: 1px solid transparent;
+          }
+        }
+  
+        &:hover {
+          background-color: var(--blue-400);
+          filter: drop-shadow(0 0 10px var(--blue-500));
+          transform: translateY(-2px);
+        }
       }
     }
   }

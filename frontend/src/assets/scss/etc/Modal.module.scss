@@ -35,6 +35,7 @@
       &:hover {
         color: var(--blue-200);
         transform: translateX(-2px);
+        filter: drop-shadow(0 0 10px var(--blue-200));
       }
 
       svg {

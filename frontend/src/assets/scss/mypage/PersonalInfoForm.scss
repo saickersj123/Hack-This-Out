@@ -51,43 +51,43 @@
 
                 .avatar-input {
                     width: 120px;
-                    padding: 10px 16px;
+                    padding: 10px;
                     background: rgba(255, 255, 255, 0.08);
                     border-radius: 10px;
                     color: var(--color-white);
                     cursor: pointer;
                     transition: all 0.3s ease-in-out;
-                    font-weight: 500;
+                    font-weight: 600;
                     white-space: nowrap;
                     text-align: center;
                     line-height: 1.2;
 
                     &:hover {
-                        background: rgba(255, 255, 255, 0.12);
                         transform: translateY(-2px);
-                        background-color: var(--blue-200);
+                        background-color: var(--blue-400);
+                        filter: drop-shadow(0 0 10px var(--blue-500));
                     }
                 }
 
                 .avatar-button { 
-                    //@include button_color;
-                    width: 60px;
+                    width: 64px;
                     height: 36px;
-                    padding: 0;
+                    padding: 10px;
                     border-radius: 10px;
                     background: var(--color-primary);
                     color: var(--color-white);
                     border: none;
                     cursor: pointer;
                     transition: all 0.3s ease-in-out;
-                    font-weight: 500;
+                    font-weight: 600;
                     display: flex;
                     align-items: center;
                     justify-content: center;
 
                     &:hover {
-                        background: var(--color-primary-dark);
-                        transform: translateY(-1px);
+                        background: var(--blue-400);
+                        transform: translateY(-2px);
+                        filter: drop-shadow(0 0 10px var(--blue-500));
                     }
                 }
             }
@@ -113,7 +113,7 @@
 
                 &:hover {
                     background: rgba(255, 255, 255, 0.04);
-                    background-color: var(--blue-200);
+                    filter: drop-shadow(0 0 10px var(--blue-200));
                     transform: translateY(-2px);
                 }
 
@@ -176,9 +176,9 @@
             margin-right: 5px;
 
             &:hover {
-                background: var(--blue-200);
+                background: var(--blue-400);
                 transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                filter: drop-shadow(0 0 10px var(--blue-500));
             }
         }
 
@@ -239,9 +239,9 @@
                 font-weight: 600;
 
                 &:hover {
-                    background: var(--blue-200);
+                    background: var(--blue-400);
                     transform: translateY(-2px);
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    filter: drop-shadow(0 0 10px var(--blue-500));
                 }
             }
         }
@@ -251,7 +251,8 @@
             border: 2px solid var(--color-primary);
             
             &:hover {
-                background: var(--blue-200);
+                background: var(--blue-400);
+                filter: drop-shadow(0 0 10px var(--blue-500));
             }
         }
     }

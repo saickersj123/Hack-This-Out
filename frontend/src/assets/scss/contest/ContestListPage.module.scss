@@ -57,9 +57,10 @@
             }
 
             &:hover {
-                background: var(--blue-200);
+                background: var(--blue-400);
                 transform: translateY(-2px);
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                border: 1px solid transparent;
 
                 .machine,
                 .plus,

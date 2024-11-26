@@ -37,11 +37,12 @@
             height: clamp(36px, 6vh, 48px);
             box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08), 0px 4px 8px rgba(44, 39, 56, 0.08);
             border-radius: 6px;
-            background: var(--blue-500);
+            background: var(--color-layout);
             color: var(--color-white);
             font-size: clamp(14px, 2vw, 16px);
             transition: all 0.3s ease-in-out;
             cursor: pointer;
+            border: 2px solid transparent;
             @media (max-width: 768px) {
                 position: relative;
                 right: auto;
@@ -51,7 +52,8 @@
             }
 
             &:hover {
-                background: var(--blue-200);
+                background: var(--blue-400);
+                border: 2px solid transparent;
                 transform: translateY(-2px);
                 filter: drop-shadow(0 0 10px var(--blue-500));
             }
@@ -92,7 +94,7 @@
                 }
 
                 button {
-                    background-color: var(--blue-500);
+                    background-color: var(--color-layout);
                     color: white;
                     border: 2px solid var(--color-white);
                     border-radius: 20px;
@@ -103,8 +105,9 @@
                     transition: all 0.3s ease-in-out;
 
                     &:hover {
-                        background-color: var(--blue-200);
+                        background-color: var(--blue-400);
                         border: 2px solid transparent;
+                        filter: drop-shadow(0 0 10px var(--blue-500));
                         transform: translateY(-2px);
                     }
                 }

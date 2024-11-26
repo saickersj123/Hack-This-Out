@@ -4,10 +4,16 @@
     color: var(--color-white);
     width: 100%;
     height: 170px;
-    background-color: var(--blue-400);
+    background-color: var(--color-layout);
+    border: 2px solid var(--color-white);
     border-radius: 24px;
     padding: 24px;
     gap: 8px;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        border: 2px solid var(--blue-200);
+    }
 
     .upper-text {
         display: flex;
@@ -21,28 +27,32 @@
     
     .flag-form {
         position: relative; 
-
+        padding-top: 10px;
         .flag-input {
             margin-left: 30px;
-            height: 60px;
+            height: 50px;
             width: 470px;
-            background-color: var(--blue-200);
+            background-color: var(--secondary-layout);
             border-radius: 24px;
             padding-left: 30px;
             font-size: var(--font-size-small);
             color: var(--color-white);
             
+            &:hover {
+                border: 2px solid var(--blue-200);
+            }
+
             &:focus {
                 outline: none;
-                border: none;
+                border: 2px solid var(--color-white);
             }
         }
     
         .submit-flag-button {
             position: absolute;
             right: 0;
-            background-color: var(--blue-400);
-            border: 2px solid var(--blue-400);
+            background-color: var(--color-layout);
+            border: 2px solid var(--color-white);
             white-space: nowrap;
             border-radius: 50px;
             width: 160px;
@@ -55,12 +65,12 @@
             justify-content: center;
             color: var(--color-white);
             cursor: pointer;
-            border: 2px solid var(--blue-200);
             transition: all 0.3s ease-in-out;
 
             &:hover {
-                background-color: var(--blue-100);
-                color: var(--color-gray-400);
+                border: 2px solid transparent;
+                background-color: var(--blue-400);
+                filter: drop-shadow(0 0 10px var(--blue-500));
                 transform: translateY(-2px);
             }
         }

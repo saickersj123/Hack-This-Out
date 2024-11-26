@@ -223,13 +223,14 @@
           height: clamp(32px, 5vw, 40px);
           border: 2px solid transparent;
           border-radius: 50%;
-          background-color: var(--blue-500);
+          background-color: var(--color-layout);
           transition: all 0.3s ease;
           cursor: pointer;
 
           &:hover {
-            background-color: var(--blue-200);
+            background-color: var(--blue-400);
             transform: translateY(-2px);
+            filter: drop-shadow(0 0 10px var(--blue-500));
           }
         }
       }
