@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--blue-500);
+    background-color: var(--color-layout);
     border-radius: 10px;
     margin: 0;
 }
@@ -13,7 +13,7 @@
     width: 600px;
     height: 600px;
     border-radius: 10px;
-    background-color: var(--blue-500);
+    background-color: var(--color-layout);
     place-items: center;
     
     .sign-up-title h1 {
@@ -47,23 +47,23 @@
         input {
             width: 100%;
             height: 100%;
-            background: #ddd;
+            background: var(--secondary-layout);
             outline: none;
-            border: 2px solid rgba(255, 255, 255);
+            border: 2px solid transparent;
             border-radius: 10px;
             font-size: 16px;
-            color: #333;
+            color: var(--color-white);
             padding-left: 20px;
             transition: all 0.3s ease-in-out;
 
             &::placeholder {
                 font-weight: 600;
-                color: var(--blue-500);
+                color: var(--color-white);
             }
 
             &:focus {
-                border: 2px solid var(--blue-500);
                 transform: translateX(2px);
+                filter: drop-shadow(0 0 10px var(--blue-200));
             }
 
         }
@@ -79,14 +79,15 @@
         border: 2px solid var(--color-white);
         border-radius: 10px;
         color: var(--color-white);
-        background-color: var(--blue-500);
+        background-color: var(--color-layout);
         margin-top: 20px;
         cursor: pointer;
         transition: all 0.3s ease-in-out;
 
         &:hover {
-            background-color: var(--blue-200);
+            background-color: var(--blue-400);
             color: var(--color-white);
+            filter: drop-shadow(0 0 10px var(--blue-500));
             transform: translateY(-2px);
             border: 2px solid transparent;
         }
