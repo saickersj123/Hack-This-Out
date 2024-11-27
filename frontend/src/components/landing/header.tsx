@@ -10,7 +10,7 @@ type HeaderProps = {
 
 export const Header: React.FC<HeaderProps> = ({ data }) => {
   return (
-    <header className="header">
+    <header id="header" className="header">
       <div className="intro">
         <div className="overlay">
           <div className="header-container">

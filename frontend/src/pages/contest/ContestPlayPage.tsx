@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getContestDetails } from '../../api/axiosContest';
 import { getInstanceByMachine } from '../../api/axiosInstance';
-import DisplayReward from '../../components/play/DisplayReward';
 import GetHints from '../../components/play/GetHints';
 import StartInstanceButton from '../../components/play/StartInstanceButton';
 import DownloadVPNProfile from '../../components/play/DownloadVPNProfile';
@@ -13,10 +12,11 @@ import GiveUpButton from '../../components/play/GiveUpButton';
 import StatusIcon from '../../components/play/StatusIcon';
 import Main from '../../components/main/Main';
 import { ContestDetail, Machine } from '../../types/Contest';
-import { Instance } from '../../types/Instance';
 import '../../assets/scss/contest/ContestPlayPage.scss';
 import Loading from '../../components/public/Loading';
 import ErrorIcon from '../../components/public/ErrorIcon';
+import { PlayProvider, usePlayContext } from '../../contexts/PlayContext';
+import { BsListCheck } from "react-icons/bs";
 
 /**
  * Interface for API response when fetching contest details.
@@ -34,10 +34,19 @@ const ContestPlayPage: React.FC = () => {
   const [contest, setContest] = useState<ContestDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedMachine, setSelectedMachine] = useState<Machine | null>(null);
-  const [instanceStatus, setInstanceStatus] = useState<Instance['status']>(null);
   const [instanceStarted, setInstanceStarted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [submitStatus, setSubmitStatus] = useState<'flag' | 'flag-success'>('flag');
+
+  const {
+    instanceStatus,
+    setInstanceStatus,
+    downloadStatus,
+    submitStatus,
+    setSubmitStatus,
+  } = usePlayContext();
+
+  // Ref to the container for scrolling and class manipulation
+  const containerRef = useRef<HTMLDivElement>(null);
 
 
   // Fetch contest details and check for existing instance when component mounts
@@ -69,9 +78,9 @@ const ContestPlayPage: React.FC = () => {
   // Handle machine selection
   const handleMachineSelect = async (machine: Machine) => {
     setSelectedMachine(machine);
-    setInstanceStarted(false); // Reset instanceStarted when selecting a new machine
+    setInstanceStarted(false);
     setInstanceStatus(null); // Reset instance status
-
+    
     // Check for existing instance for the selected machine within the contest
     try {
       const instanceResponse = await getInstanceByMachine(machine._id);
@@ -121,9 +130,10 @@ const ContestPlayPage: React.FC = () => {
       </Main>
     );
   }
-
+  
   // Determine if controls should be disabled based on instance status
   const isRunning = instanceStatus === 'running';
+
 
   const handleFlagSuccess = () => {
     setSubmitStatus('flag-success'); // 정답을 제출했을 때 상태를 flag-success로 변경
@@ -132,80 +142,92 @@ const ContestPlayPage: React.FC = () => {
   return (
     <Main>
       <div className="contest-play-container">
-        <div className="contest-play-title">
-          <h2>Contest Play</h2>
-        </div>
         <div className="contest-play-name">
-          <h3>Contest: {contest.name}</h3>
-        </div>
-        <div className="contest-play-timer">
+          <h3><b>{contest.name}</b></h3>
           <Timer endTime={new Date(contest.endTime)} />
         </div>
-
-        {/* List of Machines */}
-        <div className="select-machines">
-          <h3>Select a Machine:</h3>
-          <ul className="select-machine-list">
-            {contest.machines.map((machine) => (
-              <li
-                key={machine._id}
-                className={`select-machine-item ${selectedMachine?._id === machine._id ? 'selected' : ''
-                  }`}
-                onClick={() => handleMachineSelect(machine)}
-                style={{
-                  cursor: 'pointer',
-                  padding: '10px',
-                  border: selectedMachine?._id === machine._id ? '2px solid blue' : '1px solid #ccc',
-                  marginBottom: '5px',
-                  borderRadius: '4px',
-                }}
-              >
-                {machine.name}
-              </li>
-            ))}
-          </ul>
+        <div className='contest-upper-content'>
+          {/* List of Machines */}
+          <div className="select-machines">
+            <div className='select-text'>
+              <BsListCheck size={40} color="white" />
+              <h2><b>Select a Machine</b></h2>
+            </div>
+            <select
+              className="select-machine-dropdown"
+              value={selectedMachine?._id || ''}
+              onChange={(e) => {
+                const selectedId = e.target.value;
+                const machine = contest.machines.find((m) => m._id === selectedId);
+                if (machine) {
+                  handleMachineSelect(machine);
+                }
+              }}
+            >
+              <option value="" disabled>
+                Machine
+              </option>
+              {contest.machines.map((machine) => (
+                <option key={machine._id} value={machine._id}>
+                  {machine.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {selectedMachine ? (
           <>
-            <div className="contest-play-name">
-              <h3>Now Playing: {selectedMachine.name}</h3>
+            <div className={`selected-machine-container ${submitStatus === 'flag-success' ? 'flag-success' : ''}`} ref={containerRef}>
+              <div className="contest-play-name">
+                <h3><b>Now Playing: {selectedMachine.name.charAt(0).toUpperCase() + selectedMachine.name.slice(1)}</b></h3>
+                <GiveUpButton
+                  contestId={contestId}
+                  machineId={selectedMachine._id}
+                  machineName={contest.name}
+                  mode="contest"
+                />
+              </div>
+              <div className='download-box'>
+                {(instanceStatus === 'running' || instanceStatus === 'pending') ? (
+                  <>
+                    <StatusIcon status={'completed'} />
+                  </>
+                ) : (<StatusIcon status={downloadStatus || 'idle'} />)}
+                <DownloadVPNProfile />
+              </div>
+              {/* Conditionally render StartInstanceButton or InstanceInfo */}
+              <div className='btn-box'>
+                <StatusIcon status={instanceStatus || 'idle'} />
+                <div className='instance-hint-box'>
+                  {!instanceStarted ? (
+                    <StartInstanceButton
+                      machineId={selectedMachine._id}
+                      onInstanceStarted={handleInstanceStarted}
+                    />
+                  ) : (
+                    <InstanceInfo
+                      machineId={selectedMachine._id}
+                    />
+                  )}
+                  <GetHints
+                    machineId={selectedMachine._id}
+                    playType="contest"
+                    contestId={contestId}
+                    disabled={!isRunning} // Disable based on instance status
+                  />
+                </div>
+              </div>
+              <div className='submit-box'>
+                <StatusIcon status={submitStatus || 'idle'} />
+                <SubmitFlagForm
+                  contestId={contestId}
+                  machineId={selectedMachine._id}
+                  playType="contest"
+                  onFlagSuccess={handleFlagSuccess}
+                />
+              </div>
             </div>
-            <DisplayReward reward={contest.contestExp} />
-            <DownloadVPNProfile
-            />
-            {/* Conditionally render StartInstanceButton or InstanceInfo */}
-            {!instanceStarted ? (
-              <StartInstanceButton
-                machineId={selectedMachine._id}
-                onInstanceStarted={handleInstanceStarted} // Pass the callback
-              />
-            ) : (
-              <InstanceInfo
-                machineId={selectedMachine._id}
-              />
-            )}
-
-            <GetHints
-              machineId={selectedMachine._id}
-              playType="contest"
-              contestId={contestId}
-              disabled={!isRunning} // Disable based on instance status
-            />
-            <StatusIcon status={submitStatus} />
-            <SubmitFlagForm
-              contestId={contestId}
-              machineId={selectedMachine._id}
-              playType="contest"
-              onFlagSuccess={handleFlagSuccess}
-            />
-            <GiveUpButton
-              contestId={contestId}
-              machineId={selectedMachine._id}
-              machineName={selectedMachine.name}
-              mode="contest"
-            //disabled={!isRunning} // Disable based on instance status
-            />
           </>
         ) : (
           <div>Please select a machine to start playing.</div>
@@ -215,4 +237,13 @@ const ContestPlayPage: React.FC = () => {
   );
 };
 
-export default ContestPlayPage;
+/**
+ * Wrap MachinePlayPage with PlayProvider to provide context.
+ */
+const ContestPlayPageWithProvider: React.FC = () => (
+  <PlayProvider>
+    <ContestPlayPage />
+  </PlayProvider>
+);
+
+export default ContestPlayPageWithProvider;
