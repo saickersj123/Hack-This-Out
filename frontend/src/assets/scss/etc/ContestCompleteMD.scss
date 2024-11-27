@@ -1,0 +1,36 @@
+@use "../style" as *;
+.contest-complete-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: clamp(300px, 100%, 550px);
+    gap: 10px;
+
+    .title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--color-white);
+    }
+    .content {
+        font-size: 18px;
+        font-weight: 400;
+        color: var(--color-white);
+    }
+    .redirect-button {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        position: relative; 
+        @include button_color;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        &:hover {
+            border: 2px solid transparent;
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 10px var(--blue-500));
+        }
+    }
+}

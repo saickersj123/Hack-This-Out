@@ -331,3 +331,17 @@ export const getContestParticipations = async () => {
     throw error.response ? error.response.data : new Error('Failed to fetch contest participation');
   }
 };
+
+/**
+ * Get contest participation details.
+ * @param {string} contestId - The ID of the contest.
+ * @returns {Promise<Object>} - The response data containing contest participation details.
+ */
+export const getContestParticipationDetails = async (contestId: string) => {
+  try {
+    const response = await axiosInstance.get(`/contest/${contestId}/participation`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : new Error('Failed to fetch contest participation details');
+  }
+};

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getContestDetails } from '../../api/axiosContest';
+import { getContestDetails, getContestParticipationDetails } from '../../api/axiosContest';
 import { getInstanceByMachine } from '../../api/axiosInstance';
 import GetHints from '../../components/play/GetHints';
 import StartInstanceButton from '../../components/play/StartInstanceButton';
@@ -17,6 +17,7 @@ import Loading from '../../components/public/Loading';
 import ErrorIcon from '../../components/public/ErrorIcon';
 import { PlayProvider, usePlayContext } from '../../contexts/PlayContext';
 import { BsListCheck } from "react-icons/bs";
+import ContestCompleteModal from '../../components/modal/ContestCompleteMD';
 
 /**
  * Interface for API response when fetching contest details.
@@ -24,6 +25,25 @@ import { BsListCheck } from "react-icons/bs";
 interface GetContestDetailsResponse {
   contest: ContestDetail;
   // Add other response properties if available
+}
+
+/**
+ * Interface for API response when fetching contest participation details.
+ */
+interface GetContestParticipationDetailsResponse {
+  participation: ContestParticipation;
+  // Add other response properties if available
+}
+
+/**
+ * Updated interface to match the participation structure from ContestController.ts
+ */
+interface ContestParticipation {
+  // ...other fields
+  machineCompleted: {
+    machine: string;
+    completed: boolean;
+  }[];
 }
 
 /**
@@ -36,7 +56,6 @@ const ContestPlayPage: React.FC = () => {
   const [selectedMachine, setSelectedMachine] = useState<Machine | null>(null);
   const [instanceStarted, setInstanceStarted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   const {
     instanceStatus,
     setInstanceStatus,
@@ -48,8 +67,12 @@ const ContestPlayPage: React.FC = () => {
   // Ref to the container for scrolling and class manipulation
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // State to track completed machines (store only machine IDs)
+  const [completedMachines, setCompletedMachines] = useState<string[]>([]);
+  // State to handle contest completion
+  const [isContestComplete, setIsContestComplete] = useState<boolean>(false);
 
-  // Fetch contest details and check for existing instance when component mounts
+  // Fetch contest details and participation details when component mounts
   useEffect(() => {
     const fetchData = async () => {
       if (!contestId) {
@@ -64,15 +87,34 @@ const ContestPlayPage: React.FC = () => {
         console.log('Contest Details:', contestResponse.contest); // Debugging
         setContest(contestResponse.contest);
 
+        // Fetch contest participation details
+        const participationResponse: GetContestParticipationDetailsResponse = await getContestParticipationDetails(contestId);
+        const participation = participationResponse.participation;
+
+        if (participation && participation.machineCompleted.length > 0) {
+          // Extract machine IDs where completed is true
+          const completed = participation.machineCompleted
+            .filter(mc => mc.completed)
+            .map(mc => mc.machine);
+          setCompletedMachines(completed);
+          console.log('Completed Machines:', completed); // Debugging
+
+          // Check if all machines are completed
+          if (completed.length === contestResponse.contest.machines.length) {
+            setIsContestComplete(true);
+          }
+        }
+
         setIsLoading(false);
       } catch (err: any) {
         console.error('Error fetching contest details:', err);
-        setError(err.msg || 'Failed to fetch contest details.');
+        setError(err.message || 'Failed to fetch contest details.');
         setIsLoading(false);
       }
     };
 
     fetchData();
+    setSelectedMachine(null);
   }, [contestId]);
 
   // Handle machine selection
@@ -80,7 +122,7 @@ const ContestPlayPage: React.FC = () => {
     setSelectedMachine(machine);
     setInstanceStarted(false);
     setInstanceStatus(null); // Reset instance status
-    
+
     // Check for existing instance for the selected machine within the contest
     try {
       const instanceResponse = await getInstanceByMachine(machine._id);
@@ -109,11 +151,27 @@ const ContestPlayPage: React.FC = () => {
     setInstanceStarted(true);
   };
 
+  // Callback when a flag is successfully submitted
+  const handleFlagSuccess = () => {
+    if (selectedMachine) {
+      setCompletedMachines((prev) => [...prev, selectedMachine._id]);
+      setSubmitStatus('flag-success');
+      console.log(`Machine ${selectedMachine._id} marked as completed.`);
+
+      // Check if all machines are completed
+      if (completedMachines.length + 1 === contest?.machines.length) {
+        setIsContestComplete(true);
+      } else {
+        // If there are machines left, reset the selected machine to hide the container
+        setSelectedMachine(null);
+      }
+    }
+  };
+
   if (error) {
     return (
       <Main>
         <div className="contest-play-container">
-          <h2>Contest Play</h2>
           <div className="error-message"><ErrorIcon /> {error}</div>
         </div>
       </Main>
@@ -124,20 +182,14 @@ const ContestPlayPage: React.FC = () => {
     return (
       <Main>
         <div className="contest-play-container">
-          <h2>Contest Play</h2>
           <Loading />
         </div>
       </Main>
     );
   }
-  
+
   // Determine if controls should be disabled based on instance status
   const isRunning = instanceStatus === 'running';
-
-
-  const handleFlagSuccess = () => {
-    setSubmitStatus('flag-success'); // 정답을 제출했을 때 상태를 flag-success로 변경
-  };
 
   return (
     <Main>
@@ -165,26 +217,32 @@ const ContestPlayPage: React.FC = () => {
               }}
             >
               <option value="" disabled>
-                Machine
+                Select a Machine
               </option>
               {contest.machines.map((machine) => (
-                <option key={machine._id} value={machine._id}>
-                  {machine.name}
+                <option
+                  key={machine._id}
+                  value={machine._id}
+                  disabled={completedMachines.includes(machine._id)}
+                >
+                  {machine.name} {completedMachines.includes(machine._id) && '(Completed)'}
                 </option>
               ))}
             </select>
           </div>
         </div>
 
-        {selectedMachine ? (
+        {/* Display selected machine container only if a machine is selected and contest is not complete */}
+        {selectedMachine && !isContestComplete ? (
           <>
             <div className={`selected-machine-container ${submitStatus === 'flag-success' ? 'flag-success' : ''}`} ref={containerRef}>
               <div className="contest-play-name">
                 <h3><b>Now Playing: {selectedMachine.name.charAt(0).toUpperCase() + selectedMachine.name.slice(1)}</b></h3>
                 <GiveUpButton
                   contestId={contestId}
+                  contestName={contest.name}
                   machineId={selectedMachine._id}
-                  machineName={contest.name}
+                  machineName={selectedMachine.name}
                   mode="contest"
                 />
               </div>
@@ -230,7 +288,13 @@ const ContestPlayPage: React.FC = () => {
             </div>
           </>
         ) : (
-          <div>Please select a machine to start playing.</div>
+          // Optionally, you can add a message or keep it empty when no machine is selected
+          <div className='no-machine-selected'></div>
+        )}
+
+        {/* Display ContestCompleteModal if contest is complete */}
+        {isContestComplete && (
+          <ContestCompleteModal onClose={() => setIsContestComplete(false)} />
         )}
       </div>
     </Main>
@@ -238,7 +302,7 @@ const ContestPlayPage: React.FC = () => {
 };
 
 /**
- * Wrap MachinePlayPage with PlayProvider to provide context.
+ * Wrap ContestPlayPage with PlayProvider to provide context.
  */
 const ContestPlayPageWithProvider: React.FC = () => (
   <PlayProvider>

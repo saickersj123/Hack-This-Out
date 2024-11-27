@@ -11,6 +11,7 @@ interface GiveUpModalProps {
   onClose: () => void;
   machineId: string;
   contestId?: string;
+  contestName?: string;
   machineName: string;
   mode : "machine" | "contest";
 }
@@ -20,6 +21,7 @@ const GiveUpModal: React.FC<GiveUpModalProps> = ({
   onClose,
   machineId,
   contestId,
+  contestName,
   machineName,
   mode
 }) => {
@@ -57,7 +59,11 @@ const GiveUpModal: React.FC<GiveUpModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className={styles.give_up_modal}>
         <div className={styles.textbox}>
-          <p className={styles.text}>Are you sure you want to give up on {machineName}?</p>
+          {mode === 'machine' ? (
+            <p className={styles.text}>Are you sure you want to give up <br /> on {machineName}?</p>
+          ) : (
+            <p className={styles.text}>Are you sure you want to give up <br /> on {contestName}?</p>
+          )}
           <p className={styles.warning_text}>Warning! All your progress will be lost!</p>
         </div>
         <div className={styles.button_group}>

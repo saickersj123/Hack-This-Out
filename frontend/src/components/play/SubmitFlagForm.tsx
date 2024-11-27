@@ -41,9 +41,9 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
   const [flag, setFlag] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [errors, setErrors] = useState<ErrorMessage[]>([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showMachineCompleteModal, setShowMachineCompleteModal] = useState(false);
 
-  const { instanceStatus, setSubmitStatus } = usePlayContext();
+  const { instanceStatus, setInstanceStatus, setSubmitStatus, setDownloadStatus } = usePlayContext();
   const disabled = instanceStatus !== 'running';
 
   /**
@@ -92,7 +92,7 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
         onFlagSuccess();
 
         // Flag submission successful, show modal instead of navigate
-        setShowModal(true);
+        setShowMachineCompleteModal(true);
       } else if (playType === 'contest') {
         if (!contestId) {
           setErrors([{ msg: 'Contest ID is required for contest mode.' }]);
@@ -107,9 +107,6 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
         }
         setMessage(response.msg || instanceResponse.msg || 'Flag submitted successfully for contest!');
         onFlagSuccess();
-
-        // Flag submission successful, show modal instead of navigate
-        setShowModal(true);
       }
     } catch (error: any) {
       // Handle different error structures
@@ -121,8 +118,14 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
     }
 
     setSubmitStatus('flag-success');
-    setShowModal(true);
   };
+
+
+  const resetPlayContext = () => {
+    setInstanceStatus(null);
+    setDownloadStatus('idle');
+    setSubmitStatus('flag');
+  }
 
   return (
     <div className="submit-flag-form">
@@ -130,7 +133,7 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
         <LuFlag size={40} color="white" />
         <h2>Submit Flag</h2>
       </div>
-      {message && <p className="message">{message}</p>}
+      {message && <p className="message"></p>}
       <form className="flag-form" onSubmit={handleSubmitFlag}>
         <input
           className={`flag-input ${disabled ? "disabled" : ""} ${errors.length ? "error shake-error" : ""}`}
@@ -152,8 +155,11 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
       </form>
 
       {/* Modal */}
-      {showModal && (
-        <MachineCompleteModal onClose={() => setShowModal(false)} />
+      {showMachineCompleteModal && (
+        <MachineCompleteModal onClose={() => {
+          setShowMachineCompleteModal(false);
+          resetPlayContext();
+        }} />
       )}
     </div>
   );

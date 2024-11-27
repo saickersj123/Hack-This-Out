@@ -15,6 +15,8 @@ const PreContestPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State to control Modal visibility
+  const [isCompleted, setIsCompleted] = useState<boolean>(false); // State to check if contest participation is completed
+  const [isFound, setIsFound] = useState<boolean>(false); // State to check if contest participation is found
   const navigate: NavigateFunction = useNavigate();
 
   /**
@@ -72,20 +74,21 @@ const PreContestPage: React.FC = () => {
 
       const participation = await participateInContest(contestId);
       if (participation) {
-        navigate(`/contest/${contestId}/play`);
+        setIsModalOpen(true);
       } else {
         setError(participation.msg);
       }
     } catch (error: any) {
       if (error.message === "FOUND") {
         // User has already participated and completed the contest
-        setIsModalOpen(true); // Open the modal instead of redirecting immediately
+        setIsFound(true); // Open the modal instead of redirecting immediately
         return;
       }
       // Check if the error response exists
       if (error.message === "COMPLETED") {
         // User has already completed the contest
-        setIsModalOpen(true); // Open the modal instead of redirecting immediately
+        setIsCompleted(true);
+
         return;
       }
       // Handle other specific status codes if needed
@@ -99,12 +102,20 @@ const PreContestPage: React.FC = () => {
   // Handler to close the modal and redirect to main
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    navigate(`/contest`);
   };
   
   const handleJoinContest = () => {
-    setIsModalOpen(false);
-    navigate(`/contest/${contestId}/play`);
+    if (isCompleted) {
+      setIsCompleted(true);
+      setIsModalOpen(false);
+    } else if (isFound) {
+      setIsFound(true);
+      setIsModalOpen(false);
+      navigate(`/contest/${contestId}/play`);
+    } else {
+      setIsModalOpen(false);
+      navigate(`/contest/${contestId}/play`);
+    }
   };
 
   const handleCompletedContest = () => {
@@ -140,8 +151,9 @@ const PreContestPage: React.FC = () => {
         </div>
       </div>
       {/* When user participated in the contest */}
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <div className={styles.modal_body}>
+      {isModalOpen && (
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <div className={styles.modal_body}>
           <div className={styles.contest_warning}>
             <div className={styles.contest_warning_title}>
               Warning
@@ -149,27 +161,40 @@ const PreContestPage: React.FC = () => {
             <p>
               Once you join the contest, progress will be recorded.
               <br />
-              If you leave the contest, you will be disqualified.
             </p>
           </div>
           <button onClick={handleJoinContest} className={styles.modal_button}>
-            Join Contest
+            Let's Go!
           </button>
           </div>
-      </Modal>
+        </Modal>
+      )}
       {/* When user already completed the contest */}
-      {error === "COMPLETED" && (
-        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+      {isCompleted && (
+        <Modal isOpen={isCompleted} onClose={handleCloseModal}>
           <div className={styles.modal_body}>
           <div className={styles.contest_warning}>
-            <p>
+            <div className={styles.contest_warning_title}>
               You have already completed the contest.
-            </p>
+            </div>
           </div>
           <button onClick={handleCompletedContest} className={styles.modal_button}>
-            Back to Contests
+            Go Back
           </button>
         </div>
+        </Modal>
+      )}
+      {/* When user already participated in the contest */}
+      {isFound && (
+        <Modal isOpen={isFound} onClose={handleCloseModal}>
+          <div className={styles.modal_body}>
+            <div className={styles.contest_warning}>
+                <p>You have been participating in the contest.</p>
+            </div>
+            <button onClick={handleJoinContest} className={styles.modal_button}>
+              Continue
+            </button>
+          </div>
         </Modal>
       )}
     </Main>

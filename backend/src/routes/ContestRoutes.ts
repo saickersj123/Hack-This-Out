@@ -22,7 +22,8 @@ import {
     getUsedHintsInContest,
     getMyRankInContest,
     getStartedContest,
-    getLatestContest
+    getLatestContest,
+    getContestParticipationDetails
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
@@ -48,6 +49,9 @@ ContestRoutes.get('/active', verifyToken, getActiveContests);
 
 // Route to get user contest participations
 ContestRoutes.get('/participations', verifyToken, getContestParticipations);
+
+// Route to get contest participation details
+ContestRoutes.get('/:contestId/participation', verifyToken, getContestParticipationDetails);
 
 // Route to participate in a contest
 ContestRoutes.post('/:contestId/participate', verifyToken, participateInContest);

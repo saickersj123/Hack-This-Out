@@ -448,6 +448,7 @@ export const giveUpContest = async (req: Request, res: Response): Promise<void> 
         }
 
         participation.participationEndTime = new Date();
+        participation.expEarned = 0;
         participation.contestCompleted = true;
         await participation.save();
 
@@ -1005,4 +1006,41 @@ export const getContestParticipations = async (req: Request, res: Response) => {
             error: error.message
         });
     }
-}
+};
+
+export const getContestParticipationDetails = async (req: Request, res: Response) => {
+    try {
+        const { contestId } = req.params;
+        const userId = res.locals.jwtData.id;
+        if (!userId) {
+            res.status(404).json({
+                message: "ERROR",
+                msg: 'User not found.'
+            });
+            return;
+        }
+        const participation = await ContestParticipation.findOne({ contest: contestId, user: userId, contestCompleted: false })
+            .populate('machineCompleted', 'name _id')
+            .select('-__v -updatedAt -createdAt -usedHints -remainingHints');
+        if (!participation) {
+            res.status(200).json({
+                message: "OK",
+                msg: 'You are not participating in this contest yet.',
+                participation: null
+            });
+            return;
+        }
+        res.status(200).json({
+            message: "OK",
+            msg: 'Contest participation details fetched successfully.',
+            participation: participation
+        });
+    } catch (error: any) {
+        console.error('Error getting contest participation details:', error);
+        res.status(500).json({
+            message: "ERROR",
+            msg: 'Failed to get contest participation details.',
+            error: error.message
+        });
+    }
+};
