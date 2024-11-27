@@ -9,6 +9,7 @@ import App from './App';
 import './assets/scss/admin/AdminDashboard.scss';
 import AdminLayout from './components/admin/AdminLayout';
 import MachineCompleteModal from './components/modal/MachineCompleteModal';
+import ContestCompleteModal from './components/modal/ContestCompleteMD';
 
 // Lazy-loaded components
 const LoginPage = lazy(() => import('./pages/public/LoginPage'));
@@ -18,7 +19,6 @@ const LeaderBoardPage = lazy(() => import('./pages/leaderboard/LeaderBoardPage')
 const ContestListPage = lazy(() => import('./pages/contest/ContestListPage'));
 const ContestDetailPage = lazy(() => import('./pages/contest/ContestDetailPage'));
 const ContestRegisterPage = lazy(() => import('./pages/contest/ContestRegisterPage'));
-const ContestCompletePage = lazy(() => import('./pages/contest/ContestCompletePage'));
 const PreContestPage = lazy(() => import('./pages/contest/PreContestPage'));
 const ContestPlayPage = lazy(() => import('./pages/contest/ContestPlayPage'));
 const MachineListPage = lazy(() => import('./pages/machine/MachineListPage'));
@@ -124,7 +124,7 @@ const routes: RouteObject[] = [
         path: 'contest/:contestId/complete',
         element: (
           <ProtectedRoute>
-            <ContestCompletePage />
+            <ContestCompleteModal onClose={() => {}} expEarned={9999} />
           </ProtectedRoute>
         ),
       },
@@ -156,7 +156,7 @@ const routes: RouteObject[] = [
         path: 'machine/:machineId/complete',
         element: (
           <ProtectedRoute>
-            <MachineCompleteModal onClose={() => {}} />
+            <MachineCompleteModal onClose={() => {}} expEarned={9999} />
           </ProtectedRoute>
         ),
       },
