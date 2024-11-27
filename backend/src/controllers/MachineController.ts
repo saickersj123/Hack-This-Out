@@ -548,26 +548,45 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
             return;
         }
   
-        // Calculate EXP based on hints used
-        const progress = await UserProgress.findOne({ user: userId, machine: machineId });
-        const hintsUsed = progress ? progress.hintsUsed : 0;
-        let expEarned = machine.exp;
-        expEarned -= hintsUsed * 10; // 10 EXP penalty per hint
-  
-        if (expEarned < 0) expEarned = 0;
-  
+        // Retrieve user progress
+        const progress = await UserProgress.findOne({ user: userId, machine: machineId, completed: false });
+        if (!progress) {
+            res.status(400).json({ msg: 'Progress not found for this machine.' });
+            return;
+        }
+
+        const hintsUsed = progress.hintsUsed || 0;
+        // Ensure hintsUsed does not exceed the number of available hints
+        const validHintsUsed = Math.min(hintsUsed, machine.hints.length);
+
+        // Calculate total hint cost by summing the costs of the first `validHintsUsed` hints
+        const totalHintCost = machine.hints
+            .slice(0, validHintsUsed)
+            .reduce((sum, hint) => sum + hint.cost, 0);
+
+        let expEarned = machine.exp - (totalHintCost*10);
+
+        expEarned = Math.max(expEarned, 0); // Ensure EXP is not negative
+
+        // Calculate time spent in milliseconds using UTC
+        const endTime = new Date(); // Current time in UTC
+        const startTime = new Date(progress.createdAt); // Ensure startTime is a Date object
+
+        // Validate startTime
+        if (isNaN(startTime.getTime())) {
+            res.status(500).json({ msg: 'Invalid start time.' });
+            return;
+        }
+
+        const durationMillis = endTime.getTime() - startTime.getTime();
+        const timeSpentDate = new Date(durationMillis);
+
         // Update user progress
-        await UserProgress.findOneAndUpdate(
-            { user: userId, machine: machineId, completedAt: { $exists: false } },
-            { 
-                completed: true,
-                completedAt: new Date(),
-                expEarned: expEarned,
-            },
-            { upsert: true }
-        );
-        // Update time spent
-        await (progress as any).updateTimeSpent();
+        progress.completed = true;
+        progress.completedAt = endTime;
+        progress.expEarned = expEarned;
+        progress.timeSpent = timeSpentDate;
+        await progress.save();
 
         // Update user EXP and level
         const user = await User.findById(userId);
@@ -576,6 +595,8 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
             await (user as any).updateLevel();
             await user.save();
         }
+
+        // Increment machine's player count
         machine.playerCount += 1;
         await machine.save();
   
@@ -583,7 +604,7 @@ export const submitFlagMachine = async (req: Request, res: Response): Promise<vo
             message: "OK",
             msg: 'Flag accepted.',
             expEarned: expEarned,
-            totalExp: user?.exp
+            totalExp: user?.exp || 0
         });
     } catch (error) {
         console.error('Error submitting flag:', error);

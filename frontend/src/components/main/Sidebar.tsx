@@ -85,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 data-tooltip="Tutorial"
               >
                 {getMenuIcon('/tutorial', <FaQuestionCircle className={styles.menuIcon} />, <FaRegQuestionCircle className={styles.menuIcon} />)}
-                <div className={styles.label}>Tutorial</div>
+                <div className={styles.label}>How to Play</div>
               </Link>
               <Link
                 to="/leaderboard"
@@ -100,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
                 className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/contest') ? styles.selected : ''}`}
                 data-tooltip="Contests"
               >
-                {getMenuIcon('/contest', <EmojiEventsOutlinedIcon className={styles.menuIcon} />, <EmojiEventsIconRounded className={styles.menuIcon} />)}
+                {getMenuIcon('/contest', <EmojiEventsIconRounded className={styles.menuIcon} />, <EmojiEventsOutlinedIcon className={styles.menuIcon} />)}
                 <div className={styles.label}>Contests</div>
               </Link>
               <Link

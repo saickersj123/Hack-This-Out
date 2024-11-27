@@ -141,6 +141,9 @@
           background-color: #202227;
           outline: 1px solid #383e4b;
           transform: translateY(-2px);
+          .icon {
+            filter: drop-shadow(0 0 10px var(--blue-200));
+          }
         }
 
         .icon {
@@ -194,11 +197,15 @@
       &:hover {
         background-color: #202227;
         outline: 1px solid #383e4b;
-        transform: translateY(-2px);
+        transform: translateX(3px);
+        color: var(--danger);
+        .logout_icon {
+          filter: drop-shadow(0 0 10px var(--danger));
+        }
       }
 
       .logout_icon {
-        fill: #B3B8C2;
+        fill: var(--color-gainsboro);
       }
     }
   }

@@ -168,7 +168,7 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
       </form>
 
       {/* Modal */}
-      {playType === 'machine' && showMachineCompleteModal && (
+      {showMachineCompleteModal && (
         <MachineCompleteModal onClose={() => {
           setShowMachineCompleteModal(false);
           resetPlayContext();

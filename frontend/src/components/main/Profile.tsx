@@ -7,9 +7,7 @@ import { useProfileContext } from '../../contexts/ProfileContext';
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import down_arrow from '../../assets/img/icon/down_arrow.svg';
 import up_arrow from '../../assets/img/icon/up_arrow.svg';
-import setting from '../../assets/img/icon/setting_icon.svg';
-import darkmode_icon from '../../assets/img/icon/darkmode_icon.svg';
-import darkmode_switch from '../../assets/img/icon/darkmode_switch.svg';
+import { ImInfo } from "react-icons/im";
 import { Avatar } from '@mui/material';
 import { avatarBackgroundColors, getAvatarColorIndex } from '../../utils/avatars';
 
@@ -113,18 +111,9 @@ const Profile: React.FC = () => {
                     </div>
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
-                            <img className={styles.icon} alt="" src={setting} />
-                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/settings'))}>Settings</MenuItem>
+                            <ImInfo className={styles.icon} />
+                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/intro'))}>Introduction</MenuItem>
                         </div>
-                    </div>
-                    <div className={styles.settingsInner}>
-                        <div className={styles.rectangleParent}>
-                            <img className={styles.icon} alt="" src={darkmode_icon} />
-                            <div className={styles.darkModeParent}>
-                                <div className={styles.darkMode}>Dark mode</div>
-                            </div>
-                        </div>
-                        <img className={styles.switchIcon} alt="" src={darkmode_switch} />
                     </div>
                 </li>
                 <div className={styles.userinfoDarkChild} />

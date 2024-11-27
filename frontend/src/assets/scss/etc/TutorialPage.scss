@@ -1,0 +1,74 @@
+@use "../style" as *;
+
+.tutorial-page-container {
+    @include background_set;
+    @include scrollbar-none;
+    color: var(--color-white);
+    overflow: auto;
+    flex-direction: column;
+    padding: 0;
+    padding-bottom: 64px;
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+}
+
+.tutorial-page-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin-top: 120px;
+    gap: 8px;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 24px;
+
+    article {
+        position: relative;
+        max-width: 1200px;
+        width: 100%;
+        text-align: left;
+        padding: 32px 48px;
+        font-size: clamp(20px, 2vw, 24px);
+        line-height: 1.6;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        margin-bottom: 32px;
+
+        h2 {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            border-left: 4px solid var(--blue-200);
+            font-weight: 700;
+            font-size: clamp(28px, 2vw, 36px);
+        }
+
+        p, ol {
+            margin: 0;
+            padding: 0;
+        }
+
+        ol {
+            padding-left: 40px;
+            list-style: decimal inside;
+        }
+
+        a {
+            font-weight: 700;
+            color: var(--blue-200);
+            transition: color 0.2s ease;
+            
+            &:hover {
+                color: var(--blue-300);
+            }
+        }
+
+        b {
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+    }
+}

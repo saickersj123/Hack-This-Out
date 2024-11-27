@@ -15,7 +15,7 @@ export type UserProgressItem = {
     remainingHints: number;
     hintsUsed: number;
     expEarned: number;
-    timeSpent: number;
+    timeSpent: Date;
 };
 
 export type ContestParticipation = {

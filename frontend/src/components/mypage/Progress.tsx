@@ -84,9 +84,9 @@ const Progress = () => {
                                         </Avatar> {progress.machine.name.charAt(0).toUpperCase() + progress.machine.name.slice(1)}
                                     </td>
                                     <td className="body-exp">{progress.expEarned} EXP</td>
-                                    <td className="body-time">{progress.timeSpent ? formatTimeSpent(progress.timeSpent) : "-"}</td>
+                                    <td className="body-time">{progress.timeSpent === new Date(0) ? "-" : formatTimeSpent(new Date(progress.timeSpent))}</td>
                                     <td className="body-hint">{progress.hintsUsed}</td>
-                                    <td className="body-comp">{progress.completedAt ? formatDate(progress.completedAt) : "Given up"}</td>
+                                    <td className="body-comp">{progress.completedAt ? formatDate(progress.completedAt) : "Not completed"}</td>
                                     </tr>
                                 );
                             })}
@@ -122,13 +122,11 @@ const Progress = () => {
                                 <td className="body-comp">
                                     {participation.participationEndTime
                                         ? formatDate(participation.participationEndTime)
-                                        : "Given up"}
+                                        : "On going"}
                                 </td>
-                                <td className="body-exp">{participation.expEarned} EXP</td>
+                                <td className="body-exp">{participation.expEarned === 0 ? "Given up" : `${participation.expEarned} EXP`}</td>
                                 <td className="body-machine">
-                                    {participation.machineCompleted.length > 0
-                                        ? participation.machineCompleted.map((machine) => machine.name).join(", ")
-                                        : "-"}
+                                    {participation.machineCompleted.length}
                                 </td>
                             </tr>
                             );

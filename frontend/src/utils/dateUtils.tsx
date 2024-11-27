@@ -41,10 +41,37 @@ export const formatRemainingTime = (endDateString: string | Date): string => {
   return `${days}D ${hours}H ${minutes}M`;
 };
 
-export const formatTimeSpent = (timeSpent: number): string => {
-  //convert seconds to hours, minutes and seconds
-  const minutes = Math.floor((timeSpent % 3600) / 60);
-  const seconds = timeSpent % 60;
-  return `${minutes}:${seconds}`;
+
+
+/**
+ * Formats a duration represented as a Date object into "HH:MM:SS" format.
+ * The Date object is treated as the epoch plus the duration in milliseconds.
+ *
+ * @param timeSpent - The duration as a Date object.
+ * @returns The formatted time string in "HH:MM:SS" format.
+ * @throws Will throw an error if the provided timeSpent is invalid.
+ */
+export const formatTimeSpent = (timeSpent: Date): string => {
+  // Validate input
+  if (!(timeSpent instanceof Date) || isNaN(timeSpent.getTime())) {
+    throw new Error('Invalid input: timeSpent must be a valid Date object.');
+  }
+
+  // Calculate duration in milliseconds from the epoch
+  const durationMillis = timeSpent.getTime();
+
+  if (durationMillis < 0) {
+    throw new Error('Invalid input: duration cannot be negative.');
+  }
+
+  const totalSeconds = Math.floor(durationMillis / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  // Helper function to pad numbers with leading zeros
+  const pad = (num: number): string => num.toString().padStart(2, '0');
+
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 

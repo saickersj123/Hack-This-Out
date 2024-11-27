@@ -34,8 +34,8 @@ const UserProgressSchema = new mongoose.Schema({
         default: 0
     },
     timeSpent: {
-        type: Number,
-        default: 0
+        type: Date,
+        default: () => new Date(0)
     }
 }, {
     timestamps: true
