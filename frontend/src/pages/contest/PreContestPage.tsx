@@ -65,13 +65,22 @@ const PreContestPage: React.FC = () => {
     );
   }
 
-  const handleStartContest = async () => {
+  const handleStartContest = () => {
+    setIsModalOpen(true);
+  };
+
+  // Handler to close the modal and redirect to main
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  
+  const handleJoinContest = async () => {
     try {
       if (!contestId) {
         setError('Contest ID is missing.');
         return;
       }
-
+  
       const participation = await participateInContest(contestId);
       if (participation) {
         setIsModalOpen(true);
@@ -88,23 +97,15 @@ const PreContestPage: React.FC = () => {
       if (error.message === "COMPLETED") {
         // User has already completed the contest
         setIsCompleted(true);
-
+  
         return;
       }
       // Handle other specific status codes if needed
       setError(error.response.data.msg || 'Failed to start contest.');
       console.error('Error starting contest:', error.message || error);
       setError('Failed to start contest.');
-
-    }
-  };
-
-  // Handler to close the modal and redirect to main
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
   
-  const handleJoinContest = () => {
+    }
     if (isCompleted) {
       setIsCompleted(true);
       setIsModalOpen(false);
