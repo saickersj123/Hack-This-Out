@@ -4,7 +4,12 @@ import Modal from './Modal';
 import Confetti from 'react-confetti';
 import '../../assets/scss/etc/ContestCompleteMD.scss';
 
-const ContestCompleteModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+interface ContestCompleteModalProps {
+  onClose: () => void;
+  expEarned: number;
+}
+
+const ContestCompleteModal: React.FC<ContestCompleteModalProps> = ({ onClose, expEarned }) => {
   const navigate = useNavigate();
   const [showConfetti, setShowConfetti] = useState(true);
   const [opacity, setOpacity] = useState(1);
@@ -53,6 +58,7 @@ const ContestCompleteModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
         <div className="contest-complete-modal">
           <div className="title">🎉 Contest Completed! 🎉</div>
           <div className="content">You have successfully completed the contest.</div>
+          <div className="content"><b>{expEarned} EXP earned!</b></div>
           <button onClick={handleGoToContests} className="redirect-button">
             Go to Contests
           </button>

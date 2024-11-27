@@ -101,16 +101,18 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId }) => {
     <div className="instance-info-container">
       <div className='upper-text'>
         <FaDotCircle size={40} color={getStatusColor(instance.status)} />
-        <h2>Spawn Machine</h2>
+        {instance.vpnIp ? <h2>Machine Spawned</h2> : <h2>Starting Machine</h2>}
       </div>
-      <h3>Create machine and Start hacking.</h3>
+      <div className="lower-text">
+        {instance.vpnIp ? <h3>VPN IP of target machine.</h3> : <h3>Waiting for machine to start...</h3>}
+      </div>
       <div
         className="vpn-info"
         style={{
           border: `2px solid ${getStatusColor(instance.status)}`,
         }}
       >
-        VPN IP: {instance.vpnIp}
+        {instance.vpnIp ? `${instance.vpnIp}` : <LoadingIcon />}
       </div>
     </div>
   );

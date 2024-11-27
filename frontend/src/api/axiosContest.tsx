@@ -345,3 +345,15 @@ export const getContestParticipationDetails = async (contestId: string) => {
     throw error.response ? error.response.data : new Error('Failed to fetch contest participation details');
   }
 };
+
+/**
+ * Get contest result.
+ */
+export const getContestResult = async (contestId: string) => {
+  try {
+    const response = await axiosInstance.get(`/contest/${contestId}/result`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : new Error('Failed to fetch contest result');
+  }
+};

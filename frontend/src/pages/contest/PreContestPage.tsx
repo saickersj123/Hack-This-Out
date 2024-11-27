@@ -72,6 +72,8 @@ const PreContestPage: React.FC = () => {
   // Handler to close the modal and redirect to main
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setIsFound(false);
+    setIsCompleted(false);
   };
   
   const handleJoinContest = async () => {
@@ -89,7 +91,7 @@ const PreContestPage: React.FC = () => {
       }
     } catch (error: any) {
       if (error.message === "FOUND") {
-        // User has already participated and completed the contest
+        // User has already participated the contest
         setIsFound(true); // Open the modal instead of redirecting immediately
         return;
       }
@@ -106,22 +108,17 @@ const PreContestPage: React.FC = () => {
       setError('Failed to start contest.');
   
     }
-    if (isCompleted) {
-      setIsCompleted(true);
-      setIsModalOpen(false);
-    } else if (isFound) {
-      setIsFound(true);
-      setIsModalOpen(false);
-      navigate(`/contest/${contestId}/play`);
-    } else {
-      setIsModalOpen(false);
-      navigate(`/contest/${contestId}/play`);
-    }
+    navigate(`/contest/${contestId}/play`);
   };
 
   const handleCompletedContest = () => {
     setIsModalOpen(false);
     navigate(`/contest/${contestId}`);
+  };
+
+  const handleContinueContest = () => {
+    setIsModalOpen(false);
+    navigate(`/contest/${contestId}/play`);
   };
 
   return (
@@ -135,13 +132,13 @@ const PreContestPage: React.FC = () => {
         <div className={styles.under_box}>
           <div className={styles.contest_rules}>
             <div className={styles.contest_rules_title}>
-              <p><MdOutlineRule size={25} /> Rules</p>
+              <p><MdOutlineRule size={25} /> Contest Rules</p>
             </div>
             <ul>
               <li>1. You can only play one machine at a time.</li>
               <li>2. While playing, hints are provided for the machine.</li>
               <li>3. You must submit the flag of the machine you are playing.</li>
-              <li>4. To clear the contest, you must complete all machines.</li>
+              <li>4. To finish the contest, you must complete all machines.</li>
               <li>5. The reward decreases over time.</li>
               <li>6. The contest ends when the time runs out.</li>
               <li>7. If you finished the contest, you can earn experience points (EXP).</li>
@@ -192,7 +189,7 @@ const PreContestPage: React.FC = () => {
             <div className={styles.contest_warning}>
                 <p>You have been participating in the contest.</p>
             </div>
-            <button onClick={handleJoinContest} className={styles.modal_button}>
+            <button onClick={handleContinueContest} className={styles.modal_button}>
               Continue
             </button>
           </div>

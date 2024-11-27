@@ -58,7 +58,9 @@ const StartInstanceButton: React.FC<StartInstanceButtonProps> = ({ machineId, on
         <AiOutlineCloudServer size={40} color="white" />
         <h2>Spawn Machine</h2>
       </div>
-      <h3>Create machine and Start hacking.</h3>
+      <div className="lower-text">
+        <h3>Create machine and Start hacking.</h3>
+      </div>
       <div className={`start-instance-btn ${loading ? "disabled" : ""}`}>
         <label className="download-label">
           <input

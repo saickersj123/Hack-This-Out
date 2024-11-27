@@ -29,6 +29,12 @@
         }
     }
 
+    .lower-text {
+        h3 {
+            font-size: clamp(16px, 2vw, 20px);
+        }
+    }
+
     .hints-list {
         display: flex;
         flex-direction: column;

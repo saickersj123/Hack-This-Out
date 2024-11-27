@@ -23,7 +23,8 @@ import {
     getMyRankInContest,
     getStartedContest,
     getLatestContest,
-    getContestParticipationDetails
+    getContestParticipationDetails,
+    getContestResult
 } from '../controllers/ContestController.js';
 import { verifyAdmin } from '../middlewares/Admin.js';
 import { createContestValidation, updateContestValidation, handleValidation } from '../middlewares/validateContest.js';
@@ -83,6 +84,9 @@ ContestRoutes.get('/started', verifyToken, getStartedContest);
 
 // Route to get latest contest
 ContestRoutes.get('/latest', verifyToken, getLatestContest);
+
+// Route to get contest result
+ContestRoutes.get('/:contestId/result', verifyToken, getContestResult);
 
 // Admin Routes
 // Route to get all contests(Admin only)

@@ -139,9 +139,11 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) =
     <div className="get-hints-container">
       <div className="upper-text">
         <FaRegQuestionCircle size={40} color="white" />
-        <h2>Hints</h2>
+        {remainingHints > 0 ? <h2>Hints</h2> : <h2>No More Hints</h2>}
       </div>
-      <h3>If you need a hint, Press the button</h3>
+      <div className="lower-text">
+        {remainingHints > 0 ? <h3>If you need a hint, Press the button</h3> : <h3>You have used all the hints for this machine.</h3>}
+      </div>
       {loading && <LoadingIcon />}
       {error && <div className="error-message">{error.msg}</div>}
       {!loading && !error && hintsUsed > 0 && (

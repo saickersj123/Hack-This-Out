@@ -80,7 +80,7 @@ const ContestLeaderboard: React.FC<ContestLeaderboardProps> = ({ leaderboard, cu
                                         </Avatar>
                                         <div className={styles.leaderboard_username}>{user.username}</div>
                                     </div>
-                                    <div className={styles.leaderboard_exp}>{user.exp} EXP</div>
+                                    <div className={styles.leaderboard_exp}>{user.exp === 0 ? 'Given Up' : `${user.exp} EXP`}</div>
                                 </div>
                             );
                         })

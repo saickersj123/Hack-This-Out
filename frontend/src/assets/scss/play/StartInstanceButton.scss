@@ -25,8 +25,11 @@
         }
     }
 
-    h3 {
-        padding-left: 48px;
+    .lower-text {
+        h3 {
+            padding-left: 48px;
+            font-size: clamp(16px, 2vw, 20px);
+        }
     }
 
     .start-instance-btn {

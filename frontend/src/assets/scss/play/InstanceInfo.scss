@@ -25,9 +25,13 @@
             font-weight: 600;
           }
     }
-    
-    h3 {
-        padding-left: 48px;
+
+
+    .lower-text {
+        h3 {
+            padding-left: 48px;
+            font-size: clamp(16px, 2vw, 24px);
+        }
     }
 
     .vpn-info {
@@ -46,5 +50,6 @@
         text-align: center;
         align-items: center;
         justify-content: center;
+        font-size: clamp(24px, 2vw, 28px);
     }
 }

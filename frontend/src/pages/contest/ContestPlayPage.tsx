@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getContestDetails, getContestParticipationDetails } from '../../api/axiosContest';
+import { getContestDetails, getContestParticipationDetails, getContestResult } from '../../api/axiosContest';
 import { getInstanceByMachine } from '../../api/axiosInstance';
 import GetHints from '../../components/play/GetHints';
 import StartInstanceButton from '../../components/play/StartInstanceButton';
@@ -32,6 +32,7 @@ interface GetContestDetailsResponse {
  */
 interface GetContestParticipationDetailsResponse {
   participation: ContestParticipation;
+  machinesLeft: number;
   // Add other response properties if available
 }
 
@@ -44,6 +45,15 @@ interface ContestParticipation {
     machine: string;
     completed: boolean;
   }[];
+  expEarned: number;
+}
+
+/**
+ * Interface for API response when fetching contest result.
+ */
+interface GetContestResultResponse {
+  expEarned: number;
+  machinesLeft: number;
 }
 
 /**
@@ -71,6 +81,16 @@ const ContestPlayPage: React.FC = () => {
   const [completedMachines, setCompletedMachines] = useState<string[]>([]);
   // State to handle contest completion
   const [isContestComplete, setIsContestComplete] = useState<boolean>(false);
+  // State to track total exp earned
+  const [totalExpEarned, setTotalExpEarned] = useState<number>(0);
+  // State to track machines left
+  const [machinesLeft, setMachinesLeft] = useState<number>(-1);
+
+  /**
+   * useEffect to reset selectedMachine to null on component mount.
+   * This ensures that the selected machine is always null when the page is refreshed.
+   */
+
 
   // Fetch contest details and participation details when component mounts
   useEffect(() => {
@@ -98,11 +118,6 @@ const ContestPlayPage: React.FC = () => {
             .map(mc => mc.machine);
           setCompletedMachines(completed);
           console.log('Completed Machines:', completed); // Debugging
-
-          // Check if all machines are completed
-          if (completed.length === contestResponse.contest.machines.length) {
-            setIsContestComplete(true);
-          }
         }
 
         setIsLoading(false);
@@ -114,7 +129,6 @@ const ContestPlayPage: React.FC = () => {
     };
 
     fetchData();
-    setSelectedMachine(null);
   }, [contestId]);
 
   // Handle machine selection
@@ -152,19 +166,24 @@ const ContestPlayPage: React.FC = () => {
   };
 
   // Callback when a flag is successfully submitted
-  const handleFlagSuccess = () => {
+  const handleFlagSuccess = async () => {
     if (selectedMachine) {
       setCompletedMachines((prev) => [...prev, selectedMachine._id]);
       setSubmitStatus('flag-success');
       console.log(`Machine ${selectedMachine._id} marked as completed.`);
-
       // Check if all machines are completed
-      if (completedMachines.length + 1 === contest?.machines.length) {
-        setIsContestComplete(true);
-      } else {
-        // If there are machines left, reset the selected machine to hide the container
-        setSelectedMachine(null);
+      try {
+        const resultResponse: GetContestResultResponse = await getContestResult(contestId || '');
+        setTotalExpEarned(resultResponse.expEarned);
+        setMachinesLeft(resultResponse.machinesLeft);
+      } catch (error: any) {
+        console.error('Error fetching participation details:', error);
       }
+    }
+    if (machinesLeft === 0) {
+      setIsContestComplete(true);
+    } else {
+      setSelectedMachine(null);
     }
   };
 
@@ -172,7 +191,7 @@ const ContestPlayPage: React.FC = () => {
     return (
       <Main>
         <div className="contest-play-container">
-          <div className="error-message"><ErrorIcon /> {error}</div>
+          <div className="error-message"><ErrorIcon /></div>
         </div>
       </Main>
     );
@@ -291,10 +310,12 @@ const ContestPlayPage: React.FC = () => {
           // Optionally, you can add a message or keep it empty when no machine is selected
           <div className='no-machine-selected'></div>
         )}
-
-        {/* Display ContestCompleteModal if contest is complete */}
         {isContestComplete && (
-          <ContestCompleteModal onClose={() => setIsContestComplete(false)} />
+          <ContestCompleteModal onClose={() => {
+            setIsContestComplete(false);
+          }}
+          expEarned={totalExpEarned}
+          />
         )}
       </div>
     </Main>

@@ -620,7 +620,7 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 //Get Leaderboard
 export const getLeaderboard = async (req: Request, res: Response) => {
 	try {
-		const users = await User.find().sort({ exp: -1 }).select('-password -isAdmin -email -createdAt -updatedAt -__v -_id');
+		const users = await User.find({ exp: { $gt: 0 } }).sort({ exp: -1 }).select('-password -isAdmin -email -createdAt -updatedAt -__v -_id');
 		return res.status(200).json({ message: "OK", users: users });
 	} catch (error: any) {
 		console.error('Error getting leaderboard:', error);

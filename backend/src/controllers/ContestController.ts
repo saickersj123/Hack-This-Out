@@ -401,12 +401,6 @@ export const submitFlagForContest = async (req: Request, res: Response): Promise
             await (user as any).updateLevel(); // Assuming updateLevel is properly typed
             await user.save();
             await participation.save();
-            res.status(200).json({ 
-                message: "OK", 
-                msg: 'Congratulations! You have completed the contest.', 
-                participation: participation 
-            });
-            return;
         }
 
         res.status(200).json({ 
@@ -833,7 +827,7 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
         const { contestId } = req.params;
 
         // Fetch participations with user details
-        const participations = await ContestParticipation.find({ contest: contestId })
+        const participations = await ContestParticipation.find({ contest: contestId, contestCompleted: true })
             .populate({
                 path: 'user',
                 select: 'username level avatar',
@@ -883,6 +877,7 @@ export const getMyRankInContest = async (req: Request, res: Response) => {
         const participation = await ContestParticipation.findOne({
             user: userId,
             contest: contestId,
+            contestCompleted: true
         });
         if (!participation) {
             res.status(200).json({
@@ -1008,6 +1003,9 @@ export const getContestParticipations = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * Get contest participation details.
+ */
 export const getContestParticipationDetails = async (req: Request, res: Response) => {
     try {
         const { contestId } = req.params;
@@ -1016,6 +1014,14 @@ export const getContestParticipationDetails = async (req: Request, res: Response
             res.status(404).json({
                 message: "ERROR",
                 msg: 'User not found.'
+            });
+            return;
+        }
+        const contest = await Contest.findById(contestId);
+        if (!contest) {
+            res.status(404).json({
+                message: "ERROR",
+                msg: 'Contest not found.'
             });
             return;
         }
@@ -1033,13 +1039,71 @@ export const getContestParticipationDetails = async (req: Request, res: Response
         res.status(200).json({
             message: "OK",
             msg: 'Contest participation details fetched successfully.',
-            participation: participation
+            participation: participation,
         });
     } catch (error: any) {
         console.error('Error getting contest participation details:', error);
         res.status(500).json({
             message: "ERROR",
             msg: 'Failed to get contest participation details.',
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Get contest result.
+ */
+export const getContestResult = async (req: Request, res: Response) => {
+    try {
+        const { contestId } = req.params;
+        const userId = res.locals.jwtData.id;
+        if (!userId) {
+            res.status(404).json({
+                message: "ERROR",
+                msg: 'User not found.'
+            });
+            return; 
+        }
+        const contest = await Contest.findById(contestId);
+        if (!contest) {
+            res.status(404).json({
+                message: "ERROR",
+                msg: 'Contest not found.'
+            });
+            return;
+        }
+        const participation = await ContestParticipation.findOne({ contest: contestId, user: userId });
+        if (!participation) {
+            res.status(400).json({
+                message: "ERROR",
+                msg: 'Participation not found.',
+                machinesLeft: contest.machines.length,
+                expEarned: null
+            });
+            return;
+        }
+        const machinesLeft = contest.machines.length - participation.machineCompleted.length;
+        if (machinesLeft === 0) {
+            res.status(200).json({
+                message: "COMPLETE",
+                msg: 'You have completed all the machines in this contest.',
+                expEarned: participation.expEarned,
+                machinesLeft: machinesLeft
+            });
+            return;
+        }
+        res.status(200).json({
+            message: "OK",
+            msg: 'Contest is not completed yet.',
+            machinesLeft: machinesLeft,
+            expEarned: participation.expEarned
+        });
+    } catch (error: any) {
+        console.error('Error getting contest result:', error);
+        res.status(500).json({
+            message: "ERROR",
+            msg: 'Failed to get contest result.',
             error: error.message
         });
     }

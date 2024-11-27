@@ -97,6 +97,7 @@
             }
 
             .time_box {
+                margin-top: clamp(120px, 3vw, 160px);
                 margin-left: clamp(16px, 3vw, 150px);
                 display: flex;
                 flex-direction: column;
