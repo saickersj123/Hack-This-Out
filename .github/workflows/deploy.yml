@@ -30,6 +30,6 @@ jobs:
           cd /home/${{ secrets.EC2_USER }}/Hack-This-Out/backend
           npm install
           npm run build
-          cd backend/dist
-          pm2 start server.js --name "HacktThisOut-API" || pm2 restart "HacktThisOut-API"
+          cd backend
+          pm2 start dist/server.js --name "HacktThisOut-API" || pm2 restart "HacktThisOut-API"
         ENDSSH
