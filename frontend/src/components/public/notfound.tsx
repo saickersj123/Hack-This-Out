@@ -18,7 +18,7 @@ const NotFound: React.FC = () => {
                 variant="contained" 
                 color="primary"
                 className={styles.notfound_content_button}
-                onClick={() => navigate('/main')}
+                onClick={() => navigate('/')}
             >Go Home</Button>
         </div>
     </div>

@@ -42,7 +42,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
       setIsLoggedIn(true);
       
       // Optional: If you prefer to handle navigation here instead of in LoginPage
-      navigate('/main'); 
+      navigate('/'); 
       
       // Since LoginPage handles navigation based on isLoggedIn, no need to navigate here
     } catch (err: any) {

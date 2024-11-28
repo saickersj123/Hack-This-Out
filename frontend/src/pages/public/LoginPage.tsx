@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
   // Handle redirection if user is already logged in
   useEffect(() => {
     if (!isLoading && isLoggedIn) {
-      navigate('/main'); // Redirect to main page
+      navigate('/'); // Redirect to main page
     }
   }, [isLoggedIn, isLoading, navigate]);
 

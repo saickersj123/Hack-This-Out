@@ -80,11 +80,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
           <div className={styles.topMenu}>
             <li className={styles.verticalMenuList}>
               <Link
-                to="/main"
-                className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/main') ? styles.selected : ''}`}
+                to="/"
+                className={`${styles.verticalMenuItem} ${location.pathname.startsWith('/') ? styles.selected : ''}`}
                 data-tooltip="Tutorial"
               >
-                {getMenuIcon('/main', <FaQuestionCircle className={styles.menuIcon} />, <FaRegQuestionCircle className={styles.menuIcon} />)}
+                {getMenuIcon('/', <FaQuestionCircle className={styles.menuIcon} />, <FaRegQuestionCircle className={styles.menuIcon} />)}
                 <div className={styles.label}>How to Play</div>
               </Link>
               <Link

@@ -48,7 +48,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: '/',
+        path: '/intro',
         element: (
             <LandingPage />
         ),
@@ -64,7 +64,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'main',
+        path: '/',
         element: (
           <ProtectedRoute>
             <TutorialPage />
