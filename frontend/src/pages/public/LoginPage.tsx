@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import '../../assets/scss/login/LoginPage.scss';
 import LoginForm from '../../components/login/LoginForm'; 
@@ -12,6 +12,9 @@ const LoginPage: React.FC = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state management
   const navigate = useNavigate(); // Initialize navigate
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isPreGlitch, setIsPreGlitch] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Consume AuthUserContext
   const authUserContext = useContext(AuthUserContext);
@@ -31,7 +34,20 @@ const LoginPage: React.FC = () => {
 
   // Background click handler
   const handleBackgroundClick = () => {
-    setIsClicked(!isClicked);
+    // Start pre-glitch effect
+    setIsPreGlitch(true);
+    
+    // Start main transition after pre-glitch
+    setTimeout(() => {
+      setIsPreGlitch(false);
+      setIsTransitioning(true);
+      
+      // Update state after transition starts
+      setTimeout(() => {
+        setIsClicked(!isClicked);
+        setIsTransitioning(false);
+      }, 500);
+    }, 350);
   };
 
   // Open registration modal
@@ -58,9 +74,15 @@ const LoginPage: React.FC = () => {
   return (
     <div>
       <div
-        className={isClicked ? "background-image change-background" : "background-image"}
+        ref={containerRef}
+        className={`background-image ${isClicked ? 'change-background' : ''} ${isTransitioning ? 'transitioning' : ''} ${isPreGlitch ? 'pre-glitch' : ''}`}
         onClick={handleBackgroundClick}
-      ></div>
+      >
+        <div className="channel r"></div>
+        <div className="channel g"></div>
+        <div className="channel b"></div>
+        <div className="noise"></div>
+      </div>
       <div className={isClicked ? "content-wrapper visible" : "content-wrapper"}>
         <LoginForm openRegisterModal={openModal} /> {/* Pass the modal opening function to LoginForm */}
       </div>

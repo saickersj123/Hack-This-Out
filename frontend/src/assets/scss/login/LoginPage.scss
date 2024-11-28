@@ -1,5 +1,8 @@
 /* LoginPage.scss */
 
+@use '../etc/loading.module.scss' as loading;
+@use 'sass:math';
+
 .background-image {
 	position: fixed;
 	top: 0;
@@ -11,11 +14,97 @@
 	background-size: cover;
 	background-repeat: no-repeat;
 	transition: width 0.5s;
+	overflow: hidden;
+
+	&::before {
+		@include loading.paint-splash;
+		transform-origin: center;
+		transform: scale(1.1);
+	}
+
+	&::after {
+		@include loading.chaotic-noise;
+		transform-origin: center;
+		transform: scale(1.1);
+	}
+
+	&.transitioning {
+		animation: glitch-main 0.85s cubic-bezier(0.17, 0.95, 0.45, 1);
+		@include loading.keyframes-glitch(main);
+
+		.channel {
+			animation: channel-shift 0.85s cubic-bezier(0.15, 0.9, 0.4, 1);
+			
+			&.active {
+				opacity: 0.25;
+				mix-blend-mode: exclusion;
+			}
+		}
+	}
+
+	&.pre-glitch {
+		animation: preglitch-main 0.35s cubic-bezier(0.4, 0.1, 0.3, 1);
+		@include loading.keyframes-preglitch(main);
+
+		.channel {
+			animation: pre-channel-shift 0.35s ease-in-out;
+			transition: opacity 0.15s ease-in-out;
+			
+			&.active {
+				opacity: 0.35;
+			}
+		}
+	}
+
+	.channel {
+		position: absolute;
+		top: -5%;
+		left: -5%;
+		right: -5%;
+		bottom: -5%;
+		background-size: cover;
+		background-position: center;
+		opacity: 0;
+		transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		mix-blend-mode: screen;
+		
+		&.r {
+			background-color: rgba(255, 25, 95, 0.18);
+			transform: translate(2.5px, -1px);
+			filter: blur(0.3px) brightness(1.2) contrast(1.1);
+		}
+
+		&.g {
+			background-color: rgba(0, 255, 180, 0.18);
+			transform: translate(-2px, 0.8px);
+			filter: blur(0.3px) brightness(1.2) contrast(1.1);
+		}
+
+		&.b {
+			background-color: rgba(50, 200, 255, 0.18);
+			transform: translate(1px, -0.5px);
+			filter: blur(0.3px) brightness(1.2) contrast(1.1);
+		}
+	}
+
+	.noise {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyAQMAAAAk8RryAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGovxNEIAAAASSURBVBhXY2AYBaNgFIyCUQAAAQ4AAAVZ5/YAAAAASUVORK5CYII=');
+		background-repeat: repeat;
+		opacity: 0.015;
+		pointer-events: none;
+		animation: noise 0.2s steps(2) infinite;
+		mix-blend-mode: difference;
+	}
 }
 
 .change-background {
-	animation: change-background 1s forwards;
 	width: 80%;
+	background-image: url('../../img/Fullscreen_black.png') !important;
 	
 	@media screen and (max-width: 768px) {
 		width: 70%;
@@ -23,16 +112,6 @@
 	
 	@media screen and (max-width: 480px) {
 		width: 0%;
-	}
-}
-
-@keyframes change-background {
-	0% {
-		background-image: url('../../img/Fullscreen.png');
-	}
-
-	100% {
-		background-image: url('../../img/Fullscreen_black.png');
 	}
 }
 

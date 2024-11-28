@@ -8,87 +8,327 @@
     background: var(--secondary-layout);
     overflow: hidden;
 
-    // Updated floating circles with new colors and opacity
-    &::before,
+    // Enhanced Jinx paint splash effect
+    &::before {
+        content: '';
+        position: absolute;
+        top: -10%;
+        left: -10%;
+        right: -10%;
+        bottom: -10%;
+        background: 
+            // Chaotic paint drips
+            repeating-linear-gradient(
+                45deg,
+                rgba(var(--lightblue-200-rgb), 0.02) 0px,
+                rgba(var(--lightblue-200-rgb), 0.02) 1px,
+                transparent 1px,
+                transparent 4px
+            ),
+            // Explosive paint splatters
+            radial-gradient(
+                circle at 20% 50%,
+                rgba(var(--blue-300-rgb), 0.18) 0%,
+                rgba(var(--blue-300-rgb), 0.12) 20%,
+                transparent 60%
+            ),
+            radial-gradient(
+                circle at 80% 40%,
+                rgba(var(--lightblue-200-rgb), 0.18) 0%,
+                rgba(var(--lightblue-200-rgb), 0.12) 25%,
+                transparent 65%
+            ),
+            // Additional chaotic elements
+            radial-gradient(
+                circle at 60% 70%,
+                rgba(var(--blue-300-rgb), 0.15) 0%,
+                rgba(var(--blue-300-rgb), 0.08) 30%,
+                transparent 70%
+            ),
+            // Paint streaks
+            linear-gradient(
+                135deg,
+                transparent 0%,
+                rgba(var(--lightblue-200-rgb), 0.05) 45%,
+                rgba(var(--lightblue-200-rgb), 0.08) 50%,
+                rgba(var(--lightblue-200-rgb), 0.05) 55%,
+                transparent 100%
+            );
+        mix-blend-mode: screen;
+        animation: paint-shift 8s ease-in-out infinite,
+                  paint-pulse 6s ease-in-out infinite;
+        filter: contrast(1.1) saturate(1.1);
+    }
+
+    // Enhanced cyberpunk noise effect
     &::after {
         content: '';
         position: absolute;
-        border-radius: 50%;
-        opacity: 0.08;  // Slightly reduced opacity
-        animation: float 20s infinite ease-in-out;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            // Enhanced scan lines
+            repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 3px,
+                transparent 3px
+            ),
+            // Dynamic color shift
+            linear-gradient(
+                90deg,
+                rgba(var(--blue-300-rgb), 0.06),
+                rgba(var(--lightblue-200-rgb), 0.06)
+            ),
+            // Additional noise texture
+            repeating-radial-gradient(
+                circle at 50% 50%,
+                transparent 0,
+                transparent 3px,
+                rgba(var(--blue-300-rgb), 0.02) 4px,
+                transparent 5px
+            );
+        pointer-events: none;
+        mix-blend-mode: overlay;
+        animation: chaotic-shift 6s linear infinite;
     }
 
-    &::before {
-        width: 45vw;
-        height: 45vw;
-        background: var(--lightblue-200);  // Using lighter blue for better contrast
-        top: -15%;
-        right: -10%;
-        animation-delay: -3s;
-    }
-
-    &::after {
-        width: 35vw;
-        height: 35vw;
-        background: var(--blue-300);  // Using mid-tone blue
-        bottom: -5%;
-        left: -5%;
-        animation-duration: 25s;
-    }
-
-    // Updated geometric patterns
+    // Updated geometric patterns with more dynamic glitch effects
     .geometric {
         position: absolute;
         width: 100%;
         height: 100%;
+        pointer-events: none;
         
+        // Neon triangles and tech lines
         &::before {
             content: '';
             position: absolute;
-            width: 25vw;
-            height: 25vw;
-            border: 3px solid var(--lightblue-200);  // Thicker border, lighter color
-            opacity: 0.15;
-            top: 35%;
-            left: 45%;
+            width: 45vw;
+            height: 45vw;
+            background: 
+                // Neon triangle outlines
+                conic-gradient(
+                    from 0deg at 50% 50%,
+                    rgba(var(--blue-300-rgb), 0.03) 0deg,
+                    transparent 60deg,
+                    rgba(var(--lightblue-200-rgb), 0.03) 120deg,
+                    transparent 180deg,
+                    rgba(var(--blue-300-rgb), 0.03) 240deg,
+                    transparent 300deg,
+                    rgba(var(--lightblue-200-rgb), 0.03) 360deg
+                ),
+                // Tech grid lines
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(var(--blue-300-rgb), 0.02) 0px,
+                    rgba(var(--blue-300-rgb), 0.02) 1px,
+                    transparent 1px,
+                    transparent 20px
+                ),
+                repeating-linear-gradient(
+                    -45deg,
+                    rgba(var(--lightblue-200-rgb), 0.02) 0px,
+                    rgba(var(--lightblue-200-rgb), 0.02) 1px,
+                    transparent 1px,
+                    transparent 20px
+                );
+            opacity: 0.4;
+            top: 25%;
+            left: 35%;
             transform: rotate(45deg);
-            animation: rotate 30s infinite linear;
+            animation: neon-geometry 20s infinite linear;
+            filter: blur(0.3px) brightness(1.2) contrast(1.1);
+            mix-blend-mode: screen;
         }
 
+        // Hexagonal grid and data matrices
         &::after {
             content: '';
             position: absolute;
-            width: 20vw;
-            height: 20vw;
-            border: 2px solid var(--blue-200);  // Lighter border color
-            opacity: 0.12;
+            width: 35vw;
+            height: 35vw;
+            background: 
+                // Hexagonal pattern
+                repeating-radial-gradient(
+                    circle at center,
+                    transparent 0,
+                    transparent 20px,
+                    rgba(var(--blue-300-rgb), 0.02) 21px,
+                    rgba(var(--blue-300-rgb), 0.02) 22px,
+                    transparent 23px
+                ),
+                // Data matrix overlay
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(var(--lightblue-200-rgb), 0.01) 0%,
+                    rgba(var(--lightblue-200-rgb), 0.01) 1px,
+                    transparent 1px,
+                    transparent 10px
+                ),
+                // Additional tech details
+                conic-gradient(
+                    from 0deg at 60% 60%,
+                    rgba(var(--blue-300-rgb), 0.02) 0deg,
+                    transparent 90deg,
+                    rgba(var(--lightblue-200-rgb), 0.02) 180deg,
+                    transparent 270deg,
+                    rgba(var(--blue-300-rgb), 0.02) 360deg
+                );
+            opacity: 0.3;
             top: 15%;
             right: 20%;
             transform: rotate(30deg);
-            animation: rotate 25s infinite linear reverse;
+            animation: tech-matrix 25s infinite linear reverse;
+            filter: blur(0.5px) brightness(1.2) contrast(1.1);
+            mix-blend-mode: screen;
         }
     }
 }
 
-// Enhanced animation keyframes
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg) scale(1);
+// Enhanced chaotic animations
+@keyframes paint-shift {
+    0% { 
+        transform: scale(1.1) rotate(0deg) skew(0deg); 
+        filter: hue-rotate(0deg) brightness(1) saturate(1);
     }
-    50% {
-        transform: translateY(60px) rotate(5deg) scale(1.05);
+    25% { 
+        transform: scale(1.25) rotate(3deg) skew(1deg); 
+        filter: hue-rotate(5deg) brightness(1.2) saturate(1.1);
+    }
+    50% { 
+        transform: scale(1.05) rotate(-2deg) skew(-1deg); 
+        filter: hue-rotate(-5deg) brightness(0.95) saturate(1.2);
+    }
+    75% { 
+        transform: scale(1.2) rotate(2deg) skew(0.5deg); 
+        filter: hue-rotate(3deg) brightness(1.1) saturate(1.15);
+    }
+    100% { 
+        transform: scale(1.1) rotate(0deg) skew(0deg); 
+        filter: hue-rotate(0deg) brightness(1) saturate(1);
     }
 }
 
-@keyframes rotate {
-    from {
+@keyframes paint-pulse {
+    0% { opacity: 0.85; }
+    50% { opacity: 1; }
+    100% { opacity: 0.85; }
+}
+
+@keyframes chaotic-shift {
+    0% { 
+        transform: translate(-30%, -30%) scale(2);
+        filter: hue-rotate(0deg);
+    }
+    25% {
+        transform: translate(0%, 30%) scale(2.1);
+        filter: hue-rotate(2deg);
+    }
+    50% { 
+        transform: translate(30%, 30%) scale(2.2);
+        filter: hue-rotate(-2deg);
+    }
+    75% {
+        transform: translate(0%, -30%) scale(2.1);
+        filter: hue-rotate(1deg);
+    }
+    100% { 
+        transform: translate(-30%, -30%) scale(2);
+        filter: hue-rotate(0deg);
+    }
+}
+
+@keyframes rotate-chaos {
+    0% {
+        transform: rotate(0deg) scale(1) skew(0deg);
+        filter: hue-rotate(0deg) brightness(1);
+    }
+    33% {
+        transform: rotate(120deg) scale(0.95) skew(2deg);
+        filter: hue-rotate(3deg) brightness(1.1);
+    }
+    66% {
+        transform: rotate(240deg) scale(1.05) skew(-2deg);
+        filter: hue-rotate(-3deg) brightness(0.95);
+    }
+    100% {
+        transform: rotate(360deg) scale(1) skew(0deg);
+        filter: hue-rotate(0deg) brightness(1);
+    }
+}
+
+@keyframes glitch-border-intense {
+    0%, 100% {
+        clip-path: none;
+        transform: none;
+        filter: none;
+    }
+    15% {
+        clip-path: polygon(0 15%, 100% 15%, 100% 85%, 0 85%);
+        transform: translate(-3px, 1.5px) skew(1deg);
+        filter: brightness(1.2) saturate(1.1);
+    }
+    25% {
+        clip-path: polygon(0 35%, 100% 35%, 100% 65%, 0 65%);
+        transform: translate(2.5px, -1px) skew(-1.5deg);
+        filter: brightness(0.9) saturate(1.2);
+    }
+    35% {
+        clip-path: polygon(0 45%, 100% 45%, 100% 55%, 0 55%);
+        transform: translate(-1px, 0.5px);
+        filter: brightness(1.05);
+    }
+}
+
+// New geometric animations
+@keyframes neon-geometry {
+    0% {
         transform: rotate(0deg) scale(1);
+        filter: blur(0.3px) brightness(1) saturate(1);
+        opacity: 0.4;
+    }
+    25% {
+        transform: rotate(90deg) scale(1.1);
+        filter: blur(0.4px) brightness(1.2) saturate(1.1);
+        opacity: 0.5;
     }
     50% {
         transform: rotate(180deg) scale(0.95);
+        filter: blur(0.2px) brightness(0.9) saturate(1.2);
+        opacity: 0.3;
     }
-    to {
+    75% {
+        transform: rotate(270deg) scale(1.05);
+        filter: blur(0.35px) brightness(1.1) saturate(1.05);
+        opacity: 0.45;
+    }
+    100% {
         transform: rotate(360deg) scale(1);
+        filter: blur(0.3px) brightness(1) saturate(1);
+        opacity: 0.4;
+    }
+}
+
+@keyframes tech-matrix {
+    0% {
+        transform: rotate(30deg) scale(1) skew(0deg);
+        filter: blur(0.5px) brightness(1);
+    }
+    33% {
+        transform: rotate(150deg) scale(1.1) skew(2deg);
+        filter: blur(0.6px) brightness(1.2);
+    }
+    66% {
+        transform: rotate(270deg) scale(0.9) skew(-2deg);
+        filter: blur(0.4px) brightness(0.9);
+    }
+    100% {
+        transform: rotate(390deg) scale(1) skew(0deg);
+        filter: blur(0.5px) brightness(1);
     }
 }
 
