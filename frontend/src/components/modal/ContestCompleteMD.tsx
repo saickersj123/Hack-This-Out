@@ -58,9 +58,9 @@ const ContestCompleteModal: React.FC<ContestCompleteModalProps> = ({ onClose, ex
         <div className="contest-complete-modal">
           <div className="title">🎉 Contest Completed! 🎉</div>
           <div className="content">You have successfully completed the contest.</div>
-          <div className="content"><b>{expEarned} EXP earned!</b></div>
+          <div className="exp-earned"><b>+ {expEarned} EXP!</b></div>
           <button onClick={handleGoToContests} className="redirect-button">
-            Go to Contests
+            Back to Contests
           </button>
         </div>
       </Modal>

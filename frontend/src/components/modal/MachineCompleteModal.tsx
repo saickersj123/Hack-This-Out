@@ -58,9 +58,9 @@ const MachineCompleteModal: React.FC<MachineCompleteModalProps> = ({ onClose, ex
         <div className="machine-complete-modal">
           <div className="title">🎉 Machine Completed! 🎉</div>
           <div className="content">You have successfully completed the machine.</div>
-          <div className="content"><b>{expEarned} EXP earned!</b></div>
+          <div className="exp-earned"><b>+ {expEarned} EXP!</b></div>
           <button onClick={handleGoToMachines} className="redirect-button">
-            Go to Machines
+            Back to Machines
           </button>
         </div>
       </Modal>

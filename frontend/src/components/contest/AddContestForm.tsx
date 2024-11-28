@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../assets/scss/contest/AddContestForm.scss';
 import Loading from '../public/Loading';
 import { IoMdArrowRoundBack } from "react-icons/io";
+import RegisterCompleteMD from '../modal/RegisterCompleteMD';
 
 interface Contest {
     id: string;
@@ -53,7 +54,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     const [activeSuggestion, setActiveSuggestion] = useState<Record<number, number>>({});
     const [focusedMachineIndex, setFocusedMachineIndex] = useState<number | null>(null);
     const navigate = useNavigate();
-
+    const [registerComplete, setRegisterComplete] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
 
     const { name, description, contestExp, startTime, endTime, machines } = formData;
@@ -227,6 +228,14 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
             alert('Please fill in all required fields.');
             return;
         }
+        if (startTime >= endTime) {
+            alert('Start time must be before end time.');
+            return;
+        }
+        if (new Date(endTime).getTime() - new Date(startTime).getTime() < 1 * 24 * 60 * 60 * 1000) {
+            alert('Contest duration must be at least 1 day.');
+            return;
+        }
         for (let i = 0; i < machines.length; i++) {
             if (!machines[i].id) {
                 alert(`Please select a valid machine for field ${i + 1}.`);
@@ -247,7 +256,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                 machines: machineIds,
                 contestExp,
             });
-            alert('Contest registered successfully.');
+            setRegisterComplete(true);
             setFormData({
                 name: '',
                 description: '',
@@ -440,6 +449,8 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                     </button>
                 </div>
             </div>
+            {registerComplete && <RegisterCompleteMD onClose={
+                () => {setRegisterComplete(false); navigate('/contest');}} mode='contest' />}
         </form>
     );
 };

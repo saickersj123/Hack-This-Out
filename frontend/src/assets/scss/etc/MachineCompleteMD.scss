@@ -17,6 +17,13 @@
         font-weight: 400;
         color: var(--color-white);
     }
+    .exp-earned {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--color-white);
+        filter: drop-shadow(0 0 10px var(--blue-200));
+        animation: shake 0.3s ease-in-out 6;
+    }
     .redirect-button {
         margin-top: 20px;
         margin-bottom: 10px;
@@ -32,5 +39,23 @@
             transform: translateY(-2px);
             filter: drop-shadow(0 0 10px var(--blue-500));
         }
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-2px);
+    }
+    50% {
+        transform: translateX(0);
+    }
+    75% {
+        transform: translateX(2px);
+    }
+    100% {
+        transform: translateX(0);
     }
 }

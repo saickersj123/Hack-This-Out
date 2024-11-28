@@ -3,8 +3,8 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(18, 18, 18, 0.8);
+  height: clamp(100vh, 140dvh, 140vh);
+  background-color: rgba(18, 18, 18, 0.98);
   display: flex;
   justify-content: center;
   align-items: center;
