@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { getInstanceByMachine } from '../../api/axiosInstance';
 import { Instance } from '../../types/Instance';
 import LoadingIcon from '../public/LoadingIcon';
-import ErrorIcon from '../public/ErrorIcon';
 import '../../assets/scss/play/InstanceInfo.scss';
 import { FaDotCircle } from "react-icons/fa";
 import { usePlayContext } from '../../contexts/PlayContext';
@@ -76,7 +75,7 @@ const InstanceInfo: React.FC<InstanceInfoProps> = ({ machineId }) => {
   */
 
   if (error) {
-    return <div className="instance-error"><ErrorIcon /> {error}</div>;
+    return <div className="instance-error"><LoadingIcon /></div>;
   }
 
   if (!instance) {

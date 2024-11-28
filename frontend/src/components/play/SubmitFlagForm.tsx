@@ -1,4 +1,5 @@
 import React, { useState, FormEvent } from 'react';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { submitFlagMachine } from '../../api/axiosMachine';
 import { submitFlagForContest } from '../../api/axiosContest';
 import { submitFlagInstance } from '../../api/axiosInstance';
@@ -39,6 +40,7 @@ interface SubmitFlagResponse {
  * Component for submitting a flag for a machine or contest.
  */
 const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, contestId, onFlagSuccess }) => {
+  const navigate: NavigateFunction = useNavigate();
   const [flag, setFlag] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [errors, setErrors] = useState<ErrorMessage[]>([]);
@@ -171,6 +173,7 @@ const SubmitFlagForm: React.FC<SubmitFlagFormProps> = ({ machineId, playType, co
       {showMachineCompleteModal && (
         <MachineCompleteModal onClose={() => {
           setShowMachineCompleteModal(false);
+          navigate(`/play`);
           resetPlayContext();
         }}
         expEarned={machineExpEarned}

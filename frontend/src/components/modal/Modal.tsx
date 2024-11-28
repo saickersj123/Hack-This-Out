@@ -26,13 +26,17 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     };
 
     if (isOpen) {
+      window.scrollTo(0, 0);
+      document.body.style.overflow = 'hidden';
       document.addEventListener('keydown', handleEscape);
     } else {
+      document.body.style.overflow = '';
       document.removeEventListener('keydown', handleEscape);
     }
 
-    // Cleanup event listener on unmount
+    // Cleanup event listener and reset overflow on unmount
     return () => {
+      document.body.style.overflow = '';
       document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen, onClose]);

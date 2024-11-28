@@ -1,0 +1,40 @@
+@use "../style" as *;
+
+.register_complete_contents{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 16px;
+    color: var(--color-white);
+    font-weight: bold;
+    align-items: flex-start;
+
+    .register_complete_upper{
+        display: flex;
+        justify-content: center;
+    }
+
+    .register_complete_body{
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        text-align: left;
+    }
+
+    button{
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        margin-left: auto;
+        transition: all 0.3s ease;
+        @include button_color;
+
+        &:hover{
+            border: 2px solid transparent;
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 10px var(--blue-500));
+        }
+    }
+}

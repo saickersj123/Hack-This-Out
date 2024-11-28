@@ -19,10 +19,7 @@ const DownloadVPNProfile: React.FC = () => {
     setDownloadStatus('inProgress');
 
     try {
-      const response = await downloadOpenVPNProfile();
-
-      // Assuming the response is a Blob
-      const blob = new Blob([response.data], { type: 'application/x-openvpn-profile' });
+      const blob = await downloadOpenVPNProfile();
       const url = window.URL.createObjectURL(blob);
 
       // Create and trigger download

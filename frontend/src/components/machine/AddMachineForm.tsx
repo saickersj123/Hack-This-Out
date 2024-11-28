@@ -3,6 +3,7 @@ import { createMachine } from '../../api/axiosMachine';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/scss/machine/AddMachineForm.scss';
 import { IoMdArrowRoundBack } from 'react-icons/io';
+import RegisterCompleteMD from '../modal/RegisterCompleteMD';
 
 interface MachineFormData {
   name: string;
@@ -29,7 +30,7 @@ const AddMachineForm: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-
+  const [registerComplete, setRegisterComplete] = useState(false);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -99,10 +100,10 @@ const AddMachineForm: React.FC = () => {
 
     try {
       await createMachine(formData);
-      alert('Machine Registered, Admin will review and approve it.');
-      navigate('/machine'); // Redirect to machine list or detail page
+      setRegisterComplete(true);
     } catch (err: any) {
       setError(err.msg || 'Failed to create machine.');
+      alert(err.msg || 'Check your input and try again.');
     }
   };
 
@@ -252,6 +253,7 @@ const AddMachineForm: React.FC = () => {
           <button type='submit'>Add Machine</button>
         </div>
       </div>
+      {registerComplete && <RegisterCompleteMD onClose={() => {setRegisterComplete(false); navigate('/machine');}} mode='machine' />}
     </form>
   );
 };
