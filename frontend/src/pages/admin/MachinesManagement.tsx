@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/admin/AdminSidebar';
-import DataTable from '../../components/admin/DataTable/DataTable';
 import ActionButtons from '../../components/admin/ActionButtons';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import ErrorMessage from '../../components/admin/ErrorMessage';
@@ -10,6 +9,7 @@ import {
   deactivateMachine,
   deleteMachine,
 } from '../../api/axiosMachine';
+import '../../assets/scss/admin/DataTable.scss';
 
 interface Machine {
   _id: string;
@@ -90,14 +90,6 @@ const MachinesManagement: React.FC = () => {
       <div className="admin-content">
         <h1>Machines Management</h1>
         {error && <ErrorMessage message={error} />}
-        <DataTable
-          columns={columns}
-          data={machines.map(machine => ({
-            ...machine,
-            isActive: machine.isActive ? 'Yes' : 'No',
-          }))}
-          actions={undefined}
-        />
         
         {/* Render Action Buttons separately per row */}
         <table className="data-table">

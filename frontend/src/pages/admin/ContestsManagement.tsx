@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import DataTable from '../../components/admin/DataTable/DataTable';
 import ActionButtons from '../../components/admin/ActionButtons';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import ErrorMessage from '../../components/admin/ErrorMessage';
 import Sidebar from '../../components/admin/AdminSidebar';
+import '../../assets/scss/admin/DataTable.scss';
 import {
   getContests,
   ActivateContest,
@@ -94,14 +94,6 @@ const ContestsManagement: React.FC = () => {
       <div className="admin-content">
         <h1>Contests Management</h1>
         {error && <ErrorMessage message={error} />}
-        <DataTable
-          columns={columns}
-          data={contests.map(contest => ({
-            ...contest,
-            isActive: contest.isActive ? 'Yes' : 'No',
-          }))}
-          actions={undefined}
-        />
         
         {/* Render Action Buttons separately per row */}
         <table className="data-table">

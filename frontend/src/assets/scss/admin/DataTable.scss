@@ -44,10 +44,18 @@
   
             &.deactivate-button {
               background-color: var(--danger);
+
+              &:hover {
+                background-color: var(--danger-hover);
+              }
             }
   
             &.delete-button {
-              background-color: var(--warning);
+              background-color: var(--danger);
+
+              &:hover {
+                background-color: var(--danger-hover);
+              }
             }
           }
         }

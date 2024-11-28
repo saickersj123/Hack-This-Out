@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import DataTable from '../../components/admin/DataTable/DataTable';
 import ActionButtons from '../../components/admin/ActionButtons';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import ErrorMessage from '../../components/admin/ErrorMessage';
@@ -9,6 +8,7 @@ import {
   deleteUserByUserId 
 } from '../../api/axiosUser';
 import Sidebar from '../../components/admin/AdminSidebar';
+import '../../assets/scss/admin/DataTable.scss';
 interface User {
   _id: string;
   username: string;
@@ -84,10 +84,6 @@ const UsersManagement: React.FC = () => {
       <div className="admin-content">
         <h1>Users Management</h1>
         {error && <ErrorMessage message={error} />}
-        <DataTable columns={columns} data={users.map(user => ({
-          ...user,
-          isAdmin: user.isAdmin ? 'Yes' : 'No'
-        }))} actions={undefined} />
         
         {/* Render Action Buttons separately per row */}
         <table className="data-table">

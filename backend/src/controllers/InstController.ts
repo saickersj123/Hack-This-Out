@@ -327,7 +327,7 @@ export const terminateInstanceByInstanceId = async (req: Request, res: Response)
     }
 
     // Find the instance
-    const instance = await Instance.findOne({ instanceId, user: userId });
+    const instance = await Instance.findOne({ _id: instanceId, user: userId });
     if (!instance) {
       res.status(404).json({ 
         message: "ERROR", 
@@ -338,7 +338,7 @@ export const terminateInstanceByInstanceId = async (req: Request, res: Response)
 
     // Terminate the instance
     const terminateParams = {
-      InstanceIds: [instanceId],
+      InstanceIds: [instance.instanceId],
     };
     const terminateCommand = new TerminateInstancesCommand(terminateParams);
     await ec2Client.send(terminateCommand);
@@ -478,7 +478,7 @@ export const terminateInstance = async (req: Request, res: Response) => {
     instance.status = 'terminated';
     await instance.save();
 
-    await Instance.deleteOne({ instanceId: instance.instanceId });
+    await Instance.deleteOne({ _id: instance._id, user: user.id });
 
     res.status(200).json({ 
       message: "OK", 

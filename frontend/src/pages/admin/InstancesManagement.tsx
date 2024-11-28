@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import DataTable from '../../components/admin/DataTable/DataTable';
 import Sidebar from '../../components/admin/AdminSidebar';
 import ActionButtons from '../../components/admin/ActionButtons';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import ErrorMessage from '../../components/admin/ErrorMessage';
+import '../../assets/scss/admin/DataTable.scss';
 import { getAllInstances, TerminateInstanceById } from '../../api/axiosInstance';
 interface Instance {
   _id: string;
@@ -40,6 +40,7 @@ const InstancesManagement: React.FC = () => {
 
   const confirmTerminate = async () => {
     const { instanceId } = modal;
+    console.log(instanceId);
     if (!instanceId) return;
 
     try {
@@ -65,11 +66,6 @@ const InstancesManagement: React.FC = () => {
       <div className="admin-content">
         <h1>Instances Management</h1>
         {error && <ErrorMessage message={error} />}
-        <DataTable
-          columns={columns}
-          data={instances}
-          actions={undefined}
-        />
         
         {/* Render Action Buttons separately per row */}
         <table className="data-table">

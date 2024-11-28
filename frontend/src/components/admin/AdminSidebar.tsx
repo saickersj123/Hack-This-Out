@@ -1,13 +1,17 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import '../../assets/scss/admin/AdminSidebar.scss';
-import { FaTachometerAlt, FaUsers, FaCogs, FaClipboardList, FaServer } from 'react-icons/fa';
+import { FaTachometerAlt, FaUsers, FaHome, FaCogs, FaClipboardList, FaServer } from 'react-icons/fa';
 
 const Sidebar: React.FC = () => {
   return (
     <div className="admin-sidebar">
       <h2 className="sidebar-title">Admin Dashboard</h2>
       <nav className="sidebar-nav">
+      <NavLink to="/main" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <FaHome className="sidebar-icon" />
+          Main Page
+        </NavLink>
         <NavLink to="/admin" className={({ isActive }) => (isActive ? 'active' : '')}>
           <FaTachometerAlt className="sidebar-icon" />
           Dashboard Home
