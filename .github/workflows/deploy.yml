@@ -13,12 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Add SSH key
-      uses: shimataro/ssh-key-action@v2
+    - name: Start ssh agent
+      uses: webfactory/ssh-agent@v0.7.0
       with:
-        key: ${{ secrets.EC2_SSH_KEY }}
-        name: github-actions
-        known_hosts: ${{ secrets.EC2_HOST }}
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
     - name: Deploy files to EC2
       run: |
