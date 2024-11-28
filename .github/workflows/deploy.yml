@@ -27,8 +27,8 @@ jobs:
     - name: Install dependencies and restart app
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'ENDSSH'
-          cd /home/${{ secrets.EC2_USER }}/Hack-This-Out
-          npm install-server
-          cd backend
+          cd /home/${{ secrets.EC2_USER }}/Hack-This-Out/backend
+          npm install
+          npm run build
           pm2 start /dist/server.js --name "HacktThisOut-API" || pm2 restart "HacktThisOut-API"
         ENDSSH
