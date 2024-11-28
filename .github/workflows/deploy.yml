@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ] 
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Add SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.EC2_SSH_KEY }}
+        name: gihub-actions
+        known_hosts: ${{ secrets.EC2_HOST }}
+
+    - name: Deploy files to EC2
+      run: |
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude='.git' --exclude='node_modules' ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/Hack-This-Out
+
+    - name: Install dependencies and restart app
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'ENDSSH'
+          cd /home/${{ secrets.EC2_USER }}/Hack-This-Out
+          npm install-server
+          pm2 start server.js --name "HacktThisOut-API" || pm2 restart "HacktThisOut-API"
+        ENDSSH
