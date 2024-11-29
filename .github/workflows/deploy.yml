@@ -27,9 +27,7 @@ jobs:
     - name: Install dependencies and restart app
       run: |
         ssh -i ~/.ssh/github-actions -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'ENDSSH'
-          cd /home/${{ secrets.EC2_USER }}/Hack-This-Out/backend
-          npm install
-          npm run build
-          cd backend
-          pm2 start dist/server.js --name "HackThisOut-API" || pm2 restart "HackThisOut-API"
+          cd /home/${{ secrets.EC2_USER }}/Hack-This-Out/
+          npm run install-server
+          pm2 start ecosystem.config.js --name "HackThisOut-API" || pm2 restart "HackThisOut-API"
         ENDSSH
