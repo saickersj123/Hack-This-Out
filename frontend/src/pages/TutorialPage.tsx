@@ -24,28 +24,29 @@ const TutorialPage: React.FC = () => {
           <article className="tutorial-page-content-intro">
             <h2>Introduction</h2>
             <p>
-              <b>Hack This Out</b> is a Web-based <a href="#">Hacking Lab</a>.<br />
-              &nbsp;We provide a <a href="#">Secured Network</a> and <a href="#">Virtual Environment</a> for your journey to become a hacker or cyber security enthusiast.<br />
-              The journey can be boring and exhausting, so we provide a <a href="#">Gaming experience</a> for you.
+              <b>Hack This Out</b> is a web-based <a href="#">Hacking Lab</a>.<br />
+              Cyber Security is hard and boring, but we believe that it can be <a href="#">Fun</a> and <a href="#">Exciting</a>.<br />
+              The journey probably be boring and exhausting, so we prepare a <a href="#">Gaming experience</a> for you.
             </p>
           </article>
           <article className="tutorial-page-content-rules">
             <h2>Gaming Rules</h2>
             <ol>
-              <li>You complete a machine by <a href="#">Hacking</a> and <a href="#">Capture the Flag</a>.</li>
-              <li>You get rewards as <a href="#">Experience Points (EXP)</a> by completing machines.</li>
+              <li>You complete a machine by <a href="#">Hacking</a> and <a href="#">Capturing the Flag</a>.</li>
+              <li>You get rewarded <a href="#">Experience Points (EXP)</a> by completing machines.</li>
               <li>You can get <a href="#">Hints</a> from each machine, but there will be a penalty.</li>
             </ol>
           </article>
           <article className="tutorial-page-content-gamemode">
             <h2>Game Modes</h2>
             <p>
-              <strong><b>&nbsp;&nbsp;Machine</b></strong><br />
-              <a href="#">The Basic!</a> You can play machines whenever you want.<br />
-              <strong><b>&nbsp;&nbsp;Contest</b></strong><br />
-              <a href="#">Compete and Win!</a> Compete against other users.<br />
-              Each contest has a duration.<br />
-              The quickest user to complete all given machines during the contest wins.
+              <strong>&nbsp;&nbsp;Machine</strong><br />
+              <a href="#">The Basic!</a> You have to hack vulnerable machines.<br />
+              Find the <a href="#">Flag</a> and complete the machine.<br /><br />
+              <strong>&nbsp;&nbsp;Contest</strong><br />
+              <a href="#">Compete and Win!</a> Compete against others.
+              Each contest has a <a href="#">Period</a>.<br />
+              The <a href="#">Quickest</a> player who completes all given tasks in the period, gets to <a href="#">Win</a>.
             </p>
           </article>
 
