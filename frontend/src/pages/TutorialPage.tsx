@@ -1,14 +1,14 @@
 import React from 'react';
 import Main from '../components/main/Main';
-import logo from "../assets/img/icon/HTO DARK RECOLORED_crop_filled_tutorial.png";
+import logo_dark from "../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
 import '../assets/scss/etc/TutorialPage.scss';
-// frontend\src\assets\img\icon\HTO DARK RECOLORED_crop_filled.png
+
 const TutorialPage: React.FC = () => {
   return (
     <Main>
       <div className="tutorial-page-container">
         <div className="tutorial-page-top">
-          <img className="tutorial-page-img" alt="" src={logo} />
+          <img id="tutorialImg" className="tutorial-page-img-dark" alt="" src={logo_dark} />
         </div>
         <section className="tutorial-page-content-container">
           <article className="tutorial-page-content-intro">

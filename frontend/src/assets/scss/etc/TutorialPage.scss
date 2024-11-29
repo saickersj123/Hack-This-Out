@@ -15,12 +15,12 @@
 }
 
 .tutorial-page-top{
-    height: 160px;
-    // background-color: ; 
+    height: auto;
     border-bottom: 2px solid white;
-    .tutorial-page-img{
+
+    .tutorial-page-img-dark{
         height: 100%;
-        object-fit: contain; 
+        object-fit: cover; 
     }
 }
 
