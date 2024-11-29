@@ -181,7 +181,7 @@ export const getActiveMachineDetailsById = async (req: Request, res: Response): 
  */
 export const getActiveMachines = async (req: Request, res: Response): Promise<void> => {
   try {
-    const machines = await Machine.find({ isActive: true })
+    const machines = await Machine.find({ isActive: true }).sort({ playerCount: -1 })
     .select('-hints -flag -__v -reviews -createdAt -updatedAt -isActive -description -exp -amiId');
     if (machines.length === 0) {
       res.status(404).json({ 

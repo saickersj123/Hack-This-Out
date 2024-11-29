@@ -112,7 +112,7 @@ const Profile: React.FC = () => {
                     <div className={styles.settingsInner}>
                         <div className={styles.rectangleParent}>
                             <ImInfo className={styles.icon} />
-                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/intro'))}>Introduction</MenuItem>
+                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/intro'))}>Infomation</MenuItem>
                         </div>
                     </div>
                 </li>
