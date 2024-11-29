@@ -210,7 +210,7 @@ header .intro-text {
   align-items: center;
   text-transform: uppercase;
   color: #fff;
-  background-color: var(--blue-500);
+  background-color: var(--color-layout);
   padding: 14px 34px;
   letter-spacing: 1px;
   width: 200px;
@@ -221,7 +221,7 @@ header .intro-text {
   transition: all 0.3s ease-in-out;
   border: 0;
   gap: 8px;
-  filter: drop-shadow(0 0 10px var(--blue-300));
+  filter: drop-shadow(0 0 10px var(--secondary-layout));
 
   &:hover {
     animation: glitchEffect 0.3s ease-in-out;
