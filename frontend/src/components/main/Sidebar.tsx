@@ -51,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
     <div className={`${styles.sidebarMenu} ${isCollapsed ? styles.collapsed : ''}`}>
       <div className={styles.headerParent}>
         <div className={styles.header}>
-          <Link to='/main' className={styles.logoimage}>
+          <Link to='/' className={styles.logoimage}>
             <img className={styles.logoContainerIcon} alt="" src={logo} />
           </Link>
           <div className={styles.sidebarMenuButton}>

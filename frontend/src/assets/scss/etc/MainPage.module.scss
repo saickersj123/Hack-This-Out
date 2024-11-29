@@ -1,0 +1,78 @@
+@use './loading.module.scss';
+
+.glitch {
+  @extend .glitch;
+  cursor: pointer;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  background-color: #000;
+
+  &.fadeOut {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+    
+    & + * {
+      overflow: hidden;
+    }
+    
+    .channel {
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &.r {
+        transform: translate(8px, -3px) scale(1.02);
+        filter: brightness(1.5) saturate(1.5);
+      }
+      
+      &.g {
+        transform: translate(-6px, 2px) scale(0.98);
+        filter: brightness(1.3) saturate(1.3);
+      }
+      
+      &.b {
+        transform: translate(4px, -1px) scale(1.01);
+        filter: brightness(1.4) saturate(1.4);
+      }
+    }
+
+    &::before {
+      transform: scale(1.2) rotate(2deg);
+      filter: brightness(1.3) saturate(1.5) hue-rotate(15deg);
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &::after {
+      transform: scale(1.15) rotate(-1deg);
+      filter: brightness(1.2) contrast(1.3);
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  &:hover {
+    &::before {
+      filter: brightness(1.1) saturate(1.2);
+    }
+
+    .channel {
+      &.r { transform: translate(3px, -1.2px); }
+      &.g { transform: translate(-2.4px, 1px); }
+      &.b { transform: translate(1.2px, -0.6px); }
+    }
+  }
+}
+
+:global(body) {
+  transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:has(.fadeOut) {
+    overflow: hidden;
+  }
+}
+
+:global(#root) {
+  overflow: hidden;
+}
