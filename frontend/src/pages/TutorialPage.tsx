@@ -40,11 +40,11 @@ const TutorialPage: React.FC = () => {
           <article className="tutorial-page-content-gamemode">
             <h2>Game Modes</h2>
             <p>
-              <strong>&nbsp;&nbsp;Machine</strong><br />
-              <a href="#">The Basic!</a> You have to hack vulnerable machines.<br />
+              <strong>&nbsp;&nbsp;&nbsp;Machine</strong><br />
+              <a href="#">&nbsp;The Basic!</a> You have to hack vulnerable machines.<br />
               Find the <a href="#">Flag</a> and complete the machine.<br /><br />
-              <strong>&nbsp;&nbsp;Contest</strong><br />
-              <a href="#">Compete and Win!</a> Compete against others.
+              <strong>&nbsp;&nbsp;&nbsp;Contest</strong><br />
+              <a href="#">&nbsp;The Competition!</a> Compete against other players.
               Each contest has a <a href="#">Period</a>.<br />
               The <a href="#">Quickest</a> player who completes all given tasks in the period, gets to <a href="#">Win</a>.
             </p>
