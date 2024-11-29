@@ -1,5 +1,6 @@
 import React from "react";
 import '../../assets/scss/landing/services.scss';
+import LoadingIcon from "../public/LoadingIcon";
 
 // 데이터 항목 타입 정의
 interface Service {
@@ -20,13 +21,20 @@ export const Services: React.FC<ServicesProps> = ({ data }) => {
         <div className="section-title">
           <h2>Our Services</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-            dapibus leonec.
+            <br />
+            People say that cybersecurity is hard to learn and boring.
+            <br />
+            But we believe that cybersecurity can be fun and interesting.
+            <br />
+            So we created a Hacking Lab for you to practice and learn in a fun and interesting way.
+            <br />
+            We used a lot of technologies to make this possible.
+            <br />
+            Let's see what we used.
           </p>
         </div>
         <div className="row">
           {data ? (
-            // 데이터가 존재하면 각 항목을 매핑하여 출력
             data.map((d, i) => (
               <div key={`${d.name}-${i}`} className="col-md-4">
                 <div className="service-data">
@@ -39,8 +47,7 @@ export const Services: React.FC<ServicesProps> = ({ data }) => {
               </div>
             ))
           ) : (
-            // 데이터가 없으면 "Loading..." 표시
-            "Loading..."
+            <LoadingIcon />
           )}
         </div>
       </div>

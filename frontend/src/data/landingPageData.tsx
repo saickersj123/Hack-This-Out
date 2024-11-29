@@ -1,6 +1,9 @@
-import { PiWechatLogoFill } from "react-icons/pi";
-import { IoCloudDownloadOutline } from "react-icons/io5";
-
+import { IoGameControllerOutline } from "react-icons/io5";
+import { FaAws, FaGithub, FaReact, FaUsers } from "react-icons/fa";
+import { GrCloudComputer } from "react-icons/gr";
+import { RiEmotionHappyFill } from "react-icons/ri";
+import { SiExpress, SiOpenvpn } from "react-icons/si";
+import { TbBrandMongodb } from "react-icons/tb";
 // 타입 정의
 export interface Header {
   title: string;
@@ -38,12 +41,8 @@ export interface TeamMember {
 }
 
 export interface Contact {
-  address: string;
-  phone: string;
   email: string;
-  facebook: string;
-  twitter: string;
-  youtube: string;
+  github: string;
 }
 
 export interface Feature {
@@ -67,15 +66,15 @@ export interface LandingPageData {
 // 데이터 정의
 export const landingPageData: LandingPageData = {
   Header: {
-    title: "Hack This Out 2024",
+    title: "Hack This Out",
     paragraph:
-      "Web-based Hacking Lab SCNU Imagineer Project"
+      "Web-based Hacking Lab\nImagineer Project 2024, SCNU",
   },
   About: {
     paragraph:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    Why: ["Lorem ipsum dolor", "Tempor incididunt", "Lorem ipsum dolor", "Incididunt ut labore"],
-    Why2: ["Aliquip ex ea commodo", "Lorem ipsum dolor", "Exercitation ullamco", "Lorem ipsum dolor"],
+      "Hack This Out is a web-based Hacking Lab.\nWe provide a Secured Network and Virtual Environment for your journey to become a hacker or cyber security enthusiast.\nThe journey can be boring and exhausting, so we provide a Gaming experience for you.",
+    Why: ["Easy to Use", "Play and Compete", "Safe and Secure", "Study and Practice"],
+    Why2: ["User-friendly Interface", "Gaming Experience", "Secure Network", "Virtual Environment"],
   },
   Gallery: [
     { title: "Project Title", largeImage: "img/portfolio/01-large.jpg", smallImage: "img/portfolio/01-small.jpg" },
@@ -90,102 +89,100 @@ export const landingPageData: LandingPageData = {
   ],
   Services: [
     {
-      icon: <IoCloudDownloadOutline />,
-      name: "Lorem ipsum dolor",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.",
+      icon: <FaReact />,
+      name: "Frontend",
+      text: "Easy to use and Responsive, Interactive Interface using React.",
     },
     {
-      icon: <IoCloudDownloadOutline />,
-      name: "Consectetur adipiscing",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.",
+      icon: <SiExpress />,
+      name: "Backend",
+      text: "Secure and Scalable Backend using Node.js and Express.",
     },
     {
-      icon: <IoCloudDownloadOutline />,
-      name: "Lorem ipsum dolor",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.",
+      icon: <TbBrandMongodb />,
+      name: "Database",
+      text: "Simple and Scalable NoSQL Database using MongoDB.",
     },
     {
-      icon: <IoCloudDownloadOutline />,
-      name: "Consectetur adipiscing",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.",
+      icon: <FaAws />,
+      name: "Virtual Machines",
+      text: "Secure and Sustaiable Virtural Machine ecosystem for Hacking Lab using AWS.",
     },
     {
-      icon: <IoCloudDownloadOutline />,
-      name: "Lorem ipsum dolor",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.",
+      icon: <SiOpenvpn />,
+      name: "Virtual Network",
+      text: "Secured and Quarantined Network for Hacking Lab using OpenVPN.",
     },
     {
-      icon: <IoCloudDownloadOutline />,
-      name: "Consectetur adipiscing",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.",
+      icon: <FaGithub />,
+      name: "CI/CD Pipeline",
+      text: "Automated CI/CD Pipeline for Hacking Lab using GitHub Actions.",
     },
   ],
   Testimonials: [
     {
       img: "img/testimonials/01.jpg",
       text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."',
-      name: "John Doe",
+      name: "Sangjin Park",
     },
     {
       img: "img/testimonials/02.jpg",
       text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."',
-      name: "Johnathan Doe",
+      name: "Kangmin Lee",
     },
     {
       img: "img/testimonials/03.jpg",
       text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."',
-      name: "John Doe",
+      name: "Jiwoo Park",
     },
     {
       img: "img/testimonials/04.jpg",
       text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."',
-      name: "Johnathan Doe",
+      name: "Jeongjin Mun",
     },
     {
       img: "img/testimonials/05.jpg",
       text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."',
-      name: "John Doe",
+      name: "Seungmin Lee",
     },
     {
       img: "img/testimonials/06.jpg",
       text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."',
-      name: "Johnathan Doe",
+      name: "Undoe Yun",
     },
   ],
   Team: [
-    { img: "img/team/01.jpg", name: "John Doe", job: "Director" },
-    { img: "img/team/02.jpg", name: "Mike Doe", job: "Senior Designer" },
-    { img: "img/team/03.jpg", name: "Jane Doe", job: "Senior Designer" },
-    { img: "img/team/04.jpg", name: "Karen Doe", job: "Project Manager" },
+    { img: "img/team/00.jpg", name: "Sangjin Park", job: "Project Lead, Developer" },
+    { img: "img/team/01.jpg", name: "Kangmin Lee", job: "Developer" },
+    { img: "img/team/02.jpg", name: "Jiwoo Park", job: "Developer" },
+    { img: "img/team/03.jpg", name: "Jeongjin Mun", job: "Developer" },
+    { img: "img/team/04.jpg", name: "Seungmin Lee", job: "Developer" },
+    { img: "img/team/05.jpg", name: "Undoe Yun", job: "Developer" },
   ],
   Contact: {
-    address: "4321 California St, San Francisco, CA 12345 ",
-    phone: "+1 123 456 1234",
-    email: "info@company.com",
-    facebook: "fb.com",
-    twitter: "twitter.com",
-    youtube: "youtube.com",
+    email: "hackthisout123@gmail.com",
+    github: "github.com",
   },
   Features: [
     {
-      icon: <PiWechatLogoFill />,
-      title: "Lorem ipsum",
-      text: "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.",
+      icon: <FaUsers />,
+      title: "User Management",
+      text: "User Management system for managing users and their permissions safely.",
     },
     {
-      icon: <PiWechatLogoFill />,
-      title: "Lorem ipsum",
-      text: "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.",
+      icon: <GrCloudComputer />,
+      title: "Virtual Environment",
+      text: "Secured Network and Virtual environment for web-based Hacking Lab.",
     },
     {
-      icon:<PiWechatLogoFill />,
-      title: "Lorem ipsum",
-      text: "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.",
+      icon: <IoGameControllerOutline />,
+      title: "Gaming Experience",
+      text: "Fun and interesting Gaming experience for practicing hacking and cybersecurity skills.",
     },
     {
-      icon: <PiWechatLogoFill />,
-      title: "Lorem ipsum",
-      text: "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.",
+      icon: <RiEmotionHappyFill />,
+      title: "User-friendly Interface",
+      text: "User-friendly interface for easy navigation and usage.",
     },
   ],
 };

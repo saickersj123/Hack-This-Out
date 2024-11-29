@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingIcon from "../public/LoadingIcon";
 
 // 테스트몬셜 항목의 타입 정의
 interface Testimonial {
@@ -34,7 +35,7 @@ export const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                   </div>
                 </div>
               ))
-            : "Loading..."}
+            : <LoadingIcon />}
         </div>
       </div>
     </div>

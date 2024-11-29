@@ -1,5 +1,6 @@
 import React from "react";
 import '../../assets/scss/landing/team.scss';
+import LoadingIcon from "../public/LoadingIcon";
 
 // 팀 멤버 항목의 타입 정의
 interface TeamMember {
@@ -20,8 +21,7 @@ export const Team: React.FC<TeamProps> = ({ data }) => {
         <div className="section-title">
           <h2>Meet the Team</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-            dapibus leonec.
+            We are a team of passionate developers and cyber security enthusiasts.
           </p>
         </div>
         <div id="row">
@@ -29,7 +29,6 @@ export const Team: React.FC<TeamProps> = ({ data }) => {
             ? data.map((d, i) => (
                 <div key={`${d.name}-${i}`} className="col-md-3 col-sm-6 team">
                   <div className="thumbnail">
-                    <img src={d.img} alt={d.name} className="team-img" />
                     <div className="caption">
                       <h4>{d.name}</h4>
                       <p>{d.job}</p>
@@ -37,7 +36,7 @@ export const Team: React.FC<TeamProps> = ({ data }) => {
                   </div>
                 </div>
               ))
-            : "Loading..."}
+            : <LoadingIcon />}
         </div>
       </div>
     </div>

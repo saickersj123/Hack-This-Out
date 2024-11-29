@@ -9,18 +9,18 @@ import { Services } from "../../components/landing/services";
 import { Team } from "../../components/landing/team";
 import { Contact } from "../../components/landing/contact";
 import { landingPageData } from "../../data/landingPageData"; // TSX 데이터 임포트
-
+import LoadingIcon from "../../components/public/LoadingIcon";
 const LandingPage: React.FC = () => {
   const [data, setData] = useState(landingPageData);
 
   useEffect(() => {
-    // 데이터가 없으면 로드 (지금은 파일에서 바로 가져오므로 필요 없음)
+    // fetch data from backend. but now, it's just static data.
     if (!data) {
       setData(landingPageData);
     }
   }, [data]);
 
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <div><LoadingIcon /></div>;
 
   return (
     <div

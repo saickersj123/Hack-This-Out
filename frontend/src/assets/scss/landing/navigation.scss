@@ -44,8 +44,22 @@
     height: 50px;
     padding: 10px 10px;
     line-height: 20px;
+    img {
+        height:80px;
+        
+    }
 }
-
+.logo-image {
+    transition: all 0.2s ease-in-out;
+    transform-origin: center;
+    will-change: transform;
+    backface-visibility: hidden; // Prevents flickering
+    -webkit-font-smoothing: antialiased;
+    
+    &:hover {
+        transform: translateX(-3px);
+    }
+}
 .navbar-nav>li>a {
     text-transform: uppercase;
     color: #555;

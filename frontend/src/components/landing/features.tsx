@@ -1,5 +1,6 @@
 import React from "react";
 import '../../assets/scss/landing/features.scss';
+import LoadingIcon from "../public/LoadingIcon";
 
 // 타입 정의
 type FeatureProps = {
@@ -29,7 +30,7 @@ export const Features: React.FC<FeatureProps> = ({ data }) => {
               </div>
             ))
           ) : (
-            "Loading..." // data가 없거나 비어있을 경우 로딩 메시지
+            <LoadingIcon />
           )}
         </div>
       </div>

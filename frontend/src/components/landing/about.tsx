@@ -1,6 +1,7 @@
 import React from "react";
 import '../../assets/scss/landing/about.scss';
 import { GrFormCheckmark } from "react-icons/gr";
+import LoadingIcon from "../public/LoadingIcon";
 
 // data의 타입을 정의
 interface AboutProps {
@@ -22,7 +23,7 @@ export const About: React.FC<AboutProps> = ({ data }) => {
           <div className="col-xs-12 col-md-6">
             <div className="about-text">
               <h2>About Us</h2>
-              <p>{data ? data.paragraph : "loading..."}</p>
+              <p>{data ? data.paragraph : <LoadingIcon />}</p>
               <h3>Why Choose Us?</h3>
               <div className="list-style">
                 <div className="col-lg-6 col-sm-6 col-xs-12">

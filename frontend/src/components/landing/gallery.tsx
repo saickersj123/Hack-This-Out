@@ -1,6 +1,7 @@
 import React from "react";
 import { Image } from "./image";
 import styles from '../../assets/scss/landing/gallery.module.scss';
+import LoadingIcon from "../public/LoadingIcon";
 
 // 각 gallery 항목의 타입 정의
 interface GalleryItem {
@@ -39,7 +40,7 @@ export const Gallery: React.FC<GalleryProps> = ({ data }) => {
                 </div>
               ))
             ) : (
-              <div>Loading...</div>
+              <LoadingIcon />
             )}
           </div>
         </div>

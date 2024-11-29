@@ -1,18 +1,12 @@
 import React from "react";    // , { useState, ChangeEvent, FormEvent } 
 import '../../assets/scss/landing/contact.scss';
-import { RiFacebookLine } from "react-icons/ri";
-import { FaXTwitter } from "react-icons/fa6";
-import { TbBrandGithub } from "react-icons/tb";
+import { TbBrandGithub, TbBrandGmail } from "react-icons/tb";
 
 // 데이터 타입 정의
 interface ContactData {
   data: {
-    address: string;
-    phone: string;
     email: string;
-    facebook: string;
-    twitter: string;
-    youtube: string;
+    github: string;
   };
 }
 
@@ -134,19 +128,16 @@ export const Contact: React.FC<ContactData> = ({ data }) => {
               <div className="social">
                 <ul>
                   <li>
-                    <a href={data?.facebook || "#"}>
-                    <RiFacebookLine className="social-icon" size={48} color="white"/>
+                    <a href={`mailto:${data?.email}`}>
+                    <TbBrandGmail className="social-icon" size={60} color="white"/>
                     </a>
+                    <p>Email</p>
                   </li>
                   <li>
-                    <a href={data?.twitter || "#"}>
-                    <FaXTwitter className="social-icon" size={48} color="white"/>
+                    <a href={data?.github || "#"}>
+                    <TbBrandGithub className="social-icon" size={60} color="white"/>
                     </a>
-                  </li>
-                  <li>
-                    <a href={data?.youtube || "#"}>
-                    <TbBrandGithub className="social-icon" size={48} color="white"/>
-                    </a>
+                    <p>Github</p>
                   </li>
                 </ul>
               </div>
