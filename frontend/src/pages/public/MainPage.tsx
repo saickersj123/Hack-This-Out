@@ -39,7 +39,7 @@ const MainPage: React.FC = () => {
     setIsFadingOut(true);
     setTimeout(() => {
       navigate('/tutorial');
-    }, 1200); // Updated to match the new 1.2s animation duration
+    }, 500);
   };
 
   const currentImage = images[currentImageIndex];

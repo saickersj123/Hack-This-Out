@@ -1,10 +1,11 @@
 @use './loading.module.scss';
+@use '../style.scss' as *;
 
 .glitch {
   @extend .glitch;
   cursor: pointer;
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   background-color: #000;
 
@@ -66,10 +67,11 @@
 }
 
 :global(body) {
-  transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   
   &:has(.fadeOut) {
     overflow: hidden;
+    background-color: var(--color-layout);
   }
 }
 
