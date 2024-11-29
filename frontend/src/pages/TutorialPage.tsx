@@ -1,14 +1,24 @@
 import React from 'react';
 import Main from '../components/main/Main';
 import logo_dark from "../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
+import logo_light from "../assets/img/icon/HTO LIGHT RECOLORED_crop_filled.png";
 import '../assets/scss/etc/TutorialPage.scss';
 
 const TutorialPage: React.FC = () => {
+  const [isHovered, setIsHovered] = React.useState(false);
+
   return (
     <Main>
       <div className="tutorial-page-container">
         <div className="tutorial-page-top">
-          <img id="tutorialImg" className="tutorial-page-img-dark" alt="" src={logo_dark} />
+          <img 
+            id="tutorialImg" 
+            className="tutorial-page-img-dark" 
+            alt="" 
+            src={isHovered ? logo_light : logo_dark}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          />
         </div>
         <section className="tutorial-page-content-container">
           <article className="tutorial-page-content-intro">
@@ -30,10 +40,10 @@ const TutorialPage: React.FC = () => {
           <article className="tutorial-page-content-gamemode">
             <h2>Game Modes</h2>
             <p>
-              <strong><b>Machine</b></strong><br />
-              The Basic, You can play machines whenever you want.<br />
-              <strong><b>Contest</b></strong><br />
-              The Competition, Compete against other users.<br />
+              <strong><b>&nbsp;&nbsp;Machine</b></strong><br />
+              <a href="#">The Basic!</a> You can play machines whenever you want.<br />
+              <strong><b>&nbsp;&nbsp;Contest</b></strong><br />
+              <a href="#">Compete and Win!</a> Compete against other users.<br />
               Each contest has a duration.<br />
               The quickest user to complete all given machines during the contest wins.
             </p>

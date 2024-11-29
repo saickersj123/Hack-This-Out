@@ -131,7 +131,7 @@ export const Contact: React.FC<ContactData> = ({ data }) => {
                     <a href={`mailto:${data?.email}`}>
                     <TbBrandGmail className="social-icon" size={60} color="white"/>
                     </a>
-                    <p>Email</p>
+                    <p>E-mail</p>
                   </li>
                   <li>
                     <a href={data?.github || "#"}>
