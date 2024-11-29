@@ -31,5 +31,5 @@ jobs:
           npm install
           npm run build
           cd backend
-          pm2 start dist/server.js --name "HacktThisOut-API" || pm2 restart "HacktThisOut-API"
+          pm2 start dist/server.js --name "HackThisOut-API" || pm2 restart "HackThisOut-API"
         ENDSSH
