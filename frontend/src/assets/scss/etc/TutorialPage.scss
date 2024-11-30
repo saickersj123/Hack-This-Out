@@ -12,6 +12,64 @@
     margin-bottom: 16px;
     // min-height: calc(100% - 16px);
     // min-height: 100vh;
+
+    .language-switcher {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-left: 16px;
+        padding: 10px;
+        gap: 8px;
+        position: relative;
+        z-index: 10;
+
+        .switch-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 700;
+            border-radius: 30px;
+            padding: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            .switch-option {
+                position: relative;
+                padding: 6px 12px;
+                font-size: 14px;
+                color: var(--color-white);
+                z-index: 1;
+                transition: color 0.3s ease;
+                user-select: none;
+
+                &.active {
+                    color: #000;
+                }
+            }
+
+            .slider {
+                position: absolute;
+                top: 4px;
+                left: 4px;
+                height: calc(100% - 8px);
+                width: calc(50% - 4px);
+                background: var(--color-white);
+                border-radius: 25px;
+                transition: transform 0.3s ease;
+
+                &.ko {
+                    transform: translateX(100%);
+                }
+            }
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.15);
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+        }
+    }
 }
 
 .tutorial-page-top{
@@ -83,13 +141,22 @@
 
         a {
             font-weight: 700;
+            font-size: 1.2em;
             color: var(--blue-200);
-            filter: drop-shadow(0 0 10px var(--blue-500));
+            filter: drop-shadow(0 0 10px var(--blue-400));
             transition: color 0.2s ease;
             cursor: auto;
             &:hover {
                 color: var(--blue-200);
-                filter: drop-shadow(0 0 10px var(--blue-200));
+                filter: drop-shadow(0 0 10px var(--blue-500));
+            }
+            &.intro-red {
+                color: var(--accent);
+                filter: drop-shadow(0 0 10px var(--blue-400));
+                &:hover {
+                    color: var(--accent);
+                    filter: drop-shadow(0 0 10px var(--blue-500));
+                }
             }
         }
 

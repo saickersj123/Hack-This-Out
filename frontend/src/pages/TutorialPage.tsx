@@ -1,11 +1,19 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import Main from '../components/main/Main';
 import logo_dark from "../assets/img/icon/HTO DARK RECOLORED_crop_filled.png";
 import logo_light from "../assets/img/icon/HTO LIGHT RECOLORED_crop_filled.png";
 import '../assets/scss/etc/TutorialPage.scss';
 
 const TutorialPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [isHovered, setIsHovered] = React.useState(false);
+
+  const handleChangeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
+
+  const gamingRulesList: string[] = t('gamingRules.list', { returnObjects: true }) as string[];
 
   return (
     <Main>
@@ -20,46 +28,78 @@ const TutorialPage: React.FC = () => {
             onMouseLeave={() => setIsHovered(false)}
           />
         </div>
+        <div className="language-switcher">
+          <div className="switch-button" onClick={() => handleChangeLanguage(i18n.language === 'en' ? 'ko' : 'en')}>
+            <span className={`switch-option ${i18n.language === 'en' ? 'active' : ''}`}>EN</span>
+            <span className={`switch-option ${i18n.language === 'ko' ? 'active' : ''}`}>KR</span>
+            <span className={`slider ${i18n.language === 'ko' ? 'ko' : ''}`}></span>
+          </div>
+        </div>
         <section className="tutorial-page-content-container">
           <article className="tutorial-page-content-intro">
-            <h2>Introduction</h2>
-            <p>
-              <b>Hack This Out</b> is a web-based <a href="#">Hacking Lab</a>.<br />
-              Cyber Security is hard and boring, but we believe that it can be <a href="#">Fun</a> and <a href="#">Exciting</a>.<br />
-              The journey probably be boring and exhausting, so we prepare a <a href="#">Gaming experience</a> for you.
-            </p>
+            <h2>{t('introduction.title')}</h2>
+            <Trans
+              i18nKey="introduction.content"
+              components={[
+                <strong key={0}></strong>,
+                <a href="#" key={1}></a>,
+                <a href="#" key={2}></a>,
+                <a href="#" key={3}></a>,
+                <a className="intro-red" href="#" key={4}></a>,
+                <a className="intro-red" href="#" key={5}></a>,
+                <a href="#" key={6}></a>,
+              ]}
+            />
           </article>
           <article className="tutorial-page-content-rules">
-            <h2>Gaming Rules</h2>
+            <h2>{t('gamingRules.title')}</h2>
             <ol>
-              <li>You complete a machine by <a href="#">Hacking</a> and <a href="#">Capturing the Flag</a>.</li>
-              <li>You get rewarded <a href="#">Experience Points (EXP)</a> by completing machines.</li>
-              <li>You can get <a href="#">Hints</a> from each machine, but there will be a penalty.</li>
+              {gamingRulesList.map((_item: string, index: number) => (
+                <li key={index}>
+                  <Trans
+                    i18nKey={`gamingRules.list.${index}`}
+                    components={[
+                      <a href="#" key={0}></a>,
+                      <a href="#" key={1}></a>
+                    ]}
+                  />
+                </li>
+              ))}
             </ol>
           </article>
           <article className="tutorial-page-content-gamemode">
-            <h2>Game Modes</h2>
-            <p>
-              <strong>&nbsp;&nbsp;&nbsp;Machine</strong><br />
-              <a href="#">&nbsp;The Basic!</a> You have to hack vulnerable machines.<br />
-              Find the <a href="#">Flag</a> and complete the machine.<br /><br />
-              <strong>&nbsp;&nbsp;&nbsp;Contest</strong><br />
-              <a href="#">&nbsp;The Competition!</a> Compete against other players.
-              Each contest has a <a href="#">Period</a>.<br />
-              The <a href="#">Quickest</a> player who completes all given tasks in the period, gets to <a href="#">Win</a>.
-            </p>
+            <h2>{t('gameModes.title')}</h2>
+            <Trans
+              i18nKey="gameModes.machine"
+              components={[
+                <strong key={0}></strong>,
+                <a href="#" key={1}></a>,
+                <a href="#" key={2}></a>,
+              ]}
+            />
+            <Trans
+              i18nKey="gameModes.contest"
+              components={[
+                <strong key={0}></strong>,
+                <a href="#" key={1}></a>,
+                <a href="#" key={2}></a>,
+                <a href="#" key={3}></a>,
+                <a href="#" key={4}></a>,
+              ]}
+            />
           </article>
 
           <article className="tutorial-page-content-add">
-            <h2>Game Modes</h2>
-            <p>
-              <strong><b>Machine</b></strong><br />
-              The Basic, You can play machines whenever you want.<br />
-              <strong><b>Contest</b></strong><br />
-              The Competition, Compete against other users.<br />
-              Each contest has a duration.<br />
-              The quickest user to complete all given machines during the contest wins.
-            </p>
+            <h2>{t('additionalGameModes.title')}</h2>
+            <Trans
+              i18nKey="additionalGameModes.content"
+              components={[
+                <strong key={0}></strong>,
+                <b key={1}></b>,
+                <strong key={2}></strong>,
+                <b key={3}></b>,
+              ]}
+            />
           </article>
         </section>
       </div>

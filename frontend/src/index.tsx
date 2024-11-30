@@ -7,6 +7,8 @@ import { SidebarProvider } from './contexts/SidebarContext';
 import { ProfileProvider } from './contexts/ProfileContext';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import routes from './routes';
+import './utils/i18n';
+
 const rootElement = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootElement);
 
