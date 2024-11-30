@@ -17,6 +17,9 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
       if (!category) missingFields.push('category');
       if (!amiId) missingFields.push('amiId');
       if (!flag) missingFields.push('flag');
+      if (!exp) missingFields.push('exp');
+      if (!hints) missingFields.push('hints');
+      if (!hintCosts) missingFields.push('hintCosts');
       
       console.error('Missing fields:', missingFields);
       res.status(400).json({ message: "ERROR", msg: `Missing fields: ${missingFields.join(', ')}` });
@@ -27,6 +30,12 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
     const existingMachine = await Machine.findOne({ name });
     if (existingMachine) {
       res.status(400).json({ message: "ERROR", msg: 'Machine with this name already exists.' });
+      return;
+    }
+
+    const existingAmiId = await Machine.findOne({ amiId });
+    if (existingAmiId) {
+      res.status(400).json({ message: "ERROR", msg: 'AMI ID already exists.' });
       return;
     }
 

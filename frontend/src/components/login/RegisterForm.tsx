@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { signUpUser } from '../../api/axiosUser';
 import '../../assets/scss/login/RegisterForm.scss';
+import { validatePassword, validateUsername, validateEmail } from '../../utils/validation';
 
 interface RegisterFormProps {
   closeRegisterModal: () => void;
@@ -31,11 +32,26 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
     }));
   };
 
-  const validatePasswords = (): boolean => {
+  const validateForm = (): boolean => {
+    const errors: string[] = [];
+    
+    const usernameError = validateUsername(formData.username);
+    const emailError = validateEmail(formData.email);
+    const passwordError = validatePassword(formData.password);
+    
+    if (usernameError) errors.push(usernameError);
+    if (emailError) errors.push(emailError);
+    if (passwordError) errors.push(passwordError);
+    
     if (formData.password !== formData.confirmPassword) {
-      setError('Password and confirm password do not match.');
+      errors.push('Password and confirm password do not match');
+    }
+    
+    if (errors.length > 0) {
+      setError(errors.join('\n'));
       return false;
     }
+    
     return true;
   };
 
@@ -43,33 +59,51 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
     e.preventDefault();
     setError(null);
 
-    if (!validatePasswords()) {
+    if (!validateForm()) {
       return;
     }
 
     try {
-      const data = await signUpUser({
+      await signUpUser({
         email: formData.email,
         username: formData.username,
         password: formData.password,
       });
-      console.log('User registered:', data);
-      // Refresh or redirect
-      window.location.reload(); 
+      window.location.reload();
     } catch (err: any) {
-      console.error('Error registering user:', err.message || err);
+      let errorMessages: string[] = [];
       
-      // Extract a meaningful error message
-      let errorMessage = 'Sign up failed. Please try again.';
-      
-      // If the error response contains a message, use it
-      if (err.response && err.response.data && err.response.data.msg) {
-        errorMessage = err.response.data.msg;
-      } else if (err.message) {
-        errorMessage = err.message;
+      if (err.response?.data?.errors) {
+        // Handle multiple validation errors from express-validator
+        err.response.data.errors.forEach((validationError: any) => {
+          switch (validationError.path) {
+            case 'username':
+              errorMessages.push('Username must be between 3 and 10 characters long');
+              break;
+            case 'email':
+              errorMessages.push('Please enter a valid email address');
+              break;
+            case 'password':
+              errorMessages.push('Password must be between 8 and 15 characters long');
+              break;
+            default:
+              errorMessages.push(validationError.msg);
+          }
+        });
+      } else if (err.response?.data?.msg) {
+        // Handle custom error messages from backend
+        const msg = err.response.data.msg || err.msg;
+        if (msg.includes('User already exists')) {
+          errorMessages.push('This email or username is already registered. Please try another one.');
+        } else {
+          errorMessages.push(msg);
+        }
+      } else {
+        errorMessages.push('Please try again.');
       }
 
-      setError(errorMessage);
+      // Join all error messages with line breaks
+      setError(errorMessages.join('\n'));
     }
   };
 
@@ -80,7 +114,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
           <div className='sign-up-title'>
             <h1>Sign Up</h1>
           </div>
-          {error && <p className="error-message">{error}</p>}
+          {error && (
+            <div className="error-message">
+              {error.split('\n').map((message, index) => (
+                <p key={index}>{message}</p>
+              ))}
+            </div>
+          )}
           <div className="input-box">
             <input
               type="text"

@@ -23,10 +23,18 @@ export const getContests = async () => {
    */
   export const createContest = async (contestData: any) => {
     try {
-      const response = await axiosInstance.post('/contest/', contestData);
-      return response.data;
+        const response = await axiosInstance.post('/contest/', contestData);
+        return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to create contest');
+        if (error.response?.data?.errors) {
+            // Handle express-validator errors
+            const errorMessages = error.response.data.errors.map((err: any) => err.msg);
+            throw new Error(errorMessages.join('\n'));
+        } else if (error.response?.data?.msg) {
+            // Handle custom error messages
+            throw new Error(error.response.data.msg);
+        }
+        throw new Error('Failed to create contest');
     }
   };
   
@@ -40,7 +48,15 @@ export const getContests = async () => {
       const response = await axiosInstance.post(`/contest/${contestId}/participate`);
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to participate in contest');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to participate in contest');
     }
   };
   
@@ -56,7 +72,15 @@ export const getContests = async () => {
       const response = await axiosInstance.post(`/contest/${contestId}/${machineId}/submit-flag`, { flag });
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to submit flag for contest');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to submit flag for contest');
     }
   };
   
@@ -174,7 +198,15 @@ export const getContests = async () => {
       const response = await axiosInstance.post(`/contest/${contestId}/active`);
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to activate contest');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to activate contest');
     }
   };
   
@@ -189,7 +221,15 @@ export const getContests = async () => {
       const response = await axiosInstance.post(`/contest/${contestId}/deactive`);
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to deactivate contest');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to deactivate contest');
     }
   };
   
@@ -274,7 +314,15 @@ export const getContests = async () => {
       const response = await axiosInstance.post(`/contest/${contestId}/give-up`);
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to give up contest');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to give up contest');
     }
   };
 

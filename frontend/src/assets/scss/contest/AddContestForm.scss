@@ -272,4 +272,56 @@
             }
         }
     }
+
+    .error-message {
+        color: #dc3545;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: rgba(220, 53, 69, 0.1);
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    .field-error {
+        color: #dc3545;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        display: block;
+        font-weight: bold;
+    }
+
+    .error-input {
+        border-color: #dc3545 !important;
+        
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+    }
+
+    .required {
+        color: #dc3545;
+        margin-left: 4px;
+    }
+
+    // Improve spacing and layout
+    .create-container {
+        > div {
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .time-container {
+        display: flex;
+        gap: 1rem;
+
+        > div {
+            flex: 1;
+        }
+    }
+
+    // Add transitions for smooth error display
+    .error-message, .field-error {
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
+    }
 }

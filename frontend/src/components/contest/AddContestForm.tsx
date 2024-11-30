@@ -39,6 +39,10 @@ interface Suggestions {
     [key: number]: Machine[];
 }
 
+interface ValidationErrors {
+    [key: string]: string;
+}
+
 const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -56,6 +60,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     const navigate = useNavigate();
     const [registerComplete, setRegisterComplete] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
+    const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
 
     const { name, description, contestExp, startTime, endTime, machines } = formData;
 
@@ -218,66 +223,89 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (machines.length < 1) {
-            alert('Please add at least 1 machine.');
-            return;
+    const validateForm = (): boolean => {
+        const errors: ValidationErrors = {};
+        const currentTime = new Date();
+        const startTimeDate = new Date(startTime);
+        const endTimeDate = new Date(endTime);
+
+        if (!name || name.length < 3) {
+            errors.name = 'Name must be at least 3 characters long';
         }
-        if (!name || !description || contestExp <= 0 || !startTime || !endTime) {
-            alert('Please fill in all required fields.');
-            return;
+
+        if (!description) {
+            errors.description = 'Description is required';
+        } else if (description.length > 500) {
+            errors.description = 'Description must be less than 500 characters';
         }
-        if (startTime >= endTime) {
-            alert('Start time must be before end time.');
-            return;
+
+        if (!startTime) {
+            errors.startTime = 'Start time is required';
+        } else if (startTimeDate < currentTime) {
+            errors.startTime = 'Start time cannot be in the past';
         }
-        if (new Date(endTime).getTime() - new Date(startTime).getTime() < 1 * 24 * 60 * 60 * 1000) {
-            alert('Contest duration must be at least 1 day.');
-            return;
-        }
-        for (let i = 0; i < machines.length; i++) {
-            if (!machines[i].id) {
-                alert(`Please select a valid machine for field ${i + 1}.`);
-                return;
+
+        if (!endTime) {
+            errors.endTime = 'End time is required';
+        } else if (endTimeDate <= startTimeDate) {
+            errors.endTime = 'End time must be after start time';
+        } else {
+            const durationInHours = (endTimeDate.getTime() - startTimeDate.getTime()) / (1000 * 60 * 60);
+            if (durationInHours < 24) {
+                errors.endTime = 'Contest duration must be at least 24 hours';
             }
         }
-        setLoading(true);
-        try {
-            const utcStartTime = new Date(startTime).toISOString();
-            const utcEndTime = new Date(endTime).toISOString();
 
-            const machineIds = machines.map(machine => machine.id);
-            const data = await createContest({
+        if (!machines.length) {
+            errors.machines = 'At least one machine is required';
+        } else if (machines.some(machine => !machine.id)) {
+            errors.machines = 'Please select valid machines';
+        }
+
+        if (!contestExp || contestExp < 100) {
+            errors.contestExp = 'Contest EXP must be at least 100';
+        }
+
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(false);
+        setValidationErrors({});
+
+        if (!validateForm()) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const machineIds = machines.map(machine => machine.id).filter(id => id);
+            const contestData = {
                 name,
                 description,
-                startTime: utcStartTime,
-                endTime: utcEndTime,
+                startTime,
+                endTime,
                 machines: machineIds,
-                contestExp,
+                contestExp
+            };
+
+            const response = await createContest(contestData);
+            if (response.message === "OK") {
+                setRegisterComplete(true);
+                onContestAdded(response.contest);
+            }
+        } catch (err: any) {
+            setValidationErrors({
+                submit: err.message || 'Failed to create contest'
             });
-            setRegisterComplete(true);
-            setFormData({
-                name: '',
-                description: '',
-                startTime: '',
-                endTime: '',
-                machines: [{ id: '', name: '' }],
-                contestExp: 0,
-            });
-            setSuggestions({});
-            setActiveSuggestion({});
-            setFocusedMachineIndex(null);
-            if (onContestAdded) onContestAdded(data.contest);
-        } catch (error: any) {
-            console.error('Error creating contest:', error);
-            alert(error.msg || 'Failed to register contest.');
+            // Scroll to top to show error
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } finally {
             setLoading(false);
         }
     };
-
-
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -299,7 +327,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     }
 
     return (
-        <form className='add-contest-form' onSubmit={handleSubmit} ref={formRef}>
+        <form onSubmit={handleSubmit} ref={formRef} className='add-contest-form'>
             <div className='back-button'>
                 <h2>Add New Contest</h2>
                 <button className="IconButton" type='button' onClick={() => navigate(-1)}>
@@ -309,53 +337,66 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
 
             <div className='create-container'>
                 <div className='name-container'>
-                    <label htmlFor="name">Contest Name<span style={{ color: 'red' }}> *</span></label>
+                    <label htmlFor='name'>Contest Name <span className="required">*</span></label>
                     <input
-                        type="text"
-                        id="name"
-                        name="name"
+                        type='text'
+                        id='name'
+                        name='name'
                         value={name}
-                        onChange={(e) => handleChange(e)}
+                        onChange={handleChange}
+                        className={validationErrors.name ? 'error-input' : ''}
                         placeholder="Enter the contest name"
-                        required
                     />
+                    {validationErrors.name && (
+                        <span className='field-error'>{validationErrors.name}</span>
+                    )}
                 </div>
+
                 <div className='description-container'>
-                    <label htmlFor="description">Description<span style={{ color: 'red' }}> *</span></label>
+                    <label htmlFor='description'>Description <span className="required">*</span></label>
                     <textarea
-                        id="description"
-                        name="description"
+                        id='description'
+                        name='description'
                         value={description}
-                        onChange={(e) => handleChange(e)}
-                        placeholder="Enter contest description"
-                        required
-                    ></textarea>
+                        onChange={handleChange}
+                        className={validationErrors.description ? 'error-input' : ''}
+                        placeholder="Description of the contest"
+                    />
+                    {validationErrors.description && (
+                        <span className='field-error'>{validationErrors.description}</span>
+                    )}
                 </div>
 
                 <div className='start-time-container'>
-                    <label htmlFor="startTime">Starts at<span style={{ color: 'red' }}> *</span></label>
+                    <label htmlFor='startTime'>Start Time <span className="required">*</span></label>
                     <input
-                        type="datetime-local"
-                        id="startTime"
-                        name="startTime"
+                        type='datetime-local'
+                        id='startTime'
+                        name='startTime'
                         value={startTime}
-                        onChange={(e) => handleChange(e)}
-                        placeholder="Enter the start time"
-                        required
+                        onChange={handleChange}
+                        className={validationErrors.startTime ? 'error-input' : ''}
                     />
+                    {validationErrors.startTime && (
+                        <span className='field-error'>{validationErrors.startTime}</span>
+                    )}
                 </div>
+
                 <div className='end-time-container'>
-                    <label htmlFor="endTime">Ends at<span style={{ color: 'red' }}> *</span></label>
+                    <label htmlFor='endTime'>End Time <span className="required">*</span></label>
                     <input
-                        type="datetime-local"
-                        id="endTime"
-                        name="endTime"
+                        type='datetime-local'
+                        id='endTime'
+                        name='endTime'
                         value={endTime}
-                        onChange={(e) => handleChange(e)}
-                        placeholder="Enter the end time"
-                        required
-                    />
+                        onChange={handleChange}
+                            className={validationErrors.endTime ? 'error-input' : ''}
+                        />
+                        {validationErrors.endTime && (
+                        <span className='field-error'>{validationErrors.endTime}</span>
+                    )}
                 </div>
+
                 <div className='exp-container'>
                     <label htmlFor="contestExp">Reward (EXP)<span style={{ color: 'red' }}> *</span></label>
                     <input
@@ -368,6 +409,9 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         min="100"
                         required
                     />
+                    {validationErrors.contestExp && (
+                        <span className='field-error'>{validationErrors.contestExp}</span>
+                    )}
                 </div>
                 <div className='add-machine-container'>
                     <label>Machines<span style={{ color: 'red' }}> *</span></label>
@@ -382,7 +426,6 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                                 onKeyDown={(e) => handleKeyDown(e, index)}
                                 placeholder={`Machine ${index + 1}`}
                                 autoComplete="off"
-                                required
                                 aria-autocomplete="list"
                                 aria-controls={`suggestions-${index}`}
                                 aria-expanded={focusedMachineIndex === index && suggestions[index]?.length > 0}
@@ -436,6 +479,9 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                                 </ul>
                             ) : machine.name && focusedMachineIndex === index && (
                                 <div className="no-suggestions">No matching machines found.</div>
+                            )}
+                            {validationErrors.machines && (
+                                <span className='field-error'>{validationErrors.machines}</span>
                             )}
                         </div>
                     ))}

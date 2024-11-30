@@ -16,6 +16,10 @@ interface MachineFormData {
   hintCosts: number[];
 }
 
+interface ValidationErrors {
+    [key: string]: string;
+}
+
 const AddMachineForm: React.FC = () => {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [formData, setFormData] = useState<MachineFormData>({
@@ -31,6 +35,8 @@ const AddMachineForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const [registerComplete, setRegisterComplete] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -79,31 +85,58 @@ const AddMachineForm: React.FC = () => {
     }));
   };
 
+  const validateForm = (): boolean => {
+    const errors: ValidationErrors = {};
+    
+    if (!formData.name || formData.name.length < 3) {
+        errors.name = 'Name must be at least 3 characters long';
+    }
+    
+    if (!formData.category) {
+        errors.category = 'Category is required';
+    }
+    
+    if (!formData.amiId || !/^ami-[0-9a-fA-F]{8,17}$/.test(formData.amiId)) {
+        errors.amiId = 'Invalid AMI ID format';
+    }
+    
+    if (!formData.flag || formData.flag.length < 5) {
+        errors.flag = 'Flag must be at least 5 characters long';
+    }
+    
+    if (!formData.description || formData.description.length < 4) {
+        errors.description = 'Description must be at least 4 characters long';
+    }
+    
+    if (!formData.exp || formData.exp < 50) {
+        errors.exp = 'Experience points must be at least 50';
+    }
+    
+    if (!formData.hints.length || formData.hints.some(hint => !hint.trim())) {
+        errors.hints = 'At least one valid hint is required';
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+    setValidationErrors({});
 
-    // Basic Frontend Validation
-    if (
-      !formData.name ||
-      !formData.category ||
-      !formData.exp ||
-      !formData.description ||
-      !formData.hints ||
-      !formData.hintCosts ||
-      !formData.amiId ||
-      !formData.flag
-    ) {
-      setError('Please fill in all required fields.');
-      return;
+    if (!validateForm()) {
+        setError('Please fix the validation errors below.');
+        return;
     }
 
     try {
       await createMachine(formData);
       setRegisterComplete(true);
     } catch (err: any) {
-      setError(err.msg || 'Failed to create machine.');
-      alert(err.msg || 'Check your input and try again.');
+      setError(err.message);
+      // Scroll to top to show error
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -127,8 +160,18 @@ const AddMachineForm: React.FC = () => {
         </button>
       </div>
 
+      {error && (
+        <div className='error-message' style={{ 
+          color: 'red',
+          padding: '10px',
+          marginBottom: '20px',
+          backgroundColor: 'rgba(255, 0, 0, 0.1)',
+          borderRadius: '4px'
+        }}>
+          {error}
+        </div>
+      )}
 
-      {error && <p className='error-message'></p>}
       <div className='create-container'>
 
 
@@ -141,8 +184,11 @@ const AddMachineForm: React.FC = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Enter the machine name"
-            required
+            className={validationErrors.name ? 'error-input' : ''}
           />
+          {validationErrors.name && (
+            <span className='field-error'>{validationErrors.name}</span>
+          )}
         </div>
 
         <div className='category-container'>
@@ -151,8 +197,8 @@ const AddMachineForm: React.FC = () => {
             id="category"
             name="category"
             value={formData.category}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e as unknown as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)}
-            required
+            onChange={(e) => handleChange(e as any)}
+            className={validationErrors.category ? 'error-input' : ''}
           >
             <option value="">--Select Category--</option>
             <option value="Web">Web</option>
@@ -164,6 +210,9 @@ const AddMachineForm: React.FC = () => {
             <option value="OS">OS</option>
             <option value="Other">Other</option>
           </select>
+          {validationErrors.category && (
+            <span className='field-error'>{validationErrors.category}</span>
+          )}
         </div>
 
 
@@ -176,8 +225,10 @@ const AddMachineForm: React.FC = () => {
             value={formData.amiId}
             onChange={handleChange}
             placeholder='AMI-XXXXXX'
-            required
           />
+          {validationErrors.amiId && (
+            <span className='field-error'>{validationErrors.amiId}</span>
+          )}
         </div>
 
         <div className='flag-container'>
@@ -188,9 +239,11 @@ const AddMachineForm: React.FC = () => {
             name='flag'
             value={formData.flag}
             onChange={handleChange}
-            required
             placeholder='Flag of the machine here'
           />
+          {validationErrors.flag && (
+            <span className='field-error'>{validationErrors.flag}</span>
+          )}
         </div>
 
         <div className='Description-container'>
@@ -203,6 +256,9 @@ const AddMachineForm: React.FC = () => {
             placeholder='Description of the machine here'
             onChange={handleChange}
           />
+          {validationErrors.description && (
+            <span className='field-error'>{validationErrors.description}</span>
+          )}
         </div>
 
         <div className='exp-container'>
@@ -213,8 +269,11 @@ const AddMachineForm: React.FC = () => {
             name='exp'
             value={formData.exp}
             onChange={handleChange}
-            min={0}
+            min={50}
           />
+          {validationErrors.exp && (
+            <span className='field-error'>{validationErrors.exp}</span>
+          )}
         </div>
 
         <div className='hint-container'>
@@ -236,12 +295,15 @@ const AddMachineForm: React.FC = () => {
                 }
                 placeholder='Cost'
                 min={1}
-                max={10}
+                max={100}
               />
               {formData.hints.length > 1 && (
                 <button className='remove-hint' type='button' onClick={() => removeHint(index)}>
                   Remove
                 </button>
+              )}
+              {validationErrors.hints && (
+                <span className='field-error'>{validationErrors.hints}</span>
               )}
             </div>
           ))}

@@ -2,24 +2,24 @@
 
 .login-form {
     position: relative;
-    width: clamp(200px, 20vw, 400px);
+    width: clamp(280px, 80%, 400px);
     margin: 0 auto;
-    padding: 2rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
     height: auto;
-    margin-top: 20vh;
+    margin-top: clamp(10vh, 15vh, 20vh);
 
     .login-title {
         color: var(--color-layout);
-        font-size: clamp(1.5rem, 4vw, 2rem);
+        font-size: clamp(1.75rem, 5vw, 2.25rem);
         font-weight: 900;
-        padding-bottom: 1.25rem;
+        padding-bottom: clamp(1rem, 2vw, 1.5rem);
     }
 
     .input-box {
         width: 100%;
-        height: 50px;
+        height: clamp(45px, 6vh, 55px);
         position: relative;
-        margin-bottom: 1.25rem;
+        margin-bottom: clamp(1rem, 2vw, 1.5rem);
         font-weight: 600;
 
         input {
@@ -28,51 +28,90 @@
             background: #e7e7e7;
             outline: none;
             border: 2px solid var(--color-white);
-            font-size: clamp(14px, 2vw, 16px);
+            font-size: clamp(14px, 1.5vw, 16px);
             color: #333;
-            padding: 0 1.25rem;
+            padding: 0 clamp(1rem, 2vw, 1.25rem);
             border-radius: 10px;
             transition: all 0.3s ease-in-out;
-            &::placeholder {
-                font-weight: 600;
-                color: #333;
-            }
 
             &:focus {
                 border: 2px solid var(--blue-500);
                 transform: translateX(2px);
+                background: #f0f0f0;
             }
         }
     }
 
     button {
         font-weight: 600;
+        font-size: clamp(14px, 1.5vw, 16px);
         background-color: var(--color-layout);
         color: var(--color-white);
-        height: 50px;
+        height: clamp(45px, 6vh, 55px);
         width: 100%;
         border: none;
-        margin-top: 2.5rem;
+        margin-top: clamp(2rem, 4vw, 2.5rem);
         transition: all 0.3s ease-in-out;
         border-radius: 10px;
+        cursor: pointer;
+
         &:hover {
             background-color: var(--blue-400);
             filter: drop-shadow(0 0 10px var(--blue-500));
             transform: translateY(-2px);
         }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .login-form {
+        width: clamp(260px, 85%, 380px);
     }
 }
 
 @media screen and (max-width: 768px) {
     .login-form {
-        margin-top: 15vh;
-        padding: 1.5rem;
+        width: clamp(240px, 90%, 340px);
+        margin-top: clamp(8vh, 12vh, 15vh);
     }
 }
 
 @media screen and (max-width: 480px) {
     .login-form {
-        margin-top: 10vh;
+        width: clamp(220px, 90%, 300px);
+        margin-top: clamp(5vh, 8vh, 10vh);
         padding: 1rem;
+    }
+}
+
+.error,
+.error-message {
+    color: #ff3e3e;
+    background-color: rgba(255, 62, 62, 0.1);
+    padding: clamp(8px, 2vw, 12px);
+    border-radius: 10px;
+    margin: clamp(8px, 2vw, 12px) 0;
+    font-weight: 600;
+    border: 1px solid rgba(255, 62, 62, 0.2);
+}
+
+.error {
+    font-size: clamp(14px, 1.2vw, 16px);
+}
+
+.error-message {
+    font-size: clamp(12px, 1vw, 14px);
+
+    p {
+        margin: 5px 0;
+        
+        &:not(:last-child) {
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 62, 62, 0.1);
+        }
     }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../../assets/scss/etc/MainPage.module.scss';
 import fullscreenBlack from '../../assets/img/Fullscreen_black.png';
 import fullscreen from '../../assets/img/Fullscreen.png';
@@ -10,12 +10,33 @@ const images = [
 ];
 
 const MainPage: React.FC = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPreGlitch, setIsPreGlitch] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
+
+  const handleTransition = () => {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      navigate('/tutorial');
+    }, 500);
+  };
+
+  useEffect(() => {
+    // Add keyboard event listener
+    const handleKeyPress = () => {
+      handleTransition();
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -33,6 +54,16 @@ const MainPage: React.FC = () => {
     }, 5000);
 
     return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    // If we're coming from login, automatically trigger transition after a delay
+    if (location.state?.fromLogin) {
+      // Wait for 6 seconds (1 full image transition cycle + extra time to see effects)
+      setTimeout(() => {
+        handleTransition();
+      }, 6000);
+    }
   }, []);
 
   const handleClick = () => {

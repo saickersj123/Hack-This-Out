@@ -9,12 +9,20 @@ import axiosInstance from './axiosInit';
  */
 export const createMachine = async (machineData: any) => {
     try {
-      const response = await axiosInstance.post('/machines', machineData);
-      return response.data; // Return the data received from the server
+        const response = await axiosInstance.post('/machines', machineData);
+        return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to create machine');
+        if (error.response?.data?.errors) {
+            // Handle express-validator errors
+            const errorMessages = error.response.data.errors.map((err: any) => err.msg);
+            throw new Error(errorMessages.join('\n'));
+        } else if (error.response?.data?.msg) {
+            // Handle custom error messages
+            throw new Error(error.response.data.msg);
+        }
+        throw new Error('Failed to create machine');
     }
-  };
+};
   
   /**
    * Get all machines.
@@ -228,7 +236,15 @@ export const createMachine = async (machineData: any) => {
       const response = await axiosInstance.post(`/machines/${machineId}/submit-flag`, { flag });
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to submit flag');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to submit flag');
     }
   };
   
@@ -243,7 +259,15 @@ export const createMachine = async (machineData: any) => {
       const response = await axiosInstance.post(`/machines/${machineId}/review`, reviewData);
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to post machine review');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to post machine review');
     }
   };
   
@@ -356,7 +380,15 @@ export const createMachine = async (machineData: any) => {
       const response = await axiosInstance.post(`/machines/${machineId}/give-up`);
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to give up machine');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to give up machine');
     }
   };
 
@@ -370,7 +402,15 @@ export const createMachine = async (machineData: any) => {
       const response = await axiosInstance.post(`/machines/${machineId}/start-play`);
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Failed to start playing machine');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Failed to start playing machine');
     }
   };
 
