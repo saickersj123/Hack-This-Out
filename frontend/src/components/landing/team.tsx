@@ -27,7 +27,7 @@ export const Team: React.FC<TeamProps> = ({ data }) => {
         <div id="row">
           {data
             ? data.map((d, i) => (
-                <div key={`${d.name}-${i}`} className="col-md-3 col-sm-6 team">
+                <div key={`${d.name}-${i}`} className="col-md-4 col-sm-6 team">
                   <div className="thumbnail">
                     <div className="caption">
                       <h4>{d.name}</h4>
