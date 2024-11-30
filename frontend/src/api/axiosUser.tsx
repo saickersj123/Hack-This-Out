@@ -53,7 +53,15 @@ export const getAllUser = async () => {
       const response = await axiosInstance.post('/user/login', formData);
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Login failed');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
+      }
+      throw new Error('Login failed');
     }
   };
   
@@ -65,13 +73,17 @@ export const getAllUser = async () => {
   export const signUpUser = async (formData: any) => {
     try {
       const response = await axiosInstance.post('/user/sign-up', formData);
-      return response.data; 
+      return response.data;
     } catch (error: any) {
-      if (error.response && error.response.msg) {
-        throw new Error(error.response.msg);
-      } else {
-        throw new Error('Sign up failed');
+      if (error.response) {
+        throw {
+          response: {
+            data: error.response.data,
+            status: error.response.status
+          }
+        };
       }
+      throw new Error('Sign up failed');
     }
   };
   

@@ -3,6 +3,7 @@ import { loginUser, getUserStatus } from '../../api/axiosUser';
 import { AuthUserContext } from '../../contexts/AuthUserContext';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
 import '../../assets/scss/login/LoginForm.scss';
+import { validateEmail, validatePassword } from '../../utils/validation';
 
 interface LoginFormProps {
   openRegisterModal: () => void;
@@ -26,33 +27,74 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const validateForm = (): boolean => {
+    const errors: string[] = [];
+    
+    const emailError = validateEmail(formData.email);
+    const passwordError = validatePassword(formData.password);
+    
+    if (emailError) errors.push(emailError);
+    if (passwordError) errors.push(passwordError);
+    
+    if (errors.length > 0) {
+      setError(errors.join('\n'));
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
+    if (!validateForm()) {
+      return;
+    }
+
     try {
-      // Attempt to log in the user
       await loginUser(formData);
-      
-      // Fetch user status after successful login
       const userData = await getUserStatus();
-      
-      // Update context with fetched user data
       setCurrentUser(userData.user);
       setIsLoggedIn(true);
-      
-      // Optional: If you prefer to handle navigation here instead of in LoginPage
       navigate('/'); 
-      
-      // Since LoginPage handles navigation based on isLoggedIn, no need to navigate here
     } catch (err: any) {
-      setError(err.msg || 'Login failed');
+      let errorMessages: string[] = [];
+      
+      if (err.response?.data?.errors) {
+        err.response.data.errors.forEach((validationError: any) => {
+          errorMessages.push(validationError.msg);
+        });
+      } else if (err.response?.data?.msg) {
+        const msg = err.response.data.msg;
+        switch (msg) {
+          case 'User does not exist':
+            errorMessages.push('No account found with this email');
+            break;
+          case 'Passwords do not match':
+            errorMessages.push('Incorrect password');
+            break;
+          default:
+            errorMessages.push(msg);
+        }
+      } else {
+        errorMessages.push('Login failed. Please try again.');
+      }
+      
+      setError(errorMessages.join('\n'));
     }
   };
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
       <h1 className='login-title'>Login</h1>
+      {error && (
+        <div className="error-message">
+          {error.split('\n').map((message, index) => (
+            <p key={index}>{message}</p>
+          ))}
+        </div>
+      )}
       <div className="input-box">
         <input 
           type="text" 
@@ -72,7 +114,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterModal }) => {
           onChange={handleChange}
           required
         />
-        {error && <p className='error'>{error}</p>}
       </div>
       <button type="submit">Login</button>
       <button type="button" onClick={openRegisterModal}>Sign Up</button>

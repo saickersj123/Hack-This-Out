@@ -97,29 +97,41 @@ const Profile: React.FC = () => {
             </div>
             <div className={`${styles.userMenu} ${isProfileCollapsed ? styles.collapsed : ''}`}>
                 <li className={styles.settings}>
-                    <div className={styles.settingsInner}>
+                    <div 
+                        className={styles.settingsInner} 
+                        onClick={() => handleMenuItemClick(() => navigate('/mypage'))}
+                    >
                         <div className={styles.rectangleParent}>
                             <FaRegUserCircle className={styles.icon} />
-                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/mypage'))}>My Profile</MenuItem>
+                            <MenuItem>My Profile</MenuItem>
                         </div>
                     </div>
-                    <div className={styles.settingsInner}>
+                    <div 
+                        className={styles.settingsInner}
+                        onClick={() => handleMenuItemClick(() => navigate('/mystats'))}
+                    >
                         <div className={styles.rectangleParent}>
                             <IoStatsChartOutline className={styles.icon} />
-                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/mystats'))}>My Stats</MenuItem>
+                            <MenuItem>My Stats</MenuItem>
                         </div>
                     </div>
-                    <div className={styles.settingsInner}>
+                    <div 
+                        className={styles.settingsInner}
+                        onClick={() => handleMenuItemClick(() => navigate('/intro'))}
+                    >
                         <div className={styles.rectangleParent}>
                             <ImInfo className={styles.icon} />
-                            <MenuItem onClick={() => handleMenuItemClick(() => navigate('/intro'))}>Infomation</MenuItem>
+                            <MenuItem>Infomation</MenuItem>
                         </div>
                     </div>
                 </li>
                 <div className={styles.userinfoDarkChild} />
-                <div className={styles.logout}>
+                <div 
+                    className={styles.logout}
+                    onClick={() => handleMenuItemClick(handleLogout)}
+                >
                     <FaArrowRightToBracket className={styles.logout_icon} size={30} />
-                    <MenuItem onClick={() => handleMenuItemClick(handleLogout)}>Logout</MenuItem>
+                    <MenuItem>Logout</MenuItem>
                 </div>
             </div>
         </div >
