@@ -26,7 +26,7 @@ export const Services: React.FC<ServicesProps> = ({ data }) => {
             <br />
             But we believe that cybersecurity can be fun and interesting.
             <br />
-            So we created a Hacking Lab for you to practice and learn in a fun and interesting way.
+            Hacking Lab for you to practice and learn in a fun and interesting way.
             <br />
             We used a lot of technologies to make this possible.
             <br />

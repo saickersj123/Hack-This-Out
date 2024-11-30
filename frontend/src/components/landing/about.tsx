@@ -2,7 +2,7 @@ import React from "react";
 import '../../assets/scss/landing/about.scss';
 import { GrFormCheckmark } from "react-icons/gr";
 import LoadingIcon from "../public/LoadingIcon";
-
+import aboutImage from '../../assets/img/icon/HTO ICON DARK RECOLORED_crop_fill.png';
 // data의 타입을 정의
 interface AboutProps {
   data: {
@@ -18,7 +18,7 @@ export const About: React.FC<AboutProps> = ({ data }) => {
       <div className="about-container">
         <div className="row">
           <div className="col-xs-12 col-md-6">
-            <img src="img/about.jpg" className="img-responsive" alt="" />
+            <img src={aboutImage} className="img-responsive" alt="" />
           </div>
           <div className="col-xs-12 col-md-6">
             <div className="about-text">
