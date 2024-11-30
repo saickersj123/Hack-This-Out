@@ -7,7 +7,6 @@ import '../assets/scss/etc/TutorialPage.scss';
 
 const TutorialPage: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const [isHovered, setIsHovered] = React.useState(false);
 
   const handleChangeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -23,17 +22,10 @@ const TutorialPage: React.FC = () => {
             id="tutorialImg" 
             className="tutorial-page-img-dark" 
             alt="" 
-            src={isHovered ? logo_light : logo_dark}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            src={i18n.language === 'en' ? logo_dark : logo_light}
+            onClick={() => handleChangeLanguage(i18n.language === 'en' ? 'ko' : 'en')}
+            style={{ cursor: 'pointer' }}
           />
-        </div>
-        <div className="language-switcher">
-          <div className="switch-button" onClick={() => handleChangeLanguage(i18n.language === 'en' ? 'ko' : 'en')}>
-            <span className={`switch-option en ${i18n.language === 'en' ? 'active' : ''}`}>EN</span>
-            <span className={`switch-option ko ${i18n.language === 'ko' ? 'active' : ''}`}>KR</span>
-            <span className={`slider ${i18n.language === 'ko' ? 'ko' : ''}`}></span>
-          </div>
         </div>
         <section className="tutorial-page-content-container">
           <article className="tutorial-page-content-intro">

@@ -13,91 +13,28 @@
     // min-height: calc(100% - 16px);
     // min-height: 100vh;
 
-    .language-switcher {
-        position: relative;        
-        width: 100%;
-        top: -75px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding: 10px 40px 10px 10px;
-        gap: 8px;
-        z-index: 10;
-
-        .switch-button {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            font-weight: 700;
-            border-radius: 30px;
-            padding: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-
-            .switch-option {
-                position: relative;
-                padding: 6px 16px;
-                font-size: 14px;
-                color: var(--color-white);
-                z-index: 1;
-                transition: color 0.3s ease;
-                user-select: none;
-
-                &.active {
-                    color: #000;
-                }
+    .tutorial-page-top{
+        .tutorial-page-img-dark{
+            height: 70%;
+            object-fit: cover; 
+            border-bottom: 2px solid white;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(1);
+            transform-origin: center;
+            
+            &:hover {
+                transform: scale(1.02) translateY(-4px);
+                filter: brightness(0.9) contrast(1.1) invert(1);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             }
             
-            .en {
-                padding-right: 20px;
-            }
-
-            .ko {
-                padding-left: 20px;
-            }
-
-            .slider {
-                position: absolute;
-                top: 4px;
-                left: 4px;
-                height: calc(100% - 8px);
-                width: calc(50% - 4px);
-                background: var(--color-white);
-                border-radius: 25px;
-                transition: transform 0.3s ease;
-
-                &.ko {
-                    transform: translateX(100%);
-                }
-            }
-
-            &:hover {
-                background: rgba(255, 255, 255, 0.15);
-                border-color: rgba(255, 255, 255, 0.3);
+            &:active {
+                transform: scale(0.98);
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             }
         }
     }
 }
-
-.tutorial-page-top{
-    .tutorial-page-img-dark{
-        height: 70%;
-        object-fit: cover; 
-        border-bottom: 2px solid white;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        filter: brightness(1);
-        
-        &:hover {
-            transform: scale(1.02);
-            filter: brightness(0.9);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        }
-    }
-}
-
 
 .tutorial-page-content-container {
     display: flex;
@@ -106,7 +43,7 @@
     width: 100%;
     // height: 100%;
     padding: 0;
-    margin-top: -80px;
+    margin-top: -60px;
     gap: 32px;
     max-width: 1200px;
     margin-inline: auto;

@@ -2,6 +2,12 @@ import axiosInstance from './axiosInit';
 
 // ------- User related ------
 
+interface ApiResponse {
+  message: string;
+  msg?: string;
+  cause?: string;
+}
+
 /**
  * Get all user data.
  * @returns {Promise<Object>} - The response data containing all user data.
@@ -73,7 +79,7 @@ export const getAllUser = async () => {
   export const signUpUser = async (formData: any) => {
     try {
       const response = await axiosInstance.post('/user/sign-up', formData);
-      return response.data;
+      return response.data; 
     } catch (error: any) {
       if (error.response) {
         throw {
@@ -132,12 +138,14 @@ export const getAllUser = async () => {
    * @param {string} newPassword - The new password to change.
    * @returns {Promise<Object>} - The response data confirming password change.
    */
-  export const changePassword = async (oldPassword: string, newPassword: string) => {
+  export const changePassword = async (oldPassword: string, newPassword: string): Promise<ApiResponse> => {
     try {
       const response = await axiosInstance.post('/user/change-password', { oldPassword, newPassword });
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Password change failed');
+      throw {
+        cause: error.response?.data?.cause || 'Failed to change password'
+      };
     }
   };
   
@@ -146,12 +154,14 @@ export const getAllUser = async () => {
    * @param {string} newUsername - The new username to change.
    * @returns {Promise<Object>} - The response data confirming name change.
    */
-  export const changeName = async (newUsername: string) => {
+  export const changeName = async (username: string): Promise<ApiResponse> => {
     try {
-      const response = await axiosInstance.post('/user/change-name', { username: newUsername });
+      const response = await axiosInstance.post('/user/change-name', { username });
       return response.data;
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error('Name change failed');
+      throw {
+        cause: error.response?.data?.cause || 'Failed to change name'
+      };
     }
   };
   
@@ -220,12 +230,14 @@ export const getAllUser = async () => {
    * @param {string} AdminPassword - The admin password to update.
    * @returns {Promise<Object>} - The response data confirming update.
    */
-  export const updateUsertoAdmin = async (AdminPassword: string) => {
+  export const updateUsertoAdmin = async (AdminPassword: string): Promise<ApiResponse> => {
     try {
       const response = await axiosInstance.post('/user/update/to-admin', { AdminPassword });
       return response.data;
     } catch (error: any) {
-      throw new Error('Failed to update user to admin');
+      throw {
+        cause: error.response?.data?.cause || 'Failed to update user to admin'
+      };
     }
   };
   

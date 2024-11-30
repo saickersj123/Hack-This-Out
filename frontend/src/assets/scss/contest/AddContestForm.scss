@@ -280,6 +280,7 @@
         background-color: rgba(220, 53, 69, 0.1);
         border-radius: 4px;
         font-size: 0.9rem;
+        text-wrap: balance;
     }
 
     .field-error {
@@ -288,6 +289,7 @@
         margin-top: 4px;
         display: block;
         font-weight: bold;
+        text-wrap: balance;
     }
 
     .error-input {

@@ -1,5 +1,11 @@
 import axios from 'axios';
 
+interface ApiResponse {
+  message: string;
+  msg?: string;
+  cause?: string;
+}
+
 // axios 인스턴스 생성. 모든 요청에 사용됩니다.
 const axiosMulti = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -11,15 +17,17 @@ const axiosMulti = axios.create({
 
 /**
  * Update user avatar.
- * @param {string} avatar - The avatar to update.
- * @returns {Promise<Object>} - The response data confirming update.
+ * @param {File} avatar - The avatar file to update.
+ * @returns {Promise<ApiResponse>} - The response data confirming avatar update.
  */
-export const updateUserAvatar = async (avatar: any) => {
+export const updateUserAvatar = async (avatar: File): Promise<ApiResponse> => {
   try {
     const response = await axiosMulti.post('/user/update/avatar', { avatar });
     return response.data;
   } catch (error: any) {
-    throw new Error('Failed to update user avatar');
+    throw {
+      cause: error.response?.data?.cause || 'Failed to update avatar'
+    };
   }
 };
 

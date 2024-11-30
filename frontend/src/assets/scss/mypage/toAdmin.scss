@@ -6,8 +6,9 @@
 
     .toAdmin-form {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 10px;  /* 요소 간 간격 조정 */
+        gap: 10px;
 
         h2 {
             font-weight: 600;
@@ -17,6 +18,7 @@
             height: 40px;
             padding: 0 10px;
             border-radius: 12px;
+            color: var(--color-white);
             background: rgba(255, 255, 255, 0.05);
 
             &::placeholder {
@@ -41,6 +43,25 @@
                 border: 2px solid transparent;
                 transform: translateY(-2px);
             }
+
+            &:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+                &:hover {
+                    transform: none;
+                    filter: none;
+                }
+            }
+        }
+
+        .success-message {
+            color: var(--color-white);
+            background-color: var(--blue-400);
+            border: 1px solid var(--blue-400);
+            border-radius: 4px;
+            padding: 0.75rem 1.25rem;
+            margin: 0.5rem 0;
+            font-size: 0.875rem;
         }
     }
 }

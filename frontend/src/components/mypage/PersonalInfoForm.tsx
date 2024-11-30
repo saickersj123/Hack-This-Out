@@ -9,6 +9,8 @@ import '../../assets/scss/mypage/PersonalInfoForm.scss';
 import { Avatar } from '@mui/material';
 import { getAvatarColorIndex } from '../../utils/avatars';
 import { avatarBackgroundColors } from '../../utils/avatars';
+import ErrorMessage from './ErrorMsg';
+
 interface UserData {
   id: string;
   email: string;
@@ -32,6 +34,16 @@ const PersonalInfoForm: React.FC = () => {
   const [oldPassword, setOldPassword] = useState<string>('');
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>('');
   const [avatar, setAvatar] = useState<File | null>(null);
+  const [errors, setErrors] = useState<{
+    password?: string;
+    name?: string;
+    avatar?: string;
+  }>({});
+  const [successMessages, setSuccessMessages] = useState<{
+    password?: string;
+    name?: string;
+    avatar?: string;
+  }>({});
 
   /**
    * Fetches user details from the API.
@@ -50,27 +62,50 @@ const PersonalInfoForm: React.FC = () => {
     fetchUserDetail();
   }, []);
 
+  const validatePassword = (newPw: string, confirmPw: string): boolean => {
+    const newErrors: { password?: string } = {};
+    
+    if (newPw.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters long';
+    } else if (newPw !== confirmPw) {
+      newErrors.password = 'New passwords do not match';
+    }
+
+    setErrors(prev => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  };
+
   /**
    * Handles password change form submission.
    * @param e - The form event.
    */
   const handlePasswordChange = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    if (newPassword !== confirmNewPassword) {
-      alert('New password does not match.');
+    setErrors({});
+    setSuccessMessages({});
+
+    if (!validatePassword(newPassword, confirmNewPassword)) {
       return;
     }
+
     try {
       await changePassword(oldPassword, newPassword);
-      alert('Password changed successfully.');
+      setSuccessMessages(prev => ({
+        ...prev,
+        password: 'Password changed successfully!'
+      }));
       setNewPassword('');
       setOldPassword('');
       setConfirmNewPassword('');
-      //refresh
-      window.location.reload();
-    } catch (error) {
-      console.error('Error changing password:', error);
-      alert('Failed to change password. Please try again.');
+      // Delay reload to show success message
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error: any) {
+      setErrors(prev => ({
+        ...prev,
+        password: error.cause
+      }));
     }
   };
 
@@ -80,17 +115,25 @@ const PersonalInfoForm: React.FC = () => {
    */
   const handleNameChange = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setErrors({});
+    setSuccessMessages({});
+
     try {
       await changeName(username);
-      alert('Name changed successfully.');
-      // Optionally, refetch user data to reflect changes
-      fetchUserDetail();
+      setSuccessMessages(prev => ({
+        ...prev,
+        name: 'Name changed successfully!'
+      }));
       setUsername('');
-      //refresh
-      window.location.reload();
-    } catch (error) {
-      console.error('Error changing name:', error);
-      alert('Failed to change name. Please try again.');
+      // Delay reload to show success message
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error: any) {
+      setErrors(prev => ({
+        ...prev,
+        name: error.cause
+      }));
     }
   };
 
@@ -100,21 +143,33 @@ const PersonalInfoForm: React.FC = () => {
    */
   const handleAvatarChange = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setErrors({});
+    setSuccessMessages({});
+
     if (!avatar) {
-      alert('Please select a file to upload.');
+      setErrors(prev => ({
+        ...prev,
+        avatar: 'Please select a file to upload.'
+      }));
       return;
     }
+
     try {
       await updateUserAvatar(avatar);
-      alert('Avatar changed successfully.');
-      // Optionally, refetch user data to reflect changes
-      fetchUserDetail();
+      setSuccessMessages(prev => ({
+        ...prev,
+        avatar: 'Avatar changed successfully!'
+      }));
       setAvatar(null);
-      //refresh
-      window.location.reload();
-    } catch (error) {
-      console.error('Error changing avatar:', error);
-      alert('Failed to change avatar. Please try again.');
+      // Delay reload to show success message
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error: any) {
+      setErrors(prev => ({
+        ...prev,
+        avatar: error.cause
+      }));
     }
   };
 
@@ -157,6 +212,8 @@ const PersonalInfoForm: React.FC = () => {
             <button className="avatar-button" type="submit">
               Change
             </button>
+            {errors.avatar && <ErrorMessage message={errors.avatar} />}
+            {successMessages.avatar && <div className="success-message">{successMessages.avatar}</div>}
           </form>
         </div>
         <div className="user-container">
@@ -177,6 +234,8 @@ const PersonalInfoForm: React.FC = () => {
       <div className="modify-container">
         <form className="name-form" onSubmit={handleNameChange}>
           <h3>Change Name</h3>
+          {errors.name && <ErrorMessage message={errors.name} />}
+          {successMessages.name && <div className="success-message">{successMessages.name}</div>}
           <input
             type="text"
             value={username}
@@ -192,6 +251,8 @@ const PersonalInfoForm: React.FC = () => {
         </form>
         <form className="password-form" onSubmit={handlePasswordChange}>
           <h3>Change Password</h3>
+          {errors.password && <ErrorMessage message={errors.password} />}
+          {successMessages.password && <div className="success-message">{successMessages.password}</div>}
           <input
             type="password"
             value={oldPassword}
