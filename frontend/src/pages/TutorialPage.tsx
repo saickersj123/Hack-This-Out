@@ -30,8 +30,8 @@ const TutorialPage: React.FC = () => {
         </div>
         <div className="language-switcher">
           <div className="switch-button" onClick={() => handleChangeLanguage(i18n.language === 'en' ? 'ko' : 'en')}>
-            <span className={`switch-option ${i18n.language === 'en' ? 'active' : ''}`}>EN</span>
-            <span className={`switch-option ${i18n.language === 'ko' ? 'active' : ''}`}>KR</span>
+            <span className={`switch-option en ${i18n.language === 'en' ? 'active' : ''}`}>EN</span>
+            <span className={`switch-option ko ${i18n.language === 'ko' ? 'active' : ''}`}>KR</span>
             <span className={`slider ${i18n.language === 'ko' ? 'ko' : ''}`}></span>
           </div>
         </div>
