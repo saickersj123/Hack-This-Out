@@ -8,36 +8,38 @@
     display: flex;
     flex-direction: column;
     height: auto;
-    gap: 32px;
+    gap: 8px;
     margin-bottom: 16px;
     // min-height: calc(100% - 16px);
     // min-height: 100vh;
 
     .language-switcher {
+        position: relative;        
+        width: 100%;
+        top: -75px;
         display: flex;
-        justify-content: flex-start;
+        justify-content: flex-end;
         align-items: center;
-        margin-left: 16px;
-        padding: 10px;
+        padding: 10px 40px 10px 10px;
         gap: 8px;
-        position: relative;
         z-index: 10;
 
         .switch-button {
             position: relative;
             display: inline-flex;
             align-items: center;
+            text-align: center;
             background: rgba(255, 255, 255, 0.1);
             font-weight: 700;
             border-radius: 30px;
-            padding: 4px;
+            padding: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.2);
 
             .switch-option {
                 position: relative;
-                padding: 6px 12px;
+                padding: 6px 16px;
                 font-size: 14px;
                 color: var(--color-white);
                 z-index: 1;
@@ -47,6 +49,14 @@
                 &.active {
                     color: #000;
                 }
+            }
+            
+            .en {
+                padding-right: 20px;
+            }
+
+            .ko {
+                padding-left: 20px;
             }
 
             .slider {
@@ -73,7 +83,6 @@
 }
 
 .tutorial-page-top{
-
     .tutorial-page-img-dark{
         height: 70%;
         object-fit: cover; 
