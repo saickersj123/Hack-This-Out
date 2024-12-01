@@ -489,7 +489,7 @@ export const terminateInstance = async (req: Request, res: Response) => {
     instance.status = 'terminated';
     await instance.save();
 
-    await Instance.deleteOne({ _id: instance._id, user: user.id });
+    await Instance.deleteOne({ instanceId: instance.instanceId, user: user.id });
 
     res.status(200).json({ 
       message: "OK", 
