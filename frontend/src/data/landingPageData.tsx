@@ -72,7 +72,7 @@ export const landingPageData: LandingPageData = {
   },
   About: {
     paragraph:
-      "Hack This Out is a web-based Hacking Lab.\nWe provide a Secure Network and Virtual Environment for your journey to become a hacker or cyber security enthusiast.\nThe journey can be rough and exhausting, so we prepared Gaming experience for you.",
+      "Hack This Out is a web-based Hacking Lab.\nWe provide Secure Network and Virtual Environment for your journey to become a hacker or cyber security enthusiast.\nThe journey can be rough and exhausting, so we prepared Gaming experience for you.",
     Why: ["Easy to Use", "Play and Compete", "Safe and Secure", "Study and Practice"],
     Why2: ["User-friendly Interface", "Gaming Experience", "Secure Network", "Virtual Environment"],
   },
