@@ -29,14 +29,8 @@ interface Machine {
 interface FormData {
     name: string;
     description: string;
-    startTime: {
-        date: string;
-        timezoneOffset: number;
-    };
-    endTime: {
-        date: string;
-        timezoneOffset: number;
-    };
+    startTime: string;
+    endTime: string;
     machines: Machine[];
     contestExp: number;
 };
@@ -53,14 +47,8 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     const [formData, setFormData] = useState<FormData>({
         name: '',
         description: '',
-        startTime: {
-            date: '',
-            timezoneOffset: 0
-        },
-        endTime: {
-            date: '',
-            timezoneOffset: 0
-        },
+        startTime: '',
+        endTime: '',
         machines: [{ id: '', name: '' }],
         contestExp: 100,
     });
@@ -124,15 +112,9 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     ) => {
         const { name, value } = e.target;
         if (name === 'startTime' || name === 'endTime') {
-            const clientTimezoneOffset = new Date().getTimezoneOffset();
             const localDate = new Date(value);
-            setFormData({ 
-                ...formData, 
-                [name]: {
-                    date: localDate.toISOString(),
-                    timezoneOffset: clientTimezoneOffset
-                }
-            });
+            const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
+            setFormData({ ...formData, [name]: utcDate.toISOString() });
         } else if (name.startsWith('machine-') && typeof index === 'number') {
             const newMachines = [...machines];
             newMachines[index] = { id: '', name: value };
@@ -248,8 +230,8 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
     const validateForm = (): boolean => {
         const errors: ValidationErrors = {};
         const currentTime = new Date();
-        const startTimeDate = new Date(startTime.date);
-        const endTimeDate = new Date(endTime.date);
+        const startTimeDate = new Date(startTime);
+        const endTimeDate = new Date(endTime);
 
         if (!name || name.length < 3) {
             errors.name = 'Name must be at least 3 characters long';
@@ -395,7 +377,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         type='datetime-local'
                         id='startTime'
                         name='startTime'
-                        value={startTime?.date ? new Date(startTime.date).toLocaleString('sv-SE').slice(0, 16) : ''}
+                        value={startTime ? new Date(startTime).toLocaleString('sv-SE', { dateStyle: undefined, timeStyle: undefined }).slice(0, 16) : ''}
                         onChange={handleChange}
                         className={validationErrors.startTime ? 'error-input' : ''}
                     />
@@ -410,7 +392,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         type='datetime-local'
                         id='endTime'
                         name='endTime'
-                        value={endTime?.date ? new Date(endTime.date).toLocaleString('sv-SE').slice(0, 16) : ''}
+                        value={endTime ? new Date(endTime).toLocaleString('sv-SE', { dateStyle: undefined, timeStyle: undefined }).slice(0, 16) : ''}
                         onChange={handleChange}
                         className={validationErrors.endTime ? 'error-input' : ''}
                     />
