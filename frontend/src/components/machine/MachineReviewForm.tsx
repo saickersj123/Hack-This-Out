@@ -101,6 +101,8 @@ const MachineReviewForm: React.FC<MachineReviewFormProps> = ({
       }
     } finally {
       setLoading(false);
+      //reload page
+      window.location.reload();
     }
   };
 
