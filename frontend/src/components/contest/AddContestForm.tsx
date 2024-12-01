@@ -395,7 +395,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         type='datetime-local'
                         id='startTime'
                         name='startTime'
-                        value={startTime?.date ? new Date(startTime.date).toLocaleString('sv-SE').slice(0, 16) : ''}
+                        value={startTime?.date ? new Date(startTime.date).toLocaleString().slice(0, 16) : ''}
                         onChange={handleChange}
                         className={validationErrors.startTime ? 'error-input' : ''}
                     />
@@ -410,7 +410,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         type='datetime-local'
                         id='endTime'
                         name='endTime'
-                        value={endTime?.date ? new Date(endTime.date).toLocaleString('sv-SE').slice(0, 16) : ''}
+                        value={endTime?.date ? new Date(endTime.date).toLocaleString().slice(0, 16) : ''}
                         onChange={handleChange}
                         className={validationErrors.endTime ? 'error-input' : ''}
                     />
