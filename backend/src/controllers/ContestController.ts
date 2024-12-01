@@ -21,7 +21,7 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
-        // Parse and validate dates
+        // Parse ISO strings to Date objects
         const parsedStartTime = new Date(startTime);
         const parsedEndTime = new Date(endTime);
         const currentTime = new Date();

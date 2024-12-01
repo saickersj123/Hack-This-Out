@@ -111,11 +111,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
         index?: number
     ) => {
         const { name, value } = e.target;
-        if (name === 'startTime' || name === 'endTime') {
-            const localDate = new Date(value);
-            const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
-            setFormData({ ...formData, [name]: utcDate.toISOString() });
-        } else if (name.startsWith('machine-') && typeof index === 'number') {
+        if (name.startsWith('machine-') && typeof index === 'number') {
             const newMachines = [...machines];
             newMachines[index] = { id: '', name: value };
             setFormData({ ...formData, machines: newMachines });
@@ -286,11 +282,16 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
         try {
             setLoading(true);
             const machineIds = machines.map(machine => machine.id).filter(id => id);
+            
+            // Add timezone offset to dates
+            const startTimeWithOffset = new Date(startTime).toISOString();
+            const endTimeWithOffset = new Date(endTime).toISOString();
+
             const contestData = {
                 name,
                 description,
-                startTime,
-                endTime,
+                startTime: startTimeWithOffset,
+                endTime: endTimeWithOffset,
                 machines: machineIds,
                 contestExp
             };
@@ -377,7 +378,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         type='datetime-local'
                         id='startTime'
                         name='startTime'
-                        value={startTime ? new Date(startTime).toLocaleString('ko-KR', { dateStyle: undefined, timeStyle: undefined }).slice(0, 16) : ''}
+                        value={startTime}
                         onChange={handleChange}
                         className={validationErrors.startTime ? 'error-input' : ''}
                     />
@@ -392,7 +393,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         type='datetime-local'
                         id='endTime'
                         name='endTime'
-                        value={endTime ? new Date(endTime).toLocaleString('ko-KR', { dateStyle: undefined, timeStyle: undefined }).slice(0, 16) : ''}
+                        value={endTime}
                         onChange={handleChange}
                         className={validationErrors.endTime ? 'error-input' : ''}
                     />
