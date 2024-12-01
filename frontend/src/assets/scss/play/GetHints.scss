@@ -42,6 +42,7 @@
         gap: 8px;
         padding-left: 30px;
         margin-top: 16px;
+        
         .list {
             height: 60px;
             background-color: var(--color-layout);
@@ -53,6 +54,13 @@
             align-items: center;
             padding-left: 30px;
             transition: all 0.3s ease-in-out;
+            
+            &.hint-animate {
+                animation: fadeInSlide 0.5s ease-out forwards;
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            
             &:hover {
                 border: 2px solid var(--blue-200);
                 transform: translateY(-2px);
@@ -92,4 +100,15 @@
         cursor: not-allowed; /* 금지된 커서 */
         pointer-events: none; /* 상호작용 방지 */
       }
+}
+
+@keyframes fadeInSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

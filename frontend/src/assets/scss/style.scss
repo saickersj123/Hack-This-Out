@@ -9,3 +9,11 @@
 @use "section/layout.module.scss";
 @use "section/sidebar.module.scss";
 @use "section/profile.module.scss";
+
+* {
+    &::-webkit-scrollbar {
+        display: none; // Chrome, Safari, Opera
+    }
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE, Edge
+}

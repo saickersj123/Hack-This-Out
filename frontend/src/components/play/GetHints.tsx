@@ -150,7 +150,13 @@ const GetHints: React.FC<GetHintsProps> = ({ machineId, playType, contestId }) =
         <div className="used-hints">
           <ul className="hints-list">
             {hints.map((hint, index) => (
-              <li className="list" key={index}>{hint.content}</li>
+              <li 
+                className="list hint-animate" 
+                key={index}
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                {hint.content}
+              </li>
             ))}
           </ul>
         </div>
