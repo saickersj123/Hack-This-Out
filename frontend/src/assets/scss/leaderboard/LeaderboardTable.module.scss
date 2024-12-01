@@ -47,6 +47,8 @@
 
       .leaderboard_rank,
       .leaderboard_level {
+        text-align: center;
+        text-wrap: nowrap;
         width: 51px;
         min-width: 30px;
       }
