@@ -17,8 +17,9 @@
       "contest": "<0>\u00A0\u00A0\u00A0Contest</0><br /><1>\u00A0\u00A0The Competition!</1> Compete against other players.<br />\u00A0\u00A0Each contest has a <2>Period</2>.<br />\u00A0\u00A0The <3>Quickest</3> player who completes all given tasks in the period, gets to <4>Win</4>."
     },
     "additionalGameModes": {
-      "title": "Additional Game Modes",
-      "content": "<0><b>Machine</b></0><br />The Basic, You can play machines whenever you want.<br /><0><b>Contest</b></0><br />The Competition, Compete against other users.<br />Each contest has a duration.<br />The quickest user to complete all given machines during the contest wins."
+      "video": {
+        "title": "Tutorial Video"
+      }
     },
     "language": "Language"
 } 
