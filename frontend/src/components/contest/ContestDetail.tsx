@@ -43,7 +43,7 @@ const ContestDetail: React.FC<ContestDetailProps> = ({ contestDetail }) => {
           </div>
           <div className={styles.contest_textbox}>
             <div className={styles.contest_name}><b>{name.charAt(0).toUpperCase() + name.slice(1) || 'N/A'}</b></div>
-            <div className={styles.contest_description}><b>Description: </b>{description || 'N/A'}</div>
+            <div className={styles.contest_description}>"{description || 'N/A'}"</div>
             <ul className={styles.contest_machines}>
               <p><b>Machines </b></p>
               {machines.length > 0 ? (
