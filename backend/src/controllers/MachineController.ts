@@ -382,7 +382,7 @@ export const getUserProgress = async (req: Request, res: Response): Promise<void
 			res.status(404).json({ message: "ERROR", cause: "Machine not found." });
 			return;
 		}
-		let userProgress = await UserProgress.findOne({ user: user._id, machine: machineId, completed: false });
+		let userProgress = await UserProgress.findOne({ user: user._id, machine: machineId, completed: false }).sort({ createdAt: -1 });
 		if (!userProgress) {
 			userProgress = new UserProgress({
 				user: user._id,

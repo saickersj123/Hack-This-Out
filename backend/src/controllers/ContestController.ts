@@ -1039,7 +1039,8 @@ export const getContestParticipations = async (req: Request, res: Response) => {
         const participations = await ContestParticipation.find({ user: userId })
             .populate('contest', 'name')
             .populate('machineCompleted.machine', 'name')
-            .select('-__v -updatedAt -createdAt -usedHints -remainingHints');
+            .select('-__v -updatedAt -createdAt -usedHints -remainingHints')
+            .sort({ createdAt: -1 });
         if (!participations) {
             res.status(200).json({
                 message: "OK",

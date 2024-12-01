@@ -72,7 +72,8 @@ const Progress = () => {
                         </thead>
                         <tbody>
                             {userProgress.map((progress) => {
-                                const avatarColorIndex = getAvatarColorIndex(progress.machine.name);
+                                const machineName = progress.machine?.name || 'Unknown';
+                                const avatarColorIndex = getAvatarColorIndex(machineName);
                                 const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
                                 return (
                                 <tr className="body-detail" key={progress._id}>
@@ -80,8 +81,8 @@ const Progress = () => {
                                         <Avatar 
                                         variant="rounded" 
                                         sx={{ backgroundColor: avatarBgColor, width: 40, height: 40 }}>
-                                        {progress.machine.name.charAt(0).toUpperCase()}
-                                        </Avatar> {progress.machine.name.charAt(0).toUpperCase() + progress.machine.name.slice(1)}
+                                        {machineName.charAt(0).toUpperCase()}
+                                        </Avatar> {machineName.charAt(0).toUpperCase() + machineName.slice(1)}
                                     </td>
                                     <td className="body-exp">{progress.expEarned} EXP</td>
                                     <td className="body-time">{progress.timeSpent === new Date(0) ? "-" : formatTimeSpent(new Date(progress.timeSpent))}</td>
@@ -108,15 +109,16 @@ const Progress = () => {
                     </thead>
                     <tbody>
                         {contestParticipation.map((participation) => {
-                            const avatarColorIndex = getAvatarColorIndex(participation.contest.name);
+                            const contestName = participation.contest.name || 'Unknown';
+                            const avatarColorIndex = getAvatarColorIndex(contestName);
                             const avatarBgColor = avatarBackgroundColors[avatarColorIndex];
                             return (
                             <tr className="body-detail" key={participation._id}>
                                 <td className="body-name"><Avatar 
                                     variant="rounded" 
                                     sx={{ backgroundColor: avatarBgColor, width: 40, height: 40 }}>
-                                    {participation.contest.name.charAt(0).toUpperCase()}
-                                    </Avatar> {participation.contest.name.charAt(0).toUpperCase() + participation.contest.name.slice(1)}
+                                    {contestName.charAt(0).toUpperCase()}
+                                    </Avatar> {contestName.charAt(0).toUpperCase() + contestName.slice(1)}
                                     </td>
                                 <td className="body-time">{formatDate(participation.participationStartTime)}</td>
                                 <td className="body-comp">
