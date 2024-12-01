@@ -5,12 +5,19 @@ import ContestParticipation from '../models/ContestParticipation';
 import Machine from '../models/Machine';
 import User from '../models/User';
 
+interface TimeWithOffset {
+    date: string;
+    timezoneOffset: number;
+}
+
 /**
  * Create a new contest.
  */
 export const createContest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, description, startTime, endTime, machines, contestExp } = req.body;
+        const { name, description, machines, contestExp } = req.body;
+        const startTime: TimeWithOffset = req.body.startTime;
+        const endTime: TimeWithOffset = req.body.endTime;
         
         // Validate required fields
         if (!name || !startTime || !endTime || !machines || !contestExp) {
@@ -21,9 +28,14 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
-        // Parse and validate dates
-        const parsedStartTime = new Date(startTime);
-        const parsedEndTime = new Date(endTime);
+        // Parse and validate dates with timezone offset
+        const parsedStartTime = new Date(startTime.date);
+        const parsedEndTime = new Date(endTime.date);
+        
+        // Adjust for client's timezone
+        parsedStartTime.setMinutes(parsedStartTime.getMinutes() - startTime.timezoneOffset);
+        parsedEndTime.setMinutes(parsedEndTime.getMinutes() - endTime.timezoneOffset);
+        
         const currentTime = new Date();
 
         if (isNaN(parsedStartTime.getTime()) || isNaN(parsedEndTime.getTime())) {
@@ -112,10 +124,15 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
 
         await newContest.save();
         
+        // When sending back the contest, adjust times back to client's timezone
+        const contestResponse = newContest.toObject();
+        contestResponse.startTime = new Date(newContest.startTime.getTime() + (startTime.timezoneOffset * 60000));
+        contestResponse.endTime = new Date(newContest.endTime.getTime() + (endTime.timezoneOffset * 60000));
+
         res.status(201).json({ 
             message: "OK", 
             msg: 'Contest created successfully.', 
-            contest: newContest 
+            contest: contestResponse 
         });
     } catch (error: any) {
         console.error('Error creating contest:', error);
@@ -718,7 +735,9 @@ export const getUsedHintsInContest = async (req: Request, res: Response): Promis
 export const updateContestDetails = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
-        const { name, description, startTime, endTime, machines, contestExp } = req.body;
+        const { name, description, machines, contestExp } = req.body;
+        const startTime: TimeWithOffset | undefined = req.body.startTime;
+        const endTime: TimeWithOffset | undefined = req.body.endTime;
 
         // Find the contest
         const contest = await Contest.findById(contestId);
@@ -730,9 +749,17 @@ export const updateContestDetails = async (req: Request, res: Response): Promise
             return;
         }
 
-        // Set existing startTime for validation if not provided
-        if (!startTime && endTime) {
-            req.body.startTime = contest.startTime;
+        // Update time fields if provided
+        if (startTime) {
+            const parsedStartTime = new Date(startTime.date);
+            parsedStartTime.setMinutes(parsedStartTime.getMinutes() - startTime.timezoneOffset);
+            contest.startTime = parsedStartTime;
+        }
+
+        if (endTime) {
+            const parsedEndTime = new Date(endTime.date);
+            parsedEndTime.setMinutes(parsedEndTime.getMinutes() - endTime.timezoneOffset);
+            contest.endTime = parsedEndTime;
         }
 
         // If machines are being updated, validate them
@@ -751,8 +778,6 @@ export const updateContestDetails = async (req: Request, res: Response): Promise
         // Update other fields if provided
         if (name) contest.name = name;
         if (description) contest.description = description;
-        if (startTime) contest.startTime = startTime;
-        if (endTime) contest.endTime = endTime;
         if (contestExp !== undefined) contest.contestExp = contestExp;
 
         await contest.save();
