@@ -148,10 +148,7 @@ export const Contact: React.FC<ContactData> = ({ data }) => {
       <div id="footer">
         <div className="social-container text-center">
           <p>
-            &copy; 2023 Issaaf Kattan React Landing Page Template. Design by{" "}
-            <a href="http://www.templatewire.com" rel="nofollow">
-              TemplateWire
-            </a>
+            &copy; 2024 Hack This Out. Designed by {"Sangjin Park"}
           </p>
         </div>
       </div>

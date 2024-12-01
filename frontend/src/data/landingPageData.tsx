@@ -161,7 +161,7 @@ export const landingPageData: LandingPageData = {
   ],
   Contact: {
     email: "hackthisout123@gmail.com",
-    github: "github.com",
+    github: "https://github.com/saickersj123/Hack-This-Out",
   },
   Features: [
     {
