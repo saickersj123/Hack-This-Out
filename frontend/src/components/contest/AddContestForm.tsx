@@ -111,7 +111,11 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
         index?: number
     ) => {
         const { name, value } = e.target;
-        if (name.startsWith('machine-') && typeof index === 'number') {
+        if (name === 'startTime' || name === 'endTime') {
+            const localDate = new Date(value);
+            const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
+            setFormData({ ...formData, [name]: utcDate.toISOString() });
+        } else if (name.startsWith('machine-') && typeof index === 'number') {
             const newMachines = [...machines];
             newMachines[index] = { id: '', name: value };
             setFormData({ ...formData, machines: newMachines });
@@ -373,7 +377,7 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         type='datetime-local'
                         id='startTime'
                         name='startTime'
-                        value={startTime}
+                        value={startTime ? new Date(startTime).toLocaleString('sv-SE', { dateStyle: undefined, timeStyle: undefined }).slice(0, 16) : ''}
                         onChange={handleChange}
                         className={validationErrors.startTime ? 'error-input' : ''}
                     />
@@ -388,11 +392,11 @@ const AddContestForm: React.FC<AddContestFormProps> = ({ onContestAdded }) => {
                         type='datetime-local'
                         id='endTime'
                         name='endTime'
-                        value={endTime}
+                        value={endTime ? new Date(endTime).toLocaleString('sv-SE', { dateStyle: undefined, timeStyle: undefined }).slice(0, 16) : ''}
                         onChange={handleChange}
-                            className={validationErrors.endTime ? 'error-input' : ''}
-                        />
-                        {validationErrors.endTime && (
+                        className={validationErrors.endTime ? 'error-input' : ''}
+                    />
+                    {validationErrors.endTime && (
                         <span className='field-error'>{validationErrors.endTime}</span>
                     )}
                 </div>

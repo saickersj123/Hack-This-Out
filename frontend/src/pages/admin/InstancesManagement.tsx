@@ -5,11 +5,21 @@ import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import ErrorMessage from '../../components/admin/ErrorMessage';
 import '../../assets/scss/admin/DataTable.scss';
 import { getAllInstances, TerminateInstanceById } from '../../api/axiosInstance';
+import { formatDate } from '../../utils/dateUtils';
 interface Instance {
   _id: string;
-  user: string;
-  machineType: string;
+  user: {
+    _id: string;
+    username: string;
+  };
+  machineType: {
+    _id: string;
+    name: string;
+  };
   status: string;
+  instanceId: string;
+  vpnIp?: string;
+  createdAt: Date;
 }
 
 const InstancesManagement: React.FC = () => {
@@ -55,8 +65,11 @@ const InstancesManagement: React.FC = () => {
   };
 
   const columns = [
-    { header: 'User', accessor: 'user' },
-    { header: 'Machine Type', accessor: 'machineType' },
+    { header: 'Username', accessor: 'user.username' },
+    { header: 'Machine Type', accessor: 'machineType.name' },
+    { header: 'Instance ID', accessor: 'instanceId' },
+    { header: 'VPN IP', accessor: 'vpnIp' },
+    { header: 'Created At', accessor: 'createdAt' },
     { header: 'Status', accessor: 'status' },
   ];
 
@@ -67,7 +80,6 @@ const InstancesManagement: React.FC = () => {
         <h1>Instances Management</h1>
         {error && <ErrorMessage message={error} />}
         
-        {/* Render Action Buttons separately per row */}
         <table className="data-table">
           <thead>
             <tr>
@@ -80,9 +92,16 @@ const InstancesManagement: React.FC = () => {
           <tbody>
             {instances.map(instance => (
               <tr key={instance._id}>
-                <td>{instance.user}</td>
-                <td>{instance.machineType}</td>
-                <td>{instance.status}</td>
+                <td>{instance.user?.username || 'N/A'}</td>
+                <td>{instance.machineType?.name || 'N/A'}</td>
+                <td>{instance.instanceId}</td>
+                <td>{instance.vpnIp || 'Not assigned'}</td>
+                <td>{formatDate(instance.createdAt)}</td>
+                <td>
+                  <span className={`status-badge status-${instance.status.toLowerCase()}`}>
+                    {instance.status}
+                  </span>
+                </td>
                 <td>
                   <ActionButtons
                     onDelete={() => handleTerminateInstance(instance._id)}
@@ -93,7 +112,6 @@ const InstancesManagement: React.FC = () => {
           </tbody>
         </table>
         
-        {/* Confirmation Modal */}
         <ConfirmationModal
           isOpen={modal.isOpen}
           title="Confirm Terminate Instance"

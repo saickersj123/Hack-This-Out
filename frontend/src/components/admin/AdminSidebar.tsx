@@ -8,7 +8,7 @@ const Sidebar: React.FC = () => {
     <div className="admin-sidebar">
       <h2 className="sidebar-title">Admin Dashboard</h2>
       <nav className="sidebar-nav">
-      <NavLink to="/main" className={({ isActive }) => (isActive ? 'active' : '')}>
+      <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
           <FaHome className="sidebar-icon" />
           Main Page
         </NavLink>

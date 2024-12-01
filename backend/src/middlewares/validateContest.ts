@@ -39,8 +39,8 @@ export const createContestValidation: ValidationChain[] = [
             }
 
             const durationInHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
-            if (durationInHours < 24) {
-                throw new Error('Contest duration must be at least 24 hours.');
+            if (durationInHours < 1) {
+                throw new Error('Contest duration must be at least 1 hour.');
             }
 
             return true;
@@ -97,8 +97,8 @@ export const updateContestValidation: ValidationChain[] = [
                 }
 
                 const durationInHours = (new Date(value).getTime() - startTime.getTime()) / (1000 * 60 * 60);
-                if (durationInHours < 24) {
-                    throw new Error('Contest duration must be at least 24 hours.');
+                if (durationInHours < 1) {
+                    throw new Error('Contest duration must be at least 1 hour.');
                 }
             }
 

@@ -12,19 +12,38 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
     try {
         const { name, description, startTime, endTime, machines, contestExp } = req.body;
         
-        // Parse startTime and endTime as UTC dates
-        const parsedStartTime = new Date(startTime);
-        const parsedEndTime = new Date(endTime);
-
-        if (isNaN(parsedStartTime.getTime()) || isNaN(parsedEndTime.getTime())) {
+        // Validate required fields
+        if (!name || !startTime || !endTime || !machines || !contestExp) {
             res.status(400).json({ 
                 message: "ERROR", 
-                msg: 'Invalid startTime or endTime.' 
+                msg: 'Missing required fields.' 
             });
             return;
         }
 
-        // Validate startTime and endTime
+        // Parse and validate dates
+        const parsedStartTime = new Date(startTime);
+        const parsedEndTime = new Date(endTime);
+        const currentTime = new Date();
+
+        if (isNaN(parsedStartTime.getTime()) || isNaN(parsedEndTime.getTime())) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Invalid startTime or endTime format.' 
+            });
+            return;
+        }
+
+        // Validate start time is in the future
+        if (parsedStartTime <= currentTime) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Start time must be in the future.' 
+            });
+            return;
+        }
+
+        // Validate time sequence
         if (parsedStartTime >= parsedEndTime) {
             res.status(400).json({ 
                 message: "ERROR", 
@@ -33,7 +52,26 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
-        // Validate machines
+        // Validate contest duration (optional)
+        const durationInHours = (parsedEndTime.getTime() - parsedStartTime.getTime()) / (1000 * 60 * 60);
+        if (durationInHours < 1) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'Contest duration must be at least 1 hour.' 
+            });
+            return;
+        }
+
+        // Validate machines array
+        if (!Array.isArray(machines) || machines.length === 0) {
+            res.status(400).json({ 
+                message: "ERROR", 
+                msg: 'At least one machine must be specified.' 
+            });
+            return;
+        }
+
+        // Validate machines exist in database
         const machineDocs = await Machine.find({ _id: { $in: machines } });
         if (machineDocs.length !== machines.length) {
             res.status(400).json({ 
@@ -43,7 +81,17 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
-        const contestExists = await Contest.findOne({ name, startTime, endTime });
+        // Check for duplicate contest
+        const contestExists = await Contest.findOne({ 
+            $and: [
+                { name },
+                { 
+                    startTime: { $lte: parsedEndTime },
+                    endTime: { $gte: parsedStartTime }
+                }
+            ]
+        });
+
         if (contestExists) {
             res.status(400).json({ 
                 message: "ERROR", 
@@ -54,15 +102,16 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
 
         const newContest = new Contest({
             name,
-            description,
-            startTime,
-            endTime,
+            description: description || '',
+            startTime: parsedStartTime,
+            endTime: parsedEndTime,
             machines,
             contestExp,
             isActive: false
         });
 
         await newContest.save();
+        
         res.status(201).json({ 
             message: "OK", 
             msg: 'Contest created successfully.', 
@@ -70,7 +119,11 @@ export const createContest = async (req: Request, res: Response): Promise<void> 
         });
     } catch (error: any) {
         console.error('Error creating contest:', error);
-        res.status(500).send('Failed to create contest.');
+        res.status(500).json({
+            message: "ERROR",
+            msg: 'Failed to create contest.',
+            error: error.message
+        });
     }
 };
 
@@ -119,6 +172,13 @@ export const deactivateContest = async (req: Request, res: Response): Promise<vo
             });
             return;
         }
+        contest.isActive = false;
+        await contest.save();
+        res.status(200).json({ 
+            message: "OK", 
+            msg: 'Contest deactivated successfully.', 
+            contest 
+        });
     } catch (error: any) {
         console.error('Error deactivating contest:', error);
         res.status(500).send('Failed to deactivate contest.');

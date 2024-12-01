@@ -4,6 +4,7 @@ import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import ErrorMessage from '../../components/admin/ErrorMessage';
 import Sidebar from '../../components/admin/AdminSidebar';
 import '../../assets/scss/admin/DataTable.scss';
+import { formatDate } from '../../utils/dateUtils';
 import {
   getContests,
   ActivateContest,
@@ -110,8 +111,8 @@ const ContestsManagement: React.FC = () => {
               <tr key={contest._id}>
                 <td>{contest.name}</td>
                 <td>{contest.isActive ? 'Yes' : 'No'}</td>
-                <td>{new Date(contest.startTime).toLocaleString()}</td>
-                <td>{new Date(contest.endTime).toLocaleString()}</td>
+                <td>{formatDate(contest.startTime)}</td>
+                <td>{formatDate(contest.endTime)}</td>
                 <td>
                   <ActionButtons
                     onActivate={!contest.isActive ? () => handleToggleActive(contest._id, contest.isActive) : undefined}

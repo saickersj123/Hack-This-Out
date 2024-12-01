@@ -267,14 +267,25 @@ export const getInstanceByMachine = async (req: Request, res: Response) => {
  */
 export const getAllInstances = async (req: Request, res: Response) => {
   try {
-    const instances = await Instance.find();
+    // Populate user and machineType fields
+    const instances = await Instance.find()
+      .populate({
+        path: 'user',
+        select: 'username',
+        model: User
+      })
+      .populate('machineType', 'name');  // Also populate machineType if needed
+      
     res.status(200).json({ 
       message: "OK", 
       instances: instances 
     });
   } catch (error) {
     console.error('Error fetching all instances:', error);  
-    res.status(500).send('Server error');
+    res.status(500).json({ 
+      message: "ERROR", 
+      error: 'Server error' 
+    });
   }
 };
 
