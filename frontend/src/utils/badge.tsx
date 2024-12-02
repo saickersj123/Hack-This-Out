@@ -48,10 +48,39 @@ export const rankBadges: { [key: number]: string } = {
 };
 
 export const getLevelFrame = (level: number): number => {
-    const totalFrames = 9;
-    if (level < 1) return 1; // Default to frame 1 for levels below 1
-    if (level === 20) return totalFrames; // Assign the last frame for max level
-    return ((level - 1) % totalFrames) + 1; // Cycle through frames 1 to 9
+    // Ensure level is between 1 and 20
+    const clampedLevel = Math.max(1, Math.min(level, 20));
+    
+    // Map levels to frames:
+    // Levels 1-3: frames 1
+    // Levels 4-5: frame 2
+    // Levels 6-8: frame 3
+    // Levels 9-11: frame 4
+    // Levels 12-13: frame 5
+    // Levels 14-15: frame 6
+    // Levels 16-17: frame 7
+    // Levels 18-19: frame 8
+    // Level 20: frame 9
+    
+    if (clampedLevel <= 3) {
+        return 1;
+    } else if (clampedLevel <= 5) {
+        return 2;
+    } else if (clampedLevel <= 8) {
+        return 3;
+    } else if (clampedLevel <= 11) {
+        return 4;
+    } else if (clampedLevel <= 13) {
+        return 5;
+    } else if (clampedLevel <= 15) {
+        return 6;
+    } else if (clampedLevel <= 17) {
+        return 7;
+    } else if (clampedLevel <= 19) {
+        return 8;
+    } else {
+        return 9;
+    }
 };
 
 // Function to determine rank frame based on rank

@@ -84,7 +84,7 @@ const TutorialPage: React.FC = () => {
           <article className="tutorial-page-content-add">
             <div className="tutorial-video-container">
               <h3>{t('additionalGameModes.video.title')}</h3>
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=GmzEgvi07yp_-kU-&amp;list=PLUK26Cwhrfoaq323273vJl13rBw8pAnb4" 
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=kgEJ4ZhlcCpcSSF6&amp;list=PLUK26CwhrfoZVjnUkSWtrds8nvh4VUY59" 
                 title="YouTube video player" 
                 frameBorder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
