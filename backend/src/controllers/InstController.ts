@@ -328,6 +328,7 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
 export const terminateInstanceByInstanceId = async (req: Request, res: Response) => {
   try {
     const { instanceId } = req.params;
+    
     // Find the instance
     const instance = await Instance.findOne({ _id: instanceId });
     if (!instance) {
