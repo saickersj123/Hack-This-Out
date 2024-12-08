@@ -328,17 +328,8 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
 export const terminateInstanceByInstanceId = async (req: Request, res: Response) => {
   try {
     const { instanceId } = req.params;
-    const userId = res.locals.jwtData.id;
-
-    if (!userId) {
-      return res.status(401).json({ 
-        message: "ERROR", 
-        msg: "User not registered / token malfunctioned" 
-      });
-    }
-
     // Find the instance
-    const instance = await Instance.findOne({ _id: instanceId, user: userId });
+    const instance = await Instance.findOne({ _id: instanceId });
     if (!instance) {
       res.status(404).json({ 
         message: "ERROR", 
