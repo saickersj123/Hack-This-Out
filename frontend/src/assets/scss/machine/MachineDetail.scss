@@ -55,6 +55,9 @@
         padding-left: clamp(8px, 2vw, 16px);
         line-height: 1.4;
         font-size: clamp(1rem, 2vw, 20px);
+        text-wrap: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     

@@ -9,7 +9,7 @@
         display: flex;
         justify-content: space-between;
         height: 100%;
-        padding: clamp(24px, 4vw, 48px) clamp(24px, 4vw, 48px) clamp(12px, 2vw, 16px);
+        padding: clamp(24px, 4vw, 48px) clamp(24px, 4vw, 48px) clamp(16px, 2vw, 16px);
         flex-grow: 1;
         gap: clamp(16px, 3vw, 32px);
 
@@ -48,7 +48,9 @@
                 font-weight: 900;
                 filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
                 margin-bottom: clamp(8px, 2vw, 16px);
-
+                text-wrap: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
                 @media (max-width: 768px) {
                     text-align: center;
                 }
@@ -56,7 +58,6 @@
 
             .contest_description {
                 padding-left: clamp(8px, 2vw, 16px);
-                padding-top: clamp(8px, 2vw, 16px);
                 font-size: clamp(1rem, 2vw, 20px);
                 line-height: 1.4;
 
@@ -98,7 +99,7 @@
 
             .time_box {
                 margin-top: clamp(120px, 3vw, 160px);
-                margin-left: clamp(16px, 3vw, 150px);
+                margin-left: clamp(16px, 1vw, 150px);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -106,6 +107,7 @@
 
                 @media (max-width: 768px) {
                     margin-left: 0;
+                    display: none;
                 }
         
 
@@ -116,6 +118,13 @@
                     font-weight: 600;
                     text-align: right;
                     margin-top: 8px;
+                    text-wrap: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+
+                    @media (max-width: 768px) {
+                        text-align: center;
+                    }
                 }
             }
 
