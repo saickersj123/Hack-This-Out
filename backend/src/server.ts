@@ -9,37 +9,41 @@ import InstRoutes from "./routes/InstRoutes";
 import MachineRoutes from './routes/MachineRoutes';
 import ContestRoutes from './routes/ContestRoutes';
 
+// **Import the Instance Cleanup Scheduler**
+import './middlewares/instanceCleanup';
+
 const app = express();
 
-//DB
+// DB Connection
 connectDB();
 
-//CORS
+// CORS Configuration
 app.use(cors({
     origin: process.env.ORIGIN_URL,
     credentials: true
 }));
 
-//Cookie
+// Cookie Parser
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-//Logger
+// Logger
 app.use(morgan("dev"));
 
-//Root
+// Root Endpoint
 app.get('/', (req, res) => res.send('API is running'));
 
-//Middleware
+// Middleware
 app.use(express.json());
 app.use(mongoSanitize());
 
-//Routes
+// Routes
 app.use('/api/user', userRoutes);
 app.use('/api/inst', InstRoutes);
 app.use('/api/machines', MachineRoutes);
 app.use('/api/contest', ContestRoutes);
 
+// Server Port
 const PORT = process.env.PORT || 5000;
 
-//Server
+// Start Server
 app.listen(PORT, () => console.log(`Server starts on port ${PORT}`));

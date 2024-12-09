@@ -351,7 +351,7 @@ export const terminateInstanceByInstanceId = async (req: Request, res: Response)
     await instance.save();
 
     // Optionally, delete the instance record from DB
-    await Instance.deleteOne({ instanceId });
+    await Instance.deleteOne({ _id: instanceId });
 
     res.status(200).json({ 
       message: "OK", 
