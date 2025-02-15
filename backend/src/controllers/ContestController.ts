@@ -882,7 +882,7 @@ export const getContestDetails = async (req: Request, res: Response): Promise<vo
 /**
  * Get leaderboard by contest.
  */
-export const getLeaderboardByContest = async (req: Request, res: Response) => {
+export const getLeaderboardByContest = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
 
@@ -903,7 +903,7 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
             exp: participation.expEarned || 0
         }));
 
-        return res.status(200).json({ 
+        res.status(200).json({ 
             message: "OK", 
             msg: 'Leaderboard fetched successfully.', 
             users: leaderboard 
@@ -921,7 +921,7 @@ export const getLeaderboardByContest = async (req: Request, res: Response) => {
 /**
  * Get my rank in contest.
  */
-export const getMyRankInContest = async (req: Request, res: Response) => {
+export const getMyRankInContest = async (req: Request, res: Response): Promise<void> => {
     try {
         const { contestId } = req.params;
         const userId = res.locals.jwtData.id;
@@ -955,7 +955,7 @@ export const getMyRankInContest = async (req: Request, res: Response) => {
         });
         const myRank = higherExpCount + 1;
         
-        return res.status(200).json({
+        res.status(200).json({
             message: "OK",
             msg: 'My rank fetched successfully.',
             myRank: myRank,
@@ -975,7 +975,7 @@ export const getMyRankInContest = async (req: Request, res: Response) => {
 /**
  * Get started contests.
  */
-export const getStartedContest = async (req: Request, res: Response) => {
+export const getStartedContest = async (req: Request, res: Response): Promise<void> => {
     try {
         const contest = await Contest.findOne({ isActive: true, startTime: { $lte: new Date() }, endTime: { $gte: new Date() } });
         if (!contest) {

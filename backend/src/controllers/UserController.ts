@@ -29,37 +29,37 @@ const getCookieOptions = () => {
 };
 
 // GET all user information (Admin Only)
-export const getAllUser = async (req: Request, res: Response) => {
+export const getAllUser = async (req: Request, res: Response): Promise<void> => {
     try {
 		const users = await User.find().select('-password');
-		return res.status(200).json({ message: "OK", users: users });
+		res.status(200).json({ message: "OK", users: users });
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: "ERROR", cause: error.message });
+		res.status(500).json({ message: "ERROR", cause: error.message });
 	}
 };
 
 // GET user Detail(User Only)
-export const getUserDetail = async (req: Request, res: Response) => {
+export const getUserDetail = async (req: Request, res: Response): Promise<void> => {
     try {
 		const userId = res.locals.jwtData.id;
         const user = await User.findById(userId).select('-password -isAdmin -createdAt -updatedAt -__v -_id');
-        return res.status(200).json({ message: "OK", user: user });
+        res.status(200).json({ message: "OK", user: user });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "ERROR", cause: error.message });
+        res.status(500).json({ message: "ERROR", cause: error.message });
     }
 };
 
 // GET user Detail by userId(Admin Only)
-export const getUserDetailByUserId = async (req: Request, res: Response) => {
+export const getUserDetailByUserId = async (req: Request, res: Response): Promise<void> => {
     const { userId } = req.params;
     const user = await User.findOne({ id: userId });
-    return res.status(200).json({ message: "OK", user: user });
+    res.status(200).json({ message: "OK", user: user });
 };
 
 // POST user signup
-export const postSignUp = async (req: Request, res: Response) => {
+export const postSignUp = async (req: Request, res: Response): Promise<void> => {
     const { username, email, password } = req.body;
 
     try {
@@ -108,9 +108,7 @@ export const postSignUp = async (req: Request, res: Response) => {
 
 		res.cookie(COOKIE_NAME, token, getCookieOptions());
 
-		return res
-			.status(201)
-			.json({ message: "OK", username: newUser.username, email: newUser.email });
+		res.status(201).json({ message: "OK", username: newUser.username, email: newUser.email });
     } catch(err: any) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -118,7 +116,7 @@ export const postSignUp = async (req: Request, res: Response) => {
 };
 
 // POST user login
-export const postLoginUser = async (req: Request, res: Response) => {
+export const postLoginUser = async (req: Request, res: Response): Promise<void> => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         res.status(400).json({
@@ -162,9 +160,7 @@ export const postLoginUser = async (req: Request, res: Response) => {
 
 		res.cookie(COOKIE_NAME, token, getCookieOptions());
 
-		return res
-			.status(200)
-			.json({ message: "OK", username: user.username, email: user.email });
+		res.status(200).json({ message: "OK", username: user.username, email: user.email });
     } catch (err: any) {
         console.error(err.message);
         res.status(500).send({ message: "ERROR", cause: err.message });
@@ -176,20 +172,18 @@ export const logoutUser = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const user = await User.findById(res.locals.jwtData.id); // get variable stored in previous middleware
 
 		if (!user)
-			return res.status(401).json({
+			res.status(401).json({
 				message: "ERROR",
 				cause: "User doesn't exist or token malfunctioned",
 			});
 
 		if (user._id.toString() !== res.locals.jwtData.id) {
-			return res
-				.status(401)
-				.json({ message: "ERROR", cause: "Permissions didn't match" });
+			res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
 		}
 
         // Clear any existing token
@@ -202,14 +196,10 @@ export const logoutUser = async (
 			domain: process.env.DOMAIN,
 		});
 
-		return res
-			.status(200)
-			.json({ message: "OK", username: user.username, email: user.email });
+		res.status(200).json({ message: "OK" });
 	} catch (err) {
 		console.log(err);
-		return res
-			.status(200)
-			.json({ message: "ERROR", cause: err.message});
+		res.status(200).json({ message: "ERROR", cause: err.message});
 	}
 };
 
@@ -218,30 +208,24 @@ export const verifyUserStatus = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const user = await User.findById(res.locals.jwtData.id).select('-password -date -createdAt -updatedAt -__v -level -exp');
 
 		if (!user)
-			return res.status(401).json({
+			res.status(401).json({
 				message: "ERROR",
 				cause: "User doesn't exist or token malfunctioned",
 			});
 
 		if (user._id.toString() !== res.locals.jwtData.id) {
-			return res
-				.status(401)
-				.json({ message: "ERROR", cause: "Permissions didn't match" });
+			res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
 		}
 
-		return res
-			.status(200)
-			.json({ message: "OK", user: user });
+		res.status(200).json({ message: "OK", user: user });
 	} catch (err) {
 		console.log(err);
-		return res
-			.status(200)
-			.json({ message: "ERROR", cause: err.message});
+		res.status(200).json({ message: "ERROR", cause: err.message});
 	}
 };
 
@@ -250,45 +234,39 @@ export const changePassword = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const { oldPassword, newPassword } = req.body;
 		const user = await User.findById(res.locals.jwtData.id); // get variable stored in previous middleware
 
 		if (!user)
-			return res.status(401).json({
+			res.status(401).json({
 				message: "ERROR",
 				cause: "User doesn't exist or token malfunctioned",
 			});
 
 		if (user._id.toString() !== res.locals.jwtData.id) {
-			return res
-				.status(401)
-				.json({ message: "ERROR", cause: "Permissions didn't match" });
+			res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
 		}
 
 		const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
 		if (!isPasswordCorrect) {
-			return res.status(403).json({ message: "ERROR", cause: "Incorrect Password" });
+			res.status(403).json({ message: "ERROR", cause: "Incorrect Password" });
 		}
 
 		const hashedPassword = await bcrypt.hash(newPassword, 10);
 		user.password = hashedPassword;
 		await user.save();
 
-		return res
-			.status(200)
-			.json({ message: "OK", username: user.username, email: user.email });
+		res.status(200).json({ message: "OK" });
 	} catch (err) {
 		console.log(err);
-		return res
-			.status(200)
-			.json({ message: "ERROR", cause: err.message});
+		res.status(200).json({ message: "ERROR", cause: err.message});
 	}
 };
 
 // Change user name
-export const changeName = async (req: Request, res: Response) => {
+export const changeName = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { username } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
@@ -298,22 +276,22 @@ export const changeName = async (req: Request, res: Response) => {
 			return;
 		}
 		if (user._id.toString() !== res.locals.jwtData.id) {
-			return res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
+			res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
 		}
 		if (username === user.username) {
-			return res.status(401).json({ message: "ERROR", cause: "Name is the same as before" });
+			res.status(401).json({ message: "ERROR", cause: "Name is the same as before" });
 		}
 		if (username.length > 10) {
-			return res.status(401).json({ message: "ERROR", cause: "Name is too long" });
+			res.status(401).json({ message: "ERROR", cause: "Name is too long" });
 		}
 		if (username.length < 3) {
-			return res.status(401).json({ message: "ERROR", cause: "Name is too short" });
+			res.status(401).json({ message: "ERROR", cause: "Name is too short" });
 		}
 		if (username.includes(' ')) {
-			return res.status(401).json({ message: "ERROR", cause: "Name cannot contain spaces" });
+			res.status(401).json({ message: "ERROR", cause: "Name cannot contain spaces" });
 		}
 		if (isNameExist) {
-			return res.status(401).json({ message: "ERROR", cause: "Name already taken" });
+			res.status(401).json({ message: "ERROR", cause: "Name already taken" });
 		}
 		// Update username
 		user.username = username;
@@ -328,7 +306,7 @@ export const changeName = async (req: Request, res: Response) => {
 			});
 			await machine.save();
 		});
-		return res.status(200).json({ message: "OK", username: user.username, email: user.email });
+		res.status(200).json({ message: "OK", username: user.username, email: user.email });
 	} catch (error: any) {
 		console.error('Error changing name:', error);
 		res.status(500).send('Server error');
@@ -340,42 +318,34 @@ export const checkPassword = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const { password } = req.body;
 		const user = await User.findById(res.locals.jwtData.id); // get variable stored in previous middleware
 
 		if (!user)
-			return res.status(401).json({
+			res.status(401).json({
 				message: "ERROR",
 				cause: "User doesn't exist or token malfunctioned",
 			});
 
 		if (user._id.toString() !== res.locals.jwtData.id) {
-			return res
-				.status(401)
-				.json({ message: "ERROR", cause: "Permissions didn't match" });
+			res.status(401).json({ message: "ERROR", cause: "Permissions didn't match" });
 		}
 
 		const isPasswordCorrect = await bcrypt.compare(password, user.password);
 		if (!isPasswordCorrect)
-			return res
-				.status(403)
-				.json({ message: "ERROR", cause: "Incorrect Password" });
+			res.status(403).json({ message: "ERROR", cause: "Incorrect Password" });
 
-		return res
-			.status(200)
-			.json({ message: "OK", username: user.username, email: user.email });
+		res.status(200).json({ message: "OK", username: user.username, email: user.email });
 	} catch (err) {
 		console.log(err);
-		return res
-			.status(200)
-			.json({ message: "ERROR", cause: err.message});
+		res.status(200).json({ message: "ERROR", cause: err.message});
 	}
 };
 
 //reset user password
-export const resetPassword = async (req: Request, res: Response) => {
+export const resetPassword = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { userId } = req.params;
 		const { password } = req.body;
@@ -387,7 +357,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		user.password = hashedPassword;
 		await user.save();
-		return res.status(200).json({ message: "OK", username: user.username, email: user.email });
+		res.status(200).json({ message: "OK", username: user.username, email: user.email });
 	} catch (error: any) {
 		console.error('Error resetting password:', error);
 		res.status(500).send('Server error');
@@ -395,7 +365,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 }
 
 // Delete user
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const userId = res.locals.jwtData.id;
 		const { password } = req.body;
@@ -406,7 +376,8 @@ export const deleteUser = async (req: Request, res: Response) => {
 		}
 		const isPasswordCorrect = await bcrypt.compare(password, user.password);
 		if (!isPasswordCorrect) {
-			return res.status(401).json({ message: "ERROR", cause: "Incorrect Password" });
+			res.status(401).json({ message: "ERROR", cause: "Incorrect Password" });
+			return;
 		}
 		// Delete user progress
 		await UserProgress.deleteMany({ user: userId });
@@ -426,7 +397,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 		// Delete user
 		await user.deleteOne({ id: userId });
-		return res.status(200).json({ message: "OK" });
+		res.status(200).json({ message: "OK" });
 	} catch (error: any) {
 		console.error('Error deleting user:', error);
 		res.status(500).send('Server error');
@@ -434,7 +405,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 };
 
 // Delete user by userId(Admin Only)
-export const deleteUserByUserId = async (req: Request, res: Response) => {
+export const deleteUserByUserId = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { userId } = req.params;
 		const user = await User.findById(userId);
@@ -459,7 +430,7 @@ export const deleteUserByUserId = async (req: Request, res: Response) => {
 		});
 		// Delete user
 		await user.deleteOne({ id: userId });
-		return res.status(200).json({ message: "OK" });
+		res.status(200).json({ message: "OK" });
 	} catch (error: any) {
 		console.error('Error deleting user:', error);
 		res.status(500).send('Server error');
@@ -467,7 +438,7 @@ export const deleteUserByUserId = async (req: Request, res: Response) => {
 };
 
 // Get user progress by userId(Admin Only)
-export const getUserProgressByUserId = async (req: Request, res: Response) => {
+export const getUserProgressByUserId = async (req: Request, res: Response): Promise<void>	 => {
 	try {
 		const { userId } = req.params;
 		const user = await User.findOne({ id: userId });
@@ -488,7 +459,7 @@ export const getUserProgressByUserId = async (req: Request, res: Response) => {
 }
 
 // Update user level(Admin Only)
-export const updateUserLevel = async (req: Request, res: Response) => {
+export const updateUserLevel = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { level } = req.body;
 		const { userId } = req.params;
@@ -499,7 +470,7 @@ export const updateUserLevel = async (req: Request, res: Response) => {
 		}
 		user.level = level;
 		await user.save();
-		return res.status(200).json({ message: "OK", level: user.level });
+		res.status(200).json({ message: "OK", level: user.level });
 	} catch (error: any) {
 		console.error('Error updating user level:', error);
 		res.status(500).send('Server error');
@@ -507,7 +478,7 @@ export const updateUserLevel = async (req: Request, res: Response) => {
 }
 
 // Add user exp(Admin Only)
-export const addUserExp = async (req: Request, res: Response) => {
+export const addUserExp = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { exp } = req.body;
 		const { userId } = req.params;
@@ -518,7 +489,7 @@ export const addUserExp = async (req: Request, res: Response) => {
 		}
 		user.exp += exp;
 		await user.save();
-		return res.status(200).json({ message: "OK", exp: user.exp });
+		res.status(200).json({ message: "OK", exp: user.exp });
 	} catch (error: any) {
 		console.error('Error updating user exp:', error);
 		res.status(500).send('Server error');
@@ -526,7 +497,7 @@ export const addUserExp = async (req: Request, res: Response) => {
 };
 
 // Update User Avatar
-export const updateUserAvatar = async (req: Request, res: Response) => {
+export const updateUserAvatar = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { avatar } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
@@ -536,7 +507,7 @@ export const updateUserAvatar = async (req: Request, res: Response) => {
 		}
 		user.avatar = avatar;
 		await user.save();
-		return res.status(200).json({ message: "OK", avatar: user.avatar });
+		res.status(200).json({ message: "OK", avatar: user.avatar });
 	} catch (error: any) {
 		console.error('Error updating user avatar:', error);
 		res.status(500).send('Server error');
@@ -544,7 +515,7 @@ export const updateUserAvatar = async (req: Request, res: Response) => {
 };
 
 // Update User to Admin
-export const updateUsertoAdmin = async (req: Request, res: Response) => {
+export const updateUsertoAdmin = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { AdminPassword } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
@@ -553,14 +524,16 @@ export const updateUsertoAdmin = async (req: Request, res: Response) => {
 			return;
 		}
 		if (AdminPassword !== process.env.ADMIN_PASSWORD) {
-			return res.status(401).json({ message: "ERROR", cause: "Incorrect Admin Password" });
+			res.status(401).json({ message: "ERROR", cause: "Incorrect Admin Password" });
+			return;
 		}
 		if (user.isAdmin) {
-			return res.status(401).json({ message: "ERROR", cause: "User already has admin permissions" });
+			res.status(401).json({ message: "ERROR", cause: "User already has admin permissions" });
+			return;
 		}
 		user.isAdmin = true;
 		await user.save();
-		return res.status(200).json({ message: "OK", isAdmin: user.isAdmin });
+		res.status(200).json({ message: "OK", isAdmin: user.isAdmin });
 	} catch (error: any) {
 		console.error('Error updating user permissions:', error);
 		res.status(500).send('Server error');
@@ -568,7 +541,7 @@ export const updateUsertoAdmin = async (req: Request, res: Response) => {
 };
 
 // Reset User Progress
-export const resetUserProgress = async (req: Request, res: Response) => {
+export const resetUserProgress = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { password } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
@@ -578,16 +551,18 @@ export const resetUserProgress = async (req: Request, res: Response) => {
 		}
 		const isPasswordCorrect = await bcrypt.compare(password, user.password);
 		if (!isPasswordCorrect) {
-			return res.status(401).json({ message: "ERROR", cause: "Incorrect Password" });
+			res.status(401).json({ message: "ERROR", cause: "Incorrect Password" });
+			return;
 		}
 		user.exp = 0;
 		user.level = 1;
 		await user.save();
 		const userProgress = await UserProgress.findByIdAndDelete(user._id);
 		if (!userProgress) {
-			return res.status(404).json({ message: "ERROR", cause: "User progress not found." });
+			res.status(404).json({ message: "ERROR", cause: "User progress not found." });
+			return;
 		}
-		return res.status(200).json({ message: "OK", exp: user.exp, level: user.level, userProgress: userProgress });
+		res.status(200).json({ message: "OK", exp: user.exp, level: user.level, userProgress: userProgress });
 	} catch (error: any) {
 		console.error('Error resetting user progress:', error);
 		res.status(500).send('Server error');
@@ -595,7 +570,7 @@ export const resetUserProgress = async (req: Request, res: Response) => {
 };
 
 // Reset User Progress(Admin Only)
-export const resetUserProgressByUserId = async (req: Request, res: Response) => {
+export const resetUserProgressByUserId = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { userId } = req.params;
 		const user = await User.findOne({ id: userId });
@@ -608,9 +583,10 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 		await user.save();
 		const userProgress = await UserProgress.findByIdAndDelete(user._id);
 		if (!userProgress) {
-			return res.status(404).json({ message: "ERROR", cause: "User progress not found." });
+			res.status(404).json({ message: "ERROR", cause: "User progress not found." });
+			return;
 		}
-		return res.status(200).json({ message: "OK", exp: user.exp, level: user.level, userProgress: userProgress });
+		res.status(200).json({ message: "OK", exp: user.exp, level: user.level, userProgress: userProgress });
 	} catch (error: any) {
 		console.error('Error resetting user progress:', error);
 		res.status(500).send('Server error');
@@ -618,10 +594,10 @@ export const resetUserProgressByUserId = async (req: Request, res: Response) => 
 };
 
 //Get Leaderboard
-export const getLeaderboard = async (req: Request, res: Response) => {
+export const getLeaderboard = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const users = await User.find({ exp: { $gt: 0 } }).sort({ exp: -1 }).select('-password -isAdmin -email -createdAt -updatedAt -__v -_id');
-		return res.status(200).json({ message: "OK", users: users });
+		res.status(200).json({ message: "OK", users: users });
 	} catch (error: any) {
 		console.error('Error getting leaderboard:', error);
 		res.status(500).send('Server error');
@@ -629,25 +605,26 @@ export const getLeaderboard = async (req: Request, res: Response) => {
 };
 
 // Get My Rank
-export const getMyRank = async (req: Request, res: Response) => {
+export const getMyRank = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = res.locals.jwtData.id;
         const user = await User.findById(userId).select('exp level username avatar');
         if (!user) {
-            return res.status(404).json({ message: "ERROR", msg: 'User not found.' });
+            res.status(404).json({ message: "ERROR", msg: 'User not found.' });
+            return;
         }
 
         const higherExpCount = await User.countDocuments({ exp: { $gt: user.exp } });
         const myRank = higherExpCount + 1;
 
-        return res.status(200).json({ 
+        res.status(200).json({ 
 			message: "OK", 
 			myRank: myRank, 
 			user: user
 		});
     } catch (error: any) {
         console.error('Error getting my rank:', error);
-        return res.status(500).json({ 
+        res.status(500).json({ 
 			message: "ERROR", 
 			cause: 'Server error' 
 		});
@@ -655,7 +632,7 @@ export const getMyRank = async (req: Request, res: Response) => {
 };
 
 // Make User Admin by User ID(Admin Only)
-export const makeUserAdmin = async (req: Request, res: Response) => {
+export const makeUserAdmin = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { userId } = req.params;
 		const user = await User.findById(userId);
@@ -668,7 +645,7 @@ export const makeUserAdmin = async (req: Request, res: Response) => {
 		}
 		user.isAdmin = true;
 		await user.save();
-		return res.status(200).json({ 
+		res.status(200).json({ 
 			message: "OK",
 			username: user.username,
 			isAdmin: user.isAdmin 
@@ -680,7 +657,7 @@ export const makeUserAdmin = async (req: Request, res: Response) => {
 };
 
 // Make Admin to User by User ID(Admin Only)
-export const makeAdminToUser = async (req: Request, res: Response) => {
+export const makeAdminToUser = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { userId } = req.params;
 		const user = await User.findOne({ id: userId });
@@ -693,7 +670,7 @@ export const makeAdminToUser = async (req: Request, res: Response) => {
 		}
 		user.isAdmin = false;
 		await user.save();
-		return res.status(200).json({ 
+		res.status(200).json({ 
 			message: "OK",
 			username: user.username,
 			isAdmin: user.isAdmin 
@@ -705,7 +682,7 @@ export const makeAdminToUser = async (req: Request, res: Response) => {
 };
 
 // Check Admin Password(Admin Only)
-export const checkAdminPassword = async (req: Request, res: Response) => {
+export const checkAdminPassword = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { adminPassword } = req.body;
 		const user = await User.findById(res.locals.jwtData.id);
@@ -717,12 +694,13 @@ export const checkAdminPassword = async (req: Request, res: Response) => {
 			return;
 		}
 		if (adminPassword !== process.env.ADMIN_PASSWORD) {
-			return res.status(401).json({ 
+			res.status(401).json({ 
 				message: "ERROR", 
 				msg: "Incorrect Admin Password" 
 			});
+			return;
 		}
-		return res.status(200).json({ 
+		res.status(200).json({ 
 			message: "OK", 
 			isAdmin: user.isAdmin 
 		});
@@ -733,27 +711,29 @@ export const checkAdminPassword = async (req: Request, res: Response) => {
 };
 
 // Get User Progress
-export const getUserProgress = async (req: Request, res: Response) => {
+export const getUserProgress = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const userId = res.locals.jwtData.id;
 		if (!userId) {
-			return res.status(404).json({
+			res.status(404).json({
 				message: "ERROR",
 				msg: 'User not found.'
 			});
+			return;
 		}
 		const userProgress = await UserProgress.find({ user: userId })
 			.sort({ createdAt: -1 })
 			.populate('machine', 'name')
 			.select('-__v -updatedAt -createdAt -usedHints -remainingHints');
 		if (!userProgress) {
-			return res.status(200).json({
+			res.status(200).json({
 				message: "OK",
 				msg: 'You are new here.',
 				userProgress: []
 			});
+			return;
 		}
-		return res.status(200).json({
+		res.status(200).json({
 			message: "OK",
 			userProgress: userProgress
 		});

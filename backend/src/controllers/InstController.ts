@@ -35,16 +35,17 @@ const s3Client = new S3Client({ // Initialize S3 client
 /**
  * Start an EC2 instance based on user's machine selection.
  */
-export const startInstance = async (req: Request, res: Response) => {
+export const startInstance = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-      return res.status(401).json({ 
+      res.status(401).json({ 
         message: "ERROR", 
         msg: "User not registered / token malfunctioned" 
       });
+      return;
     }
 
     // Fetch the machine from the database to get the AMI ID
@@ -156,17 +157,18 @@ export const receiveVpnIp = async (req: Request, res: Response): Promise<void> =
 /**
  * Handle flag submission, terminate instance, and clean up.
  */
-export const submitFlag = async (req: Request, res: Response) => {
+export const submitFlag = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
     const { flag } = req.body;
     const user = await User.findById(res.locals.jwtData.id);
 
     if (!user) {
-      return res.status(401).json({ 
+      res.status(401).json({ 
         message: "ERROR", 
         msg: "User not registered / token malfunctioned" 
       });
+      return;
     }
     // Validate flag
     const isValidFlag = await validateFlag(flag, user.id, machineId);
@@ -224,15 +226,16 @@ export const submitFlag = async (req: Request, res: Response) => {
 /**
  * Get details of all instances by machine.
  */
-export const getInstanceByMachine = async (req: Request, res: Response) => {
+export const getInstanceByMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = res.locals.jwtData.id;
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(401).json({ 
+      res.status(401).json({ 
         message: "ERROR", 
         msg: "User not registered / token malfunctioned" 
       });
+      return;
     }
     const { machineId } = req.params;
     const machine = await Machine.findById(machineId);
@@ -265,7 +268,7 @@ export const getInstanceByMachine = async (req: Request, res: Response) => {
 /**
  * Get all instances(Admin only)
  */
-export const getAllInstances = async (req: Request, res: Response) => {
+export const getAllInstances = async (req: Request, res: Response): Promise<void> => {
   try {
     // Populate user and machineType fields
     const instances = await Instance.find()
@@ -292,15 +295,16 @@ export const getAllInstances = async (req: Request, res: Response) => {
 /**
  * Get details of a specific instance.
  */
-export const getInstanceDetails = async (req: Request, res: Response) => {
+export const getInstanceDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { instanceId } = req.params;
     const userId = res.locals.jwtData.id;
     if (!userId) {
-      return res.status(401).json({ 
+      res.status(401).json({ 
         message: "ERROR", 
         msg: "User not registered / token malfunctioned" 
       });
+      return;
     }
     // Find the instance
     const instance = await Instance.findOne({ instanceId, user: userId });
@@ -325,7 +329,7 @@ export const getInstanceDetails = async (req: Request, res: Response) => {
 /**
  * Delete a specific instance.
  */
-export const terminateInstanceByInstanceId = async (req: Request, res: Response) => {
+export const terminateInstanceByInstanceId = async (req: Request, res: Response): Promise<void> => {
   try {
     const { instanceId } = req.params;
     
@@ -391,15 +395,16 @@ const validateFlag = async (flag: string, userId: string, machineId: string): Pr
 /**
  * Download OpenVPN Profile for a specific instance.
  */
-export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
+export const downloadOpenVPNProfile = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = res.locals.jwtData.id;
 
     if (!userId) {
-      return res.status(401).json({ 
+      res.status(401).json({ 
         message: "ERROR", 
         msg: "User not registered / token malfunctioned" 
       });
+      return;
     }
 
     const bucketName = config.aws.s3BucketName;
@@ -413,10 +418,11 @@ export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
     const data = await s3Client.send(command);
 
     if (!data.Body) {
-      return res.status(404).json({ 
+      res.status(404).json({ 
         message: "ERROR", 
         msg: 'VPN profile not found.' 
       });
+      return;
     }
 
     // Set appropriate headers for file download
@@ -445,16 +451,17 @@ export const downloadOpenVPNProfile = async (req: Request, res: Response) => {
   }
 };
 
-export const terminateInstance = async (req: Request, res: Response) => {
+export const terminateInstance = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId } = req.params;
     const userId = res.locals.jwtData.id;
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(401).json({ 
+      res.status(401).json({ 
         message: "ERROR", 
         msg: "User not registered / token malfunctioned" 
       });
+      return;
     }
     const machine = await Machine.findById(machineId);
     if (!machine) { 
