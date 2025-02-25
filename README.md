@@ -78,11 +78,10 @@ The application follows a client-server architecture:
 Create a `.env` file in the backend directory with the following variables:
 
 ```
-PORT=3000
+PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 COOKIE_SECRET=your_cookie_secret
-SUPPRESS_NO_CONFIG_WARNING=true
 AWS_ACCESS_KEY_ID=your_aws_access_key
 AWS_SECRET_ACCESS_KEY=your_aws_secret_key
 AWS_REGION=your_aws_region
@@ -91,15 +90,16 @@ AWS_S3_BUCKET_NAME=your_s3_bucket_name
 AWS_KEY_NAME=your_key_name
 ADMIN_PASSWORD=your_admin_password
 VPN_SERVER_IP=your_vpn_server_ip
-ORIGIN_URL=http://localhost:5173
-DOMAIN=localhost
+ORIGIN_URL=http://localhost:3000
+DOMAIN:.window.location.hostname
+MODE=development
 ```
 
 #### Frontend
 Create a `.env` file in the frontend directory with the following variables:
 
 ```
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=http://localhost:5000/api
 ```
 
 ### Installation
