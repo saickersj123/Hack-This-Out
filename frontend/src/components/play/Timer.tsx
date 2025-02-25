@@ -37,7 +37,7 @@ const Timer: React.FC<TimerProps> = ({ endTime }) => {
     return () => clearInterval(timer);
   }, [endTime]);
 
-  const timerComponents: JSX.Element[] = [];
+  const timerComponents: React.ReactNode[] = [];
 
   Object.entries(timeLeft).forEach(([interval, value]) => {
     timerComponents.push(

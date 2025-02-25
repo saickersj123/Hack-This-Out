@@ -41,9 +41,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
     // 리스너 정리
     return () => window.removeEventListener('resize', handleResize);
   }, [isCollapsed, toggleSidebar, isAutoCollapsed]);
-
+  
   // URL을 기반으로 현재 선택된 메뉴 확인
-  const getMenuIcon = (path: string, iconActive: JSX.Element, iconInactive: JSX.Element) => {
+  const getMenuIcon = (path: string, iconActive: React.ReactElement, iconInactive: React.ReactElement) => {
     return location.pathname.startsWith(path) ? iconActive : iconInactive;
   };
 

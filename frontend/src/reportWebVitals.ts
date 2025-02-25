@@ -5,15 +5,15 @@ type MetricType = Metric;
 const reportWebVitals = async (onPerfEntry?: (metric: MetricType) => void) => {
   if (onPerfEntry && typeof onPerfEntry === 'function' && process.env.NODE_ENV === 'production') {
     try {
-      const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
+      const webVitals = await import('web-vitals');
       
       // Wrap each call in a try-catch to prevent single metric failure from blocking others
       const metrics = [
-        { fn: getCLS, name: 'CLS' },
-        { fn: getFID, name: 'FID' },
-        { fn: getFCP, name: 'FCP' },
-        { fn: getLCP, name: 'LCP' },
-        { fn: getTTFB, name: 'TTFB' }
+        { fn: webVitals.onCLS, name: 'CLS' },
+        { fn: webVitals.onFID, name: 'FID' },
+        { fn: webVitals.onFCP, name: 'FCP' },
+        { fn: webVitals.onLCP, name: 'LCP' },
+        { fn: webVitals.onTTFB, name: 'TTFB' }
       ];
 
       metrics.forEach(({ fn, name }) => {
