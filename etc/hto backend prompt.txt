@@ -1,0 +1,10 @@
+ @backend users going to select machine and click button to start machines they will hack,
+the server is going to start selected machine by creating aws ec2 instance with AMI.
+machine images for each selected machine are ready on AMI.
+each machine images have every different environments that can be hacked
+once the instance starts, instance post its VPN IP with user id and instance id to server by shell script.
+and the server get and store the address at DB temporally and show the machine's address to user.
+when the machine start, the instance should be created by matching images with user's selection.
+each users need to have their own instance, An instance cannot be shared by multiple users
+when users submit the flag which is hidden on the machine, the machine stops and delete the ec2 instance and delete instance info on DB
+make it happen and give me everything necessaries.

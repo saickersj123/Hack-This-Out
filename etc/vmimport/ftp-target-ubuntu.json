@@ -1,0 +1,10 @@
+[
+	{ 
+		"Description": "ftp-target-image", 
+		"Format": "ova", 
+		"UserBucket": { 
+			"S3Bucket": "hto-target-images", 
+			"S3Key": "ftp-target-ubuntu.ova" 
+		} 
+	}
+]

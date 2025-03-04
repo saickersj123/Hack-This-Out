@@ -1,0 +1,10 @@
+[Unit]
+Description=HTO VPNIP Service
+After=htovpn.service
+Requires=htovpn.service
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /var/hto/getvpnip.sh
+
+[Install]
+WantedBy=multi-user.target
